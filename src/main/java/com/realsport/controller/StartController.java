@@ -34,7 +34,10 @@ public class StartController {
 
     @Autowired
     private PlaygroundService playgroundService;
-
+    @RequestMapping(value = "/")
+    public String init(Model model){
+        return "index";
+    }
 
     @RequestMapping(value = "/maps")
     public String onMap(Model model){
