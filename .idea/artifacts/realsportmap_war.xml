@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="realsportmap:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="realsport-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="realsportmap:war exploded" />
+    </root>
+  </artifact>
+</component>
