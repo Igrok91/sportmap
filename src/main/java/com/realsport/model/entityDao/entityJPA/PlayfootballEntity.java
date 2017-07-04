@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Arrays;
 
 /**
- * Created by IgorR on 26.06.2017.
+ * Created by IgorR on 03.07.2017.
  */
 @Entity
-@Table(name = "playfootball", schema = "sportmap", catalog = "")
+@Table(name = "playfootball", schema = "heroku_a75530ab6d38c57", catalog = "")
 public class PlayfootballEntity {
     private int idplayground;
     private String name;
@@ -27,7 +27,7 @@ public class PlayfootballEntity {
     private String institutions;
 
     @Id
-    @Column(name = "idplayground", nullable = false)
+    @Column(name = "idplayground")
     public int getIdplayground() {
         return idplayground;
     }
@@ -37,7 +37,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 145)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -47,7 +47,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "latitude", nullable = false, length = 45)
+    @Column(name = "latitude")
     public String getLatitude() {
         return latitude;
     }
@@ -57,7 +57,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "longitude", nullable = false, length = 45)
+    @Column(name = "longitude")
     public String getLongitude() {
         return longitude;
     }
@@ -67,7 +67,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "links", nullable = false, length = 90)
+    @Column(name = "links")
     public String getLinks() {
         return links;
     }
@@ -77,7 +77,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "сreator", nullable = false, length = 45)
+    @Column(name = "сreator")
     public String getСreator() {
         return сreator;
     }
@@ -87,7 +87,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "sity", nullable = false, length = 45)
+    @Column(name = "sity")
     public String getSity() {
         return sity;
     }
@@ -97,7 +97,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "street", nullable = false, length = 45)
+    @Column(name = "street")
     public String getStreet() {
         return street;
     }
@@ -107,7 +107,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "house", nullable = true, length = 45)
+    @Column(name = "house")
     public String getHouse() {
         return house;
     }
@@ -117,7 +117,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "image", nullable = true)
+    @Column(name = "image")
     public byte[] getImage() {
         return image;
     }
@@ -127,7 +127,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "subject", nullable = false, length = 45)
+    @Column(name = "subject")
     public String getSubject() {
         return subject;
     }
@@ -137,7 +137,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "info", nullable = true, length = 145)
+    @Column(name = "info")
     public String getInfo() {
         return info;
     }
@@ -147,7 +147,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "size", nullable = true, length = 45)
+    @Column(name = "size")
     public String getSize() {
         return size;
     }
@@ -157,7 +157,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "coating", nullable = true, length = 45)
+    @Column(name = "coating")
     public String getCoating() {
         return coating;
     }
@@ -167,7 +167,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "school", nullable = true)
+    @Column(name = "school")
     public Byte getSchool() {
         return school;
     }
@@ -177,7 +177,7 @@ public class PlayfootballEntity {
     }
 
     @Basic
-    @Column(name = "institutions", nullable = true, length = 45)
+    @Column(name = "institutions")
     public String getInstitutions() {
         return institutions;
     }

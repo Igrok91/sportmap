@@ -8,9 +8,6 @@
 
     <persistence-unit name="persistenceUnit"  transaction-type="RESOURCE_LOCAL">
 
-        <class>com.realsport.model.entityDao.entityJPA.PlayfootballEntity</class>
-        <class>com.realsport.model.entityDao.entityJPA.VoleyballEntity</class>
-        <class>com.realsport.model.entityDao.entityJPA.BasketballEntity</class>
         <properties>
           <!--  <property name="javax.persistence.schema-generation-action" value="drop-and-create"/>-->
             <property name="javax.persistence.schema-generation-target" value="database"/>

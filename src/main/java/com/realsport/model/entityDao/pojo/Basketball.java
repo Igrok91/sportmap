@@ -3,7 +3,7 @@ package com.realsport.model.entityDao.pojo;
 import java.util.Arrays;
 
 /**
- * Created by IgorR on 25.06.2017.
+ * Created by IgorR on 02.07.2017.
  */
 public class Basketball {
     private int idbasketball;

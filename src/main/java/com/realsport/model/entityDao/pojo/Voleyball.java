@@ -3,7 +3,7 @@ package com.realsport.model.entityDao.pojo;
 import java.util.Arrays;
 
 /**
- * Created by IgorR on 25.06.2017.
+ * Created by IgorR on 02.07.2017.
  */
 public class Voleyball {
     private int idvoleyball;
@@ -21,7 +21,6 @@ public class Voleyball {
     private String size;
     private String coating;
     private Byte school;
-    private String institutions;
 
     public int getIdvoleyball() {
         return idvoleyball;
@@ -143,14 +142,6 @@ public class Voleyball {
         this.school = school;
     }
 
-    public String getInstitutions() {
-        return institutions;
-    }
-
-    public void setInstitutions(String institutions) {
-        this.institutions = institutions;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -173,8 +164,6 @@ public class Voleyball {
         if (size != null ? !size.equals(voleyball.size) : voleyball.size != null) return false;
         if (coating != null ? !coating.equals(voleyball.coating) : voleyball.coating != null) return false;
         if (school != null ? !school.equals(voleyball.school) : voleyball.school != null) return false;
-        if (institutions != null ? !institutions.equals(voleyball.institutions) : voleyball.institutions != null)
-            return false;
 
         return true;
     }
@@ -196,7 +185,6 @@ public class Voleyball {
         result = 31 * result + (size != null ? size.hashCode() : 0);
         result = 31 * result + (coating != null ? coating.hashCode() : 0);
         result = 31 * result + (school != null ? school.hashCode() : 0);
-        result = 31 * result + (institutions != null ? institutions.hashCode() : 0);
         return result;
     }
 }
