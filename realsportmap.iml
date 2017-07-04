@@ -35,7 +35,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
         <datasource-mapping>
-          <factory-entry name="classpath:META-INF/persistence.xml" value="dataSource" />
+          <factory-entry name="entityManagerFactory" value="dataSource" />
           <factory-entry name="noname-a.xml@0" value="92b61e44-bc4b-4c72-98d0-47af7ee1de75" />
           <factory-entry name="persistenceUnit" value="92b61e44-bc4b-4c72-98d0-47af7ee1de75" />
         </datasource-mapping>
