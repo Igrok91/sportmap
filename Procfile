@@ -1,1 +1,1 @@
-web:    java  -jar target/dependency/webapp-runner.jar --port 5050 target/*.war
+web:    java  -jar target/dependency/webapp-runner.jar  target/realsport-1.0-SNAPSHOT.war
