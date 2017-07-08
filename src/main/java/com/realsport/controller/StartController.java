@@ -2,9 +2,9 @@ package com.realsport.controller;
 
 import com.google.gson.Gson;
 import com.realsport.model.dao.daoException.DataBaseException;
-import com.realsport.model.entityDao.pojo.Basketball;
-import com.realsport.model.entityDao.pojo.Playfootball;
-import com.realsport.model.entityDao.pojo.Voleyball;
+import com.realsport.model.entityDao.Basketball;
+import com.realsport.model.entityDao.Playfootball;
+import com.realsport.model.entityDao.Voleyball;
 import com.realsport.model.service.PlaygroundService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -90,11 +90,9 @@ public class StartController {
         ArrayList<String> mapArrayList= new ArrayList<>();
         for (Voleyball p : voleyballList) {
             map.put("namePlayground", p.getName());
-            map.put("image", p.getImage());
-            map.put("info", p.getInfo());
-            map.put("street", p.getStreet());
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
+            map.put("creator", p.getСreator());
             String json = gson.toJson(map);
             mapArrayList.add(json);
 
@@ -108,11 +106,9 @@ public class StartController {
         ArrayList<String> mapArrayList= new ArrayList<>();
         for (Basketball p : basketballList){
             map.put("namePlayground", p.getName());
-            map.put("image", p.getImage());
-            map.put("info", p.getInfo());
-            map.put("street", p.getStreet());
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
+            map.put("creator", p.getСreator());
             String json = gson.toJson(map);
             mapArrayList.add(json);
         }
@@ -127,11 +123,9 @@ public class StartController {
         ArrayList<String> mapArrayList= new ArrayList<>();
         for (Playfootball p : playfootballList){
             map.put("namePlayground", p.getName());
-            map.put("image", p.getImage());
-            map.put("info", p.getInfo());
-            map.put("street", p.getStreet());
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
+            map.put("creator", p.getСreator());
             String json = gson.toJson(map);
             mapArrayList.add(json);
         }

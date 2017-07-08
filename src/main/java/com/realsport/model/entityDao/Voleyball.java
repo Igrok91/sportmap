@@ -1,4 +1,4 @@
-package com.realsport.model.entityDao.pojo;
+package com.realsport.model.entityDao;
 
 import java.util.Arrays;
 

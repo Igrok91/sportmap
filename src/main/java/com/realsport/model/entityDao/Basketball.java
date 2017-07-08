@@ -1,14 +1,11 @@
-package com.realsport.model.entityDao.entityJPA;
+package com.realsport.model.entityDao;
 
-import javax.persistence.*;
 import java.util.Arrays;
 
 /**
- * Created by IgorR on 03.07.2017.
+ * Created by IgorR on 02.07.2017.
  */
-@Entity
-@Table(name = "basketball", schema = "heroku_a75530ab6d38c57", catalog = "")
-public class BasketballEntity {
+public class Basketball {
     private int idbasketball;
     private String name;
     private String latitude;
@@ -26,8 +23,6 @@ public class BasketballEntity {
     private Byte school;
     private String institutions;
 
-    @Id
-    @Column(name = "idbasketball")
     public int getIdbasketball() {
         return idbasketball;
     }
@@ -36,8 +31,6 @@ public class BasketballEntity {
         this.idbasketball = idbasketball;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -46,8 +39,6 @@ public class BasketballEntity {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "latitude")
     public String getLatitude() {
         return latitude;
     }
@@ -56,8 +47,6 @@ public class BasketballEntity {
         this.latitude = latitude;
     }
 
-    @Basic
-    @Column(name = "longitude")
     public String getLongitude() {
         return longitude;
     }
@@ -66,8 +55,6 @@ public class BasketballEntity {
         this.longitude = longitude;
     }
 
-    @Basic
-    @Column(name = "links")
     public String getLinks() {
         return links;
     }
@@ -76,8 +63,6 @@ public class BasketballEntity {
         this.links = links;
     }
 
-    @Basic
-    @Column(name = "сreator")
     public String getСreator() {
         return сreator;
     }
@@ -86,8 +71,6 @@ public class BasketballEntity {
         this.сreator = сreator;
     }
 
-    @Basic
-    @Column(name = "sity")
     public String getSity() {
         return sity;
     }
@@ -96,8 +79,6 @@ public class BasketballEntity {
         this.sity = sity;
     }
 
-    @Basic
-    @Column(name = "street")
     public String getStreet() {
         return street;
     }
@@ -106,8 +87,6 @@ public class BasketballEntity {
         this.street = street;
     }
 
-    @Basic
-    @Column(name = "house")
     public String getHouse() {
         return house;
     }
@@ -116,8 +95,6 @@ public class BasketballEntity {
         this.house = house;
     }
 
-    @Basic
-    @Column(name = "image")
     public byte[] getImage() {
         return image;
     }
@@ -126,8 +103,6 @@ public class BasketballEntity {
         this.image = image;
     }
 
-    @Basic
-    @Column(name = "subject")
     public String getSubject() {
         return subject;
     }
@@ -136,8 +111,6 @@ public class BasketballEntity {
         this.subject = subject;
     }
 
-    @Basic
-    @Column(name = "info")
     public String getInfo() {
         return info;
     }
@@ -146,8 +119,6 @@ public class BasketballEntity {
         this.info = info;
     }
 
-    @Basic
-    @Column(name = "size")
     public String getSize() {
         return size;
     }
@@ -156,8 +127,6 @@ public class BasketballEntity {
         this.size = size;
     }
 
-    @Basic
-    @Column(name = "coating")
     public String getCoating() {
         return coating;
     }
@@ -166,8 +135,6 @@ public class BasketballEntity {
         this.coating = coating;
     }
 
-    @Basic
-    @Column(name = "school")
     public Byte getSchool() {
         return school;
     }
@@ -176,8 +143,6 @@ public class BasketballEntity {
         this.school = school;
     }
 
-    @Basic
-    @Column(name = "institutions")
     public String getInstitutions() {
         return institutions;
     }
@@ -191,7 +156,7 @@ public class BasketballEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BasketballEntity that = (BasketballEntity) o;
+        Basketball that = (Basketball) o;
 
         if (idbasketball != that.idbasketball) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;

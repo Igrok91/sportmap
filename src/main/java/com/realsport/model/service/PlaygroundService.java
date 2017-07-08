@@ -2,12 +2,12 @@ package com.realsport.model.service;
 
 import com.realsport.model.dao.PlaygroundDao;
 import com.realsport.model.dao.daoException.DataBaseException;
-import com.realsport.model.entityDao.pojo.Basketball;
-import com.realsport.model.entityDao.pojo.Playfootball;
-import com.realsport.model.entityDao.pojo.Voleyball;
+import com.realsport.model.entityDao.Basketball;
+import com.realsport.model.entityDao.Playfootball;
+import com.realsport.model.entityDao.Voleyball;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.List;
 @Service
 public class PlaygroundService implements PlaygroundDao{
 
+    @Qualifier("productDao")
     @Autowired
     private PlaygroundDao playgroundDao;
 

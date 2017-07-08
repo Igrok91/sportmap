@@ -3,9 +3,9 @@ package com.realsport.model.dao;
 
 
 import com.realsport.model.dao.daoException.DataBaseException;
-import com.realsport.model.entityDao.pojo.Basketball;
-import com.realsport.model.entityDao.pojo.Playfootball;
-import com.realsport.model.entityDao.pojo.Voleyball;
+import com.realsport.model.entityDao.Basketball;
+import com.realsport.model.entityDao.Playfootball;
+import com.realsport.model.entityDao.Voleyball;
 
 import java.util.List;
 
