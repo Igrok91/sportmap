@@ -3,7 +3,6 @@ package com.realsport.model.repository;
 
 import com.realsport.model.entityDao.Voleyball;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -32,16 +33,24 @@ public class StartController {
     public static  final String BASKETBALL = "basket";
     public static  final String VOLEYBALL = "voley";
 
+    private Integer i;
+
     @Autowired
     private PlaygroundService playgroundService;
     @RequestMapping(value = "/")
     public String init(Model model){
+        model.addAttribute("test", i);
         return "index";
     }
 
-    @RequestMapping(value = "/maps")
-    public String onMap(Model model){
+    @RequestMapping(value = "/info")
+    public String info(Model model){
+        return "info";
+    }
 
+    @RequestMapping(value = "/maps")
+    public String onMap(Model model, @RequestParam(value = "api_id", required = false) Integer api_id){
+      i = api_id;
         try {
             voleyballList = playgroundService.getVoleyballPlayground();
             playfootballList = playgroundService.getFootballPlayground();
@@ -62,6 +71,7 @@ public class StartController {
             model.addAttribute("footInfo", footInfoList);
             model.addAttribute("basketInfo", basketInfoList);
             model.addAttribute("voleyballInfo", voleyballInfoList);
+
         } catch (DataBaseException e) {
             e.printStackTrace();
         }

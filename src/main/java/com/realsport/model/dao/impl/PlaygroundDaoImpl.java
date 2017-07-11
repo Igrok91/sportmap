@@ -10,13 +10,9 @@ import com.realsport.model.repository.BasketballRepository;
 import com.realsport.model.repository.PlayfootballRepository;
 import com.realsport.model.repository.VoleyballRepository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +23,6 @@ import java.util.List;
 
 
 public class PlaygroundDaoImpl implements PlaygroundDao {
-    private static Logger log = LoggerFactory.getLogger(PlaygroundDaoImpl.class);
 
     @Autowired
     private PlayfootballRepository footRepository;

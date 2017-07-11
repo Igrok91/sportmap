@@ -40,14 +40,14 @@
 
 
         /* On small screens, set height to 'auto' for sidenav and grid */
-        @media screen and (max-width: 767px) {
+        @media screen and (max-width: 300px) {
             .sidenav {
                 height: auto;
                 padding: 15px;
             }
+
             .row.content {height:auto;}
         }
-
 
 
     </style>
@@ -93,216 +93,182 @@
     </div>
 </header>
 <main>
-
-
     <div class="container-fluid text-center">
         <div class="row content">
-            <!--       <div class="col-sm-2  sidenav">
-
-
-                      <form class="form-horizontal text-center">
-                      <fieldset>
-
-
-                      <legend>Поиск спортивных площадок</legend>
-
-
-                      <div class="form-group" align="center">
-                        <label class="col-md-5 control-label text-center" for="selectbasic" >Вид спорта</label>
-                        <div class="col-md-7">
-                          <select id="selectbasic" name="selectbasic" class="form-control">
-                            <option value="1">Все</option>
-                            <option value="2">Футбол</option>
-                            <option value="3">Баскетбол</option>
-                            <option value="4">Волейбол</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      </fieldset>
-                      </form>
-
-
-                  </div> -->
-
-
-            <div class="col-sm-12  text-center"  id ="map" >
-
+            <div class="sidenav"  id ="map" >
             </div>
-
-            <script>
-                var footMarkers;
-                var markerCluster;
-                var basketMarkers;
-                var voleyMarkers;
-
-                var footLocations = ${footLocation};
-                var basketLocation = ${basketLocation};
-                var voleyLocation = ${voleyLocation};
-
-                var footInfo = ${footInfo};
-                var basketInfo = ${basketInfo};
-                var voleyballInfo = ${voleyballInfo};
-
-                function initMap() {
-                    var map = new google.maps.Map(document.getElementById('map'), {
-                        center: {lat: 59.93903 , lng: 30.315828},
-                        zoom: 11,
-                        mapTypeId: 'roadmap'
-                    });
-
-                    initAutocomplete(map);
-
-
-
-                   // alert(footInfo[index].link);
-                    // Try HTML5 geolocation.
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                            var pos = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            };
-
-                            /*infoWindow.setPosition(pos);
-                             infoWindow.setContent('Location found.');*/
-                            map.setCenter(pos);
-
-                        }, function() {
-                            handleLocationError(true, map.getCenter());
-                        });
-
-
-                    } else {
-                        // Browser doesn't support Geolocation
-                        handleLocationError(false, map.getCenter());
-                    }
-
-                    var labels = 'Футбол';
-                    var imageFootball = 'resources/images/ball.png';
-                    var imageBasketball = 'resources/images/basketballSm.png';
-                    var imageVoleyball = 'resources/images/voleyballSm.png';
-
-
-                    var  footInfowindow;
-
-                    // Add some markers to the map.
-                    // Note: The code uses the JavaScript Array.prototype.map() method to
-                    // create an array of markers based on a given "footLocations" array.
-                    // The map() method here has nothing to do with the Google Maps API.
-                     footMarkers = footLocations.map(function(location, i) {
-                        var marker = new google.maps.Marker({
-                            position: location,
-                            icon: imageFootball
-                        });
-
-                         var footInfowindow = new google.maps.InfoWindow({
-                            content: getFootWindowContent(footInfo, i)
-                        });
-
-                        marker.addListener('click', function() {
-                            footInfowindow.open(map, marker);
-                        });
-
-                         map.addListener('click', function(){
-                             footInfowindow.close();
-                         });
-                        return marker;
-                    });
-
-
-                     basketMarkers = basketLocation.map(function(location, i) {
-                        var bmarker = new google.maps.Marker({
-                            position: location,
-                            icon: imageBasketball
-                        });
-
-                         var basketInfowindow = new google.maps.InfoWindow({
-                            content: getBasketWindowContent(basketInfo, i)
-                        });
-
-                        bmarker.addListener('click', function() {
-                            basketInfowindow.open(map, bmarker);
-                        });
-
-                         map.addListener('click', function(){
-                             basketInfowindow.close();
-                         });
-                        return bmarker;
-                    });
-
-
-                     voleyMarkers = voleyLocation.map(function(location, i) {
-                        var vmarker = new google.maps.Marker({
-                            position: location,
-                            icon: imageVoleyball
-                        });
-
-                        var voleyballInfowindow = new google.maps.InfoWindow({
-                            content: getVoleyballWindowContent(voleyballInfo ,i)
-                        });
-
-                        vmarker.addListener('click', function() {
-                            voleyballInfowindow.open(map, vmarker);
-                        });
-                         map.addListener('click', function(){
-                             voleyballInfowindow.close();
-                         });
-                        return vmarker;
-                    });
-                    var markers = footMarkers.concat(basketMarkers, voleyMarkers);
-
-
-                    // Add a marker clusterer to manage the markers.
-                     markerCluster = new MarkerClusterer(map, markers,
-                           {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-
-
-                    function handleLocationError(browserHasGeolocation, pos) {
-                        var infoWindow = new google.maps.InfoWindow({map: map});
-                        infoWindow.setPosition(pos);
-                        infoWindow.setContent(browserHasGeolocation ?
-                            'Используйте поле ввода для посика на карте Google' :
-                            'Error: Your browser doesn\'t support geolocation.');
-                    }
-                }
-
-
-
-                $(function() {
-                    $('#football').click(function(event) {
-                        markerCluster.clearMarkers();
-                        markerCluster.addMarkers(footMarkers);
-                    });
-                });
-                $(function() {
-                    $('#basketball').click(function(event) {
-                        markerCluster.clearMarkers();
-                        markerCluster.addMarkers(basketMarkers);
-                    });
-                });
-
-                $(function() {
-                    $('#voleyball').click(function(event) {
-                        markerCluster.clearMarkers();
-                        markerCluster.addMarkers(voleyMarkers);
-                    });
-                });
-
-
-            </script>
-            <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-            </script>
-            <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1tr-_gVY9qwaDTDpvfgckDzV_uqekjEQ&libraries=places&callback=initMap">
-            </script>
-
         </div>
     </div>
+
 </main>
 <footer class="container-fluid text-center">
     <p>Copyright © 2017 SportMap</p>
 </footer>
+<script>
+    var footMarkers;
+    var markerCluster;
+    var basketMarkers;
+    var voleyMarkers;
 
+    var footLocations = ${footLocation};
+    var basketLocation = ${basketLocation};
+    var voleyLocation = ${voleyLocation};
+
+    var footInfo = ${footInfo};
+    var basketInfo = ${basketInfo};
+    var voleyballInfo = ${voleyballInfo};
+
+
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 59.93903 , lng: 30.315828},
+            zoom: 11,
+            mapTypeId: 'roadmap'
+        });
+
+        initAutocomplete(map);
+
+
+
+        // alert(footInfo[index].link);
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                /*infoWindow.setPosition(pos);
+                 infoWindow.setContent('Location found.');*/
+                map.setCenter(pos);
+
+            }, function() {
+                handleLocationError(true, map.getCenter());
+            });
+
+
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, map.getCenter());
+        }
+
+        var labels = 'Футбол';
+        var imageFootball = 'resources/images/ball.png';
+        var imageBasketball = 'resources/images/basketballSm.png';
+        var imageVoleyball = 'resources/images/voleyballSm.png';
+
+        var  footInfowindow;
+
+        // Add some markers to the map.
+        // Note: The code uses the JavaScript Array.prototype.map() method to
+        // create an array of markers based on a given "footLocations" array.
+        // The map() method here has nothing to do with the Google Maps API.
+        footMarkers = footLocations.map(function(location, i) {
+            var marker = new google.maps.Marker({
+                position: location,
+                icon: imageFootball
+            });
+
+            var footInfowindow = new google.maps.InfoWindow({
+                content: getFootWindowContent(footInfo, i)
+            });
+
+            marker.addListener('click', function() {
+                footInfowindow.open(map, marker);
+            });
+
+            map.addListener('click', function(){
+                footInfowindow.close();
+            });
+            return marker;
+        });
+
+
+        basketMarkers = basketLocation.map(function(location, i) {
+            var bmarker = new google.maps.Marker({
+                position: location,
+                icon: imageBasketball
+            });
+
+            var basketInfowindow = new google.maps.InfoWindow({
+                content: getBasketWindowContent(basketInfo, i)
+            });
+
+            bmarker.addListener('click', function() {
+                basketInfowindow.open(map, bmarker);
+            });
+
+            map.addListener('click', function(){
+                basketInfowindow.close();
+            });
+            return bmarker;
+        });
+
+
+        voleyMarkers = voleyLocation.map(function(location, i) {
+            var vmarker = new google.maps.Marker({
+                position: location,
+                icon: imageVoleyball
+            });
+
+            var voleyballInfowindow = new google.maps.InfoWindow({
+                content: getVoleyballWindowContent(voleyballInfo ,i)
+            });
+
+            vmarker.addListener('click', function() {
+                voleyballInfowindow.open(map, vmarker);
+            });
+            map.addListener('click', function(){
+                voleyballInfowindow.close();
+            });
+            return vmarker;
+        });
+        var markers = footMarkers.concat(basketMarkers, voleyMarkers);
+
+
+        // Add a marker clusterer to manage the markers.
+        markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+
+        function handleLocationError(browserHasGeolocation, pos) {
+            var infoWindow = new google.maps.InfoWindow({map: map});
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Используйте поле ввода для посика на карте Google' :
+                'Error: Your browser doesn\'t support geolocation.');
+        }
+    }
+
+
+
+    $(function() {
+        $('#football').click(function(event) {
+            markerCluster.clearMarkers();
+            markerCluster.addMarkers(footMarkers);
+        });
+    });
+    $(function() {
+        $('#basketball').click(function(event) {
+            markerCluster.clearMarkers();
+            markerCluster.addMarkers(basketMarkers);
+        });
+    });
+
+    $(function() {
+        $('#voleyball').click(function(event) {
+            markerCluster.clearMarkers();
+            markerCluster.addMarkers(voleyMarkers);
+        });
+    });
+
+
+</script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1tr-_gVY9qwaDTDpvfgckDzV_uqekjEQ&libraries=places&callback=initMap">
+</script>
 </body>
 </html>

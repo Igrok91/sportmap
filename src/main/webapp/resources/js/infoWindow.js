@@ -7,7 +7,7 @@ function getFootWindowContent(info, index ){
     var coString = '<div>' +
         '<h4>' + info[index].namePlayground + '</h4> <hr>' +
         '<div class="btn-group ">' +
-        ' <a href="  ' + info[index].link +'"  class="btn btn-primary" id="football" role="button" >' +
+        ' <a href="/info"  class="btn btn-primary" id="football" role="button" >' +
         'Перейти в группу' + ' </a>' +
         '</div>' +
         '</div>';
