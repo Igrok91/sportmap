@@ -6,6 +6,8 @@ import com.realsport.model.entityDao.Basketball;
 import com.realsport.model.entityDao.Playfootball;
 import com.realsport.model.entityDao.Voleyball;
 import com.realsport.model.service.PlaygroundService;
+import com.realsport.model.service.VkMessageService;
+import com.realsport.model.utils.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +29,11 @@ import java.util.List;
 @Controller
 public class StartController {
 
+    public static final String USER_ID = "user_id";
+
+    @Autowired
+    HttpSession session;
+
     private List<Playfootball> playfootballList;
     private List<Voleyball> voleyballList;
     private List<Basketball> basketballList;
@@ -33,25 +42,31 @@ public class StartController {
     public static  final String BASKETBALL = "basket";
     public static  final String VOLEYBALL = "voley";
 
-    private Integer i;
 
     @Autowired
     private PlaygroundService playgroundService;
-    @RequestMapping(value = "/")
-    public String init(Model model){
-        model.addAttribute("test", i);
-        return "index";
+
+    @Autowired
+    private VkMessageService messageService;
+
+    @RequestMapping(value = "/sendMessage/${link}")
+    public void sendMessageToUser(HttpServletRequest request, @PathVariable String link){
+        Integer userId = (Integer) request.getSession().getAttribute(USER_ID);
+        messageService.sendMessage(userId, link);
     }
 
     @RequestMapping(value = "/info")
     public String info(Model model){
+
         return "info";
     }
 
     @RequestMapping(value = "/maps")
-    public String onMap(Model model, @RequestParam(value = "api_id", required = false) Integer api_id){
-      i = api_id;
+    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id){
         try {
+            session.setAttribute(USER_ID, id);
+            Users.getUsers().add(Integer.parseInt(id));
+
             voleyballList = playgroundService.getVoleyballPlayground();
             playfootballList = playgroundService.getFootballPlayground();
             basketballList = playgroundService.getBasketballPlayground();
