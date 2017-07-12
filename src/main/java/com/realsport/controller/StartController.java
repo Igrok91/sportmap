@@ -49,19 +49,20 @@ public class StartController {
     @Autowired
     private VkMessageService messageService;
 
-    @RequestMapping(value = "/sendMessage/${id}")
+    @RequestMapping(value = "/sendMessage/{id}")
     public String sendMessageToUser(HttpServletRequest request, @PathVariable String id){
+        String userId = (String) request.getSession().getAttribute(USER_ID);
         try {
-        Integer userId = (Integer) request.getSession().getAttribute(USER_ID);
+
         String links = playgroundService.getFootballById(id).getLinks();
-        messageService.sendMessage(userId, links);
+        messageService.sendMessage(Integer.parseInt(userId), links);
             System.out.println("sendMessage" + links);
             System.out.println("sendMessage" + userId);
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
 
-        return "maps";
+        return "redirect:/maps?viewer_id="+userId ;
     }
 
     @RequestMapping(value = "/info")

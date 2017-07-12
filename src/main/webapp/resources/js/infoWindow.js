@@ -2,12 +2,12 @@
  * Created by IgorR on 25.06.2017.
  */
 function getFootWindowContent(info, index ){
-
+        var link = '/sendMessage/' + info[index].id;
 
     var coString = '<div>' +
         '<h4>' + info[index].namePlayground + '</h4> <hr>' +
         '<div class="btn-group ">' +
-        ' <a href="sendMessage/' + info[index].id +'"  class="btn btn-primary" id="footballInfo" role="button" >' +
+        ' <a href="' + link + '"  class="btn btn-primary" id="footballInfo" role="button" >' +
         'Перейти в группу' + ' </a>' +
         '</div>' +
         '</div>';
