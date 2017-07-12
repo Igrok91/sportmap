@@ -11,4 +11,6 @@ import java.util.List;
 public interface PlayfootballRepository  {
 
     List<Playfootball> findAllPlayfootball();
+
+    Playfootball findPlayGroundById(String id);
 }

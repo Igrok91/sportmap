@@ -35,4 +35,6 @@ public interface PlaygroundDao {
      */
     List<Basketball> getBasketballPlayground() throws DataBaseException;
 
+    Playfootball getFootballById(String id) throws DataBaseException;
+
 }

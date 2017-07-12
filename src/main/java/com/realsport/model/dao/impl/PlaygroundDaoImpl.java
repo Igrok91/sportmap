@@ -57,4 +57,10 @@ public class PlaygroundDaoImpl implements PlaygroundDao {
         List<Basketball> list = basketballRepository.findAllBasketball();
         return list;
     }
+
+    @Override
+    public Playfootball getFootballById(String id) throws DataBaseException {
+        Playfootball play = footRepository.findPlayGroundById(id);
+        return play;
+    }
 }

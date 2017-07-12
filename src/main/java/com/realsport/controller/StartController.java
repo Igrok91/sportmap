@@ -49,10 +49,19 @@ public class StartController {
     @Autowired
     private VkMessageService messageService;
 
-    @RequestMapping(value = "/sendMessage/${link}")
-    public void sendMessageToUser(HttpServletRequest request, @PathVariable String link){
+    @RequestMapping(value = "/sendMessage/${id}")
+    public String sendMessageToUser(HttpServletRequest request, @PathVariable String id){
+        try {
         Integer userId = (Integer) request.getSession().getAttribute(USER_ID);
-        messageService.sendMessage(userId, link);
+        String links = playgroundService.getFootballById(id).getLinks();
+        messageService.sendMessage(userId, links);
+            System.out.println("sendMessage" + links);
+            System.out.println("sendMessage" + userId);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+
+        return "maps";
     }
 
     @RequestMapping(value = "/info")
@@ -118,6 +127,7 @@ public class StartController {
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
             map.put("creator", p.getСreator());
+            map.put("id", p.getIdvoleyball());
             String json = gson.toJson(map);
             mapArrayList.add(json);
 
@@ -134,6 +144,7 @@ public class StartController {
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
             map.put("creator", p.getСreator());
+            map.put("id", p.getIdbasketball());
             String json = gson.toJson(map);
             mapArrayList.add(json);
         }
@@ -151,6 +162,7 @@ public class StartController {
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
             map.put("creator", p.getСreator());
+            map.put("id", p.getIdplayground());
             String json = gson.toJson(map);
             mapArrayList.add(json);
         }

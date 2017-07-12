@@ -31,4 +31,23 @@ public class FootballRepositoryImpl implements PlayfootballRepository {
         }
         return list;
     }
+
+    @Override
+    public Playfootball findPlayGroundById(String id) {
+        Playfootball p = null;
+        for (FootData f: FootData.values()) {
+            if(f.getId().equals(id)){
+                p = new Playfootball();
+                p.setIdplayground(Integer.parseInt(f.getId()));
+                p.setName(f.getName());
+                p.setLatitude(f.getLattitude());
+                p.setLongitude(f.getLongitude());
+                p.setLinks(f.getLinks());
+                p.setСreator(f.getCreator());
+                p.setSity(f.getCity());
+            }
+        }
+
+        return p;
+    }
 }

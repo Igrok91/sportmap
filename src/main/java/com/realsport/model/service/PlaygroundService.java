@@ -43,4 +43,9 @@ public class PlaygroundService implements PlaygroundDao{
         return playgroundDao.getBasketballPlayground();
     }
 
+    @Override
+    public Playfootball getFootballById(String id) throws DataBaseException {
+        return  playgroundDao.getFootballById(id);
+    }
+
 }
