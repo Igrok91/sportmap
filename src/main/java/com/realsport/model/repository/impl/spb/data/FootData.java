@@ -4,7 +4,9 @@ package com.realsport.model.repository.impl.spb.data;
  * Created by IgorR on 08.07.2017.
  */
 public enum FootData {
-    PLAYGROUND_1("1", "Школа 29", "55.750338", "48.739751", "https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhos", "https://vk.com/igor_ryabtcev","Иннополис");
+    PLAYGROUND_1("1", "Школа 29", "55.750338", "48.739751", "https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhos", "https://vk.com/igor_ryabtcev","Иннополис"),
+    PLAYGROUND_2("2", "Школа 29", "55.750008", "48.739751", "https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhos", "https://vk.com/igor_ryabtcev","Иннополис"),
+    PLAYGROUND_3("3", "Школа 29", "55.750118", "48.739751", "https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhos", "https://vk.com/igor_ryabtcev","Иннополис");
 
 
 

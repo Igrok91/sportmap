@@ -13,4 +13,6 @@ public interface VoleyballRepository  {
 
 
     List<Voleyball> findAllVoleyball();
+
+    Voleyball findPlayGroundById(String id);
 }

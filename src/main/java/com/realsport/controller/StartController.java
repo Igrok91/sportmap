@@ -8,6 +8,7 @@ import com.realsport.model.entityDao.Voleyball;
 import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.VkMessageService;
 import com.realsport.model.utils.Users;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,11 +30,6 @@ import java.util.List;
  */
 @Controller
 public class StartController {
-
-    public static final String USER_ID = "user_id";
-
-    @Autowired
-    HttpSession session;
 
     private List<Playfootball> playfootballList;
     private List<Voleyball> voleyballList;
@@ -43,39 +40,58 @@ public class StartController {
     public static  final String VOLEYBALL = "voley";
 
 
+
     @Autowired
     private PlaygroundService playgroundService;
 
     @Autowired
     private VkMessageService messageService;
 
-    @RequestMapping(value = "/sendMessage/{id}")
-    public String sendMessageToUser(HttpServletRequest request, @PathVariable String id){
-        String userId = (String) request.getSession().getAttribute(USER_ID);
+ /*   @RequestMapping(value = "/sendMessage/{id}/{userId}")
+    public  String sendMessageToUser(HttpServletRequest request, @PathVariable String id,  @PathVariable String userId){
+        //String userId = (String) request.getSession().getAttribute(USER_ID);
         try {
 
         String links = playgroundService.getFootballById(id).getLinks();
         messageService.sendMessage(Integer.parseInt(userId), links);
-            System.out.println("sendMessage" + links);
-            System.out.println("sendMessage" + userId);
+            System.out.println("sendMessage " + links);
+            System.out.println("sendMessage " + userId);
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
 
-        return "redirect:/maps?viewer_id="+userId ;
+        //return "redirect:/maps?viewer_id="+userId ;
+        return "successs";
+    }*/
+
+    @RequestMapping(value = "/sendMessage")
+    public @ResponseBody String sendMessageToUser( @RequestParam String idFoot,  @RequestParam String userID){
+        try {
+            if (userID == null || idFoot == null ) {
+                return "fail";
+            }
+            String links = playgroundService.getFootballById(idFoot).getLinks();
+            messageService.sendMessage(Integer.parseInt(userID), links);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
+        return "success";
     }
 
-    @RequestMapping(value = "/info")
-    public String info(Model model){
 
+    @RequestMapping(value = "/info")
+    public String info(Model model, HttpServletRequest request){
+        String userId = "id";
+        model.addAttribute("test", userId);
         return "info";
     }
 
     @RequestMapping(value = "/maps")
     public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id){
         try {
-            session.setAttribute(USER_ID, id);
-            Users.getUsers().add(Integer.parseInt(id));
+            if (id != null) {
+                Users.getUsers().add(Integer.parseInt(id));
+            }
 
             voleyballList = playgroundService.getVoleyballPlayground();
             playfootballList = playgroundService.getFootballPlayground();
@@ -96,6 +112,7 @@ public class StartController {
             model.addAttribute("footInfo", footInfoList);
             model.addAttribute("basketInfo", basketInfoList);
             model.addAttribute("voleyballInfo", voleyballInfoList);
+            model.addAttribute("userId", id);
 
         } catch (DataBaseException e) {
             e.printStackTrace();

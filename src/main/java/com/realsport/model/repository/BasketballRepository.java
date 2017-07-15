@@ -2,6 +2,7 @@ package com.realsport.model.repository;
 
 
 import com.realsport.model.entityDao.Basketball;
+import com.realsport.model.entityDao.Voleyball;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ import java.util.List;
 public interface BasketballRepository  {
 
     List<Basketball> findAllBasketball();
+
+    Basketball findPlayGroundById(String id);
 }

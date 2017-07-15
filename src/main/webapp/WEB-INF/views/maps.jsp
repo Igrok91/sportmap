@@ -49,6 +49,16 @@
 
             .row.content {height:auto;}
         }
+        a.disabled {
+            pointer-events: none; /* делаем ссылку некликабельной */
+            cursor: default;  /* устанавливаем курсор в виде стрелки */
+            color: #999; /* цвет текста для нективной ссылки */
+        }
+
+        .divMain {
+            height: 140px;
+            width: 140px;
+        }
 
 
     </style>
@@ -75,16 +85,15 @@
     <div class="container-fluid" >
         <div class="row text-center">
             <h4 >Найди свою территорию спорта!</h4>
-            <hr>
             <div class="container">
                 <div class="btn-group ">
-                    <a  class="btn " id="football" role="button">
+                    <a  class="btn btn-default btn-sm" id="football" role="button">
                         <img src="resources/images/ballMiddle.png" alt="" align="middle">
                     </a>
-                    <a class="btn " id="basketball">
+                    <a class="btn btn-primary btn-sm" id="basketball">
                         <img src="resources/images/basketball.png" alt="" align="middle">
                     </a>
-                    <a  class="btn " id="voleyball">
+                    <a  class="btn btn-default btn-sm" id="voleyball">
                         <img src="resources/images/volleyball.png" alt="" align="middle">
                     </a>
                 </div>
@@ -100,6 +109,7 @@
             </div>
         </div>
     </div>
+
 
 </main>
 <footer class="container-fluid text-center">
@@ -118,6 +128,8 @@
     var footInfo = ${footInfo};
     var basketInfo = ${basketInfo};
     var voleyballInfo = ${voleyballInfo};
+
+    var userId =${userId};
 
 
     function initMap() {
@@ -171,9 +183,11 @@
                 icon: imageFootball
             });
 
+            var content = getFootWindowContent(footInfo, i, userId);
             var footInfowindow = new google.maps.InfoWindow({
-                content: getFootWindowContent(footInfo, i)
+                content: content
             });
+
 
             marker.addListener('click', function() {
                 footInfowindow.open(map, marker);
@@ -193,7 +207,7 @@
             });
 
             var basketInfowindow = new google.maps.InfoWindow({
-                content: getBasketWindowContent(basketInfo, i)
+                content: getBasketWindowContent(basketInfo, i, userId)
             });
 
             bmarker.addListener('click', function() {
@@ -214,7 +228,7 @@
             });
 
             var voleyballInfowindow = new google.maps.InfoWindow({
-                content: getVoleyballWindowContent(voleyballInfo ,i)
+                content: getVoleyballWindowContent(voleyballInfo ,i , userId)
             });
 
             vmarker.addListener('click', function() {
@@ -263,8 +277,6 @@
             markerCluster.addMarkers(voleyMarkers);
         });
     });
-
-
 
 
 
