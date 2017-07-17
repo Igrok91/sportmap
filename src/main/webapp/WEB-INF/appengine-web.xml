@@ -17,6 +17,6 @@
   <version>1</version>
   <runtime>java8</runtime>
   <threadsafe>true</threadsafe>
-  <sessions-enabled>true</sessions-enabled>
+
 </appengine-web-app>
 <!-- [END config] -->
