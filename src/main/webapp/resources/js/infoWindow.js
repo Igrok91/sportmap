@@ -2,9 +2,7 @@
  * Created by IgorR on 25.06.2017.
  */
 function getFootWindowContent(info, index, userId){
-
-
-        var infoWindow = createInfoWindow(info, index, userId);
+    var infoWindow = createInfoWindow(info, index, userId);
 
 /*    var coString = '<div>' +
         '<h4>' + info[index].namePlayground + '</h4> <hr>' +
@@ -33,13 +31,13 @@ function getVoleyballWindowContent(info, index, userId){
 }
 
 function sendMessage(idFoot, userID, a) {
+    a.className = "btn btn-success btn-xs disabled";
     $.ajax({
         url : "sendMessage",
         data : ({idFoot : idFoot, userID : userID}),
         success : function(data) {
         $('#sms').html("Ссылка отправлена");
-        a.className = "btn btn-success btn-xs disabled";
-        setTimeout(update, 6000);
+        setTimeout(update, 3000);
     }
 });
     function update() {

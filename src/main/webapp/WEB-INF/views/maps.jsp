@@ -56,7 +56,7 @@
         }
 
         .divMain {
-            height: 140px;
+            height: 110px;
             width: 140px;
         }
 
@@ -171,7 +171,8 @@
         var imageBasketball = 'resources/images/basketballSm.png';
         var imageVoleyball = 'resources/images/voleyballSm.png';
 
-        var  footInfowindow;
+
+        var  allInfowindow = [];
 
         // Add some markers to the map.
         // Note: The code uses the JavaScript Array.prototype.map() method to
@@ -183,14 +184,15 @@
                 icon: imageFootball
             });
 
-            var content = getFootWindowContent(footInfo, i, userId);
             var footInfowindow = new google.maps.InfoWindow({
-                content: content
+                content: getFootWindowContent(footInfo, i, userId)
             });
-
+            allInfowindow.push(footInfowindow);
 
             marker.addListener('click', function() {
+                closeAllInfoWindows();
                 footInfowindow.open(map, marker);
+
             });
 
             map.addListener('click', function(){
@@ -209,9 +211,11 @@
             var basketInfowindow = new google.maps.InfoWindow({
                 content: getBasketWindowContent(basketInfo, i, userId)
             });
-
+            allInfowindow.push(basketInfowindow);
             bmarker.addListener('click', function() {
+                closeAllInfoWindows();
                 basketInfowindow.open(map, bmarker);
+
             });
 
             map.addListener('click', function(){
@@ -230,9 +234,11 @@
             var voleyballInfowindow = new google.maps.InfoWindow({
                 content: getVoleyballWindowContent(voleyballInfo ,i , userId)
             });
-
+            allInfowindow.push(voleyballInfowindow);
             vmarker.addListener('click', function() {
+                closeAllInfoWindows();
                 voleyballInfowindow.open(map, vmarker);
+
             });
             map.addListener('click', function(){
                 voleyballInfowindow.close();
@@ -253,6 +259,12 @@
             infoWindow.setContent(browserHasGeolocation ?
                 'Используйте поле ввода для посика на карте Google' :
                 'Error: Your browser doesn\'t support geolocation.');
+        }
+
+        function closeAllInfoWindows(Infowindow){
+            allInfowindow.map(function(infoWindow, i) {
+                    infoWindow.close();
+            });
         }
     }
 
