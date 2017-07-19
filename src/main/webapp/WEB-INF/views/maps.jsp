@@ -195,9 +195,9 @@
 
             });
 
-            map.addListener('click', function(){
+             /*map.addListener('click', function(){
                 footInfowindow.close();
-            });
+            });*/
             return marker;
         });
 
@@ -218,9 +218,9 @@
 
             });
 
-            map.addListener('click', function(){
+            /* map.addListener('click', function(){
                 basketInfowindow.close();
-            });
+            }); */
             return bmarker;
         });
 
@@ -240,11 +240,15 @@
                 voleyballInfowindow.open(map, vmarker);
 
             });
-            map.addListener('click', function(){
+           /* map.addListener('click', function(){
                 voleyballInfowindow.close();
-            });
+            });*/
             return vmarker;
         });
+
+         map.addListener('click', function(){
+                       closeAllInfoWindows;
+                    });
         var markers = footMarkers.concat(basketMarkers, voleyMarkers);
 
 
@@ -261,7 +265,7 @@
                 'Error: Your browser doesn\'t support geolocation.');
         }
 
-        function closeAllInfoWindows(Infowindow){
+        function closeAllInfoWindows(){
             allInfowindow.map(function(infoWindow, i) {
                     infoWindow.close();
             });

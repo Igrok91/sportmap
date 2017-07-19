@@ -30,19 +30,21 @@ function getVoleyballWindowContent(info, index, userId){
     return infoWindow;
 }
 
-function sendMessage(idFoot, userID, a) {
+function sendMessage(idFoot, userID, a, p) {
     a.className = "btn btn-success btn-xs disabled";
     $.ajax({
         url : "sendMessage",
         data : ({idFoot : idFoot, userID : userID}),
         success : function(data) {
-        $('#sms').html("Ссылка отправлена");
-        setTimeout(update, 3000);
+        //$('#sms').html("Ссылка отправлена");
+        p.appendChild( document.createTextNode( "Ссылка отправлена" ) );
+        setTimeout(update, 3000, a, p);
     }
 });
-    function update() {
-        $('#sms').html("Получить ссылку");
-        a.className = "btn btn-success btn-xs";
+    function update(aa, pp) {
+       // $('#sms').html("Получить ссылку");
+        aa.className = "btn btn-success btn-xs";
+        pp.appendChild( document.createTextNode( "Получить ссылку" ) );
     }
 }
 
@@ -73,7 +75,7 @@ function createInfoWindow(info, index, userId) {
     a.role = "button";
     a.id = "footballId";
     a.onclick = function () {
-        sendMessage(idFoot, userID, a );
+        sendMessage(idFoot, userID, a, p);
     };
     //a.appendChild( document.createTextNode( "Получить ссылку" ) );
     a.appendChild(img);
