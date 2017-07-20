@@ -7,7 +7,9 @@ import com.realsport.model.entityDao.Playfootball;
 import com.realsport.model.entityDao.Voleyball;
 import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.VkMessageService;
+import com.realsport.model.utils.User;
 import com.realsport.model.utils.Users;
+import org.apache.commons.collections4.FluentIterable;
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -70,8 +72,14 @@ public class StartController {
             if (userID == null || idFoot == null ) {
                 return "fail";
             }
-            String links = playgroundService.getFootballById(idFoot).getLinks();
-            messageService.sendMessage(Integer.parseInt(userID), links);
+            User user = Users.getUsers().get(Integer.parseInt(userID));
+            if (user.getCountSendMessage() >= 10){
+                messageService.sendMessage(Integer.parseInt(userID), "Вы использовали 10 сообщений для вашего сеанса");
+                return "stopMessage";
+            } else {
+                String links = playgroundService.getFootballById(idFoot).getLinks();
+                messageService.sendMessage(Integer.parseInt(userID), links);
+            }
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
@@ -90,7 +98,13 @@ public class StartController {
     public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id){
         try {
             if (id != null) {
-                Users.getUsers().add(Integer.parseInt(id));
+                User user = new User();
+                user.setId(Integer.parseInt(id));
+                user.setCountSendMessage(0);
+                Users.getUsers().put(user.getId(), user);
+            } else {
+                model.addAttribute("errorID", "Невозможно распознать id пользователя");
+
             }
 
             voleyballList = playgroundService.getVoleyballPlayground();

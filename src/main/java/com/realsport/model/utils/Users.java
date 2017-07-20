@@ -2,6 +2,7 @@ package com.realsport.model.utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -9,9 +10,9 @@ import java.util.Set;
  */
 public class Users {
 
-    private static Set<Integer> users = new HashSet<>();
+    private static Map<Integer, User> users = new HashMap<>();
 
-    public static Set<Integer> getUsers() {
+    public static Map<Integer, User> getUsers() {
         return users;
     }
 }

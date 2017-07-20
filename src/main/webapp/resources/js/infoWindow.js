@@ -37,14 +37,14 @@ function sendMessage(idFoot, userID, a, p) {
         data : ({idFoot : idFoot, userID : userID}),
         success : function(data) {
         //$('#sms').html("Ссылка отправлена");
-        p.appendChild( document.createTextNode( "Ссылка отправлена" ) );
+        p.innerHTML = "Ссылка отправлена";
         setTimeout(update, 3000, a, p);
     }
 });
     function update(aa, pp) {
        // $('#sms').html("Получить ссылку");
         aa.className = "btn btn-success btn-xs";
-        pp.appendChild( document.createTextNode( "Получить ссылку" ) );
+        pp.innerHTML = "Получить ссылку";
     }
 }
 
