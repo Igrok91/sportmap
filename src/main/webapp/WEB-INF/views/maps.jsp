@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="resources/searchBox.css">
     <script src="resources/js/searchBox.js"></script>
     <script src="resources/js/infoWindow.js"></script>
+    <script src="resources/js/error.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
@@ -130,6 +131,8 @@
     var voleyballInfo = ${voleyballInfo};
 
     var userId =${userId};
+    var errorUserId = ${errorUserId};
+    var errorMaps = ${errorMaps};
 
 
     function initMap() {
@@ -157,20 +160,20 @@
                 map.setCenter(pos);
 
             }, function() {
-                handleLocationError(true, map.getCenter());
+                handleLocationError(true, map);
             });
 
 
         } else {
             // Browser doesn't support Geolocation
-            handleLocationError(false, map.getCenter());
+            handleLocationError(false, map);
         }
 
-        var labels = 'Футбол';
-        var imageFootball = 'resources/images/ball.png';
-        var imageBasketball = 'resources/images/basketballSm.png';
-        var imageVoleyball = 'resources/images/voleyballSm.png';
+         if (errorUserId !== undefined){
 
+                }
+
+        var labels = 'Футбол';
 
         var  allInfowindow = [];
 
@@ -257,13 +260,12 @@
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
 
-        function handleLocationError(browserHasGeolocation, pos) {
-            var infoWindow = new google.maps.InfoWindow({map: map});
-            infoWindow.setPosition(pos);
-            infoWindow.setContent(browserHasGeolocation ?
-                'Используйте поле ввода для посика на карте Google' :
-                'Error: Your browser doesn\'t support geolocation.');
-        }
+      if (errorUserId !== undefined) {
+            handleUserIdError(map, errorUserId);
+      }
+      if (errorMaps !== undefined) {
+               handleMapsError(map, errorMaps);
+            }
 
         function closeAllInfoWindows(){
             allInfowindow.map(function(infoWindow, i) {
