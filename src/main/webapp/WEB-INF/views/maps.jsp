@@ -130,9 +130,10 @@
     var basketInfo = ${basketInfo};
     var voleyballInfo = ${voleyballInfo};
 
-    var userId =${userId};
-    var errorUserId = ${errorUserId};
-    var errorMaps = ${errorMaps};
+
+    var userId = "${userId}";
+
+    var errorMaps = "${errorMaps}";
 
 
     function initMap() {
@@ -141,9 +142,8 @@
             zoom: 11,
             mapTypeId: 'roadmap'
         });
-
         initAutocomplete(map);
-
+        var infoWindow = new google.maps.InfoWindow({map: map});
 
 
         // alert(footInfo[index].link);
@@ -154,29 +154,38 @@
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-
-                /*infoWindow.setPosition(pos);
-                 infoWindow.setContent('Location found.');*/
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Нажми на маркер-мяч для большей иноформации');
                 map.setCenter(pos);
+                if (userId.localeCompare("error") === 0) {
+                    countError = handleUserError(map, infoWindow);
+
+                } else {
+                    initPlaygroundMarkers(map);
+                }
 
             }, function() {
-                handleLocationError(true, map);
+                handleLocationError(true, map, infoWindow);
+
             });
 
 
         } else {
             // Browser doesn't support Geolocation
-            handleLocationError(false, map);
+            handleLocationError(false, map, infoWindow);
         }
 
-         if (errorUserId !== undefined){
 
-                }
 
+    }
+
+    function initPlaygroundMarkers(map) {
         var labels = 'Футбол';
+        var imageFootball = 'resources/images/ball.png';
+        var imageBasketball = 'resources/images/basketballSm.png';
+        var imageVoleyball = 'resources/images/voleyballSm.png';
 
         var  allInfowindow = [];
-
         // Add some markers to the map.
         // Note: The code uses the JavaScript Array.prototype.map() method to
         // create an array of markers based on a given "footLocations" array.
@@ -198,9 +207,9 @@
 
             });
 
-             /*map.addListener('click', function(){
-                footInfowindow.close();
-            });*/
+            /*map.addListener('click', function(){
+             footInfowindow.close();
+             });*/
             return marker;
         });
 
@@ -222,8 +231,8 @@
             });
 
             /* map.addListener('click', function(){
-                basketInfowindow.close();
-            }); */
+             basketInfowindow.close();
+             }); */
             return bmarker;
         });
 
@@ -243,15 +252,15 @@
                 voleyballInfowindow.open(map, vmarker);
 
             });
-           /* map.addListener('click', function(){
-                voleyballInfowindow.close();
-            });*/
+            /* map.addListener('click', function(){
+             voleyballInfowindow.close();
+             });*/
             return vmarker;
         });
 
-         map.addListener('click', function(){
-                       closeAllInfoWindows;
-                    });
+        map.addListener('click', function(){
+            closeAllInfoWindows();
+        });
         var markers = footMarkers.concat(basketMarkers, voleyMarkers);
 
 
@@ -259,19 +268,12 @@
         markerCluster = new MarkerClusterer(map, markers,
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
-
-      if (errorUserId !== undefined) {
-            handleUserIdError(map, errorUserId);
-      }
-      if (errorMaps !== undefined) {
-               handleMapsError(map, errorMaps);
-            }
-
         function closeAllInfoWindows(){
             allInfowindow.map(function(infoWindow, i) {
-                    infoWindow.close();
+                infoWindow.close();
             });
         }
+
     }
 
 

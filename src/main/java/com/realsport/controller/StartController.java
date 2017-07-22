@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,6 +38,8 @@ public class StartController {
     public static final String VOLEYBALL = "voley";
 
     private static final Integer ADMIN = 172924708;
+
+    private static final Long TIME = 3000L;
 
 
 
@@ -70,25 +73,53 @@ public class StartController {
      * @return
      */
     @RequestMapping(value = "/sendMessage")
-    public @ResponseBody String sendMessageToUser( @RequestParam String idPlay,  @RequestParam String userID){
+    public @ResponseBody String sendMessageToUser( @RequestParam(value = "idPlay" , required = false) String idPlay,  @RequestParam(value = "userID" , required = false) String userID) throws Exception {
         try {
             if (userID == null || idPlay == null ) {
                 return "fail";
             }
+
             User user = Users.getUsers().get(Integer.parseInt(userID));
-            if (user.getCountSendMessage() >= 10){
-                messageService.sendMessage(Integer.parseInt(userID), "Сообщения для вашего сеанса исчерпаны");
-                return "stopMessage";
-            } else {
-                String links = playgroundService.getFootballById(idPlay).getLinks();
-                messageService.sendMessage(Integer.parseInt(userID), links);
-            }
+            int countMessage = user.getCountSendMessage();
+            checkUser(user);
+            if (!user.isMessageDisabled()) {
+
+                if (countMessage >= 2) {
+                    // messageService.sendMessage(Integer.parseInt(userID), "Сообщения для вашего сеанса исчерпаны");
+                    user.setDate(new Date());
+                    user.setMessageDisabled(true);
+                    return "stopMessage";
+                } else {
+                    countMessage++;
+                    user.setCountSendMessage(countMessage);
+                    String links = playgroundService.getFootballById(idPlay).getLinks();
+                    messageService.sendMessage(Integer.parseInt(userID), links);
+                    return "success";
+                }
+            } else return "stopMessage";
         } catch (Exception e) {
             messageService.sendMessage(ADMIN, errorSendMessage(userID, idPlay, e));
             e.printStackTrace();
             return "fail";
         }
-        return "success";
+    }
+
+    private void checkUser(User user) {
+        Date now = new Date();
+        if (user.isMessageDisabled()) {
+            Date userDate = new Date(TIME + user.getDate().getTime());
+            if (userDate.before(now)){
+                user.setMessageDisabled(false);
+                user.setCountSendMessage(0);
+            }
+        }
+        if (user.getDate() != null) {
+            Date userDate = new Date((TIME * 2) + user.getDate().getTime());
+            if (userDate.before(now)) {
+                user.setMessageDisabled(false);
+                user.setCountSendMessage(0);
+            }
+        }
     }
 
 
@@ -108,15 +139,19 @@ public class StartController {
      * @return
      */
     @RequestMapping(value = "/maps")
-    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id){
+    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id) throws Exception {
         try {
             if (id != null) {
-                User user = new User();
-                user.setId(Integer.parseInt(id));
-                user.setCountSendMessage(0);
-                Users.getUsers().put(user.getId(), user);
+                Integer idUser = Integer.parseInt(id);
+                if (Users.getUsers().get(idUser) == null) {
+                    User user = new User();
+                    user.setId(idUser);
+                    user.setCountSendMessage(0);
+                    Users.getUsers().put(user.getId(), user);
+                }
+                model.addAttribute("userId", id);
             } else {
-                model.addAttribute("errorUserId", "Невозможно распознать пользователя, напишите нам в группу");
+                model.addAttribute("userId", "error");
                 messageService.sendMessage(ADMIN, "Невозможно распознать пользователя" );
             }
             // Получение данных по площадкам из базы данных
@@ -141,10 +176,10 @@ public class StartController {
             model.addAttribute("footInfo", footInfoList);
             model.addAttribute("basketInfo", basketInfoList);
             model.addAttribute("voleyballInfo", voleyballInfoList);
-            model.addAttribute("userId", id);
+            model.addAttribute("errorMaps", "success");
 
         } catch (Exception e) {
-            model.addAttribute("errorMaps", "Ошибка при создании карты, в ближайшее время исправим");
+            model.addAttribute("errorMaps", "fail");
             messageService.sendMessage(ADMIN, errorCreateMaps(id, e));
             e.printStackTrace();
         }

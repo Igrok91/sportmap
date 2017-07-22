@@ -4,6 +4,7 @@
 function getFootWindowContent(info, index, userId){
     var infoWindow = createInfoWindow(info, index, userId);
 
+
 /*    var coString = '<div>' +
         '<h4>' + info[index].namePlayground + '</h4> <hr>' +
         '<div class="btn-group ">' +
@@ -30,15 +31,28 @@ function getVoleyballWindowContent(info, index, userId){
     return infoWindow;
 }
 
-function sendMessage(idFoot, userID, a, p) {
+function sendMessage(idFoot, userID, a, p, div) {
     a.className = "btn btn-success btn-xs disabled";
     $.ajax({
         url : "sendMessage",
-        data : ({idFoot : idFoot, userID : userID}),
+        data : ({idPlay : idFoot, userID : userID}),
         success : function(data) {
         //$('#sms').html("Ссылка отправлена");
-        p.innerHTML = "Ссылка отправлена";
-        setTimeout(update, 3000, a, p);
+            if (data.localeCompare("success") === 0){
+                p.innerHTML = "Ссылка отправлена";
+                setTimeout(update, 4000, a, p);
+            } else if (data.localeCompare("stopMessage") === 0) {
+                //p.innerHTML = "Лимит сообщений превышен и отключен на 5 миннут!";
+                   var coString = '<div>' +
+                 '<h4> Ошибка </h4>'+
+                 '</div>';
+                   div.innerHTML = coString;
+               // setTimeout(update, 7000, a, p);
+            }else if (data.localeCompare("fail") === 0) {
+                p.innerHTML = "Произошла ошибка при отправки сообщения!";
+                setTimeout(update, 7000, a, p);
+            }
+
     }
 });
     function update(aa, pp) {
@@ -75,7 +89,7 @@ function createInfoWindow(info, index, userId) {
     a.role = "button";
     a.id = "footballId";
     a.onclick = function () {
-        sendMessage(idFoot, userID, a, p);
+        sendMessage(idFoot, userID, a, p, divMain);
     };
     //a.appendChild( document.createTextNode( "Получить ссылку" ) );
     a.appendChild(img);

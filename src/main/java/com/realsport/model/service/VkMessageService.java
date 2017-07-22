@@ -19,13 +19,13 @@ public class VkMessageService {
     @Autowired
     private initVk initVk;
 
-    public void sendMessage(Integer userId, String message){
+    public void sendMessage(Integer userId, String message) throws Exception {
         try {
             initVk.getVk().messages().send(initVk.getGroupActor()).message(message).userId(userId).randomId(random.nextInt()).execute();
         } catch (ApiException e) {
-            e.printStackTrace();
+            throw e;
         } catch (ClientException e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 }
