@@ -31,7 +31,7 @@ function getVoleyballWindowContent(info, index, userId){
     return infoWindow;
 }
 
-function sendMessage(idFoot, userID, a, p, div) {
+function sendMessage(idFoot, userID, a, p) {
     a.className = "btn btn-success btn-xs disabled";
     $.ajax({
         url : "sendMessage",
@@ -42,15 +42,20 @@ function sendMessage(idFoot, userID, a, p, div) {
                 p.innerHTML = "Ссылка отправлена";
                 setTimeout(update, 4000, a, p);
             } else if (data.localeCompare("stopMessage") === 0) {
-                //p.innerHTML = "Лимит сообщений превышен и отключен на 5 миннут!";
+                //p.innerHTML = "Лимит сообщений превышен, сервис отключен на 5 миннут!";
                    var coString = '<div>' +
-                 '<h4> Ошибка </h4>'+
+                 //'<img src="resources/images/error.png">' +
+                  '<p>Лимит сообщений превышен, сервис отключен на 5 миннут!</p>' +
                  '</div>';
-                   div.innerHTML = coString;
-               // setTimeout(update, 7000, a, p);
+                   p.innerHTML = coString;
+                setTimeout(update, 10000, a, p);
             }else if (data.localeCompare("fail") === 0) {
-                p.innerHTML = "Произошла ошибка при отправки сообщения!";
-                setTimeout(update, 7000, a, p);
+                var coString = '<div>' +
+                    //'<img src="resources/images/error.png">' +
+                    '<p>Произошла ошибка при отправки сообщения!</p>' +
+                    '</div>';
+                p.innerHTML = coString;
+                setTimeout(update, 10000, a, p);
             }
 
     }
@@ -69,7 +74,7 @@ function createInfoWindow(info, index, userId) {
 
     var divMain = document.createElement('div');
     divMain.className = "divMain";
-    var name = document.createElement('h4');
+    var name = document.createElement('h5');
     name.appendChild( document.createTextNode(info[index].namePlayground));
 
     var p = document.createElement('p');
@@ -89,7 +94,7 @@ function createInfoWindow(info, index, userId) {
     a.role = "button";
     a.id = "footballId";
     a.onclick = function () {
-        sendMessage(idFoot, userID, a, p, divMain);
+        sendMessage(idFoot, userID, a, p);
     };
     //a.appendChild( document.createTextNode( "Получить ссылку" ) );
     a.appendChild(img);

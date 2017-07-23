@@ -1,6 +1,7 @@
 package com.realsport.controller;
 
 import com.google.gson.Gson;
+import com.realsport.model.dao.daoException.DataBaseException;
 import com.realsport.model.entityDao.Basketball;
 import com.realsport.model.entityDao.Playfootball;
 import com.realsport.model.entityDao.Voleyball;
@@ -49,22 +50,6 @@ public class StartController {
     @Autowired
     private VkMessageService messageService;
 
- /*   @RequestMapping(value = "/sendMessage/{id}/{userId}")
-    public  String sendMessageToUser(HttpServletRequest request, @PathVariable String id,  @PathVariable String userId){
-        //String userId = (String) request.getSession().getAttribute(USER_ID);
-        try {
-
-        String links = playgroundService.getFootballById(id).getLinks();
-        messageService.sendMessage(Integer.parseInt(userId), links);
-            System.out.println("sendMessage " + links);
-            System.out.println("sendMessage " + userId);
-        } catch (DataBaseException e) {
-            e.printStackTrace();
-        }
-
-        //return "redirect:/maps?viewer_id="+userId ;
-        return "successs";
-    }*/
 
     /**
      * Отправка сообщения пользователю vk
@@ -158,6 +143,9 @@ public class StartController {
             voleyballList = playgroundService.getVoleyballPlayground();
             playfootballList = playgroundService.getFootballPlayground();
             basketballList = playgroundService.getBasketballPlayground();
+            if (voleyballList == null || playfootballList == null || basketballList == null) {
+                throw new DataBaseException(DataBaseException.ERORR_MESSAGE);
+            }
             // Получение координат площадок и конвертация в JSON
             ArrayList<String> footLocationList = getСoordinateFootPlayground(playfootballList);
             ArrayList<String> basketLocationList = getСoordinateBasketPlayground(basketballList);
@@ -177,14 +165,13 @@ public class StartController {
             model.addAttribute("basketInfo", basketInfoList);
             model.addAttribute("voleyballInfo", voleyballInfoList);
             model.addAttribute("errorMaps", "success");
-
         } catch (Exception e) {
             model.addAttribute("errorMaps", "fail");
             messageService.sendMessage(ADMIN, errorCreateMaps(id, e));
             e.printStackTrace();
         }
 
-        return "maps";
+        return "map";
     }
 
     /**

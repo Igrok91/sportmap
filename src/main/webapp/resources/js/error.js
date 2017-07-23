@@ -20,9 +20,7 @@
 
       var divMain = document.createElement('div');
       divMain.className = "divMain";
-      var name = document.createElement('h4');
-      name.appendChild( document.createTextNode("Ошибка"));
-      name.className = "errors";
+
 
       var p = document.createElement('p');
       p.appendChild( document.createTextNode( error ) );
@@ -33,8 +31,6 @@
       img.src = "resources/images/error.png";
 
       divMain.appendChild(img);
-      //divMain.appendChild(name);
-      //divMain.appendChild(hr);
       divMain.appendChild(p);
       return divMain;
   }

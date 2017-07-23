@@ -57,8 +57,8 @@
         }
 
         .divMain {
-            height: 110px;
-            width: 140px;
+            height: 105px;
+            width: 150px;
         }
 
 
@@ -155,12 +155,14 @@
                     lng: position.coords.longitude
                 };
                 infoWindow.setPosition(pos);
-                infoWindow.setContent('Нажми на маркер-мяч для большей иноформации');
+                infoWindow.setContent('Нажмите на маркер-мяч для перехода к площадке');
                 map.setCenter(pos);
                 if (userId.localeCompare("error") === 0) {
-                    countError = handleUserError(map, infoWindow);
-
-                } else {
+                    handleUserError(map, infoWindow);
+                } else if (errorMaps.localeCompare("fail") === 0){
+                    handleUserError(map, infoWindow);
+                }
+                else {
                     initPlaygroundMarkers(map);
                 }
 
