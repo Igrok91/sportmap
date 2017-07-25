@@ -18,6 +18,17 @@ public enum FootData {
     PLAYGROUND_13("13", "Карташихина улица, 19", "59.935642", "30.240288", "https://chat.whatsapp.com/DLiTL30SQDxIsM7Ikckk7J", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Карташихина ", "19", "false"),
     PLAYGROUND_14("14", "Школа №6", "59.930148", "30.247321", "https://chat.whatsapp.com/8tIr8EL5qXCLud4dnK028u", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Шевченко ", "3А", "true"),
     PLAYGROUND_15("15", "Школа №4", "59.929510", "30.251619", "https://chat.whatsapp.com/KWh5WtwC9Ks9fz2VfEPPik", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "пр. Большой", "88Б", "true"),
+    PLAYGROUND_16("16", "Гимназия №642", "59.936068", "30.237155", "https://chat.whatsapp.com/Ig7pgA7FAeG3DFDZBrNdyO", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Опочинина", "35", "true"),
+    PLAYGROUND_17("17", "Гимназия №24", "59.943649", "30.282403", "https://chat.whatsapp.com/DF2Rdh1RamLAgogZTigEHC", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "Средний пр.", "20", "true"),
+    PLAYGROUND_18("18", "7 линия, 66", "59.945104", "30.274805", "https://chat.whatsapp.com/GBPEafPLONCHabhDpVufUt", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "7-я линия", "66A", "true"),
+    PLAYGROUND_19("19", "Школа №29", "59.944677", "30.267884", "https://chat.whatsapp.com/4lFagjCuGsj1WJSmd8nnfo", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "Малый пр.", "34A", "true"),
+    PLAYGROUND_20("20", "Школа №11", "59.941782", "30.264462", "https://chat.whatsapp.com/Li5NwMlwwFe2YdPTaQaXb4", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "16-я линия", "55A", "true"),
+    PLAYGROUND_21("21", "15-я линия, 20", "59.937703", "30.270151", "https://chat.whatsapp.com/BDWZ7ny5knIEnTB54Ai9IM", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "15-я линия", "20", "false"),
+    PLAYGROUND_22("22", "19-я линия, 20", "59.936022", "30.265179", "https://chat.whatsapp.com/4LmP3gMeoqG1KXHECeyy7b", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "19-я линия", "20", "false"),
+    PLAYGROUND_23("23", "Школа №17", "59.936835", "30.264294", "https://chat.whatsapp.com/CBKJPgTyo1B0OZxvjLSgfE", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "19-я линия", "22А", "true"),
+    PLAYGROUND_24("24", "Школа №15", "59.940356", "30.241166", "https://chat.whatsapp.com/GvV76rHqt4sDuAJziOy4st", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Шевченко", "35А", "true"),
+    PLAYGROUND_25("25", "ул. Наличная, 45", "59.943922", "30.232568", "https://chat.whatsapp.com/LHvqjS1Vim4CW0n2tRbspI", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Наличная", "45", "false"),
+    PLAYGROUND_26("26", "Школа №19", "59.940336", "30.237352", "https://chat.whatsapp.com/HN1WdEAZ0r1IfpImwpocRy", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Гаванская", "54А", "true"),
     ;
 
 
