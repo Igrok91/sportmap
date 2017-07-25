@@ -29,6 +29,15 @@ public enum FootData {
     PLAYGROUND_24("24", "Школа №15", "59.940356", "30.241166", "https://chat.whatsapp.com/GvV76rHqt4sDuAJziOy4st", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Шевченко", "35А", "true"),
     PLAYGROUND_25("25", "ул. Наличная, 45", "59.943922", "30.232568", "https://chat.whatsapp.com/LHvqjS1Vim4CW0n2tRbspI", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Наличная", "45", "false"),
     PLAYGROUND_26("26", "Школа №19", "59.940336", "30.237352", "https://chat.whatsapp.com/HN1WdEAZ0r1IfpImwpocRy", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Гаванская", "54А", "true"),
+    PLAYGROUND_27("27", "ул. Наличная, 29", "59.938797", "30.234423", "https://chat.whatsapp.com/Ay7CnETbuFP95j8W0BQYG4", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Наличная", "29", "false"),
+    PLAYGROUND_28("28", "Малый пр., 90", "59.938988", "30.225296", "https://chat.whatsapp.com/FLu6c8ctlt1CGbscuGMVi5", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "Малый пр", "90", "false"),
+    PLAYGROUND_29("29", "Гимназия №642", "59.940727", "30.212377", "https://chat.whatsapp.com/KJn3xDjGVFY5etIfQLN4PG", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "Морская наб.", "15к2", "true"),
+    PLAYGROUND_30("30", "Боцманская ул.", "59.942727", "30.211523", "https://chat.whatsapp.com/6uu34qhxLoLF223YJPU2tS", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "Боцманская ул.", "", "false"),
+    PLAYGROUND_31("31", "Наличная, 36к6", "59.946947", "30.220369", "https://chat.whatsapp.com/KrkocjUV2iWHxOMh62XI2n", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Наличная", "32к6", "false"),
+    PLAYGROUND_32("32", "Гимназия №74", "59.998909", "30.350464", "https://chat.whatsapp.com/HrnK7fnjEV59YYlFIzpf3P", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Болотная", "6А", "true"),
+    PLAYGROUND_33("33", "Лицей им. Неболсина", "59.998498", "30.353189", "https://chat.whatsapp.com/Dz6G4W1NLuPLZsq5UBm9Kt", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "Муринский пр.", "43", "true"),
+    PLAYGROUND_34("34", "Школа №145", "60.015645", "30.374056", "https://chat.whatsapp.com/FFPRXEGqjAEAc6X5pczksC", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "Науки пр.", "13к4", "true"),
+    PLAYGROUND_35("35", "Школа №57", "60.009088", "30.286757", "https://chat.whatsapp.com/7Vvzt3BC0YiHcLPwFXOj2f", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ал. Поликарпова", "7", "true"),
     ;
 
 
