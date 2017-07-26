@@ -17,7 +17,7 @@
 	</bean>-->
 
 
-	<bean id = "productDao" class="com.realsport.model.dao.impl.PlaygroundDaoImpl">
+	<bean id = "productDao" class="com.realsport.model.dao.impl.PlaygroundDaoImpl" >
 	</bean>
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
