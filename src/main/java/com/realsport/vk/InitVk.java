@@ -27,7 +27,7 @@ public  class InitVk {
         return initVk;
     }*/
 
-    public synchronized static VkApiClient getVk() {
+    public  static VkApiClient getVk() {
         return vk;
     }
 

@@ -132,6 +132,7 @@ public class StartController {
                     User user = new User();
                     user.setId(idUser);
                     user.setCountSendMessage(0);
+                    user.setDate(new Date());
                     Users.getUsers().put(user.getId(), user);
                 }
                 model.addAttribute("userId", id);

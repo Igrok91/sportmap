@@ -16,14 +16,7 @@ public class VkMessageService {
 
     private final Random random = new Random();
 
-
-    public  void sendMessage(Integer userId, String message) throws Exception {
-        try {
-            InitVk.getVk().messages().send(InitVk.getGroupActor()).message(message).userId(userId).randomId(random.nextInt()).execute();
-        } catch (ApiException e) {
-            throw e;
-        } catch (ClientException e) {
-            throw e;
-        }
+    public synchronized void sendMessage(Integer userId, String message) throws Exception {
+        InitVk.getVk().messages().send(InitVk.getGroupActor()).message(message).userId(userId).randomId(random.nextInt()).execute();
     }
 }

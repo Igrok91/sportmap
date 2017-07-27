@@ -155,30 +155,40 @@
                     lng: position.coords.longitude
                 };
                 infoWindow.setPosition(pos);
-                infoWindow.setContent('Нажмите на маркер-мяч для перехода к площадке');
+                infoWindow.setContent('Нажмите на маркер для перехода к площадке');
                 map.setCenter(pos);
-                if (userId.localeCompare("error") === 0) {
-                    handleUserError(map, infoWindow);
-                } else if (errorMaps.localeCompare("fail") === 0){
-                    handleUserError(map, infoWindow);
-                }
-                else {
-                    initPlaygroundMarkers(map);
-                }
+                initMarkers(map, infoWindow);
 
             }, function() {
                 handleLocationError(true, map, infoWindow);
-
+                initMarkers(map, infoWindow);
             });
 
 
         } else {
-            // Browser doesn't support Geolocation
             handleLocationError(false, map, infoWindow);
+            initMarkers(map, infoWindow);
+            // Browser doesn't support Geolocation
+
         }
+        function initMarkers(map, infoWindow) {
+         if (userId.localeCompare("error") === 0) {
+                handleUserError(map, infoWindow);
+             } else if (errorMaps.localeCompare("fail") === 0){
+               handleUserError(map, infoWindow);
+              }
+                else {
+                   VK.init(function() {
+                        // API initialization succeeded
+                         initPlaygroundMarkers(map);
 
-
-
+                     }, function() {
+                          // API initialization failed
+                        //handleUserError(map, infoWindow);
+                        initPlaygroundMarkers(map);
+                   }, '5.67');
+            }
+        }
     }
 
     function initPlaygroundMarkers(map) {

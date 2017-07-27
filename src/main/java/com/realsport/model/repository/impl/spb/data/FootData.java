@@ -93,6 +93,7 @@ public enum FootData {
     PLAYGROUND_88("88", "Школа №346", "59.913391", "30.468178", "https://chat.whatsapp.com/JSPGw4ZdUvh2Ro56K9rebX", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Подвойского", "18к3", "true"),
     PLAYGROUND_89("89", "Школа №268", "59.917019", "30.477640", "https://chat.whatsapp.com/64rJprWFm34JwhWidrSjfs", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "пр. Большевиков", "4к2А", "true"),
     PLAYGROUND_90("90", "Школа №332", "59.918796", "30.486423", "https://chat.whatsapp.com/8afeVoDy5T887nI5Sq31Io", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "пр. Товарищеский ", "10к2", "true"),
+    PLAYGROUND_91("91", "Школа №332", "59.918796", "30.486423", "https://chat.whatsapp.com/8afeVoDy5T887nI5Sq31Io", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "пр. Товарищеский ", "10к2", "true"),
     ;
 
 
