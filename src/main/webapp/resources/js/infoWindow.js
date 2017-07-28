@@ -1,8 +1,8 @@
 /**
  * Created by IgorR on 25.06.2017.
  */
-function getFootWindowContent(info, index, userId){
-    var infoWindow = createInfoWindow(info, index, userId);
+function getFootWindowContent(info, index, userId, allowMessage){
+    var infoWindow = createInfoWindow(info, index, userId, allowMessage);
 
 
 /*    var coString = '<div>' +
@@ -31,7 +31,8 @@ function getVoleyballWindowContent(info, index, userId){
     return infoWindow;
 }
 
-function sendMessage(idFoot, userID, a, p) {
+function sendMessage(idFoot, userID, a, p, allowMessage) {
+        if (allowMessage.data.localeCompare("true") === 0) {
     a.className = "btn btn-success btn-xs disabled";
     $.ajax({
         url : "sendMessage",
@@ -60,6 +61,13 @@ function sendMessage(idFoot, userID, a, p) {
 
     }
 });
+} else {
+                var coString = '<div>' +
+                  '<p>Отмена отправки сообщения</p>' +
+                 '</div>';
+                   p.innerHTML = coString;
+                setTimeout(update, 10000, a, p);
+}
     function update(aa, pp) {
        // $('#sms').html("Получить ссылку");
         aa.className = "btn btn-success btn-xs";
@@ -67,7 +75,7 @@ function sendMessage(idFoot, userID, a, p) {
     }
 }
 
-function createInfoWindow(info, index, userId) {
+function createInfoWindow(info, index, userId, allowMessage) {
 
     var idFoot = info[index].id;
     var userID = userId;
@@ -94,7 +102,13 @@ function createInfoWindow(info, index, userId) {
     a.role = "button";
     a.id = "footballId";
     a.onclick = function () {
+        var allow = checkAllowMessagesFromCommunity(userID, allowMessage);
+        if (allow === true) {
         sendMessage(idFoot, userID, a, p);
+        } else {
+        setTimeout(sendMessage, 3000, idFoot, userID, a, p, allowMessage);
+        }
+
     };
     //a.appendChild( document.createTextNode( "Получить ссылку" ) );
     a.appendChild(img);
@@ -105,4 +119,12 @@ function createInfoWindow(info, index, userId) {
     //divMain.appendChild(hr);
     divMain.appendChild(p);
     return divMain;
+}
+
+function checkAllowMessagesFromCommunity(userId, allowMessage) {
+        if (allowMessage.data.localeCompare("true") !== 0) {
+            VK.callMethod("showAllowMessagesFromCommunityBox");
+            return false;
+        }
+        return true;
 }

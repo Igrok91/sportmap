@@ -135,6 +135,8 @@
 
     var errorMaps = "${errorMaps}";
 
+    var allowMessage = {data : "false"};
+
 
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -181,6 +183,9 @@
                    VK.init(function() {
                         // API initialization succeeded
                          initPlaygroundMarkers(map);
+                         VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+                                     allow();
+                                 });
 
                      }, function() {
                           // API initialization failed
@@ -189,6 +194,10 @@
                    }, '5.67');
             }
         }
+    }
+
+    function allow() {
+           allowMessage.data = "true";
     }
 
     function initPlaygroundMarkers(map) {
@@ -209,7 +218,7 @@
             });
 
             var footInfowindow = new google.maps.InfoWindow({
-                content: getFootWindowContent(footInfo, i, userId)
+                content: getFootWindowContent(footInfo, i, userId, allowMessage)
             });
             allInfowindow.push(footInfowindow);
 

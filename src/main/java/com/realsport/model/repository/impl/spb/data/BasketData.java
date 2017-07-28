@@ -4,11 +4,14 @@ package com.realsport.model.repository.impl.spb.data;
  * Created by IgorR on 08.07.2017.
  */
 public enum BasketData {
-    PLAYGROUND_1("1", "Школа 32", "55.750367", "48.739751", "https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhos", "https://vk.com/igor_ryabtcev","Иннополис", "Кораблестроителей", "6");
+    PLAYGROUND_1("1", "Коломенская, 31", "59.922996", "30.351791", "https://chat.whatsapp.com/DSiKkPD0afb0ioLPCs5yT4", "https://vk.com/igor_ryabtcev","Санкт-Петербург", "ул. Коломенская", "31", "false"),
+    PLAYGROUND_2("2", "Школа №60", "60.035953", "30.349570", "https://chat.whatsapp.com/Hyvgyf6SQqkEa6Ubr6v57y", "https://vk.com/igor_ryabtcev","Санкт-Петербург", "пр. Художников", "9к3", "true"),
+    PLAYGROUND_3("3", "ул. Славы", "60.059276", "30.479679", "https://chat.whatsapp.com/ABbCDGpjpAxKAhUEZryhoL", "https://vk.com/igor_ryabtcev","Санкт-Петербург", "ул. Славы", "", "false"),
+    ;
 
 
 
-    BasketData(String id, String name, String lattitude, String longitude, String links, String creator, String city, String street, String house) {
+    BasketData(String id, String name, String lattitude, String longitude, String links, String creator, String city, String street, String house, String subject) {
         this.id = id;
         this.name = name;
         this.lattitude = lattitude;
@@ -18,6 +21,7 @@ public enum BasketData {
         this.city = city;
         this.street = street;
         this.house = house;
+        this.subject = subject;
     }
 
     private String id;
@@ -29,6 +33,7 @@ public enum BasketData {
     private String city;
     private String street;
     private String house;
+    private String subject;
 
     public String getId() {
         return id;
