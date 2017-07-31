@@ -51,64 +51,6 @@ public class StartController {
     private VkMessageService messageService;
 
 
-    /**
-     * Отправка сообщения пользователю vk
-     * @param idPlay
-     * @param userID
-     * @return
-     */
-    @RequestMapping(value = "/sendMessage")
-    public @ResponseBody String sendMessageToUser( @RequestParam(value = "idPlay" , required = false) String idPlay,  @RequestParam(value = "userID" , required = false) String userID) throws Exception {
-        try {
-            if (userID == null || idPlay == null ) {
-                return "fail";
-            }
-
-            User user = Users.getUsers().get(Integer.parseInt(userID));
-            int countMessage = user.getCountSendMessage();
-            checkUser(user);
-            if (!user.isMessageDisabled()) {
-
-                if (countMessage >= 3) {
-                    // messageService.sendMessage(Integer.parseInt(userID), "Сообщения для вашего сеанса исчерпаны");
-                    user.setDate(new Date());
-                    user.setMessageDisabled(true);
-                    return "stopMessage";
-                } else {
-                    countMessage++;
-                    user.setCountSendMessage(countMessage);
-                    String links = playgroundService.getFootballById(idPlay).getLinks();
-                    messageService.sendMessage(Integer.parseInt(userID), links);
-                    return "success";
-                }
-            } else return "stopMessage";
-        } catch (Exception e) {
-            messageService.sendMessage(ADMIN, errorSendMessage(userID, idPlay, e));
-            e.printStackTrace();
-            return "fail";
-        }
-    }
-
-    private void checkUser(User user) {
-        Date now = new Date();
-        if (user.isMessageDisabled()) {
-            Date userDate = new Date(TIME + user.getDate().getTime());
-            if (userDate.before(now)){
-                user.setMessageDisabled(false);
-                user.setCountSendMessage(0);
-            }
-        }
-        if (user.getDate() != null) {
-            Date userDate = new Date((TIME * 2) + user.getDate().getTime());
-            if (userDate.before(now)) {
-                user.setMessageDisabled(false);
-                user.setCountSendMessage(0);
-            }
-        }
-    }
-
-
-
 
     @RequestMapping(value = "/info")
     public String info(Model model, HttpServletRequest request){
@@ -138,7 +80,7 @@ public class StartController {
                 model.addAttribute("userId", id);
             } else {
                 model.addAttribute("userId", "error");
-                messageService.sendMessage(ADMIN, "Невозможно распознать пользователя" );
+                messageService.sendMessage(ADMIN, "Невозможно распознать пользователя " +  id);
             }
             // Получение данных по площадкам из базы данных
             voleyballList = playgroundService.getVoleyballPlayground();

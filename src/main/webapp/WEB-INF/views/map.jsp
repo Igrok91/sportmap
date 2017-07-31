@@ -21,7 +21,6 @@
     <script src="resources/js/error.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
         .navbar {
@@ -59,7 +58,7 @@
 
 
         .divMain {
-            height: 120px;
+            height: 110px;
             width: 190px;
             background-color:#fafafa;
 
@@ -205,6 +204,11 @@
         var imageBasketball = 'resources/images/basketballSm.png';
         var imageVoleyball = 'resources/images/voleyballSm.png';
 
+        var imageFootball2 = 'resources/images/ball2.png';
+        var imageBasketball2 = 'resources/images/basketballSm2.png';
+        var imageVoleyball2 = 'resources/images/voleyballSm2.png';
+
+
         var  allInfowindow = [];
         // Add some markers to the map.
         // Note: The code uses the JavaScript Array.prototype.map() method to
@@ -223,6 +227,7 @@
 
             marker.addListener('click', function() {
                 closeAllInfoWindows();
+                marker.icon = imageFootball2;
                 footInfowindow.open(map, marker);
 
             });
@@ -278,11 +283,12 @@
             return vmarker;
         });
 
-        map.addListener('click', function(){
-            closeAllInfoWindows();
-        });
-        var markers = footMarkers.concat(basketMarkers, voleyMarkers);
 
+        var markers = footMarkers.concat(basketMarkers, voleyMarkers);
+            map.addListener('click', function(){
+            closeAllInfoWindows();
+
+        });
 
         // Add a marker clusterer to manage the markers.
         markerCluster = new MarkerClusterer(map, markers,
@@ -292,8 +298,13 @@
             allInfowindow.map(function(infoWindow, i) {
                 infoWindow.close();
             });
-        }
+            markers.map(function(marker, i) {
+                   if (marker.icon !== imageFootball) {
+                            marker.icon = imageFootball;
+                   }
 
+             });
+        }
     }
 
 

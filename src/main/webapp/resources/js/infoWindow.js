@@ -31,7 +31,7 @@ function getVoleyballWindowContent(info, index, userId){
     return infoWindow;
 }
 
-function sendMessage(idFoot, userID, a, p) {
+/*function sendMessage(idFoot, userID, a, p) {
     a.className = "whatsapp btn btn-default btn-xs disabled";
     $.ajax({
         url : "sendMessage",
@@ -66,7 +66,7 @@ function sendMessage(idFoot, userID, a, p) {
         aa.className = "whatsapp btn btn-default btn-xs";
         pp.innerHTML = "";
     }
-}
+}*/
 
 function createInfoWindow(info, index, userId) {
 
@@ -92,7 +92,7 @@ function createInfoWindow(info, index, userId) {
     var img = document.createElement('img');
     img.src = "resources/image/whatsapp.png";
 
-    a.className = "whatsapp btn btn-default btn-xs";
+    a.className = "whatsapp btn btn-success btn-xs";
     a.role = "button";
     a.id = "footballId";
     a.href = info[index].link;

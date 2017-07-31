@@ -3,7 +3,7 @@
             infoWindow.setPosition(map.getCenter());
             infoWindow.setContent(browserHasGeolocation ?
                 'Используйте поле ввода для посика на карте Google' :
-                'Error: Your browser doesn\'t support geolocation.');
+                'Используйте поле ввода для посика на карте Google');
 
   }
 
@@ -11,7 +11,6 @@
                     //var infoWindow = new google.maps.InfoWindow({map: map});
                     infoWindow.setPosition(map.getCenter());
                     infoWindow.setContent(createInfoWindowError("Ошибка при загрузке Google Maps, в ближайшее время мы ее исправим!"));
-
 
 }
 
