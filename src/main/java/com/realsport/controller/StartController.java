@@ -2,19 +2,25 @@ package com.realsport.controller;
 
 import com.google.gson.Gson;
 import com.realsport.model.dao.daoException.DataBaseException;
-import com.realsport.model.entityDao.pojo.Basketball;
-import com.realsport.model.entityDao.pojo.Playfootball;
-import com.realsport.model.entityDao.pojo.Voleyball;
+import com.realsport.model.entityDao.Basketball;
+import com.realsport.model.entityDao.Playfootball;
+import com.realsport.model.entityDao.Voleyball;
 import com.realsport.model.service.PlaygroundService;
+import com.realsport.model.service.VkMessageService;
+import com.realsport.model.utils.User;
+import com.realsport.model.utils.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,33 +34,56 @@ public class StartController {
     private List<Voleyball> voleyballList;
     private List<Basketball> basketballList;
 
-    public static  final String FOOTBALL = "foot";
-    public static  final String BASKETBALL = "basket";
-    public static  final String VOLEYBALL = "voley";
+    public static final String FOOTBALL = "foot";
+    public static final String BASKETBALL = "basket";
+    public static final String VOLEYBALL = "voley";
+
+    private static final Integer ADMIN = 172924708;
+
+
+
 
     @Autowired
     private PlaygroundService playgroundService;
-    @RequestMapping(value = "/")
-    public String init(Model model){
-        return "index";
-    }
 
+    @Autowired
+    private VkMessageService messageService;
+
+
+
+    /**
+     * Возвращает представление карты Google со всеми данными
+     * @param model
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/maps")
-    public String onMap(Model model){
-
+    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id) throws Exception {
         try {
+            if (id != null) {
+                model.addAttribute("userId", id);
+            } else {
+                model.addAttribute("userId", "null");
+                messageService.sendMessage(ADMIN, "Невозможно распознать пользователя " +  id);
+            }
+            // Получение данных по площадкам из базы данных
             voleyballList = playgroundService.getVoleyballPlayground();
             playfootballList = playgroundService.getFootballPlayground();
             basketballList = playgroundService.getBasketballPlayground();
+            if (voleyballList == null || playfootballList == null || basketballList == null) {
+                throw new DataBaseException(DataBaseException.ERORR_MESSAGE);
+            }
+            // Получение координат площадок и конвертация в JSON
+            ArrayList<String> footLocationList = getСoordinateFootPlayground(playfootballList);
+            ArrayList<String> basketLocationList = getСoordinateBasketPlayground(basketballList);
+            ArrayList<String> voleyLocationList = getСoordinateVoleyPlayground(voleyballList);
 
-            ArrayList<String> footLocationList = getFootPlayground(playfootballList);
-            ArrayList<String> basketLocationList = getBasketPlayground(basketballList);
-            ArrayList<String> voleyLocationList = getVoleyPlayground(voleyballList);
-
+            // Получение основных данных по площадкам и конвертация данных в формат JSON
             ArrayList<String> footInfoList = getFootInfoList(playfootballList);
             ArrayList<String> basketInfoList = getBasketInfoList(basketballList);
             ArrayList<String> voleyballInfoList = getVoleyballInfoList(voleyballList);
 
+            // Добавление данных в модель
             model.addAttribute("footLocation", footLocationList);
             model.addAttribute("basketLocation", basketLocationList);
             model.addAttribute("voleyLocation", voleyLocationList);
@@ -62,13 +91,22 @@ public class StartController {
             model.addAttribute("footInfo", footInfoList);
             model.addAttribute("basketInfo", basketInfoList);
             model.addAttribute("voleyballInfo", voleyballInfoList);
-        } catch (DataBaseException e) {
+            model.addAttribute("errorMaps", "success");
+        } catch (Exception e) {
+            model.addAttribute("errorMaps", "fail");
+            messageService.sendMessage(ADMIN, errorCreateMaps(id, e));
             e.printStackTrace();
         }
 
-        return "maps";
+        return "map";
     }
 
+    /**
+     * Возвращает изображение по id
+     * @param type
+     * @param id
+     * @return
+     */
     @RequestMapping("/images/{type}/{id}")
     public @ResponseBody byte[] getImage(@PathVariable String type, @PathVariable String id) {
         byte[] bytes = null;
@@ -83,18 +121,22 @@ public class StartController {
         return bytes;
     }
 
-
-    private static ArrayList<String> getVoleyballInfoList(List<Voleyball> voleyballList) {
+    /**
+     * Получение основных данных по площадкам и конвертация данных в формат JSON
+     * @param voleyballList
+     * @return
+     */
+    private ArrayList<String> getVoleyballInfoList(List<Voleyball> voleyballList) {
         HashMap<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList= new ArrayList<>();
         for (Voleyball p : voleyballList) {
             map.put("namePlayground", p.getName());
-            map.put("image", p.getImage());
-            map.put("info", p.getInfo());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
+            map.put("creator", p.getСreator());
+            map.put("id", p.getIdvoleyball());
             String json = gson.toJson(map);
             mapArrayList.add(json);
 
@@ -102,17 +144,22 @@ public class StartController {
         return mapArrayList;
     }
 
-    private static ArrayList<String> getBasketInfoList(List<Basketball> basketballList) {
+    /**
+     * Получение основных данных по площадкам и конвертация данных в формат JSON
+     * @param basketballList
+     * @return
+     */
+    private  ArrayList<String> getBasketInfoList(List<Basketball> basketballList) {
         HashMap<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList= new ArrayList<>();
         for (Basketball p : basketballList){
             map.put("namePlayground", p.getName());
-            map.put("image", p.getImage());
-            map.put("info", p.getInfo());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
+            map.put("creator", p.getСreator());
+            map.put("id", p.getIdbasketball());
             String json = gson.toJson(map);
             mapArrayList.add(json);
         }
@@ -120,26 +167,34 @@ public class StartController {
         return mapArrayList;
     }
 
-
-    private static ArrayList<String> getFootInfoList(List<Playfootball> playfootballList) {
+    /**
+     * Получение основных данных по площадкам и конвертация данных в формат JSON
+     * @param playfootballList
+     * @return
+     */
+    private  ArrayList<String> getFootInfoList(List<Playfootball> playfootballList) {
         HashMap<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList= new ArrayList<>();
         for (Playfootball p : playfootballList){
             map.put("namePlayground", p.getName());
-            map.put("image", p.getImage());
-            map.put("info", p.getInfo());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
             map.put("link", p.getLinks());
+            map.put("creator", p.getСreator());
+            map.put("id", p.getIdplayground());
             String json = gson.toJson(map);
             mapArrayList.add(json);
         }
         return mapArrayList;
     }
 
-
-    private static ArrayList<String> getFootPlayground(List<Playfootball> list){
+    /**
+     * Получение координат площадок и конвертация в JSON
+     * @param list
+     * @return
+     */
+    private  ArrayList<String> getСoordinateFootPlayground(List<Playfootball> list){
         HashMap<String, Double> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList= new ArrayList<>();
@@ -152,7 +207,12 @@ public class StartController {
         return mapArrayList;
     }
 
-    private static ArrayList<String> getBasketPlayground(List<Basketball> list){
+    /**
+     * Получение координат площадок и конвертация в JSON
+     * @param list
+     * @return
+     */
+    private  ArrayList<String> getСoordinateBasketPlayground(List<Basketball> list){
         HashMap<String, Double> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList= new ArrayList<>();
@@ -165,7 +225,12 @@ public class StartController {
         return mapArrayList;
     }
 
-    private static ArrayList<String> getVoleyPlayground(List<Voleyball> list){
+    /**
+     * Получение координат площадок и конвертация в JSON
+     * @param list
+     * @return
+     */
+    private  ArrayList<String> getСoordinateVoleyPlayground(List<Voleyball> list){
         HashMap<String, Double> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList= new ArrayList<>();
@@ -176,6 +241,17 @@ public class StartController {
             mapArrayList.add(json);
         }
         return mapArrayList;
+    }
+
+
+    private String errorSendMessage(String userID, String idPlay, Exception e) {
+        String error = "Произошла ошибка при отправки сообщения пользователю с Id " + userID + ", id площадки " + idPlay + ". Error: " + e.getMessage();
+        return error;
+    }
+
+    private String errorCreateMaps(String userID,  Exception e) {
+        String error = "Произошла ошибка при создании карты пользователю с Id " + userID + ". Error: " + e.getMessage();
+        return error;
     }
 
 }

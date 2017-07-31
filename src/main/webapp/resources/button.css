@@ -1,0 +1,53 @@
+.myButton {
+    background-color:#abd9ff;
+    -moz-border-radius:42px;
+    -webkit-border-radius:42px;
+    border-radius:42px;
+    border:1px solid #867af5;;
+    display:inline-block;
+    cursor:pointer;
+    color:#eae8ff;
+    font-family:Arial;
+    font-size:21px;
+    padding:2px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #036694;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    /*width: 150px;*/
+
+}
+.myButton:hover {
+    background-color:#6ac4f5;
+}
+.myButton:active {
+    position:relative;
+    top:1px;
+}
+
+.whatsapp {
+    background-color:#adffc3;
+    -moz-border-radius:7px;
+    -webkit-border-radius:7px;
+    border-radius:7px;
+    border:1px solid #18ab29;
+    display:inline-block;
+    cursor:pointer;
+    color:#2e2e2e;
+    font-family:Arial;
+    font-size:13px;
+    padding:3px 10px;
+    text-decoration:none;
+    text-shadow:0px 1px 22px #2f6627;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.whatsapp:hover {
+    background-color:#67fa96;
+}
+.whatsapp:active {
+    position:relative;
+    top:1px;
+
+}

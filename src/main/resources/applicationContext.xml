@@ -1,48 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:sec="http://www.springframework.org/schema/security"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-       http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-   http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-   <import resource="infrastructure.xml"/>
-    <!--Do not forget activate @Transactional JPA annotation with <annotation-driven/>-->
-    <!-- JPA Persistence Context and EntityManager configuration -->
-    <bean id="entityManagerFactory"
-          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >
-        <!--packagesToScan - search Entity and mapping them -->
-        <property name="packagesToScan" value="com.realsport.model" />
-        <property name="dataSource" ref="dataSource" />
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" >
-                <property name="generateDdl" value="false" />
-                <property name="showSql" value="true" />
 
-            </bean>
-        </property>
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-            </props>
-        </property>
-
-    </bean>
-
-    <!-- Automatic Transaction Participation-->
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-    </bean>
-    <!--@Transaction annotation support -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <!-- Need for Repository abstraction -->
-    <jpa:repositories base-package="com.realsport.model.repository" entity-manager-factory-ref="entityManagerFactory"
-                      transaction-manager-ref="transactionManager"/>
 
 
 
