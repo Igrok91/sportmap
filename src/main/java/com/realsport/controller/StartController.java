@@ -40,7 +40,6 @@ public class StartController {
 
     private static final Integer ADMIN = 172924708;
 
-    private static final Long TIME = 3000000L;
 
 
 
@@ -52,13 +51,6 @@ public class StartController {
 
 
 
-    @RequestMapping(value = "/info")
-    public String info(Model model, HttpServletRequest request){
-        String userId = "id";
-        model.addAttribute("test", userId);
-        return "info";
-    }
-
     /**
      * Возвращает представление карты Google со всеми данными
      * @param model
@@ -69,17 +61,9 @@ public class StartController {
     public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id) throws Exception {
         try {
             if (id != null) {
-                Integer idUser = Integer.parseInt(id);
-                if (Users.getUsers().get(idUser) == null) {
-                    User user = new User();
-                    user.setId(idUser);
-                    user.setCountSendMessage(0);
-                    user.setDate(new Date());
-                    Users.getUsers().put(user.getId(), user);
-                }
                 model.addAttribute("userId", id);
             } else {
-                model.addAttribute("userId", "error");
+                model.addAttribute("userId", "null");
                 messageService.sendMessage(ADMIN, "Невозможно распознать пользователя " +  id);
             }
             // Получение данных по площадкам из базы данных

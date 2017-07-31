@@ -186,9 +186,7 @@
 
         }
         function initMarkers(map, infoWindow) {
-         if (userId.localeCompare("error") === 0) {
-                handleUserError(map, infoWindow);
-             } else if (errorMaps.localeCompare("fail") === 0){
+            if (errorMaps.localeCompare("fail") === 0){
                handleUserError(map, infoWindow);
               }
                 else {
