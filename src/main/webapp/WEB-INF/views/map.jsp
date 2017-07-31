@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="resources/searchBox.css">
+    <link rel="stylesheet" href="resources/button.css">
     <script src="resources/js/searchBox.js"></script>
     <script src="resources/js/infoWindow.js"></script>
     <script src="resources/js/error.js"></script>
@@ -32,9 +33,9 @@
 
         /* Set black background color, white text and some padding */
         footer {
-            background-color: #555;
-            color: white;
-            padding: 15px;
+            background-color: #384e73;
+            color: #f0f3ff;
+            padding: 7px;
         }
         header{
             background-color: #fcfcfc;
@@ -56,48 +57,61 @@
             color: #999; /* цвет текста для нективной ссылки */
         }
 
+
         .divMain {
-            height: 105px;
-            width: 150px;
+            height: 120px;
+            width: 190px;
+            background-color:#fafafa;
+
         }
 
+        hr {
+
+            margin-top: 3px;
+            margin-bottom: 10px;
+        }
+
+
+        .subtitleMap{
+            padding: 1px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-family:Trebuchet MS;
+            color:#525252;
+        }
+
+        h5 {
+            padding-top: 10px;
+        }
 
     </style>
 </head>
 <body>
-<input id="pac-input" class="controls" type="text" placeholder="Поиск..">
-<nav class="navbar navbar-inverse navbar-static-top">
+
+<%--<nav class="navbar navbar-inverse navbar-static-top">
     <div class="container ">
         <div class="navbar-header " >
             <a class="navbar-brand" href="#">SportMap</a>
         </div>
-<%--        <div class="collapse navbar-collapse navbar-right" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Выбрать город
-                        <span class="caret"></span></a>
-
-                </li>
-            </ul>
-        </div>--%>
     </div>
-</nav>
+</nav>--%>
 <header>
     <div class="container-fluid" >
         <div class="row text-center">
-            <h4 >Найди свою территорию спорта!</h4>
+            <h3 class="subtitleMap">Найди свою территорию спорта!</h3>
+            <hr>
             <div class="container">
-                <div class="btn-group ">
-                    <a  class="btn btn-default btn-sm" id="football" role="button">
-                        <img src="resources/images/ballMiddle.png" alt="" align="middle">
+                <%--<div class="btn-group ">--%>
+                    <a  class="myButton btn btn-default btn-sm" id="football" role="button">
+                        <img src="resources/image/football.png" alt="" align="middle">
                     </a>
-                    <a class="btn btn-primary btn-sm" id="basketball">
-                        <img src="resources/images/basketball.png" alt="" align="middle">
+                    <a class="myButton btn btn-default btn-sm" id="basketball">
+                        <img src="resources/image/basketball.png" alt="" align="middle">
                     </a>
-                    <a  class="btn btn-default btn-sm" id="voleyball">
-                        <img src="resources/images/volleyball.png" alt="" align="middle">
+                    <a  class="myButton btn btn-default btn-sm" id="voleyball">
+                        <img src="resources/image/voleyball.png" alt="" align="middle">
                     </a>
-                </div>
+                <%--</div>--%>
             </div>
             <hr>
         </div>
@@ -108,11 +122,11 @@
         <div class="row content">
             <div class="sidenav"  id ="map" >
             </div>
+
         </div>
     </div>
-
-
 </main>
+<input id="pac-input" class="controls" type="text" placeholder="Поиск..">
 <footer class="container-fluid text-center">
     <p>Copyright © 2017 SportMap</p>
 </footer>
@@ -135,7 +149,6 @@
 
     var errorMaps = "${errorMaps}";
 
-    var allowMessage = {data : "false"};
 
 
     function initMap() {
@@ -180,25 +193,11 @@
                handleUserError(map, infoWindow);
               }
                 else {
-                   VK.init(function() {
-                        // API initialization succeeded
-                         initPlaygroundMarkers(map);
-                         VK.addCallback('onAllowMessagesFromCommunity', function f(location){
-                                     allow();
-                                 });
-
-                     }, function() {
-                          // API initialization failed
-                        //handleUserError(map, infoWindow);
-                        initPlaygroundMarkers(map);
-                   }, '5.67');
+                initPlaygroundMarkers(map);
             }
         }
     }
 
-    function allow() {
-           allowMessage.data = "true";
-    }
 
     function initPlaygroundMarkers(map) {
         var labels = 'Футбол';
@@ -218,7 +217,7 @@
             });
 
             var footInfowindow = new google.maps.InfoWindow({
-                content: getFootWindowContent(footInfo, i, userId, allowMessage)
+                content: getFootWindowContent(footInfo, i, userId)
             });
             allInfowindow.push(footInfowindow);
 

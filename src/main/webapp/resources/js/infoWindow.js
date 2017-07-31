@@ -1,8 +1,8 @@
 /**
  * Created by IgorR on 25.06.2017.
  */
-function getFootWindowContent(info, index, userId, allowMessage){
-    var infoWindow = createInfoWindow(info, index, userId, allowMessage);
+function getFootWindowContent(info, index, userId){
+    var infoWindow = createInfoWindow(info, index, userId);
 
 
 /*    var coString = '<div>' +
@@ -31,22 +31,22 @@ function getVoleyballWindowContent(info, index, userId){
     return infoWindow;
 }
 
-function sendMessage(idFoot, userID, a, p, allowMessage) {
-        if (allowMessage.data.localeCompare("true") === 0) {
-    a.className = "btn btn-success btn-xs disabled";
+function sendMessage(idFoot, userID, a, p) {
+    a.className = "whatsapp btn btn-default btn-xs disabled";
     $.ajax({
         url : "sendMessage",
         data : ({idPlay : idFoot, userID : userID}),
         success : function(data) {
         //$('#sms').html("Ссылка отправлена");
             if (data.localeCompare("success") === 0){
+
                 p.innerHTML = "Ссылка отправлена";
                 setTimeout(update, 4000, a, p);
             } else if (data.localeCompare("stopMessage") === 0) {
                 //p.innerHTML = "Лимит сообщений превышен, сервис отключен на 5 миннут!";
                    var coString = '<div>' +
                  //'<img src="resources/images/error.png">' +
-                  '<p>Лимит сообщений превышен, сервис отключен на 5 миннут!</p>' +
+                  '<p>Лимит сообщений превышен! Сообщения будут доступны через 5 мин.</p>' +
                  '</div>';
                    p.innerHTML = coString;
                 setTimeout(update, 10000, a, p);
@@ -61,21 +61,14 @@ function sendMessage(idFoot, userID, a, p, allowMessage) {
 
     }
 });
-} else {
-                var coString = '<div>' +
-                  '<p>Отмена отправки сообщения</p>' +
-                 '</div>';
-                   p.innerHTML = coString;
-                setTimeout(update, 10000, a, p);
-}
     function update(aa, pp) {
        // $('#sms').html("Получить ссылку");
-        aa.className = "btn btn-success btn-xs";
-        pp.innerHTML = "Получить ссылку";
+        aa.className = "whatsapp btn btn-default btn-xs";
+        pp.innerHTML = "";
     }
 }
 
-function createInfoWindow(info, index, userId, allowMessage) {
+function createInfoWindow(info, index, userId) {
 
     var idFoot = info[index].id;
     var userID = userId;
@@ -86,45 +79,34 @@ function createInfoWindow(info, index, userId, allowMessage) {
     name.appendChild( document.createTextNode(info[index].namePlayground));
 
     var p = document.createElement('p');
-    p.appendChild( document.createTextNode( "Получить ссылку" ) );
+    p.appendChild( document.createTextNode( "" ) );
     p.id = "sms";
 
     var hr = document.createElement('hr');
     var div = document.createElement('div');
-    div.className = "btn-group ";
+    div.className = "text-center ";
 
     var a = document.createElement('a');
+    a.appendChild( document.createTextNode("Перейти в группу  "));
     a.id = "button";
     var img = document.createElement('img');
-    img.src = "resources/images/whatsapp2.png";
+    img.src = "resources/image/whatsapp.png";
 
-    a.className = "btn btn-success btn-xs";
+    a.className = "whatsapp btn btn-default btn-xs";
     a.role = "button";
     a.id = "footballId";
-    a.onclick = function () {
-        var allow = checkAllowMessagesFromCommunity(userID, allowMessage);
-        if (allow === true) {
-        sendMessage(idFoot, userID, a, p);
-        } else {
-        setTimeout(sendMessage, 3000, idFoot, userID, a, p, allowMessage);
-        }
-
-    };
+    a.href = info[index].link;
+    a.target = "_blank";
+    // a.onclick = function () {
+    //     sendMessage(idFoot, userID, a, p);
+    // };
     //a.appendChild( document.createTextNode( "Получить ссылку" ) );
     a.appendChild(img);
     div.appendChild(a);
 
     divMain.appendChild(name);
+    divMain.appendChild(hr);
     divMain.appendChild(div);
-    //divMain.appendChild(hr);
     divMain.appendChild(p);
     return divMain;
-}
-
-function checkAllowMessagesFromCommunity(userId, allowMessage) {
-        if (allowMessage.data.localeCompare("true") !== 0) {
-            VK.callMethod("showAllowMessagesFromCommunityBox");
-            return false;
-        }
-        return true;
 }

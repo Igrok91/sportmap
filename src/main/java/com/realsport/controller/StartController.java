@@ -40,7 +40,7 @@ public class StartController {
 
     private static final Integer ADMIN = 172924708;
 
-    private static final Long TIME = 3000L;
+    private static final Long TIME = 3000000L;
 
 
 
@@ -69,7 +69,7 @@ public class StartController {
             checkUser(user);
             if (!user.isMessageDisabled()) {
 
-                if (countMessage >= 2) {
+                if (countMessage >= 3) {
                     // messageService.sendMessage(Integer.parseInt(userID), "Сообщения для вашего сеанса исчерпаны");
                     user.setDate(new Date());
                     user.setMessageDisabled(true);

@@ -129,7 +129,7 @@ public enum FootData {
     PLAYGROUND_124("124", "Школа №510", "59.854319", "30.294880", "https://chat.whatsapp.com/BR5YN0WynECL7PTPgRjSQq", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Кубинская", "62", "true"),
     PLAYGROUND_125("125", "Школа №643", "59.850252", "30.311571", "https://chat.whatsapp.com/9QyCI2NW7pnHJPDRtVKboX", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Варшавская", "63к2", "true"),
     PLAYGROUND_126("126", "Школа №537", "59.847865", "30.305845", "https://chat.whatsapp.com/8JrpPbUSuIoKvImjGCI4Wm", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Костюшко", "34А", "true"),
-    PLAYGROUND_127("127", "Школа №519", "30.340683", "30.305845", "https://chat.whatsapp.com/3nNUfRdljtALGFnP1MnD6L", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Ленсовета", "87к2", "true"),
+    PLAYGROUND_127("127", "Школа №519", "30.340683", "30.305845", "https://chat.whatsapp.com/3nNUfRdljtALGFnP1MnD6L", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Ленсовета", "87к2", "true"), // todo
     PLAYGROUND_128("128", "Школа №390", "59.827137", "30.161059", "https://chat.whatsapp.com/6icOosXs1C0AF4aXwbSAig", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Здоровцева", "33к2", "true"),
     PLAYGROUND_129("129", "Пионерстроя, 27", "59.837895", "30.126108", "https://chat.whatsapp.com/ClcbhxXNCEc4fXyp4nU6OT", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Пионерстроя", "27", "false"),
     PLAYGROUND_130("130", "Торгово-Экономический университет", "59.995307", "30.358362", "https://chat.whatsapp.com/KMiUf8X2Fm22KISkGjFm1z", "https://vk.com/igor_ryabtcev", "Санкт-Петербург", "ул. Новороссийская", "50", "true"),
