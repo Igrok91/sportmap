@@ -2,8 +2,9 @@
             //var infoWindow = new google.maps.InfoWindow({map: map});
             infoWindow.setPosition(map.getCenter());
             infoWindow.setContent(browserHasGeolocation ?
-                'Используйте поле ввода для посика на карте Google' :
-                'Используйте поле ввода для посика на карте Google');
+                'Не удалось определить ваше местоположение!' :
+                'Не удалось определить ваше местоположение!');
+             setTimeout(updateInfo, 4000, infoWindow);
 
   }
 
@@ -33,3 +34,7 @@
       divMain.appendChild(p);
       return divMain;
   }
+
+    function updateInfo(infoWindow){
+        infoWindow.setContent("Нажмите на маркер для перехода к площадке");
+    }

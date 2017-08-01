@@ -61,15 +61,12 @@
             height: 110px;
             width: 190px;
             background-color:#fafafa;
-
         }
 
         hr {
-
             margin-top: 3px;
             margin-bottom: 10px;
         }
-
 
         .subtitleMap{
             padding: 1px;
@@ -82,7 +79,6 @@
         h5 {
             padding-top: 10px;
         }
-
     </style>
 </head>
 <body>
@@ -183,14 +179,14 @@
             handleLocationError(false, map, infoWindow);
             initMarkers(map, infoWindow);
             // Browser doesn't support Geolocation
-
         }
+
         function initMarkers(map, infoWindow) {
             if (errorMaps.localeCompare("fail") === 0){
                handleUserError(map, infoWindow);
               }
-                else {
-                initPlaygroundMarkers(map);
+               else {
+               initPlaygroundMarkers(map);
             }
         }
     }
@@ -202,16 +198,9 @@
         var imageBasketball = 'resources/images/basketballSm.png';
         var imageVoleyball = 'resources/images/voleyballSm.png';
 
-        var imageFootball2 = 'resources/images/ball2.png';
-        var imageBasketball2 = 'resources/images/basketballSm2.png';
-        var imageVoleyball2 = 'resources/images/voleyballSm2.png';
-
-
         var  allInfowindow = [];
         // Add some markers to the map.
-        // Note: The code uses the JavaScript Array.prototype.map() method to
-        // create an array of markers based on a given "footLocations" array.
-        // The map() method here has nothing to do with the Google Maps API.
+
         footMarkers = footLocations.map(function(location, i) {
             var marker = new google.maps.Marker({
                 position: location,
@@ -225,14 +214,9 @@
 
             marker.addListener('click', function() {
                 closeAllInfoWindows();
-                marker.icon = imageFootball2;
                 footInfowindow.open(map, marker);
-
             });
 
-            /*map.addListener('click', function(){
-             footInfowindow.close();
-             });*/
             return marker;
         });
 
@@ -246,6 +230,7 @@
             var basketInfowindow = new google.maps.InfoWindow({
                 content: getBasketWindowContent(basketInfo, i, userId)
             });
+
             allInfowindow.push(basketInfowindow);
             bmarker.addListener('click', function() {
                 closeAllInfoWindows();
@@ -253,9 +238,7 @@
 
             });
 
-            /* map.addListener('click', function(){
-             basketInfowindow.close();
-             }); */
+
             return bmarker;
         });
 
@@ -269,15 +252,13 @@
             var voleyballInfowindow = new google.maps.InfoWindow({
                 content: getVoleyballWindowContent(voleyballInfo ,i , userId)
             });
+
             allInfowindow.push(voleyballInfowindow);
             vmarker.addListener('click', function() {
                 closeAllInfoWindows();
                 voleyballInfowindow.open(map, vmarker);
-
             });
-            /* map.addListener('click', function(){
-             voleyballInfowindow.close();
-             });*/
+
             return vmarker;
         });
 
@@ -296,12 +277,6 @@
             allInfowindow.map(function(infoWindow, i) {
                 infoWindow.close();
             });
-            markers.map(function(marker, i) {
-                   if (marker.icon !== imageFootball) {
-                            marker.icon = imageFootball;
-                   }
-
-             });
         }
     }
 
@@ -326,7 +301,6 @@
             markerCluster.addMarkers(voleyMarkers);
         });
     });
-
 
 
 </script>
