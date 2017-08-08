@@ -49,24 +49,30 @@
             }
 
             .row.content {height:auto;}
+            #pac-input {
+                width: auto;
+                margin-right: 5px;
+            }
         }
-        a.disabled {
-            pointer-events: none; /* делаем ссылку некликабельной */
-            cursor: default;  /* устанавливаем курсор в виде стрелки */
-            color: #999; /* цвет текста для нективной ссылки */
+ /*       a.disabled {
+            pointer-events: none; !* делаем ссылку некликабельной *!
+            cursor: default;  !* устанавливаем курсор в виде стрелки *!
+            color: #999; !* цвет текста для нективной ссылки *!
         }
-
+*/
 
         .divMain {
             height: 110px;
             width: 190px;
             background-color:#fafafa;
+
         }
 
         hr {
             margin-top: 3px;
             margin-bottom: 10px;
         }
+
 
         .subtitleMap{
             padding: 1px;
@@ -79,6 +85,7 @@
         h5 {
             padding-top: 10px;
         }
+
     </style>
 </head>
 <body>
@@ -97,13 +104,13 @@
             <hr>
             <div class="container">
                 <%--<div class="btn-group ">--%>
-                    <a  class="myButton btn btn-default btn-sm" id="football" role="button">
+                    <a  class="myButton btn btn-primary btn-sm" id="football" role="button">
                         <img src="resources/image/football.png" alt="" align="middle">
                     </a>
-                    <a class="myButton btn btn-default btn-sm" id="basketball">
+                    <a class="myButton btn btn-primary btn-sm" id="basketball">
                         <img src="resources/image/basketball.png" alt="" align="middle">
                     </a>
-                    <a  class="myButton btn btn-default btn-sm" id="voleyball">
+                    <a  class="myButton btn btn-primary btn-sm" id="voleyball">
                         <img src="resources/image/voleyball.png" alt="" align="middle">
                     </a>
                 <%--</div>--%>
@@ -144,7 +151,7 @@
 
     var errorMaps = "${errorMaps}";
 
-
+    var infoWindow;
 
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -153,7 +160,7 @@
             mapTypeId: 'roadmap'
         });
         initAutocomplete(map);
-        var infoWindow = new google.maps.InfoWindow({map: map});
+        infoWindow = new google.maps.InfoWindow({map: map});
 
 
         // alert(footInfo[index].link);
@@ -179,14 +186,14 @@
             handleLocationError(false, map, infoWindow);
             initMarkers(map, infoWindow);
             // Browser doesn't support Geolocation
-        }
 
+        }
         function initMarkers(map, infoWindow) {
             if (errorMaps.localeCompare("fail") === 0){
                handleUserError(map, infoWindow);
               }
-               else {
-               initPlaygroundMarkers(map);
+                else {
+                initPlaygroundMarkers(map);
             }
         }
     }
@@ -198,9 +205,16 @@
         var imageBasketball = 'resources/images/basketballSm.png';
         var imageVoleyball = 'resources/images/voleyballSm.png';
 
-        var  allInfowindow = [];
-        // Add some markers to the map.
+        var imageFootball2 = 'resources/image/football2.png';
+        var imageBasketball2 = 'resources/images/basketballSm2.png';
+        var imageVoleyball2 = 'resources/images/voleyballSm2.png';
 
+        var  allInfowindow = [];
+
+        // Add some markers to the map.
+        // Note: The code uses the JavaScript Array.prototype.map() method to
+        // create an array of markers based on a given "footLocations" array.
+        // The map() method here has nothing to do with the Google Maps API.
         footMarkers = footLocations.map(function(location, i) {
             var marker = new google.maps.Marker({
                 position: location,
@@ -217,6 +231,9 @@
                 footInfowindow.open(map, marker);
             });
 
+            /*map.addListener('click', function(){
+             footInfowindow.close();
+             });*/
             return marker;
         });
 
@@ -230,7 +247,6 @@
             var basketInfowindow = new google.maps.InfoWindow({
                 content: getBasketWindowContent(basketInfo, i, userId)
             });
-
             allInfowindow.push(basketInfowindow);
             bmarker.addListener('click', function() {
                 closeAllInfoWindows();
@@ -238,7 +254,9 @@
 
             });
 
-
+            /* map.addListener('click', function(){
+             basketInfowindow.close();
+             }); */
             return bmarker;
         });
 
@@ -252,20 +270,23 @@
             var voleyballInfowindow = new google.maps.InfoWindow({
                 content: getVoleyballWindowContent(voleyballInfo ,i , userId)
             });
-
             allInfowindow.push(voleyballInfowindow);
             vmarker.addListener('click', function() {
                 closeAllInfoWindows();
                 voleyballInfowindow.open(map, vmarker);
-            });
 
+            });
+            /* map.addListener('click', function(){
+             voleyballInfowindow.close();
+             });*/
             return vmarker;
         });
 
 
         var markers = footMarkers.concat(basketMarkers, voleyMarkers);
-            map.addListener('click', function(){
+        map.addListener('click', function(){
             closeAllInfoWindows();
+            infoWindow.close();
 
         });
 
@@ -277,6 +298,8 @@
             allInfowindow.map(function(infoWindow, i) {
                 infoWindow.close();
             });
+
+
         }
     }
 
@@ -303,11 +326,12 @@
     });
 
 
+
 </script>
 <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
 </script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1tr-_gVY9qwaDTDpvfgckDzV_uqekjEQ&libraries=places&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXkXTJQMPNPInJcJt2yT6pNgzksYfpw1c&libraries=places&callback=initMap">
 </script>
 
 </body>

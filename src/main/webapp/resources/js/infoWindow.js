@@ -92,7 +92,7 @@ function createInfoWindow(info, index, userId) {
     var img = document.createElement('img');
     img.src = "resources/image/whatsapp.png";
 
-    a.className = "whatsapp btn btn-success btn-xs";
+    a.className = "whatsapp btn btn-default btn-xs";
     a.role = "button";
     a.id = "footballId";
     a.href = info[index].link;

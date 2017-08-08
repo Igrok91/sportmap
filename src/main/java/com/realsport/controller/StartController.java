@@ -41,8 +41,6 @@ public class StartController {
     private static final Integer ADMIN = 172924708;
 
 
-
-
     @Autowired
     private PlaygroundService playgroundService;
 
@@ -101,25 +99,7 @@ public class StartController {
         return "map";
     }
 
-    /**
-     * Возвращает изображение по id
-     * @param type
-     * @param id
-     * @return
-     */
-    @RequestMapping("/images/{type}/{id}")
-    public @ResponseBody byte[] getImage(@PathVariable String type, @PathVariable String id) {
-        byte[] bytes = null;
-        if(type.equals(FOOTBALL)) {
-            bytes = playfootballList.get(Integer.parseInt(id)).getImage();
-        } else if(type.equals(BASKETBALL)) {
-            bytes = basketballList.get(Integer.parseInt(id)).getImage();
-        } else if(type.equals(VOLEYBALL)) {
-            bytes = voleyballList.get(Integer.parseInt(id)).getImage();
-        }
 
-        return bytes;
-    }
 
     /**
      * Получение основных данных по площадкам и конвертация данных в формат JSON

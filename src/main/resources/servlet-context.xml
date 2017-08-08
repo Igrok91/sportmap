@@ -12,6 +12,7 @@
 
 	<context:annotation-config/>
 	<context:component-scan base-package="com.realsport"/>
+
 	<mvc:annotation-driven/>
 <!--	<bean id = "orica" class="MapperFactFact" scope="prototype">
 	</bean>-->
