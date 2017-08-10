@@ -12,6 +12,6 @@
   <%--  <meta http-equiv="refresh" content="0;https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhoss">--%>
 </head>
 <body>
-success ${test}
+
 </body>
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>SportMap</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+	.load {
+        background: url('images/ajax-loader.gif') no-repeat center;
+    }
+	</style>
+</head>
+<body>
+<main>
+    <div class="container-fluid text-center">
+        <div class="row content">
+            <div class="load"  id ="loader" >
+            </div>
+
+        </div>
+    </div>
+</main>
+<script>
+   function sec() {
+           var xhttp = new XMLHttpRequest();
+           xhttp.open("GET", "maps", true);
+           xhttp.send();
+       }
+       setTimeout(sec, 5000);
+   </script>
+</body>
+</html>
