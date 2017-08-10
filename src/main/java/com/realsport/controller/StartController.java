@@ -47,7 +47,10 @@ public class StartController {
     @Autowired
     private VkMessageService messageService;
 
-
+    @RequestMapping(value = "/error2")
+    public String error(){
+        return "error2";
+    }
 
     /**
      * Возвращает представление карты Google со всеми данными

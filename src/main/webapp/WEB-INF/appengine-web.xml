@@ -18,12 +18,12 @@
   <runtime>java8</runtime>
   <threadsafe>true</threadsafe>
   <!--<precompilation-enabled>true</precompilation-enabled>-->
-  <basic-scaling>
+<!--  <basic-scaling>
     <max-instances>11</max-instances>
     <idle-timeout>11m</idle-timeout>
-  </basic-scaling>
+  </basic-scaling>-->
   <static-error-handlers>
-    <handler file="views/error.html" />
+    <handler file="resources/error.html" />
   </static-error-handlers>
 </appengine-web-app>
 <!-- [END config] -->
