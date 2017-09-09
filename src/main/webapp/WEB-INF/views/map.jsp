@@ -161,8 +161,9 @@
         });
         initAutocomplete(map);
         infoWindow = new google.maps.InfoWindow({map: map});
-
-
+        infoWindow.setPosition(map.getCenter());
+        infoWindow.setContent('Нажмите на маркер для перехода к площадке');
+        initMarkers(map, infoWindow);
         // alert(footInfo[index].link);
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -175,6 +176,7 @@
                 infoWindow.setContent('Нажмите на маркер для перехода к площадке');
                 map.setCenter(pos);
                 initMarkers(map, infoWindow);
+                setTimeout(updateInfoWindow, 4000, infoWindow);
 
             }, function() {
                 handleLocationError(true, map, infoWindow);
@@ -186,7 +188,6 @@
             handleLocationError(false, map, infoWindow);
             initMarkers(map, infoWindow);
             // Browser doesn't support Geolocation
-
         }
         function initMarkers(map, infoWindow) {
             if (errorMaps.localeCompare("fail") === 0){
