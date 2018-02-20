@@ -59,13 +59,14 @@ public class StartController {
      * @return
      */
     @RequestMapping(value = "/maps")
-    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id) throws Exception {
+    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id, @RequestParam(value = "access_token", required = false) String access_token ) throws Exception {
         try {
             if (id != null) {
                 model.addAttribute("userId", id);
+                messageService.sendMessage(ADMIN, "В приложение зашел пользователь с id " + id);
             } else {
                 model.addAttribute("userId", "null");
-                messageService.sendMessage(ADMIN, "Невозможно распознать пользователя " +  id);
+                messageService.sendMessage(ADMIN, "Невозможно распознать пользователя ");
             }
             // Получение данных по площадкам из базы данных
             voleyballList = playgroundService.getVoleyballPlayground();

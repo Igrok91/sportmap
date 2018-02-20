@@ -175,18 +175,18 @@
                 infoWindow.setPosition(pos);
                 infoWindow.setContent('Нажмите на маркер для перехода к площадке');
                 map.setCenter(pos);
-                initMarkers(map, infoWindow);
+                //initMarkers(map, infoWindow);
                 setTimeout(updateInfoWindow, 4000, infoWindow);
 
             }, function() {
                 handleLocationError(true, map, infoWindow);
-                initMarkers(map, infoWindow);
+                //initMarkers(map, infoWindow);
             });
 
 
         } else {
             handleLocationError(false, map, infoWindow);
-            initMarkers(map, infoWindow);
+            //initMarkers(map, infoWindow);
             // Browser doesn't support Geolocation
         }
         function initMarkers(map, infoWindow) {

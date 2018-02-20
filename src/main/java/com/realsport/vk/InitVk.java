@@ -14,6 +14,9 @@ public  class InitVk {
     private static InitVk initVk;
 
     private static final Integer GROUP_ID = 6098255;
+
+
+
     private static final String ACCESS_TOKEN = "0b7f21f4057408fb061cb2fa5a7fac6b3f6c2e932566a03a332bea30aac6441e81a8cc7fe0ab56126f71e";
 
     private static TransportClient transportClient = new HttpTransportClient();
@@ -33,5 +36,9 @@ public  class InitVk {
 
     public static GroupActor getGroupActor(){
         return actor;
+    }
+
+    public static String getAccessToken() {
+        return ACCESS_TOKEN;
     }
 }
