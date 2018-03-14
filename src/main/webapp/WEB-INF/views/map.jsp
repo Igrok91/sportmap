@@ -23,68 +23,37 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
-        .navbar {
-            margin-bottom: 0;
-            border-radius: 0;
-        }
+
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
         .row.content {height: 450px}
 
         /* Set black background color, white text and some padding */
-        footer {
-            background-color: #384e73;
-            color: #f0f3ff;
-            padding: 7px;
-        }
-        header{
-            background-color: #fcfcfc;
-        }
+
 
 
         /* On small screens, set height to 'auto' for sidenav and grid */
-        @media screen and (max-width: 300px) {
-            .sidenav {
+        @media screen and (max-width: 480px) {
+       /*     .sidenav {
                 height: auto;
                 padding: 15px;
-            }
+            }*/
 
-            .row.content {height:auto;}
+/*            .row.content {height:auto;}*/
             #pac-input {
-                width: auto;
-                margin-right: 5px;
+                width: 175px;
+                margin-left: 3px;
             }
         }
- /*       a.disabled {
-            pointer-events: none; !* делаем ссылку некликабельной *!
-            cursor: default;  !* устанавливаем курсор в виде стрелки *!
-            color: #999; !* цвет текста для нективной ссылки *!
-        }
-*/
+
 
         .divMain {
-            height: 110px;
+            height: 120px;
             width: 190px;
             background-color:#fafafa;
 
         }
 
-        hr {
-            margin-top: 3px;
-            margin-bottom: 10px;
-        }
 
-
-        .subtitleMap{
-            padding: 1px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-family:Trebuchet MS;
-            color:#525252;
-        }
-
-        h5 {
-            padding-top: 10px;
-        }
 
     </style>
 </head>
@@ -98,40 +67,97 @@
     </div>
 </nav>--%>
 <header>
-    <div class="container-fluid" >
-        <div class="row text-center">
-            <h3 class="subtitleMap">Найди свою территорию спорта!</h3>
-            <hr>
-            <div class="container">
-                <%--<div class="btn-group ">--%>
-                    <a  class="myButton btn btn-primary btn-sm" id="football" role="button">
-                        <img src="resources/image/football.png" alt="" align="middle">
-                    </a>
-                    <a class="myButton btn btn-primary btn-sm" id="basketball">
-                        <img src="resources/image/basketball.png" alt="" align="middle">
-                    </a>
-                    <a  class="myButton btn btn-primary btn-sm" id="voleyball">
-                        <img src="resources/image/voleyball.png" alt="" align="middle">
-                    </a>
-                <%--</div>--%>
+    <nav class="nav navbar-static-top navbar-default">
+        <div class="container-fluid ">
+            <div class="pull-left" >
+                <a class="navbar-brand" href="#">Поиск</a>
             </div>
-            <hr>
+            <div class="pull-right" style="margin-top: 10px">
+                <span style="margin-right: 3px">Free</span>
+                <!-- <span style="margin-right: 3px"><img src="\Applications\Разработка\иконки\cost2.png" alt="COST" width="30" height="30"> </span> -->
+                <input type="checkbox" class="checkbox-switch2" />
+            </div>
         </div>
+    </nav>
+    <div class="container-fluid " style="margin-bottom: 10px">
+    <div class="row ">
+        <div class="text-center">
+            <span style="color: gray">Фильтры:</span>
+            <a  class="btn" id="football"><img  src="resources/image/foot2.png" alt="Футбол" width="40" height="40"/></a>
+            <a  class="btn" id="basketball"><img  src="resources/image/basket.png" alt="Баскетбол" width="40" height="40"/></a>
+            <a  class="btn" id="voleyball"><img  src="resources/image/voley.png" alt="Волейбол" width="40" height="40"/></a>
+            <div class="btn-group btn-group-justified">
+                <a href="#" class="btn active">Список</a>
+                <a href="#" class="btn ">Карта</a>
+            </div>
+        </div>
+
+    </div>
+
     </div>
 </header>
 <main>
+    <div class="row content hide ">
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-8">
+            <div class="text-center">
+                <p style="margin-top: 5px">Площадки рядом с вами</p>
+            </div>
+
+            <div class="list-group ">
+                <a href="#" class="list-group-item borderless">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40" height="40"/>
+                        </div>
+
+
+                        <div class="media-body " >
+                            <h4 class="media-heading">Площадка у школы № 29</h4>
+                            <span  style="color: gray" >Футбол</span>
+                            <hr>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="list-group-item borderless">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40" height="40" />
+                        </div>
+
+                        <div class="media-body">
+                            <h4 class="media-heading">Площадка у школы № 345</h4>
+                            <span  style="color: gray" >Баскетбол</span>
+                            <hr>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+        <div class="col-md-2">
+
+        </div>
+    </div>
+
+
+
+
     <div class="container-fluid text-center">
+
         <div class="row content">
             <div class="sidenav"  id ="map" >
             </div>
 
         </div>
+
     </div>
+    <input id="pac-input" class="controls" type="text" placeholder="Поиск..">
 </main>
-<input id="pac-input" class="controls" type="text" placeholder="Поиск..">
-<footer class="container-fluid text-center">
-    <p>Copyright © 2017 SportMap</p>
-</footer>
+
 <script>
     var footMarkers;
     var markerCluster;

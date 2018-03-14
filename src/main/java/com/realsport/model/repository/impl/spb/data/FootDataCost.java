@@ -3,7 +3,7 @@ package com.realsport.model.repository.impl.spb.data;
 /**
  * Created by IgorR on 08.07.2017.
  */
-public enum FootData {
+public enum FootDataCost {
    /* PLAYGROUND_1("1", "Школа 29", "55.750338", "48.739751", "https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhos", "https://vk.com/igor_ryabtcev","Иннополис","Кораблестроителей", "21", "true"),
     PLAYGROUND_2("2", "Школа 29", "55.750008", "48.739751", "https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhos", "https://vk.com/igor_ryabtcev","Иннополис", "Кораблестроителей", "22", "true"),
     PLAYGROUND_4("4", "Школа 29", "55.750118", "48.739751", "https://chat.whatsapp.com/9x1D6AEXv34JEuMXqhJhos", "https://vk.com/igor_ryabtcev","Иннополис", "Кораблестроителей", "23", "true"),*/
@@ -137,7 +137,7 @@ public enum FootData {
 
 
 
-    FootData(String id, String name, String lattitude, String longitude, String links, String creator, String city, String street, String house, String sport) {
+    FootDataCost(String id, String name, String lattitude, String longitude, String links, String creator, String city, String street, String house, String subject) {
         this.id = id;
         this.name = name;
         this.lattitude = lattitude;
@@ -147,7 +147,7 @@ public enum FootData {
         this.city = city;
         this.street = street;
         this.house = house;
-        this.sport = sport;
+        this.subject = subject;
     }
 
     private String id;
@@ -159,7 +159,7 @@ public enum FootData {
     private String city;
     private String street;
     private String house;
-    private String sport;
+    private String subject;
 
     public String getId() {
         return id;
@@ -234,11 +234,11 @@ public enum FootData {
     }
 
 
-    public String getSport() {
-        return sport;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setSport(String sport) {
-        this.sport = sport;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }
