@@ -49,8 +49,8 @@
 
             </div>
             <div class="col-md-8">
-                <div class="list-group">
-                    <a href="#" class="list-group-item borderless" >
+                <div class="list-group" id="listGroupsUser">
+                  <%--  <a href="#" class="list-group-item borderless" >
                         <div class="media">
                             <div class="pull-left">
                                 <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40" height="40"/>
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     </a>
-
+--%>
                 </div>
 
             </div>
@@ -100,7 +100,9 @@
         var playgroundBasketUser = sessionUser.playgroundBasketUser;
         var playgroundVoleyUser = sessionUser.playgroundVoleyUser;
 
-        var playFoottUser = [];
+        var playFootUser = [];
+        var playBasketUser = [];
+        var playVoleyUser = [];
         if (playgroundFoottUser !== undefined) {
              playgroundFoottUser.map(function(id, i) {
 
@@ -108,15 +110,96 @@
                     var idPlayground = info.id;
                     if (idPlayground == id) {
                         console.log('yes');
-                        playFoottUser.push(info);
+                        playFootUser.push(info);
                     }
                         });
 
             });
 
         }
-        var el = document.getElementById('test');
-        el.appendChild(document.createTextNode(playFoottUser[0].namePlayground));
+
+    if (playgroundBasketUser !== undefined) {
+        playgroundBasketUser.map(function(id, i) {
+
+            basketInfo.map(function(info, i2) {
+                var idPlayground = info.id;
+                if (idPlayground == id) {
+                    console.log('yes');
+                    playBasketUser.push(info);
+                }
+            });
+
+        });
+
+    }
+    if (playgroundVoleyUser !== undefined) {
+        playgroundVoleyUser.map(function(id, i) {
+
+            voleyballInfo.map(function(info, i2) {
+                var idPlayground = info.id;
+                if (idPlayground == id) {
+                    console.log('yes');
+                    playVoleyUser.push(info);
+                }
+            });
+
+        });
+
+    }
+
+
+        var allPlaygroundUser = playFootUser.concat(playBasketUser, playVoleyUser );
+
+
+         allPlaygroundUser.map(function(playground, i) {
+                var list = document.getElementById('listGroupsUser');
+                list.appendChild(getElementList(playground, i));
+         });
+
+
+        function getElementList(allPlaygroundUser, index) {
+            var a = document.createElement('a');
+            a.href = '#';
+            a.className = 'list-group-item borderless list-groups';
+
+            var divMedia = document.createElement('div');
+            divMedia.className = 'media';
+
+            var divImage = document.createElement('div');
+            divImage.className = 'pull-left';
+            var image = document.createElement('img');
+            if (allPlaygroundUser.sport === 'Футбол') {
+                image.src = 'resources/image/стадион3.png';
+            }
+            if (allPlaygroundUser.sport === 'Баскетбол') {
+                image.src = 'resources/image/площадка2.png';
+            }
+            if (allPlaygroundUser.sport === 'Волейбол') {
+                image.src = 'resources/image/спортивная-сетка.png';
+            }
+            image.width = '40';
+            image.height = '40';
+            image.className = 'media-object';
+            divImage.appendChild(image);
+
+            var divBody = document.createElement('div');
+            divBody.className = 'media-body';
+            var h4 = document.createElement('h4');
+            h4.className = 'media-heading';
+            h4.appendChild(document.createTextNode(allPlaygroundUser.namePlayground));
+            var span = document.createElement('span');
+            span.style.color = 'gray';
+            span.appendChild(document.createTextNode(allPlaygroundUser.sport));
+            var hr = document.createElement('hr');
+            divBody.appendChild(h4);
+            divBody.appendChild(span);
+            divBody.appendChild(hr);
+
+            divMedia.appendChild(divImage);
+            divMedia.appendChild(divBody);
+            a.appendChild(divMedia);
+            return a;
+        }
 
 </script>
 </body>

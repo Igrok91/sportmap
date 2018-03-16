@@ -28,6 +28,7 @@ public class VoleballRepositoryImpl implements VoleyballRepository {
             p.setSity(f.getCity());
             p.setStreet(f.getStreet());
             p.setHouse(f.getHouse());
+            p.setSubject(f.getSubject());
             list.add(p);
 
         }

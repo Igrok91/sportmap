@@ -56,16 +56,57 @@
         <div class="pull-left" >
             <a class="navbar-brand" href="#">Поиск</a>
         </div>
-        <div class="pull-right" style="margin-top: 10px">
+ <%--       <div class="pull-right" style="margin-top: 10px">
             <span style="margin-right: 3px">Free</span>
             <!-- <span style="margin-right: 3px"><img src="\Applications\Разработка\иконки\cost2.png" alt="COST" width="30" height="30"> </span> -->
             <input type="checkbox" class="checkbox-switch2" />
+        </div>--%>
+        <div class="pull-right dropdown" style="padding-top: 10px">
+            <a  class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"><span  class="glyphicon glyphicon-filter" ></span></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
+                <li><a href="#" class="list-group-item borderless">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20" height="20"  />
+                        </div>
+
+
+                        <div class="media-body " >
+                            <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Футбол</h4>
+                        </div>
+                    </div>
+                </a></li>
+                <li><a href="#" class="list-group-item borderless">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="media-object" src="resources/image/basket.png" alt="Футбол" width="20" height="20"  />
+                        </div>
+
+
+                        <div class="media-body " >
+                            <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Баскетбол</h4>
+                        </div>
+                    </div>
+                </a></li>
+                <li><a href="#" class="list-group-item borderless">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="media-object" src="resources/image/voley.png" alt="Футбол" width="20" height="20"  />
+                        </div>
+
+
+                        <div class="media-body " >
+                            <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Волейбол</h4>
+                        </div>
+                    </div>
+                </a></li>
+            </ul>
         </div>
     </div>
 </nav>
 <main>
     <div class="container-fluid ">
-        <div class="row ">
+<%--        <div class="row ">
             <div class="text-center">
                 <span style="color: gray">Фильтры:</span>
                 <a  class="btn" id="football"><img  src="resources/image/foot.png" alt="Футбол" width="40" height="40"/></a>
@@ -74,7 +115,7 @@
 
             </div>
 
-        </div>
+        </div>--%>
 
         <div class="row-content hide ">
             <div class="col-md-2">

@@ -26,8 +26,13 @@ public class AuthService {
         List<String> listBasket = new ArrayList<>();
         listBasket.add("7");
         listBasket.add("8");
-        user.setPlaygrounBasketList(listBasket);
+
+        List<String> listVoley = new ArrayList<>();
+        listVoley.add("7");
+        listVoley.add("8");
+        user.setPlaygroundBasketList(listBasket);
         user.setPlaygroundFootballList(listFootball);
+        user.setPlaygroundVoleyList(listVoley);
         return user;
 
     }

@@ -98,8 +98,8 @@ public class StartController {
         ArrayList<String> mapArrayList = new ArrayList<>();
         map.put("isAdmin", user.isAdmin());
         map.put("playgroundFoottUser", user.getPlaygroundFootballList());
-        map.put("playgroundBasketUser", user.getPlaygrounBasketList());
-        map.put("playgroundVoleyUser", user.getPlaygrounVoleyList());
+        map.put("playgroundBasketUser", user.getPlaygroundBasketList());
+        map.put("playgroundVoleyUser", user.getPlaygroundVoleyList());
         String jsonUser = gson.toJson(map);
         httpSession.setAttribute("sessionUser", jsonUser);
 
@@ -234,6 +234,7 @@ public class StartController {
             map.put("link", p.getLinks());
             map.put("creator", p.getСreator());
             map.put("id", p.getIdvoleyball());
+            map.put("sport", p.getSubject());
             String json = gson.toJson(map);
             mapArrayList.add(json);
 
@@ -258,6 +259,7 @@ public class StartController {
             map.put("link", p.getLinks());
             map.put("creator", p.getСreator());
             map.put("id", p.getIdbasketball());
+            map.put("sport", p.getSubject());
             String json = gson.toJson(map);
             mapArrayList.add(json);
         }

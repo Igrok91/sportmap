@@ -13,19 +13,17 @@
     <title>Поиск спортивной площадки</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="resources/searchBox.css">
     <link rel="stylesheet" href="resources/button.css">
     <script src="resources/js/searchBox.js"></script>
     <script src="resources/js/infoWindow.js"></script>
     <script src="resources/js/error.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 450px}
+        .row.content {height: 510px}
 
         /* Set black background color, white text and some padding */
 
@@ -47,9 +45,14 @@
 
 
         .divMain {
-            height: 120px;
-            width: 190px;
-            background-color:#fafafa;
+/*
+            height: 90px;
+            width: 140px;
+*/
+
+        }
+        .divTitle {
+          /*background-color:#fafafa;*/
 
         }
 
@@ -72,29 +75,54 @@
             <div class="pull-left" >
                 <a class="navbar-brand" href="#">Поиск</a>
             </div>
-            <div class="pull-right" style="margin-top: 10px">
+        <%--    <div class="pull-right" style="margin-top: 10px">
                 <span style="margin-right: 3px">Free</span>
-                <!-- <span style="margin-right: 3px"><img src="\Applications\Разработка\иконки\cost2.png" alt="COST" width="30" height="30"> </span> -->
                 <input type="checkbox" class="checkbox-switch2" />
+            </div>--%>
+            <div class="pull-right dropdown" style="padding-top: 10px">
+                <a  class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"><span  class="glyphicon glyphicon-filter" ></span></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
+                    <li><a href="#" id="football" style="padding-top: 3px;padding-bottom: 3px;">
+                        <div class="media">
+                            <div class="pull-left" >
+                                <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20" height="20"  />
+                            </div>
+
+
+                            <div class="media-body " >
+                                <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Футбол</h4>
+                            </div>
+                        </div>
+                    </a></li>
+                    <li><a href="#" id="basketball">
+                        <div class="media">
+                            <div class="pull-left"  >
+                                <img class="media-object" src="resources/image/basket.png" alt="Футбол" width="20" height="20"  />
+                            </div>
+
+
+                            <div class="media-body " >
+                                <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Баскетбол</h4>
+                            </div>
+                        </div>
+                    </a></li>
+                    <li><a href="#" id="voleyball">
+                        <div class="media">
+                            <div class="pull-left"  >
+                                <img class="media-object" src="resources/image/voley.png" alt="Футбол" width="20" height="20"  />
+                            </div>
+
+
+                            <div class="media-body " >
+                                <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Волейбол</h4>
+                            </div>
+                        </div>
+                    </a></li>
+                </ul>
             </div>
         </div>
     </nav>
-    <div class="container-fluid " style="margin-bottom: 10px">
-    <div class="row ">
-        <div class="text-center">
-            <span style="color: gray">Фильтры:</span>
-            <a  class="btn" id="football"><img  src="resources/image/foot2.png" alt="Футбол" width="40" height="40"/></a>
-            <a  class="btn" id="basketball"><img  src="resources/image/basket.png" alt="Баскетбол" width="40" height="40"/></a>
-            <a  class="btn" id="voleyball"><img  src="resources/image/voley.png" alt="Волейбол" width="40" height="40"/></a>
-            <div class="btn-group btn-group-justified">
-                <a href="#" class="btn active">Список</a>
-                <a href="#" class="btn ">Карта</a>
-            </div>
-        </div>
 
-    </div>
-
-    </div>
 </header>
 <main>
     <div class="row content hide ">
@@ -334,6 +362,7 @@
 
     $(function() {
         $('#football').click(function(event) {
+            alert(event);
             markerCluster.clearMarkers();
             markerCluster.addMarkers(footMarkers);
         });

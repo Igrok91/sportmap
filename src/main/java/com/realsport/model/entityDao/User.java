@@ -6,8 +6,8 @@ public class User {
     private String userId;
     private boolean isAdmin;
     private List<String> playgroundFootballList;
-    private List<String> playgrounBasketList;
-    private List<String> playgrounVoleyList;
+    private List<String> playgroundBasketList;
+    private List<String> playgroundVoleyList;
 
 
     public String getUserId() {
@@ -34,19 +34,19 @@ public class User {
         this.playgroundFootballList = playgroundFootballList;
     }
 
-    public List<String> getPlaygrounBasketList() {
-        return playgrounBasketList;
+    public List<String> getPlaygroundBasketList() {
+        return playgroundBasketList;
     }
 
-    public void setPlaygrounBasketList(List<String> playgrounBasketList) {
-        this.playgrounBasketList = playgrounBasketList;
+    public void setPlaygroundBasketList(List<String> playgroundBasketList) {
+        this.playgroundBasketList = playgroundBasketList;
     }
 
-    public List<String> getPlaygrounVoleyList() {
-        return playgrounVoleyList;
+    public List<String> getPlaygroundVoleyList() {
+        return playgroundVoleyList;
     }
 
-    public void setPlaygrounVoleyList(List<String> playgrounVoleyList) {
-        this.playgrounVoleyList = playgrounVoleyList;
+    public void setPlaygroundVoleyList(List<String> playgroundVoleyList) {
+        this.playgroundVoleyList = playgroundVoleyList;
     }
 }

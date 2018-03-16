@@ -77,6 +77,7 @@ function createInfoWindow(info, index, userId, sport) {
     imgfootball.height = '35';
     imgfootball.style.marginBottom = '0px';
 
+
     var imgbasket = document.createElement('img');
     imgbasket.src = "resources/image/площадка2.png";
     imgbasket.className = ' text-center';
@@ -96,6 +97,8 @@ function createInfoWindow(info, index, userId, sport) {
 
     var divMain = document.createElement('div');
     divMain.className = "divMain";
+    var divTitle = document.createElement('div');
+    divTitle.className = "divTitle";
 
     var media = document.createElement('div');
     var image = document.createElement('a');
@@ -114,40 +117,34 @@ function createInfoWindow(info, index, userId, sport) {
     var mediaBody = document.createElement('div');
 
 
-    var name = document.createElement('h5');
-    name.style.padding = '0px';
-    name.appendChild( document.createTextNode(info[index].namePlayground));
-
-    mediaBody.appendChild(name);
-    media.appendChild(image);
-    media.appendChild(mediaBody);
-    var p = document.createElement('p');
-    p.appendChild( document.createTextNode( "" ) );
-    p.id = "sms";
 
     var hr = document.createElement('hr');
-    hr.style.marginTop = '3px';
-    hr.style.marginBottom = '7px';
+    hr.style.marginTop = '4px';
+    hr.style.marginBottom = '0px';
+
+    mediaBody.appendChild(document.createTextNode(info[index].namePlayground));
+
+    media.appendChild(image);
+    //media.appendChild(mediaBody);
+
+
     var div = document.createElement('div');
     div.className = "text-center ";
 
     var a = document.createElement('a');
-    a.appendChild( document.createTextNode("Перейти в группу  "));
-    a.id = "button";
-/*
-    var img = document.createElement('img');
-    img.src = "resources/image/whatsapp.png";
-*/
 
-    a.className = "whatsapp btn btn-default ";
+    a.appendChild( mediaBody);
+    a.id = "button";
+
+    a.className = " btn  ";
     a.role = "button";
     a.id = "footballId";
     a.href = "toGroup?playgroundId=" + info[index].id;
    // a.appendChild(img);
     div.appendChild(a);
-
-    divMain.appendChild(media);
-    //divMain.appendChild(hr);
+    divTitle.appendChild(media);
+    divMain.appendChild(divTitle);
+    divMain.appendChild(hr);
     divMain.appendChild(div);
     //divMain.appendChild(p);
     return divMain;
