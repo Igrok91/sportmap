@@ -42,9 +42,9 @@ public class StartController {
     ArrayList<String> basketInfoList;
     ArrayList<String> voleyballInfoList;
 
-    public static final String FOOTBALL = "foot";
-    public static final String BASKETBALL = "basket";
-    public static final String VOLEYBALL = "voley";
+    public static final String FOOTBALL = "football";
+    public static final String BASKETBALL = "basketball";
+    public static final String VOLEYBALL = "voleyball";
 
     private static final Integer ADMIN = 172924708;
 
@@ -89,6 +89,7 @@ public class StartController {
             model.addAttribute("userId", "null");
             return "error";
         }
+        model.addAttribute("playgroundCoordinate", "empty");
         return !isFirst ? "main" : "begin";
     }
 
@@ -164,9 +165,200 @@ public class StartController {
         User user = (User) httpSession.getAttribute("sessionUser");
         String userId = (String) httpSession.getAttribute("userId");
 
-
         return "searchPlayground";
     }
+
+    @RequestMapping("/toGroupFromMap")
+    public String toGroup(Model model, @RequestParam(value="playgroundId", required=false, defaultValue="5") String id, @RequestParam(value="sport", required=false, defaultValue=FOOTBALL) String sport) {
+        if (sport.equalsIgnoreCase(FOOTBALL)) {
+            for (Playfootball playfootball : playfootballList) {
+                if (playfootball.getIdplayground() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", playfootball.getName() );
+                    model.addAttribute("street", playfootball.getStreet() );
+                    model.addAttribute("house", playfootball.getHouse() );
+                    model.addAttribute("sport", playfootball.getSubject() );
+                    model.addAttribute("players", playgroundService.getFootballPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getFootballPlayById(id) );
+                }
+            }
+        } else if (sport.equalsIgnoreCase(BASKETBALL)) {
+            for (Basketball basketball : basketballList) {
+                if (basketball.getIdbasketball() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", basketball.getName() );
+                    model.addAttribute("street", basketball.getStreet() );
+                    model.addAttribute("house", basketball.getHouse() );
+                    model.addAttribute("sport", basketball.getSubject() );
+                    model.addAttribute("players", playgroundService.getBasketballPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getBasketballPlayById(id) );
+                }
+            }
+        } else if (sport.equalsIgnoreCase(VOLEYBALL)) {
+            for (Voleyball voleyball : voleyballList) {
+                if (voleyball.getIdvoleyball() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", voleyball.getName() );
+                    model.addAttribute("street", voleyball.getStreet() );
+                    model.addAttribute("house", voleyball.getHouse() );
+                    model.addAttribute("sport", voleyball.getSubject() );
+                    model.addAttribute("players", playgroundService.getVoleyPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getVoleyPlayById(id) );
+                }
+            }
+        }
+
+        model.addAttribute("returnBack", "map");
+        model.addAttribute("playgroundId", id);
+        return "playground";
+    }
+
+    @RequestMapping("/toGroup")
+    public String toGroupUser(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport) {
+        if (sport.equals("Футбол")) {
+            for (Playfootball playfootball : playfootballList) {
+                if (playfootball.getIdplayground() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", playfootball.getName() );
+                    model.addAttribute("street", playfootball.getStreet() );
+                    model.addAttribute("house", playfootball.getHouse() );
+                    model.addAttribute("sport", playfootball.getSubject() );
+                    model.addAttribute("players", playgroundService.getFootballPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getFootballPlayById(id) );
+                }
+            }
+        } else if (sport.equals("Баскетбол")) {
+            for (Basketball basketball : basketballList) {
+                if (basketball.getIdbasketball() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", basketball.getName() );
+                    model.addAttribute("street", basketball.getStreet() );
+                    model.addAttribute("house", basketball.getHouse() );
+                    model.addAttribute("sport", basketball.getSubject() );
+                    model.addAttribute("players", playgroundService.getBasketballPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getBasketballPlayById(id) );
+                }
+            }
+        } else if (sport.equals("Волейбол")) {
+            for (Voleyball voleyball : voleyballList) {
+                if (voleyball.getIdvoleyball() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", voleyball.getName() );
+                    model.addAttribute("street", voleyball.getStreet() );
+                    model.addAttribute("house", voleyball.getHouse() );
+                    model.addAttribute("sport", voleyball.getSubject() );
+                    model.addAttribute("players", playgroundService.getVoleyPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getVoleyPlayById(id) );
+                }
+            }
+        }
+
+        model.addAttribute("returnBack", "group");
+        model.addAttribute("playgroundId", id);
+        return "playground";
+    }
+
+    @RequestMapping("/toCreate")
+    public String toCreate(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport) {
+        if (sport.equals("Футбол")) {
+            for (Playfootball playfootball : playfootballList) {
+                if (playfootball.getIdplayground() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", playfootball.getName() );
+                    model.addAttribute("street", playfootball.getStreet() );
+                    model.addAttribute("house", playfootball.getHouse() );
+                    model.addAttribute("sport", playfootball.getSubject() );
+                    model.addAttribute("players", playgroundService.getFootballPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getFootballPlayById(id) );
+                }
+            }
+        } else if (sport.equals("Баскетбол")) {
+            for (Basketball basketball : basketballList) {
+                if (basketball.getIdbasketball() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", basketball.getName() );
+                    model.addAttribute("street", basketball.getStreet() );
+                    model.addAttribute("house", basketball.getHouse() );
+                    model.addAttribute("sport", basketball.getSubject() );
+                    model.addAttribute("players", playgroundService.getBasketballPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getBasketballPlayById(id) );
+                }
+            }
+        } else if (sport.equals("Волейбол")) {
+            for (Voleyball voleyball : voleyballList) {
+                if (voleyball.getIdvoleyball() == Integer.parseInt(id)) {
+                    model.addAttribute("namePlayground", voleyball.getName() );
+                    model.addAttribute("street", voleyball.getStreet() );
+                    model.addAttribute("house", voleyball.getHouse() );
+                    model.addAttribute("sport", voleyball.getSubject() );
+                    model.addAttribute("players", playgroundService.getVoleyPlayersById(id) );
+                    model.addAttribute("plays", playgroundService.getVoleyPlayById(id) );
+                }
+            }
+        }
+        String userId = (String)httpSession.getAttribute("userId");
+        ArrayList<String> templates = authService.getTemplatesUserById(userId);
+
+        model.addAttribute("returnBack", "home");
+        model.addAttribute("templates", templates);
+        model.addAttribute("playgroundId", id);
+        return "create";
+    }
+
+    @RequestMapping(value = "/toHome")
+    public String toHome(Model model, @RequestParam(value="where") String where, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport ) {
+       // User user = (User) httpSession.getAttribute("sessionUser");
+        //String userId = (String) httpSession.getAttribute("userId");
+        if (where.equals("group")) {
+            addPlaygroundDataToModel(model);
+            model.addAttribute("returnBack", where);
+            model.addAttribute("sport", sport);
+            model.addAttribute("playgroundCoordinate", "empty");
+        } else if (where.equals("map")) {
+            addPlaygroundDataToModel(model);
+            String json = null;
+            if (sport.equals("Футбол")) {
+                HashMap<String, Double> map = new HashMap<>();
+                Gson gson = new Gson();
+
+                for (Playfootball p : playfootballList) {
+                    if (p.getIdplayground() == Integer.parseInt(id)) {
+                        map.put("lat", Double.parseDouble(p.getLatitude()));
+                        map.put("lng", Double.parseDouble(p.getLongitude()));
+                        json = gson.toJson(map);
+                    }
+
+                }
+            }
+
+            if (sport.equals("Баскетбол")) {
+                HashMap<String, Double> map = new HashMap<>();
+                Gson gson = new Gson();
+
+                for (Basketball p : basketballList) {
+                    if (p.getIdbasketball() == Integer.parseInt(id)) {
+                        map.put("lat", Double.parseDouble(p.getLatitude()));
+                        map.put("lng", Double.parseDouble(p.getLongitude()));
+                        json = gson.toJson(map);
+                    }
+
+                }
+            }
+
+            if (sport.equals("Волейбол")) {
+                HashMap<String, Double> map = new HashMap<>();
+                Gson gson = new Gson();
+
+                for (Voleyball p : voleyballList) {
+                    if (p.getIdvoleyball() == Integer.parseInt(id)) {
+                        map.put("lat", Double.parseDouble(p.getLatitude()));
+                        map.put("lng", Double.parseDouble(p.getLongitude()));
+                        json = gson.toJson(map);
+                    }
+
+                }
+            }
+
+            model.addAttribute("returnBack", where);
+            model.addAttribute("sport", sport);
+            model.addAttribute("playgroundCoordinate", json == null ? "empty" : json);
+        }
+        return "main";
+    }
+
+
 
 
     /**
@@ -360,4 +552,15 @@ public class StartController {
         return error;
     }
 
+    public ArrayList<String> getFootInfoList() {
+        return footInfoList;
+    }
+
+    public ArrayList<String> getBasketInfoList() {
+        return basketInfoList;
+    }
+
+    public ArrayList<String> getVoleyballInfoList() {
+        return voleyballInfoList;
+    }
 }

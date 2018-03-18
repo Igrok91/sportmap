@@ -82,39 +82,39 @@
             <div class="pull-right dropdown" style="padding-top: 10px">
                 <a  class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"><span  class="glyphicon glyphicon-filter" ></span></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
-                    <li><a href="#" id="football" style="padding-top: 3px;padding-bottom: 3px;">
+                    <li  ><a href="#" id="football" style="padding-top: 3px;padding-bottom: 3px;">
                         <div class="media">
                             <div class="pull-left" >
-                                <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20" height="20"  />
+                                <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
                             </div>
 
 
                             <div class="media-body " >
-                                <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Футбол</h4>
+                                <h4 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Футбол</h4>
                             </div>
                         </div>
                     </a></li>
                     <li><a href="#" id="basketball">
                         <div class="media">
                             <div class="pull-left"  >
-                                <img class="media-object" src="resources/image/basket.png" alt="Футбол" width="20" height="20"  />
+                                <img class="media-object" src="resources/image/basket.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
                             </div>
 
 
                             <div class="media-body " >
-                                <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Баскетбол</h4>
+                                <h4 class="media-heading"  style="margin-top: 7px;margin-bottom: 7px">Баскетбол</h4>
                             </div>
                         </div>
                     </a></li>
                     <li><a href="#" id="voleyball">
                         <div class="media">
                             <div class="pull-left"  >
-                                <img class="media-object" src="resources/image/voley.png" alt="Футбол" width="20" height="20"  />
+                                <img class="media-object" src="resources/image/voley.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
                             </div>
 
 
                             <div class="media-body " >
-                                <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">Волейбол</h4>
+                                <h4 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Волейбол</h4>
                             </div>
                         </div>
                     </a></li>
@@ -207,8 +207,13 @@
 
     var infoWindow;
 
+    function setBackPosition(map) {
+        var coor = ${playgroundCoordinate};
+        map.setCenter(coor);
+    }
+    var map;
     function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+         map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 59.93903 , lng: 30.315828},
             zoom: 11,
             mapTypeId: 'roadmap'
@@ -218,9 +223,10 @@
         infoWindow.setPosition(map.getCenter());
         infoWindow.setContent('Нажмите на маркер для перехода к площадке');
         initMarkers(map, infoWindow);
-        // alert(footInfo[index].link);
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
+        var returnBack = '${returnBack}';
+        if (returnBack == 'map') {
+            setBackPosition(map);
+        } else if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 var pos = {
                     lat: position.coords.latitude,
@@ -361,8 +367,7 @@
 
 
     $(function() {
-        $('#football').click(function(event) {
-            alert(event);
+        $('#football ').click(function(event) {
             markerCluster.clearMarkers();
             markerCluster.addMarkers(footMarkers);
         });

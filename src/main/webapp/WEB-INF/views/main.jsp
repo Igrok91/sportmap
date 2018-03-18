@@ -68,8 +68,8 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="list-group">
-                        <a href="#" class="list-group-item borderless">
+                    <div class="list-group" id="listGroupsCreate">
+    <%--                    <a href="#" class="list-group-item borderless">
                             <div class="media">
                                 <div class="pull-left">
                                     <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40" height="40"/>
@@ -82,20 +82,7 @@
                                     <hr>
                                 </div>
                             </div>
-                        </a>
-                        <a href="#" class="list-group-item borderless">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40" height="40" />
-                                </div>
-
-                                <div class="media-body">
-                                    <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">У Школы № 345</h4>
-                                    <span  style="color: gray" >Баскетбол</span>
-                                    <hr>
-                                </div>
-                            </div>
-                        </a>
+                        </a>--%>
 
                     </div>
                 </div>
@@ -110,11 +97,11 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h5 class="modal-title" id="falseModalLabel">У вас нет площадок</h5>
+                    <h5 class="modal-title" id="falseModalLabel"><span class="glyphicon glyphicon-alert" style="margin-right: 10px"></span>У вас нет площадок</h5>
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <button type="button" class="btn btn-primary">Перейти в поиск</button>
+                        <a id="toSearchPlayground" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-search" style="margin-right: 10px"></span>Перейти в поиск</a>
                     </div>
 
 
@@ -140,6 +127,56 @@
 
     $(document).ready(function(){
         $('#all2').tooltip({title: "Смотреть всех"});
+    });
+    var returnBack = '${returnBack}';
+    if (returnBack == 'map') {
+        console.log("search");
+        document.getElementById("event").className = "hide";
+        document.getElementById("prof").className = "hide";
+        document.getElementById("group").className = "hide";
+        document.getElementById("search").className = "";
+        $('#li2').attr('class', 'active');
+        $('#li1').attr('class', '');
+        $('#li3').attr('class', '');
+        $('#li4').attr('class', '');
+        $('#li5').attr('class', '');
+
+    } else if (returnBack == 'group') {
+        console.log("group");
+        document.getElementById("event").className = "hide";
+        document.getElementById("prof").className = "hide";
+        document.getElementById("group").className = "";
+        document.getElementById("search").className = "hide";
+        $('#li2').attr('class', '');
+        $('#li1').attr('class', '');
+        $('#li3').attr('class', '');
+        $('#li4').attr('class', 'active');
+        $('#li5').attr('class', '');
+    }
+    if (allPlaygroundUser.length != 0) {
+        $('#create').attr('data-target', '#exampleModal');
+        allPlaygroundUser.map(function(playground, i) {
+            var list = document.getElementById('listGroupsCreate');
+            list.appendChild(getElementList(playground, i, "toCreate"));
+        });
+    } else {
+        $('#create').attr('data-target', '#falseModal');
+    }
+
+    $(function() {
+        $('#toSearchPlayground').click(function(event) {
+
+            document.getElementById("event").className = "hide";
+            document.getElementById("prof").className = "hide";
+            document.getElementById("group").className = "hide";
+            document.getElementById("search").className = "";
+
+            $('#li2').attr('class', 'active');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', '');
+        });
     });
 
 

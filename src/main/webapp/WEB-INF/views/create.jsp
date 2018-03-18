@@ -13,12 +13,26 @@
     <title>Поиск спортивной площадки</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="resources\switch\switch.css" />
+    <script src="resources\switch\switch.js"></script>
     <style>
 
         /* Set black background color, white text and some padding */
+        .borderless {
+            border: 0 none;
 
+            box-shadow: none;
 
+        }
+
+        hr {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 <body>
@@ -56,8 +70,8 @@
 
 
                         <div class="media-body " >
-                            <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">У Школы № 29</h4>
-                            <span  style="color: gray" >Футбол</span>
+                            <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${namePlayground}</h4>
+                            <span  style="color: gray" >${sport}</span>
 
                         </div>
                     </div>
@@ -65,16 +79,16 @@
                 </div>
 
                 <div class="btn-group btn-group-justified" style="padding-bottom: 5px" >
-                    <a href="#" class="btn active btn-primary">Новый</a>
-                    <a href="#" class="btn ">Шаблоны</a>
+                    <a href="#" class="btn active btn-primary" id="newGame">Новый</a>
+                    <a href="#" class="btn " id="templatesGames">Шаблоны</a>
                 </div>
 
-                <div class="panel panel-default">
+                <div class="panel panel-default" id="panelCreate">
                     <div class="panel-body">
 
                         <div>
                             <div>
-                                <label for="desc"><span><img src="resources/image/.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
+                                <label for="desc"><span><img src="resources/image/новый3.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
                             </div>
                             <textarea  type="text" class="form-control borderless " placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
                             <hr>
@@ -93,7 +107,7 @@
 
                         <div  style="margin-top: 5px">
                             <span style="margin-right: 3px; color: gray">Дополнительные настройки </span>
-                            <input type="checkbox" class="checkbox-switch" />
+                            <input type="checkbox" class="checkbox-switch3" />
                         </div>
 
                         <div id="settings" style="margin-top: 5px" class="hide">
@@ -181,5 +195,39 @@
         </div>
     </div>
 </main>
+<script>
+    var el3 = document.querySelector('.checkbox-switch3');
+    var mySwitch3 = new Switch(el3, {
+        showText: true,
+        onText: '',
+        offText: '',
+        onChange: function () {
+          if (mySwitch3.getChecked() == true) {
+              $('#settings').removeClass('hide');
+          } else {
+              $('#settings').addClass('hide');
+          }
+        }
+    });
+
+    $(function() {
+        $('#newGame').click(function(event) {
+            $('#newGame').addClass('active btn-primary');
+            $('#panelCreate').removeClass('hide');
+            $('#templatesGames').removeClass('active btn-primary');
+            //$('#settings').addClass('hide');
+        });
+    });
+
+    $(function() {
+        $('#templatesGames').click(function(event) {
+            $('#templatesGames').addClass('active btn-primary');
+            $('#newGame').removeClass('active btn-primary');
+           // $('#newGame').removeClass('active btn-primary');
+            $('#panelCreate').addClass('hide');
+        });
+    });
+
+</script>
 </body>
 </html>

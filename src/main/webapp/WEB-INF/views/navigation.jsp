@@ -92,11 +92,11 @@
         <div class="container-fluid">
             <div class="btn-group btn-group-justified">
                 <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
-                    <li class="active visible-xs-2" ><a id="events"><span class="glyphicon glyphicon-calendar" aria-hidden=""></span>  События<span class="sr-only">(current)</span></a></li>
-                    <li><a id="searchPlayground"><span class="glyphicon glyphicon-search" aria-hidden=""></span>  Площадки</a></li>
-                    <li><a id="create" data-toggle="modal" data-target="#exampleModal" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="Создать"></span></a></li>
-                    <li><a id="groups"><span class="glyphicon glyphicon-th-list" aria-hidden=""></span>  Группы</a></li>
-                    <li><a id="profile"><span class="glyphicon glyphicon-user" aria-hidden=""></span>  Профиль</a></li>
+                    <li id="li1" class="active " ><a id="events"><span class="glyphicon glyphicon-calendar" aria-hidden=""></span>  События<span class="sr-only">(current)</span></a></li>
+                    <li id="li2"><a id="searchPlayground"><span class="glyphicon glyphicon-search" aria-hidden=""></span>  Площадки</a></li>
+                    <li id="li3"><a id="create" data-toggle="modal" data-target="#exampleModal" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="Создать"></span></a></li>
+                    <li id="li4"><a id="groups"><span class="glyphicon glyphicon-th-list" aria-hidden=""></span>  Группы</a></li>
+                    <li id="li5"><a id="profile"><span class="glyphicon glyphicon-user" aria-hidden=""></span>  Профиль</a></li>
                 </ul>
 
             </div><!-- /.navbar-collapse -->
@@ -113,6 +113,12 @@
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "hide";
         document.getElementById("search").className = "";
+
+            $('#li2').attr('class', 'active');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', '');
         });
     });
 
@@ -122,6 +128,12 @@
             document.getElementById("prof").className = "hide";
             document.getElementById("group").className = "hide";
             document.getElementById("search").className = "hide";
+
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', 'active');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', '');
         });
     });
 
@@ -131,6 +143,12 @@
             document.getElementById("prof").className = "hide";
             document.getElementById("group").className = "";
             document.getElementById("search").className = "hide";
+
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', 'active');
+            $('#li5').attr('class', '');
         });
     });
 
@@ -140,6 +158,11 @@
             document.getElementById("prof").className = "";
             document.getElementById("group").className = "hide";
             document.getElementById("search").className = "hide";
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', 'active');
         });
     });
 

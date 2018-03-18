@@ -40,4 +40,8 @@ public class AuthService {
     public User registerUser(String id) {
         return null;
     }
+
+    public ArrayList<String> getTemplatesUserById(String userId) {
+        return null;
+    }
 }

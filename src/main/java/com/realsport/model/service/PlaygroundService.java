@@ -48,4 +48,27 @@ public class PlaygroundService implements PlaygroundDao{
         return  playgroundDao.getFootballById(id);
     }
 
+    public String getFootballPlayersById(String id) {
+        return "45";
+    }
+
+    public String getFootballPlayById(String id) {
+        return "20";
+    }
+
+    public String getBasketballPlayersById(String id) {
+        return "55";
+    }
+
+    public String getBasketballPlayById(String id) {
+        return "66";
+    }
+
+    public String getVoleyPlayersById(String id) {
+        return "77";
+    }
+
+    public String getVoleyPlayById(String id) {
+        return "23";
+    }
 }

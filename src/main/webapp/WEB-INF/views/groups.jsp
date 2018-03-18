@@ -153,14 +153,16 @@
 
          allPlaygroundUser.map(function(playground, i) {
                 var list = document.getElementById('listGroupsUser');
-                list.appendChild(getElementList(playground, i));
+                list.appendChild(getElementList(playground, i, "toGroup"));
          });
 
 
-        function getElementList(allPlaygroundUser, index) {
+        function getElementList(allPlaygroundUser, index, href) {
             var a = document.createElement('a');
-            a.href = '#';
+            a.href = href + "?playgroundId=" + allPlaygroundUser.id + "&sport=" + allPlaygroundUser.sport;
+            a.id = allPlaygroundUser.id;
             a.className = 'list-group-item borderless list-groups';
+
 
             var divMedia = document.createElement('div');
             divMedia.className = 'media';
@@ -200,6 +202,8 @@
             a.appendChild(divMedia);
             return a;
         }
+
+
 
 </script>
 </body>

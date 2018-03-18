@@ -13,7 +13,10 @@
     <title>Поиск спортивной площадки</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
 
         /* Set black background color, white text and some padding */
@@ -27,16 +30,9 @@
 <nav class="nav  navbar-static-top navbar-default" >
     <div class="container-fluid ">
         <div class="pull-left" >
-            <a class="navbar-brand btn" href="#" ><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
+            <a class="navbar-brand btn"  id="returnBack"><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
         </div>
     </div>
-</nav>
-
-<nav class="nav  navbar-static-top navbar-default" >
-    <div class="container-fluid ">
-        <div class="pull-left" >
-            <a class="navbar-brand btn" href="#" ><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
-        </div>
 </nav>
 <main >
 
@@ -48,12 +44,12 @@
 
             </div>
             <div class="col-md-8">
-                <div class="panel panel-success">
+                <div class="panel " id="panelGroup">
                     <div class="panel-heading " >
                         <div>
                             <a class="pull-left" href="#" >
                                 <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                <img class="media-object" src="resources/image/playbasket.png" alt="Баскетбол" width="40" height="40" >
+                                <img class="media-object" src="resources/image/playbasket.png" alt="Баскетбол" width="40" height="40" id="imageGroup" >
                             </a>
 
 
@@ -61,11 +57,11 @@
                             <div class="media-body" style="padding-left: 10px">
 
                                 <h4 class="media-heading" style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">
-                                    У Школы № 345</h4>
+                                   ${namePlayground}</h4>
 
 
 
-                                <span  style="color: gray">12 линия В.О, 48</span>
+                                <span  style="color: gray">${sport}</span>
 
                             </div>
 
@@ -87,21 +83,20 @@
 
                         <h5><span class="glyphicon glyphicon-info-sign"></span>  Информация</h5>
                         <div >
-                            <div  style="padding-bottom: 5px">
-                                <span style="color: gray;margin-right: 10px">Покрытие </span> <span >резина</span>
-                                <br>
-                                <span style="color: gray;margin-right: 10px">Тип  </span> <span >открытая</span>
+                            <div  style="padding-bottom: 2px">
+                                <span style="color: gray;">Aдрес: ${street}, ${house} </span>
+
                             </div>
                         </div>
 
                     </div>
                     <div class="list-group" style="padding-bottom: 1px">
                         <a href="#" class="list-group-item ">
-                            <span class="badge">45</span>
+                            <span class="badge">${players}</span>
                             Участники
                         </a>
                         <a href="#" class="list-group-item">
-                            <span class="badge">25</span>
+                            <span class="badge">${plays}</span>
                             Игры</a>
 
                     </div>
@@ -125,8 +120,22 @@
 
             </div>
         </div>
-
+    </div>
 </main>
-
+<script>
+    var sp = '${sport}';
+    if (sp == 'Футбол') {
+        $('#panelGroup').addClass('panel-success');
+        $('#imageGroup').attr("src", "resources/image/стадион.png")
+    } else if (sp == 'Баскетбол') {
+        $('#panelGroup').addClass('panel-warning');
+        $('#imageGroup').attr("src", "resources/image/playbasket.png")
+    } else if (sp == 'Волейбол') {
+        $('#panelGroup').addClass('panel-info');
+        $('#imageGroup').attr("src", "resources/image/сетка.png")
+    }
+    var returnBack = 'toHome?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp;
+    $('#returnBack').attr('href', returnBack);
+</script>
 </body>
 </html>

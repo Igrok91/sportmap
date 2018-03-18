@@ -128,24 +128,44 @@ function createInfoWindow(info, index, userId, sport) {
     //media.appendChild(mediaBody);
 
 
-    var div = document.createElement('div');
+/*    var div = document.createElement('div');
     div.className = "text-center ";
+    div.id = info[index].id;*/
+
 
     var a = document.createElement('a');
 
     a.appendChild( mediaBody);
     a.id = "button";
 
-    a.className = " btn  ";
+    a.className = " btn toGroup";
     a.role = "button";
-    a.id = "footballId";
-    a.href = "toGroup?playgroundId=" + info[index].id;
+    a.id = info[index].id;
+    a.href = "toGroupFromMap?playgroundId=" + info[index].id + "&sport=" + sport;
+
+
+
    // a.appendChild(img);
-    div.appendChild(a);
+   // div.appendChild(a);
     divTitle.appendChild(media);
     divMain.appendChild(divTitle);
     divMain.appendChild(hr);
-    divMain.appendChild(div);
+    divMain.appendChild(a);
     //divMain.appendChild(p);
     return divMain;
+}
+
+
+function getplaygroundInfo(id, sport) {
+    if (sport === 'football') {
+        footInfo.map(function(info, i2) {
+            var idPlayground = info.id;
+            if (idPlayground == id) {
+                console.log('yes yes');
+                return info;
+            }
+        });
+
+    }
+
 }
