@@ -80,15 +80,15 @@
                     </div>
                     <div class="list-group">
                         <a href="#" class="list-group-item ">
-                            <span class="badge">14</span>
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">14</span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                             Группы
                         </a>
 
                         <a href="#" class="list-group-item">
-                            <span class="badge">25</span>
+                            <span class="badge">25 <span class="glyphicon glyphicon-menu-right"></span></span>
                             Участие в играх</a>
                         <a href="#" class="list-group-item">
-                            <span class="badge">4</span>
+                            <span class="badge">4 <span class="glyphicon glyphicon-menu-right"></span></span>
                             Организация игр</a>
                     </div>
 

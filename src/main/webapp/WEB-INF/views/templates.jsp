@@ -36,46 +36,63 @@
 
     <div class="container-fluid ">
 
-
         <div class="row content">
-            <div class="col-md-2">
 
-            </div>
-            <div class="col-md-8">
-                <div class="list-group">
-                    <a href="#" class="list-group-item  borderless">
-                        <span  style="margin-right: 5px">Описание </span> <h4 class="list-group-item-heading">   Го на игру в 18 ?</h4>
-
+                <div class="list-group" id="listTemplates">
+         <%--           <a href="#" class="list-group-item  borderless">
+                        <h4 class="list-group-item-heading">   Го на игру в 18 ?</h4>
                         <p class="list-group-item-text"> Да, приду </p>
                         <p class="list-group-item-text"> Не могу </p>
                         <hr>
 
-                    </a>
-                    <a href="#" class="list-group-item  borderless">
-                        <span  style="margin-right: 5px">Описание</span>
-                        <h4 class="list-group-item-heading"> Го на игру в 18 ?</h4>
-
-                        <p class="list-group-item-text">+</p>
-
-
-                        <hr>
-                    </a>
+                    </a>--%>
 
                 </div>
             </div>
 
-
-        </div>
-
-
-        <div class="col-md-2">
-
-        </div>
 
     </div>
     </div>
 
 </main>
 
+<script>
+
+    var templates = ${templates};
+    var sport = '${sport}';
+
+
+    templates.map(function (template, i) {
+        var list = document.getElementById('listTemplates');
+        list.appendChild(getTemplatesList(template, i, "createGame"));
+
+    });
+
+    function getTemplatesList(template, index, href) {
+        var a = document.createElement('a');
+        a.href = href + "?templateId=" + template.templateId + "playgroundId=" + ${playId} + "&sport=" + sport;
+        a.id = template.id;
+        a.className = 'list-group-item borderless ';
+
+
+        var description = document.createElement('h4');
+        description.className = "list-group-item-heading";
+        description.appendChild(document.createTextNode(template.description));
+
+        a.appendChild(description);
+        var answer = template.listAnswer;
+
+        answer.map(function (answer, i) {
+            var p = document.createElement('p');
+            p.className = "list-group-item-text";
+            p.appendChild(document.createTextNode(answer));
+            a.appendChild(p);
+        });
+        var hr = document.createElement('hr');
+        a.appendChild(hr);
+
+        return a;
+    }
+</script>
 </body>
 </html>

@@ -152,12 +152,26 @@
         $('#li3').attr('class', '');
         $('#li4').attr('class', 'active');
         $('#li5').attr('class', '');
+    }  else if (returnBack == 'home') {
+        console.log("group");
+        document.getElementById("event").className = "";
+        document.getElementById("prof").className = "hide";
+        document.getElementById("group").className = "hide";
+        document.getElementById("search").className = "hide";
+        $('#li2').attr('class', '');
+        $('#li1').attr('class', 'active');
+        $('#li3').attr('class', '');
+        $('#li4').attr('class', '');
+        $('#li5').attr('class', '');
     }
+
+
+
     if (allPlaygroundUser.length != 0) {
         $('#create').attr('data-target', '#exampleModal');
         allPlaygroundUser.map(function(playground, i) {
             var list = document.getElementById('listGroupsCreate');
-            list.appendChild(getElementList(playground, i, "toCreate"));
+            list.appendChild(getElementList(playground, i, "create"));
         });
     } else {
         $('#create').attr('data-target', '#falseModal');

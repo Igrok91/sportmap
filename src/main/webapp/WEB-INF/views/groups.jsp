@@ -153,7 +153,7 @@
 
          allPlaygroundUser.map(function(playground, i) {
                 var list = document.getElementById('listGroupsUser');
-                list.appendChild(getElementList(playground, i, "toGroup"));
+                list.appendChild(getElementList(playground, i, "group"));
          });
 
 
@@ -161,7 +161,9 @@
             var a = document.createElement('a');
             a.href = href + "?playgroundId=" + allPlaygroundUser.id + "&sport=" + allPlaygroundUser.sport;
             a.id = allPlaygroundUser.id;
-            a.className = 'list-group-item borderless list-groups';
+            a.className = 'list-group-item borderless ';
+
+
 
 
             var divMedia = document.createElement('div');
@@ -203,6 +205,9 @@
             return a;
         }
 
+        function sentToServer(test) {
+            alert(test);
+        }
 
 
 </script>

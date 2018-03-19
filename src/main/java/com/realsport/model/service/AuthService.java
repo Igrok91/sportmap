@@ -1,9 +1,12 @@
 package com.realsport.model.service;
 
+import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -41,7 +44,15 @@ public class AuthService {
         return null;
     }
 
-    public ArrayList<String> getTemplatesUserById(String userId) {
-        return null;
+    public List<TemplateGame> getTemplatesUserById(String userId) {
+        List<TemplateGame> list = new ArrayList<>();
+        List<String> listAnswer = new ArrayList<>();
+        listAnswer.add("+");
+
+        TemplateGame game = new TemplateGame();
+        game.setTemplateId("1");
+        game.setDescription("Го на игру в 7?");
+        game.setListAnswer(listAnswer);
+        return list;
     }
 }

@@ -2,10 +2,7 @@ package com.realsport.controller;
 
 import com.google.gson.Gson;
 import com.realsport.model.dao.daoException.DataBaseException;
-import com.realsport.model.entityDao.Basketball;
-import com.realsport.model.entityDao.Playfootball;
-import com.realsport.model.entityDao.User;
-import com.realsport.model.entityDao.Voleyball;
+import com.realsport.model.entityDao.*;
 import com.realsport.model.service.AuthService;
 import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.VkMessageService;
@@ -168,7 +165,7 @@ public class StartController {
         return "searchPlayground";
     }
 
-    @RequestMapping("/toGroupFromMap")
+    @RequestMapping("/groupFromMap")
     public String toGroup(Model model, @RequestParam(value="playgroundId", required=false, defaultValue="5") String id, @RequestParam(value="sport", required=false, defaultValue=FOOTBALL) String sport) {
         if (sport.equalsIgnoreCase(FOOTBALL)) {
             for (Playfootball playfootball : playfootballList) {
@@ -210,8 +207,9 @@ public class StartController {
         return "playground";
     }
 
-    @RequestMapping("/toGroup")
+    @RequestMapping("/group")
     public String toGroupUser(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport) {
+
         if (sport.equals("Футбол")) {
             for (Playfootball playfootball : playfootballList) {
                 if (playfootball.getIdplayground() == Integer.parseInt(id)) {
@@ -252,12 +250,13 @@ public class StartController {
         return "playground";
     }
 
-    @RequestMapping("/toCreate")
+    @RequestMapping("/create")
     public String toCreate(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport) {
         if (sport.equals("Футбол")) {
             for (Playfootball playfootball : playfootballList) {
                 if (playfootball.getIdplayground() == Integer.parseInt(id)) {
                     model.addAttribute("namePlayground", playfootball.getName() );
+                    model.addAttribute("playId", playfootball.getIdplayground() );
                     model.addAttribute("street", playfootball.getStreet() );
                     model.addAttribute("house", playfootball.getHouse() );
                     model.addAttribute("sport", playfootball.getSubject() );
@@ -269,6 +268,7 @@ public class StartController {
             for (Basketball basketball : basketballList) {
                 if (basketball.getIdbasketball() == Integer.parseInt(id)) {
                     model.addAttribute("namePlayground", basketball.getName() );
+                    model.addAttribute("playId", basketball.getIdbasketball() );
                     model.addAttribute("street", basketball.getStreet() );
                     model.addAttribute("house", basketball.getHouse() );
                     model.addAttribute("sport", basketball.getSubject() );
@@ -280,6 +280,7 @@ public class StartController {
             for (Voleyball voleyball : voleyballList) {
                 if (voleyball.getIdvoleyball() == Integer.parseInt(id)) {
                     model.addAttribute("namePlayground", voleyball.getName() );
+                    model.addAttribute("playId", voleyball.getIdvoleyball() );
                     model.addAttribute("street", voleyball.getStreet() );
                     model.addAttribute("house", voleyball.getHouse() );
                     model.addAttribute("sport", voleyball.getSubject() );
@@ -289,16 +290,20 @@ public class StartController {
             }
         }
         String userId = (String)httpSession.getAttribute("userId");
-        ArrayList<String> templates = authService.getTemplatesUserById(userId);
+        List<TemplateGame> list = authService.getTemplatesUserById(userId);
+        ArrayList<String> userTemplates = new ArrayList<>();
+        if (list != null) {
+            userTemplates = getUserTemplates(list);
+        }
 
         model.addAttribute("returnBack", "home");
-        model.addAttribute("templates", templates);
+        model.addAttribute("templates", userTemplates);
         model.addAttribute("playgroundId", id);
         return "create";
     }
 
-    @RequestMapping(value = "/toHome")
-    public String toHome(Model model, @RequestParam(value="where") String where, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport ) {
+    @RequestMapping(value = "/home")
+    public String toHome(Model model, @RequestParam(value="where", required = false) String where, @RequestParam(value="playgroundId", required = false) String id, @RequestParam(value="sport", required = false) String sport ) {
        // User user = (User) httpSession.getAttribute("sessionUser");
         //String userId = (String) httpSession.getAttribute("userId");
         if (where.equals("group")) {
@@ -354,6 +359,10 @@ public class StartController {
             model.addAttribute("returnBack", where);
             model.addAttribute("sport", sport);
             model.addAttribute("playgroundCoordinate", json == null ? "empty" : json);
+        } else {
+            addPlaygroundDataToModel(model);
+            model.addAttribute("returnBack", "home");
+            model.addAttribute("playgroundCoordinate", "empty");
         }
         return "main";
     }
@@ -408,7 +417,19 @@ public class StartController {
         return "map";
     }
 
-
+    private ArrayList<String> getUserTemplates(List<TemplateGame> list) {
+        HashMap<String, Object> map = new HashMap<>();
+        Gson gson = new Gson();
+        ArrayList<String> templates = new ArrayList<>();
+        for (TemplateGame p : list) {
+            map.put("templateId", p.getTemplateId());
+            map.put("description", p.getDescription());
+            map.put("listAnswer", p.getListAnswer());
+            String json = gson.toJson(map);
+            templates.add(json);
+        }
+        return templates;
+    }
     /**
      * Получение основных данных по площадкам и конвертация данных в формат JSON
      *

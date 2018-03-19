@@ -134,7 +134,7 @@
         $('#panelGroup').addClass('panel-info');
         $('#imageGroup').attr("src", "resources/image/сетка.png")
     }
-    var returnBack = 'toHome?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp;
+    var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp;
     $('#returnBack').attr('href', returnBack);
 </script>
 </body>

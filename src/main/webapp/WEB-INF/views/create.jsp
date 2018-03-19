@@ -24,7 +24,6 @@
         /* Set black background color, white text and some padding */
         .borderless {
             border: 0 none;
-
             box-shadow: none;
 
         }
@@ -40,7 +39,7 @@
 <nav class="nav navbar-static-top navbar-default">
     <div class="container-fluid ">
         <div class="pull-left" >
-            <a class="navbar-brand btn" href="#" ><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
+            <a class="navbar-brand btn" href="/home?where=create" id="returnBackFromCreate" ><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
         </div>
         <div class="navbar-brand ">
             Создание опроса
@@ -61,31 +60,35 @@
             </div>
             <div class="col-md-8">
 
-                <div style="padding-top: 10px;padding-bottom: 10px">
+                <div class="panel panel-default" id="headingCreate" style="margin-top: 15px">
+                    <div class="panel-heading " >
+                        <div>
+                            <a class="pull-left" href="#" >
+                                <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
+                                <img class="media-object" src="resources/image/playbasket.png" alt="Баскетбол" width="40" height="40" id="imageGroupCreate" >
+                            </a>
 
-                    <div class="media ">
-                        <div class="pull-left">
-                            <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="40" height="40"/>
-                        </div>
 
 
-                        <div class="media-body " >
-                            <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${namePlayground}</h4>
-                            <span  style="color: gray" >${sport}</span>
+                            <div class="media-body" style="padding-left: 10px">
+
+                                <h4 class="media-heading" style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">
+                                    ${namePlayground}</h4>
+
+
+
+                                <span  style="color: gray">${sport}</span>
+
+                            </div>
 
                         </div>
                     </div>
-
-                </div>
-
-                <div class="btn-group btn-group-justified" style="padding-bottom: 5px" >
-                    <a href="#" class="btn active btn-primary" id="newGame">Новый</a>
-                    <a href="#" class="btn " id="templatesGames">Шаблоны</a>
-                </div>
-
-                <div class="panel panel-default" id="panelCreate">
                     <div class="panel-body">
-
+                        <div class="btn-group btn-group-justified" style="padding-bottom: 10px" >
+                            <a href="#" class="btn active btn-primary" id="newGame">Новый</a>
+                            <a href="#" class="btn " id="templatesGames">Шаблоны</a>
+                        </div>
+                        <div id="panelCreate">
                         <div>
                             <div>
                                 <label for="desc"><span><img src="resources/image/новый3.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
@@ -166,7 +169,7 @@
                             </div>
                             <div style="padding-bottom: 10px">
                                 <div >
-                                    <label for="sel1"><span class="glyphicon glyphicon-time" style="margin-right: 5px"></span> Срок действия опроса</label>
+                                    <label for="sel1"><span class="glyphicon glyphicon-time" style="margin-right: 5px"></span> Срок действия</label>
                                 </div>
                                 <select class="form-control borderless" id="sel1">
                                     <option>1 день</option>
@@ -180,7 +183,11 @@
                                 <hr>
                             </div>
                         </div>
+                        </div>
 
+                        <div id="templatesPanel" class="hide">
+                            <c:import url="templates.jsp"/>
+                        </div>
                     </div>
 
 
@@ -215,7 +222,7 @@
             $('#newGame').addClass('active btn-primary');
             $('#panelCreate').removeClass('hide');
             $('#templatesGames').removeClass('active btn-primary');
-            //$('#settings').addClass('hide');
+            $('#templatesPanel').addClass('hide');
         });
     });
 
@@ -223,10 +230,22 @@
         $('#templatesGames').click(function(event) {
             $('#templatesGames').addClass('active btn-primary');
             $('#newGame').removeClass('active btn-primary');
-           // $('#newGame').removeClass('active btn-primary');
+            $('#templatesPanel').removeClass('hide');
             $('#panelCreate').addClass('hide');
         });
     });
+
+    var sp2 = '${sport}';
+    if (sp2 == 'Футбол') {
+        $('#headingCreate').addClass('panel-success');
+        $('#imageGroupCreate').attr("src", "resources/image/стадион.png")
+    } else if (sp2 == 'Баскетбол') {
+        $('#headingCreate').addClass('panel-warning');
+        $('#imageGroupCreate').attr("src", "resources/image/playbasket.png")
+    } else if (sp2 == 'Волейбол') {
+        $('#headingCreate').addClass('panel-info');
+        $('#imageGroupCreate').attr("src", "resources/image/сетка.png")
+    }
 
 </script>
 </body>
