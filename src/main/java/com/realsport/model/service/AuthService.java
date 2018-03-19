@@ -53,6 +53,8 @@ public class AuthService {
         game.setTemplateId("1");
         game.setDescription("Го на игру в 7?");
         game.setListAnswer(listAnswer);
+        list.add(game);
+        list.add(game);
         return list;
     }
 }

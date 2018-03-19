@@ -7,6 +7,8 @@ public class TemplateGame {
     private String description;
     private String templateId;
     private List<String> listAnswer;
+    private int countAnswer;
+    private String duration;
 
     public String getDescription() {
         return description;
@@ -30,5 +32,21 @@ public class TemplateGame {
 
     public void setTemplateId(String templateId) {
         this.templateId = templateId;
+    }
+
+    public int getCountAnswer() {
+        return countAnswer;
+    }
+
+    public void setCountAnswer(int countAnswer) {
+        this.countAnswer = countAnswer;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

@@ -187,7 +187,9 @@
 
                         <div id="templatesPanel" class="hide">
                             <c:import url="templates.jsp"/>
+
                         </div>
+
                     </div>
 
 
@@ -245,6 +247,16 @@
     } else if (sp2 == 'Волейбол') {
         $('#headingCreate').addClass('panel-info');
         $('#imageGroupCreate').attr("src", "resources/image/сетка.png")
+    }
+
+    var templates = ${templates};
+    if (templates.length != 0) {
+        $('#templatesGames').addClass('active btn-primary');
+        $('#newGame').removeClass('active btn-primary');
+        $('#templatesPanel').removeClass('hide');
+        $('#panelCreate').addClass('hide');
+    } else {
+        $('#templatesPanelEmpty').removeClass('hide');
     }
 
 </script>
