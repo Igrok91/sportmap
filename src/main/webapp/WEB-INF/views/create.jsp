@@ -103,7 +103,7 @@
 
                         <div class="row text-center " style="padding-top: 5px">
                             <div class="container-fluid">
-                                <a href="#" class="btn"><span class="glyphicon glyphicon-floppy-save " aria-hidden=""></span> Сохранить в шаблоны</a>
+                                <a href="#" onclick="" class="btn"><span class="glyphicon glyphicon-floppy-save " aria-hidden=""></span> Сохранить в шаблоны</a>
                             </div>
                         </div>
 
@@ -257,6 +257,36 @@
         $('#panelCreate').addClass('hide');
     } else {
         $('#templatesPanelEmpty').removeClass('hide');
+    }
+
+    function saveToTemplates() {
+        $.ajax({
+            url: 'saveTemplate?templateId=' + id,
+            data: ({description: $('#desc').val(),
+                answer : $('#response').val(),
+                sel2 : $('#sel2').val() }),
+                sel1 : $('#sel1').val()
+        }).then(function () {
+            var template = [];
+            var description = $('#desc').val();
+            var answer = $('#response').val();
+            var listAnswer = $('#response').val();
+            var sel2 = $('#sel2').val();
+            var sel1 = $('#sel1').val();
+
+            var object = {
+                templateId : templates.length+1,
+                "description" : description,
+                "sel2" : sel2,
+                "sel1" : sel1
+
+            }
+            template.push(object);
+            var list = document.getElementById('listTemplates');
+            list.appendChild(getTemplatesList(template));
+
+
+        });
     }
 
 </script>

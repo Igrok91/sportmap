@@ -3,7 +3,7 @@ package com.realsport.controller;
 import com.google.gson.Gson;
 import com.realsport.model.dao.daoException.DataBaseException;
 import com.realsport.model.entityDao.*;
-import com.realsport.model.service.AuthService;
+import com.realsport.model.service.UserService;
 import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.VkMessageService;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ public class StartController {
     private VkMessageService messageService;
 
     @Autowired
-    private AuthService authService;
+    private UserService userService;
 
     @Autowired
     HttpSession httpSession;
@@ -69,12 +69,12 @@ public class StartController {
         boolean isFirst = false;
         if (id != null) {
             try {
-                if (authService.isRegister(id)) {
-                    user = authService.getUser(id);
+                if (userService.isRegister(id)) {
+                    user = userService.getUser(id);
                     setPlaygroundDataToModel(model, id);
                     setUserDataToModel(user);
                 } else {
-                    user = authService.registerUser(id);
+                    user = userService.registerUser(id);
                     isFirst = true;
                 }
 
@@ -290,7 +290,7 @@ public class StartController {
             }
         }
         String userId = (String)httpSession.getAttribute("userId");
-        List<TemplateGame> list = authService.getTemplatesUserById(userId);
+        List<TemplateGame> list = userService.getTemplatesUserById(userId);
         ArrayList<String> userTemplates = new ArrayList<>();
         if (list != null) {
             userTemplates = getUserTemplates(list);

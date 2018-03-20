@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class AuthService {
+public class UserService {
     public boolean isRegister(String id) {
         return true;
     }
@@ -53,8 +53,20 @@ public class AuthService {
         game.setTemplateId("1");
         game.setDescription("Го на игру в 7?");
         game.setListAnswer(listAnswer);
+        TemplateGame game2 = new TemplateGame();
+        game2.setTemplateId("2");
+        game2.setDescription("Го на игру в 8?");
+        game2.setListAnswer(listAnswer);
         list.add(game);
-        list.add(game);
+        list.add(game2);
         return list;
+    }
+
+    public void removeTemplateUser(String id, String templateId) {
+
+    }
+
+    public void saveTemplateUser(String templateId, String userId) {
+
     }
 }

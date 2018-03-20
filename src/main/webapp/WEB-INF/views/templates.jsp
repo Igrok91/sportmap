@@ -38,9 +38,7 @@
         <div class="pull-right dropdown hide" id="dropdownTemplate" >
             <a href="#" class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3" style="padding-left: 0px;padding-right: 0px">  <span class="glyphicon glyphicon-option-vertical "></span></a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
-
-                <li><a href="#" id="removeTemlates"><span class="glyphicon glyphicon-trash" style="margin-right: 20px"></span>Удалить</a></li>
-
+                <li><a href="#"  id="removeTemlates"><span class="glyphicon glyphicon-trash" style="margin-right: 20px"></span>Удалить</a></li>
             </ul>
         </div>
         <div class="row content">
@@ -105,17 +103,22 @@
 
     templates.map(function (template, i) {
         var list = document.getElementById('listTemplates');
-        list.appendChild(getTemplatesList(template, i, "createGame"));
+        list.appendChild(getTemplatesList(template));
 
     });
 
-    function getTemplatesList(template, index, href) {
+    function getTemplatesList(template) {
         var clonedNode = document.getElementById("dropdownTemplate").cloneNode(true);
         clonedNode.className = "pull-right dropdown";
 
+        clonedNode.childNodes[3].childNodes[1].childNodes[0].onclick = function () {
+            removeTemplate(template.templateId);
+        };
+
+
         var button = document.createElement('button');
 
-        button.id = template.id;
+        button.id = template.templateId;
         button.className = 'list-group-item borderless ';
 
 
@@ -138,6 +141,26 @@
 
         return button;
     }
+
+   function removeTemplate(id) {
+       $.ajax({
+           url: 'removeTemplate?templateId=' + id
+       }).then(function () {
+           templates.map(function (template, i) {
+               var list = document.getElementById('listTemplates');
+               var child = document.getElementById(id);
+               if (list.childNodes.length == 1) {
+                   $('#templatesPanelEmpty').removeClass('hide');
+               }
+               while (child.firstChild) {
+                   child.removeChild(child.firstChild);
+               }
+               list.removeChild(child);
+
+           });
+
+           });
+   }
 </script>
 </body>
 </html>
