@@ -103,7 +103,7 @@
 
                         <div class="row text-center " style="padding-top: 5px">
                             <div class="container-fluid">
-                                <a href="#" onclick="" class="btn"><span class="glyphicon glyphicon-floppy-save " aria-hidden=""></span> Сохранить в шаблоны</a>
+                                <a href="#" onclick="saveToTemplates()" class="btn"><span class="glyphicon glyphicon-floppy-save " aria-hidden=""></span> Сохранить в шаблоны</a>
                             </div>
                         </div>
 
@@ -115,7 +115,7 @@
 
                         <div id="settings" style="margin-top: 5px" class="hide">
 
-                            <div style="padding-bottom: 10px">
+         <%--                   <div style="padding-bottom: 10px">
                                 <div>
                                     <label for="response"><span><img src="resources/image/опрос.png" width="20" height="20" style="margin-right: 5px"></span>Варианты ответа</label>
                                 </div>
@@ -127,7 +127,7 @@
                                 <a href="#" class="btn" style="margin-right: 3px"><span class="glyphicon glyphicon-plus " aria-hidden=""></span> Добавить </a>
                                 <a href="#" class="btn"><span class="glyphicon glyphicon-minus " aria-hidden=""></span> Удалить </a>
 
-                            </div>
+                            </div>--%>
                             <div style="padding-bottom: 10px">
                                 <div >
                                     <label for="sel2"><span><img src="resources/image/количество.png" width="20" height="20" style="margin-right: 5px"></span>Количество голосов</label>
@@ -260,28 +260,40 @@
     }
 
     function saveToTemplates() {
+        var description = $('#desc').val();
+        var answer = '+';
+        var sel2 = $('#sel2').val();
+        var sel1 = $('#sel1').val();
+
+        if (sel2 === 'Без ограничений') {
+            sel2 = 'infinity';
+        }
+
+        var json = {"description": description, "answer": answer, "sel2": sel2, "sel1": sel1};
         $.ajax({
-            url: 'saveTemplate?templateId=' + id,
-            data: ({description: $('#desc').val(),
-                answer : $('#response').val(),
-                sel2 : $('#sel2').val() }),
-                sel1 : $('#sel1').val()
+            url: 'saveTemplate',
+            method: "POST",
+            data: JSON.stringify(json),
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+            }
         }).then(function () {
-            var template = [];
+
+            var listAnswer = [];
+
             var description = $('#desc').val();
-            var answer = $('#response').val();
-            var listAnswer = $('#response').val();
+            var answer = "+";
             var sel2 = $('#sel2').val();
             var sel1 = $('#sel1').val();
+            listAnswer.push(answer);
 
-            var object = {
+            var template = {
                 templateId : templates.length+1,
-                "description" : description,
-                "sel2" : sel2,
-                "sel1" : sel1
-
+                listAnswer : listAnswer,
+                description : description,
             }
-            template.push(object);
+
             var list = document.getElementById('listTemplates');
             list.appendChild(getTemplatesList(template));
 

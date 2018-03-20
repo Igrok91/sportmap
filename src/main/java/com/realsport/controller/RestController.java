@@ -1,15 +1,16 @@
 package com.realsport.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.Playfootball;
 import com.realsport.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -26,10 +27,13 @@ public class RestController {
         userService.removeTemplateUser(templateId, userId);
     }
 
-    @RequestMapping("saveTemplate")
-    public void saveTemplate(@RequestParam(value="templateId", required=false, defaultValue="World") String templateId) {
+    @RequestMapping(value = "saveTemplate", method = RequestMethod.POST)
+    public void saveTemplate(@RequestBody String template) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Template requesValue = mapper.readValue(template,
+                Template.class);
         String userId = (String)httpSession.getAttribute("userId");
-        userService.saveTemplateUser(templateId, userId);
+        userService.saveTemplateUser(template, userId);
     }
 
 }

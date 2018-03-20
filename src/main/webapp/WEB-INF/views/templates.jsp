@@ -128,14 +128,14 @@
 
         button.appendChild(clonedNode);
         button.appendChild(description);
-        var answer = template.listAnswer;
+  /*      var answer = template.listAnswer;
 
         answer.map(function (answer, i) {
             var p = document.createElement('p');
             p.className = "list-group-item-text";
             p.appendChild(document.createTextNode(answer));
             button.appendChild(p);
-        });
+        });*/
         var hr = document.createElement('hr');
         button.appendChild(hr);
 

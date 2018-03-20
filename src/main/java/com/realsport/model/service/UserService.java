@@ -1,5 +1,6 @@
 package com.realsport.model.service;
 
+import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 import org.springframework.stereotype.Service;
