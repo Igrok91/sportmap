@@ -40,7 +40,7 @@
         </div>
     </div>
 </nav>
-<main>
+<main style="margin-bottom: 40px; padding-bottom: 50px;">
     <div class="container-fluid ">
 
         <div class="row content">
@@ -48,9 +48,9 @@
 
             </div>
             <div class="col-md-8">
-                <div class="list-group">
+                <div class="list-group" id="listEventGame">
 
-                    <div class="panel panel-warning" >
+                    <div class="panel panel-warning hide" id="eventsGame" >
                         <div class="panel-heading" style="padding-bottom: 3px; padding-top: 6px">
 
                             <div>
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="media-body" style="padding-left: 10px">
 
-                                    <h4 class="media-heading" style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">У школы № 345</h4>
+                                    <h4 class="media-heading" style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px" id="placeGame">У школы № 345</h4>
 
 
 
@@ -95,7 +95,7 @@
                         </div>
                         <hr class="hrDescription">
                         <div class="text-center">
-                            <span  style="color: black">Кто готов покидать мяч в 7?</span>
+                            <span  style="color: black" id="descriptionEvent">Кто готов покидать мяч в 7?</span>
                         </div>
                         <hr class="hrDescription">
 
@@ -164,6 +164,20 @@
 
 
 <script>
+    var listEvents = ${listEvents};
+    if (listEvents) {
+        listEvents.map(function (event, i) {
+            $('#placeGame').text(event.description);
+            $('#descriptionEvent').text(event.description);
+            $('#eventsGame').removeClass('hide');
+            var clonedNode = document.getElementById("eventsGame").cloneNode(true);
+            clonedNode.id = event.idEvent;
+            $('#eventsGame').addClass('hide');
+            var list = document.getElementById("listEventGame");
+            list.appendChild(clonedNode);
+        });
+    }
+
 
 </script>
 

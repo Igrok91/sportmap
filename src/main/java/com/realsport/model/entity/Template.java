@@ -3,7 +3,8 @@ package com.realsport.model.entity;
 import java.io.Serializable;
 import java.util.List;
 
-public class Template implements Serializable{
+public class Template implements Serializable {
+    private int templateId;
     private String description;
     private String answer;
     private String sel2;
@@ -39,5 +40,13 @@ public class Template implements Serializable{
 
     public void setSel1(String sel1) {
         this.sel1 = sel1;
+    }
+
+    public int getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(int templateId) {
+        this.templateId = templateId;
     }
 }

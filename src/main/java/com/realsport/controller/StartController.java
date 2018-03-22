@@ -2,7 +2,9 @@ package com.realsport.controller;
 
 import com.google.gson.Gson;
 import com.realsport.model.dao.daoException.DataBaseException;
+import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.*;
+import com.realsport.model.service.EventsService;
 import com.realsport.model.service.UserService;
 import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.VkMessageService;
@@ -12,11 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,6 +54,9 @@ public class StartController {
 
     @Autowired
     private PlaygroundService playgroundService;
+
+    @Autowired
+    private EventsService eventsService;
 
     @Autowired
     private VkMessageService messageService;
@@ -298,12 +307,13 @@ public class StartController {
 
         model.addAttribute("returnBack", "home");
         model.addAttribute("templates", userTemplates);
+        model.addAttribute("template", new Template());
         model.addAttribute("playgroundId", id);
         return "create";
     }
 
     @RequestMapping(value = "/home")
-    public String toHome(Model model, @RequestParam(value="where", required = false) String where, @RequestParam(value="playgroundId", required = false) String id, @RequestParam(value="sport", required = false) String sport ) {
+    public String toHome(Model model, @RequestParam(value="where", required = false, defaultValue = "home") String where, @RequestParam(value="playgroundId", required = false) String id, @RequestParam(value="sport", required = false) String sport ) {
        // User user = (User) httpSession.getAttribute("sessionUser");
         //String userId = (String) httpSession.getAttribute("userId");
         if (where.equals("group")) {
@@ -367,6 +377,56 @@ public class StartController {
         return "main";
     }
 
+   /* @RequestMapping(value = "createGame", method = RequestMethod.GET)
+    public String createGame(Model model, @RequestParam(name = "descr", required = false, defaultValue = "description") String  descr, @RequestParam(name = "answer", required = false, defaultValue="+") String  answer, @RequestParam(name = "sel2", required = false, defaultValue="infinity") String  sel2
+            , @RequestParam(name = "sel1", required = false, defaultValue="3") String  sel1, @RequestParam(name = "sport", required = false, defaultValue="Футбол") String  sport, @RequestParam(name = "playgroundId", required = false, defaultValue="123") String  playgroundId) throws IOException {
+        String userId = (String)httpSession.getAttribute("userId");
+        Event game = new Event();
+        game.setDescription(descr);
+        game.setListAnswer(Collections.singletonList(answer));
+        game.setCountAnswer(sel2.equals("infinity") ? 0 : Integer.valueOf(sel2));
+        game.setDuration(sel1.substring(0, 1));
+        game.setUserIdCreator(userId);
+        game.setPlaygroundId(playgroundId);
+        game.setSport(sport);
+
+        Gson gson = new Gson();
+        String jsonUser = (String)httpSession.getAttribute("sessionUser");
+        HashMap<String, Object> map = gson.fromJson(jsonUser, HashMap.class);
+
+        eventsService.publishEvent(game, userId);
+        List<Event> listEvents = eventsService.getEvents(game, (List<String>) map.get("playgroundFoottUser"), (List<String>)map.get("playgroundBasketUser"), ((List<String>)map.get("playgroundVoleyUser")));
+        model.addAttribute("listEvents", gson.toJson(listEvents));
+        addPlaygroundDataToModel(model);
+        model.addAttribute("returnBack", "home");
+        model.addAttribute("playgroundCoordinate", "empty");
+        return "main";
+    }*/
+
+    @RequestMapping(value = "/createGame", method = RequestMethod.POST)
+    public String createGame(Model model, @ModelAttribute Template template) throws IOException {
+        String userId = (String)httpSession.getAttribute("userId");
+/*        Event game = new Event();
+        game.setDescription(descr);
+        game.setListAnswer(Collections.singletonList(answer));
+        game.setCountAnswer(sel2.equals("infinity") ? 0 : Integer.valueOf(sel2));
+        game.setDuration(sel1.substring(0, 1));
+        game.setUserIdCreator(userId);
+        game.setPlaygroundId(playgroundId);
+        game.setSport(sport);
+
+        Gson gson = new Gson();
+        String jsonUser = (String)httpSession.getAttribute("sessionUser");
+        HashMap<String, Object> map = gson.fromJson(jsonUser, HashMap.class);
+
+        eventsService.publishEvent(game, userId);
+        List<Event> listEvents = eventsService.getEvents(game, (List<String>) map.get("playgroundFoottUser"), (List<String>)map.get("playgroundBasketUser"), ((List<String>)map.get("playgroundVoleyUser")));
+        model.addAttribute("listEvents", gson.toJson(listEvents));
+        addPlaygroundDataToModel(model);*/
+        model.addAttribute("returnBack", "home");
+        model.addAttribute("playgroundCoordinate", "empty");
+        return "main";
+    }
 
 
 

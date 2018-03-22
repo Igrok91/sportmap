@@ -136,8 +136,8 @@
             p.appendChild(document.createTextNode(answer));
             button.appendChild(p);
         });*/
-        var hr = document.createElement('hr');
-        button.appendChild(hr);
+
+
 
         return button;
     }
@@ -146,18 +146,21 @@
        $.ajax({
            url: 'removeTemplate?templateId=' + id
        }).then(function () {
-           templates.map(function (template, i) {
                var list = document.getElementById('listTemplates');
                var child = document.getElementById(id);
-               if (list.childNodes.length == 1) {
-                   $('#templatesPanelEmpty').removeClass('hide');
-               }
+
                while (child.firstChild) {
                    child.removeChild(child.firstChild);
                }
                list.removeChild(child);
+           if (list.childNodes.length == 1) {
+               $('#templatesPanelEmpty').removeClass('hide');
 
-           });
+           }
+           if (id == (templates.length +1)) {
+               $('#savetempltext').text('Сохранить в шаблоны');
+               $('#savetempl').css({"pointer-events": ""});
+           }
 
            });
    }

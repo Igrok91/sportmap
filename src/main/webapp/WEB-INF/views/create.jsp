@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Поиск спортивной площадки</title>
     <meta charset="utf-8">
@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-
+<form action="#" th:action="@{/createGame}" th:object="${template}" method="post">
 <nav class="nav navbar-static-top navbar-default">
     <div class="container-fluid ">
         <div class="pull-left" >
@@ -45,11 +45,13 @@
             Создание опроса
         </div>
         <div class="pull-right">
-            <a class="navbar-brand btn" href="#" ><span class="glyphicon glyphicon-ok" aria-hidden=""></span></a>
+            <button class="navbar-brand btn"  type="submit" onclick="" id="createGame"><span class="glyphicon glyphicon-ok" aria-hidden=""></span></button>
         </div>
     </div>
 </nav>
 <main>
+
+
 
     <div class="container-fluid ">
 
@@ -93,7 +95,7 @@
                             <div>
                                 <label for="desc"><span><img src="resources/image/новый3.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
                             </div>
-                            <textarea  type="text" class="form-control borderless " placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
+                            <textarea  type="text" class="form-control borderless " th:field="*{description}" placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
                             <hr>
                         </div>
 
@@ -103,7 +105,7 @@
 
                         <div class="row text-center " style="padding-top: 5px">
                             <div class="container-fluid">
-                                <a href="#" onclick="saveToTemplates()" class="btn"><span class="glyphicon glyphicon-floppy-save " aria-hidden=""></span> Сохранить в шаблоны</a>
+                                <a href="#" onclick="saveToTemplates()" id="savetempl" class="btn"><span class="glyphicon glyphicon-floppy-save " aria-hidden=""></span> <span id="savetempltext">Сохранить в шаблоны</span></a>
                             </div>
                         </div>
 
@@ -132,7 +134,7 @@
                                 <div >
                                     <label for="sel2"><span><img src="resources/image/количество.png" width="20" height="20" style="margin-right: 5px"></span>Количество голосов</label>
                                 </div>
-                                <select class="form-control borderless" id="sel2">
+                                <select class="form-control borderless" id="sel2" th:field="*{sel2}">
                                     <option>Без ограничений</option>
                                     <option>1</option>
                                     <option>2</option>
@@ -171,7 +173,7 @@
                                 <div >
                                     <label for="sel1"><span class="glyphicon glyphicon-time" style="margin-right: 5px"></span> Срок действия</label>
                                 </div>
-                                <select class="form-control borderless" id="sel1">
+                                <select class="form-control borderless" id="sel1" th:field="*{sel1}">
                                     <option>1 день</option>
                                     <option>2 дня</option>
                                     <option>3 дня</option>
@@ -204,6 +206,7 @@
         </div>
     </div>
 </main>
+</form>
 <script>
     var el3 = document.querySelector('.checkbox-switch3');
     var mySwitch3 = new Switch(el3, {
@@ -269,36 +272,87 @@
             sel2 = 'infinity';
         }
 
-        var json = {"description": description, "answer": answer, "sel2": sel2, "sel1": sel1};
+        $('#savetempltext').text('Сохранено в шаблоны');
+
+        $('#savetempl').css({"pointer-events": "none"});
+
         $.ajax({
             url: 'saveTemplate',
             method: "POST",
-            data: JSON.stringify(json),
-            beforeSend: function(xhr) {
+            data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1}),
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
+                //xhr.setRequestHeader("Content-Type", "application/json");
+            },
+            success: function (response) {
+
+                var description = response.description;
+                alert(description);
+                var template = {
+                    templateId: response.templateId,
+                    description: description,
+                }
+
+                var list = document.getElementById('listTemplates');
+                list.appendChild(getTemplatesList(template));
+                if (list.childNodes.length != 1) {
+                    $('#templatesPanelEmpty').addClass('hide');
+
+                }
             }
-        }).then(function () {
-
-            var listAnswer = [];
-
-            var description = $('#desc').val();
-            var answer = "+";
-            var sel2 = $('#sel2').val();
-            var sel1 = $('#sel1').val();
-            listAnswer.push(answer);
-
-            var template = {
-                templateId : templates.length+1,
-                listAnswer : listAnswer,
-                description : description,
-            }
-
-            var list = document.getElementById('listTemplates');
-            list.appendChild(getTemplatesList(template));
-
-
         });
+    }
+
+    function createGame() {
+        var description = $('#desc').val();
+        var answer = '+';
+        var sel2 = $('#sel2').val();
+        var sel1 = $('#sel1').val();
+        var sport = '${sport}';
+        var playgroundId = '${playgroundId}';
+
+        if (sel2 === 'Без ограничений') {
+            sel2 = 'infinity';
+        }
+
+       var href = "createGame?descr=" + description +"&answer=" + answer + "&sel2=" + sel2 + "&sel1=" + sel1 + "&sport=" + sport + "&playgroundId=" + playgroundId;
+        //var href = 'home';
+       // $('#createGame').attr('href', href);
+      /* $.ajax({
+            url: 'createGame',
+            method: "POST",
+            data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1, sport: sport, playgroundId: playgroundId}),
+            beforeSend: function (xhr) {
+               xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+           }
+        }).then(function (value) {
+
+           $('#createGame').attr('onclick', toHome());
+
+           $.get('home');
+
+
+       });*/
+
+
+       $.post("createGame", {descr: description, answer: answer, sel2: sel2, sel1: sel1, sport: sport, playgroundId: playgroundId});
+
+       /* var xhr = new XMLHttpRequest();
+
+        var body = 'descr=' + encodeURIComponent(description) +
+            '&answer=' + encodeURIComponent(answer) + "&sel2=" + encodeURIComponent(sel2) + "&sel1=" + encodeURIComponent(sel1) + "&sport=" + encodeURIComponent(sport) + "&playgroundId=" + encodeURIComponent(playgroundId);
+
+        xhr.open("POST", '/createGame', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+
+        xhr.send(body);
+*/
+    }
+
+    function toHome() {
+        var href = 'home';
+        $('#createGame').attr('href', href);
     }
 
 </script>

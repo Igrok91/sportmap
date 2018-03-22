@@ -1,13 +1,10 @@
 package com.realsport.model.service;
 
-import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -67,7 +64,8 @@ public class UserService {
 
     }
 
-    public void saveTemplateUser(String templateId, String userId) {
+    public int saveTemplateUser(TemplateGame templateId, String userId) {
 
+        return 3;
     }
 }
