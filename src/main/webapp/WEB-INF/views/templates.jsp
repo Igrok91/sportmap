@@ -33,7 +33,7 @@
 <body>
 
 <main>
-
+    <form action="createGameFromTemplate"  method="post">
     <div class="container-fluid ">
         <div class="pull-right dropdown hide" id="dropdownTemplate" >
             <a href="#" class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3" style="padding-left: 0px;padding-right: 0px">  <span class="glyphicon glyphicon-option-vertical "></span></a>
@@ -91,7 +91,7 @@
 
     </div>
     </div>
-
+    </form>
 </main>
 
 
@@ -120,6 +120,13 @@
 
         button.id = template.templateId;
         button.className = 'list-group-item borderless ';
+        button.type = 'submit';
+
+
+
+        button.onclick = function () {
+            setIdTemplate(template.templateId);
+        }
 
 
         var description = document.createElement('h4');
@@ -164,6 +171,9 @@
 
            });
    }
+    function setIdTemplate(templateId) {
+        $('#templId').attr('value', templateId);
+    }
 </script>
 </body>
 </html>

@@ -6,15 +6,23 @@ import java.util.List;
 public class Event {
     private String idEvent;
     private String userIdCreator;
+    private String userFirtsNameCreator;
+    private String userLastNameCreator;
     private String description;
 
-    private List<String> listAnswer;
-    private int countAnswer;
+    private String answer;
+    private int maxCountAnswer;
     private String duration;
     private String sport;
     private String playgroundId;
+    private String playgroundName;
     private boolean active = true;
     private Date dateCreation;
+    private String date;
+    private List<User> userList;
+    private List<Comment> commentsList;
+    private List<HistoryEvent> historyEvent;
+
 
 
     public String getDescription() {
@@ -25,22 +33,16 @@ public class Event {
         this.description = description;
     }
 
-    public List<String> getListAnswer() {
-        return listAnswer;
+
+
+
+
+    public int getMaxCountAnswer() {
+        return maxCountAnswer;
     }
 
-    public void setListAnswer(List<String> listAnswer) {
-        this.listAnswer = listAnswer;
-    }
-
-
-
-    public int getCountAnswer() {
-        return countAnswer;
-    }
-
-    public void setCountAnswer(int countAnswer) {
-        this.countAnswer = countAnswer;
+    public void setMaxCountAnswer(int maxCountAnswer) {
+        this.maxCountAnswer = maxCountAnswer;
     }
 
     public String getDuration() {
@@ -98,5 +100,69 @@ public class Event {
 
     public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    public String getPlaygroundName() {
+        return playgroundName;
+    }
+
+    public void setPlaygroundName(String playgroundName) {
+        this.playgroundName = playgroundName;
+    }
+
+    public String getUserFirtsNameCreator() {
+        return userFirtsNameCreator;
+    }
+
+    public void setUserFirtsNameCreator(String userFirtsNameCreator) {
+        this.userFirtsNameCreator = userFirtsNameCreator;
+    }
+
+    public String getUserLastNameCreator() {
+        return userLastNameCreator;
+    }
+
+    public void setUserLastNameCreator(String userLastNameCreator) {
+        this.userLastNameCreator = userLastNameCreator;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    public List<Comment> getCommentsList() {
+        return commentsList;
+    }
+
+    public void setCommentsList(List<Comment> commentsList) {
+        this.commentsList = commentsList;
+    }
+
+    public List<HistoryEvent> getHistoryEvent() {
+        return historyEvent;
+    }
+
+    public void setHistoryEvent(List<HistoryEvent> historyEvent) {
+        this.historyEvent = historyEvent;
     }
 }

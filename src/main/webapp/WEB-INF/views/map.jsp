@@ -97,7 +97,7 @@
                     <li><a href="#" id="basketball">
                         <div class="media">
                             <div class="pull-left"  >
-                                <img class="media-object" src="resources/image/basket.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
+                                <img src="resources/image/basket.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
                             </div>
 
 
@@ -109,12 +109,12 @@
                     <li><a href="#" id="voleyball">
                         <div class="media">
                             <div class="pull-left"  >
-                                <img class="media-object" src="resources/image/voley.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
+                                <img src="resources/image/voley.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
                             </div>
 
 
                             <div class="media-body " >
-                                <h4 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Волейбол</h4>
+                                <h4  style="margin-top: 7px;margin-bottom: 7px">Волейбол</h4>
                             </div>
                         </div>
                     </a></li>

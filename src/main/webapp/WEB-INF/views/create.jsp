@@ -5,10 +5,11 @@
   Time: 18:12
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru">
 <head>
     <title>Поиск спортивной площадки</title>
     <meta charset="utf-8">
@@ -35,8 +36,8 @@
     </style>
 </head>
 <body>
-<form action="#" th:action="@{/createGame}" th:object="${template}" method="post">
-<nav class="nav navbar-static-top navbar-default">
+<form action="createGame"  method="post">
+<nav class="nav navbar-static-top navbar-default" style="background: #eeeeee">
     <div class="container-fluid ">
         <div class="pull-left" >
             <a class="navbar-brand btn" href="/home?where=create" id="returnBackFromCreate" ><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
@@ -45,7 +46,7 @@
             Создание опроса
         </div>
         <div class="pull-right">
-            <button class="navbar-brand btn"  type="submit" onclick="" id="createGame"><span class="glyphicon glyphicon-ok" aria-hidden=""></span></button>
+            <button class="navbar-brand btn" style="background: #eeeeee" type="submit" onclick="" id="createGame"><span class="glyphicon glyphicon-ok" aria-hidden=""></span></button>
         </div>
     </div>
 </nav>
@@ -71,7 +72,6 @@
                             </a>
 
 
-
                             <div class="media-body" style="padding-left: 10px">
 
                                 <h4 class="media-heading" style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">
@@ -79,7 +79,8 @@
 
 
 
-                                <span  style="color: gray">${sport}</span>
+                                <span  style="color: gray;padding-right: 12px">${sport}</span> <span style="color: gray">Участники ${players}</span>
+
 
                             </div>
 
@@ -95,7 +96,7 @@
                             <div>
                                 <label for="desc"><span><img src="resources/image/новый3.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
                             </div>
-                            <textarea  type="text" class="form-control borderless " th:field="*{description}" placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
+                            <textarea  type="text" class="form-control borderless " name="descr" placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
                             <hr>
                         </div>
 
@@ -134,7 +135,7 @@
                                 <div >
                                     <label for="sel2"><span><img src="resources/image/количество.png" width="20" height="20" style="margin-right: 5px"></span>Количество голосов</label>
                                 </div>
-                                <select class="form-control borderless" id="sel2" th:field="*{sel2}">
+                                <select class="form-control borderless" id="sel2" name="sel2">
                                     <option>Без ограничений</option>
                                     <option>1</option>
                                     <option>2</option>
@@ -169,11 +170,21 @@
                                 </select>
                                 <hr>
                             </div>
+                     <input type="hidden" name="sport"
+                             value="${sport}" />
+                       <input type="hidden" name="playgroundId"
+                                value="${playgroundId}" />
+             <input type="hidden" name="namePlayground"
+                    value="${namePlayground}" />
+
+             <input id="templId" type="hidden" name="templateId"
+                    value="" />
+
                             <div style="padding-bottom: 10px">
                                 <div >
                                     <label for="sel1"><span class="glyphicon glyphicon-time" style="margin-right: 5px"></span> Срок действия</label>
                                 </div>
-                                <select class="form-control borderless" id="sel1" th:field="*{sel1}">
+                                <select class="form-control borderless" id="sel1" name="sel1">
                                     <option>1 день</option>
                                     <option>2 дня</option>
                                     <option>3 дня</option>
@@ -187,11 +198,11 @@
                         </div>
                         </div>
 
+
                         <div id="templatesPanel" class="hide">
                             <c:import url="templates.jsp"/>
 
                         </div>
-
                     </div>
 
 
@@ -207,6 +218,7 @@
     </div>
 </main>
 </form>
+
 <script>
     var el3 = document.querySelector('.checkbox-switch3');
     var mySwitch3 = new Switch(el3, {
