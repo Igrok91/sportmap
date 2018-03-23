@@ -1,5 +1,7 @@
 package com.realsport.controller;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 import com.realsport.model.dao.daoException.DataBaseException;
 import com.realsport.model.entity.Template;
@@ -8,6 +10,7 @@ import com.realsport.model.service.EventsService;
 import com.realsport.model.service.UserService;
 import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.VkMessageService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +97,8 @@ public class StartController {
         Gson gson = new Gson();
 
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundFootballList(), user.getPlaygroundBasketList(), user.getPlaygroundVoleyList());
-        model.addAttribute("listEvents", gson.toJson(listEvents));
+        httpSession.setAttribute("listEvents", gson.toJson(listEvents));
+        httpSession.setAttribute("listEvent", listEvents);
         model.addAttribute("playgroundCoordinate", "empty");
         return !isFirst ? "main" : "begin";
     }
@@ -379,8 +383,23 @@ public class StartController {
         HashMap<String, Object> map = gson.fromJson(jsonUser, HashMap.class);
 
         List<Event> listEvents = eventsService.getEvents((List<String>) map.get("playgroundFoottUser"), (List<String>)map.get("playgroundBasketUser"), ((List<String>)map.get("playgroundVoleyUser")));
-        model.addAttribute("listEvents", gson.toJson(listEvents));
+        httpSession.setAttribute("listEvents", gson.toJson(listEvents));
+        httpSession.setAttribute("listEvent", listEvents);
         return "main";
+    }
+
+
+    @RequestMapping(value = "/event")
+    public String event(Model model, @RequestParam(name = "eventId") String eventId) {
+        List<Event> listEvents = (List<Event>) httpSession.getAttribute("listEvent");
+        Event event = FluentIterable.from(listEvents).firstMatch(new Predicate<Event>() {
+            @Override
+            public boolean apply(Event event) {
+                return event.getIdEvent().equalsIgnoreCase(eventId);
+            }
+        }).get();
+        model.addAttribute("event", event);
+        return "event";
     }
 
 

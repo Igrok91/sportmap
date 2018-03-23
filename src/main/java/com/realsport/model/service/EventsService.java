@@ -1,5 +1,6 @@
 package com.realsport.model.service;
 
+import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.User;
 import org.springframework.stereotype.Service;
@@ -92,8 +93,8 @@ public class EventsService {
     private List<Event> getAllFootEventsSpb(List<String> playgroundFoottUser) {
         List<Event>  listFoot= new ArrayList<>();
         Event event = new Event();
-        event.setUserIdCreator("2");
-        event.setIdEvent("123");
+        event.setUserIdCreator("172924708");
+        event.setIdEvent("172924708");
         event.setDescription("Го на игру в 8?");
         event.setMaxCountAnswer(0);
         event.setAnswer("+");
@@ -105,6 +106,13 @@ public class EventsService {
         event.setUserLastNameCreator("Заручевский");
         event.setMaxCountAnswer(21);
         event.setUserList(Collections.singletonList(new User()));
+        Comment comment = new Comment();
+        comment.setFirstName("Игорь");
+        comment.setLastName("Рябцев");
+        comment.setDate("сегодня в 12:12");
+        comment.setMessage("Еще + 5");
+        comment.setUserId("1234");
+        event.setCommentsList(Collections.singletonList(comment));
         listFoot.add(event);
         return listFoot;
     }

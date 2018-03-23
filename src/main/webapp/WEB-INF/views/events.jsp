@@ -22,13 +22,15 @@
 
 
         .hrDescription {
-            margin-top: 5px;
-            margin-bottom: 5px;
+            margin-top: 9px;
+            margin-bottom: 9px;
         }
 
     </style>
 </head>
 <body>
+<a href="#" class="btn hide" style="color: gray" id="all2"> <span class="glyphicon glyphicon-eye-open" style="margin-right: 5px"></span></a>
+
 <%--Шаблон UserGroup--%>
 <a  href="#"  class="btn" style="padding: 0px" id="userTemplate">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
@@ -79,7 +81,7 @@
     <div>
         <a href="#" class="btn" style="margin-left: 5px" id="creatorEvent"><span class="glyphicon glyphicon-user " aria-hidden="" style="margin-right: 5px"></span> <span id="NameCreator">Леонид Заручевский</span></a>
     </div>
-    <hr class="hrDescription">
+    <hr style="margin-bottom: 9px; margin-top: 0px">
     <div >
         <span  style="color: black; padding-left: 17px; padding-right: 17px" id="descriptionEvent"></span>
     </div>
@@ -103,7 +105,7 @@
 
 
 
-                    <a href="#" class="btn hide" style="color: gray" id="all2"> <span class="glyphicon glyphicon-eye-open" style="margin-right: 5px"></span></a>
+
 
                 </div>
 
@@ -113,8 +115,8 @@
         </div>
 
     </div>
-    <a href="#" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px"><span class="glyphicon glyphicon-comment "  aria-hidden="Комментировать" style="color: #77A5C5;margin-right: 5px"></span>4</a>
-    <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px;margin-bottom: 4px"><span class="glyphicon glyphicon-bullhorn "  aria-hidden="Комментировать" style="color: #77A5C5;margin-right: 5px"></span>2</a>
+    <a href="#" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="comment"><span class="glyphicon glyphicon-comment "  aria-hidden="Комментировать" style="color: #77A5C5;margin-right: 5px"></span>4</a>
+    <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px;margin-bottom: 4px"><span class="glyphicon glyphicon-bullhorn "  aria-hidden="Комментировать" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
 
 
 
@@ -177,7 +179,8 @@
 
             $('#placeGame').text(event.playgroundName);
             $('#NameCreator').text(event.userFirtsNameCreator + " " + event.userLastNameCreator);
-
+            $('#comment').attr('href', 'event?eventId=' + event.idEvent);
+            var listUser = document.getElementById("userGroup");
             if (event.userList) {
                 $('#countAnswer').text(event.userList.length);
                 event.userList.map(function (user, i) {
@@ -188,13 +191,13 @@
                     $('#userTemplate').addClass('hide');
 
 
-
-                    var listUser = document.getElementById("userGroup");
                     listUser.appendChild(user);
 
                 });
                 if (event.userList.length > 3) {
                     $('#all2').removeClass('hide');
+                    $('#userGroup').append($('#all2'));
+
                 }
             } else {
                 $('#countAnswer').text("0");
@@ -226,7 +229,7 @@
             $('#eventsGame').removeClass('panel-success');
             $('#eventsGame').removeClass('panel-warning');
             $('#eventsGame').removeClass('panel-info');
-
+            $('#userGroup').empty();
             var list = document.getElementById("listEventGame");
             list.appendChild(clonedNode);
         });

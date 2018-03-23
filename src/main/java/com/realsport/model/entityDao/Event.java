@@ -1,5 +1,6 @@
 package com.realsport.model.entityDao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,9 +20,9 @@ public class Event {
     private boolean active = true;
     private Date dateCreation;
     private String date;
-    private List<User> userList;
-    private List<Comment> commentsList;
-    private List<HistoryEvent> historyEvent;
+    private List<User> userList = new ArrayList<>();
+    private List<Comment> commentsList = new ArrayList<>();
+    private List<HistoryEvent> historyEvent = new ArrayList<>();
 
 
 
