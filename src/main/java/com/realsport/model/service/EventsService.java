@@ -2,6 +2,7 @@ package com.realsport.model.service;
 
 import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.Event;
+import com.realsport.model.entityDao.HistoryEvent;
 import com.realsport.model.entityDao.User;
 import org.springframework.stereotype.Service;
 
@@ -101,18 +102,28 @@ public class EventsService {
         event.setDuration("1");
         event.setSport(FOOTBALL);
         event.setPlaygroundId("15");
-        event.setPlaygroundName("У Школы №23");
+        event.setPlaygroundName("У Школы №4");
         event.setUserFirtsNameCreator("Леонид");
         event.setUserLastNameCreator("Заручевский");
         event.setMaxCountAnswer(21);
-        event.setUserList(Collections.singletonList(new User()));
+        User user = new User();
+        user.setUserId("172924708");
+        event.setUserList(Collections.singletonList(user));
         Comment comment = new Comment();
+        comment.setCommentId("2");
         comment.setFirstName("Игорь");
         comment.setLastName("Рябцев");
         comment.setDate("сегодня в 12:12");
         comment.setMessage("Еще + 5");
-        comment.setUserId("1234");
+        comment.setUserId("1729247908");
         event.setCommentsList(Collections.singletonList(comment));
+        HistoryEvent event1 = new HistoryEvent();
+        event1.setFirstName("Игорь");
+        event1.setLastName("Рябцев");
+        event1.setDate("сегодня в 12:12");
+        event1.setAction("создал опрос");
+        event1.setUserId("12345*-");
+        event.setHistoryEvent(Collections.singletonList(event1));
         listFoot.add(event);
         return listFoot;
     }
@@ -130,5 +141,82 @@ public class EventsService {
         game.setPlaygroundName("template");
 
         return game;
+    }
+
+    public Event getEventById(String eventId) {
+        Event event = new Event();
+        event.setUserIdCreator("172924708");
+        event.setIdEvent("172924708");
+        event.setDescription("Го на игру в 8?");
+        event.setMaxCountAnswer(0);
+        event.setAnswer("+");
+        event.setDuration("1");
+        event.setSport(FOOTBALL);
+        event.setPlaygroundId("15");
+        event.setPlaygroundName("У Школы №4");
+        event.setUserFirtsNameCreator("Леонид");
+        event.setUserLastNameCreator("Заручевский");
+        event.setMaxCountAnswer(21);
+        event.setUserList(Collections.singletonList(new User()));
+        Comment comment = new Comment();
+        comment.setFirstName("Игорь");
+        comment.setLastName("Рябцев");
+        comment.setDate("сегодня в 12:12");
+        comment.setMessage("Еще + 5");
+        comment.setUserId("1234");
+        event.setCommentsList(Collections.singletonList(comment));
+        HistoryEvent event1 = new HistoryEvent();
+        event1.setFirstName("Игорь");
+        event1.setLastName("Рябцев");
+        event1.setDate("сегодня в 12:12");
+        event1.setAction("создал опрос");
+        event1.setUserId("12345*-");
+        event.setHistoryEvent(Collections.singletonList(event1));
+
+        return event;
+    }
+
+    public void editEventById(String eventId) {
+
+    }
+
+    public void deleteGame(String eventId) {
+
+
+    }
+
+    public void editUserAnswer(String eventId, String userId, Boolean aFalse) {
+
+    }
+
+    public void addUserToList(String eventId, String userId) {
+
+    }
+
+    public void deleteUserFromList(String eventId, String userId) {
+
+    }
+
+    public int addCommentToEvent(String eventId, Comment message) {
+
+        return 1;
+    }
+
+    public void deleteCommentFromEvent(String commentId, String eventId) {
+
+
+    }
+
+    public List<Comment> getCommentFromEventById(String eventId) {
+        Comment comment = new Comment();
+        comment.setCommentId("3");
+        comment.setFirstName("Игорь");
+        comment.setLastName("Рябцев");
+        comment.setDate("сегодня в 12:12");
+        comment.setMessage("Еще + 5");
+        comment.setUserId("172924708");
+        List<Comment> list = new ArrayList<>();
+        list.add(comment);
+        return list;
     }
 }

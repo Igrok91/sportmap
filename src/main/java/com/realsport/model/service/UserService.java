@@ -2,10 +2,13 @@ package com.realsport.model.service;
 
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -31,9 +34,15 @@ public class UserService {
         List<String> listVoley = new ArrayList<>();
         listVoley.add("7");
         listVoley.add("8");
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("172924708", Boolean.TRUE);
+        map.put("12345", Boolean.FALSE);
         user.setPlaygroundBasketList(listBasket);
         user.setPlaygroundFootballList(listFootball);
         user.setPlaygroundVoleyList(listVoley);
+        user.setEventListActive(map);
+        user.setFirstName("Игорь");
+        user.setLastName("Рябцев");
         return user;
 
     }

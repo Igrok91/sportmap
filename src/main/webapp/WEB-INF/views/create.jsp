@@ -87,7 +87,7 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div class="btn-group btn-group-justified" style="padding-bottom: 10px" >
+                        <div class="btn-group btn-group-justified" style="padding-bottom: 10px" id="tabCreate" >
                             <a href="#" class="btn active btn-primary" id="newGame">Новый</a>
                             <a href="#" class="btn " id="templatesGames">Шаблоны</a>
                         </div>
@@ -179,6 +179,8 @@
 
              <input id="templId" type="hidden" name="templateId"
                     value="" />
+             <input id="eventId" type="hidden" name="eventId"
+                    value="${event.idEvent}" />
 
                             <div style="padding-bottom: 10px">
                                 <div >
@@ -233,6 +235,15 @@
           }
         }
     });
+
+    var event = ${eventJson};
+    if (event) {
+        $('#tabCreate').addClass('hide');
+        $('#savetempl').addClass('hide');
+        $('#desc').append(event.description);
+        mySwitch3.on();
+
+    }
 
     $(function() {
         $('#newGame').click(function(event) {
