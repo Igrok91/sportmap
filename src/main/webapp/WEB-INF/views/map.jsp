@@ -90,7 +90,7 @@
 
 
                             <div class="media-body " >
-                                <h4 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Футбол</h4>
+                                <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Футбол</h5>
                             </div>
                         </div>
                     </a></li>
@@ -102,7 +102,7 @@
 
 
                             <div class="media-body " >
-                                <h4 class="media-heading"  style="margin-top: 7px;margin-bottom: 7px">Баскетбол</h4>
+                                <h5 class="media-heading"  style="margin-top: 7px;margin-bottom: 7px">Баскетбол</h5>
                             </div>
                         </div>
                     </a></li>
@@ -114,7 +114,7 @@
 
 
                             <div class="media-body " >
-                                <h4  style="margin-top: 7px;margin-bottom: 7px">Волейбол</h4>
+                                <h5 style="margin-top: 7px;margin-bottom: 7px">Волейбол</h5>
                             </div>
                         </div>
                     </a></li>

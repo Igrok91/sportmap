@@ -1,5 +1,7 @@
 package com.realsport.model.entityDao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,14 +10,18 @@ public class User {
     private String firstName;
     private String LastName;
     private boolean isAdmin;
+    private boolean isFake = false;
+    private int countFake;
     //Список id площадок
     private List<String> playgroundFootballList;
     private List<String> playgroundBasketList;
     private List<String> playgroundVoleyList;
     //Список id событий и значение проголосовал ли
-    private Map<String, Boolean> eventListActive;
+    private Map<String, Boolean> eventListActive = new HashMap<>();
+    //Список id событий и количества игроков от пользователя
+    private Map<String, Integer> count = new HashMap<>();
     //Список id событий
-    private List<String> eventListPast;
+    private List<String> eventListPast = new ArrayList<>();
 
 
     public String getUserId() {
@@ -88,5 +94,29 @@ public class User {
 
     public void setLastName(String lastName) {
         LastName = lastName;
+    }
+
+    public Map<String, Integer> getCount() {
+        return count;
+    }
+
+    public void setCount(Map<String, Integer> count) {
+        this.count = count;
+    }
+
+    public boolean isFake() {
+        return isFake;
+    }
+
+    public void setFake(boolean fake) {
+        isFake = fake;
+    }
+
+    public int getCountFake() {
+        return countFake;
+    }
+
+    public void setCountFake(int countFake) {
+        this.countFake = countFake;
     }
 }

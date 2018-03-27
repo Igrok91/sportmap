@@ -99,7 +99,8 @@ public class StartController {
         Gson gson = new Gson();
 
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundFootballList(), user.getPlaygroundBasketList(), user.getPlaygroundVoleyList());
-        httpSession.setAttribute("listEvents", gson.toJson(listEvents));
+        model.addAttribute("listEventsJson", gson.toJson(listEvents));
+        model.addAttribute("listEvents", listEvents);
         model.addAttribute("playgroundCoordinate", "empty");
         return !isFirst ? "main" : "begin";
     }
@@ -350,8 +351,9 @@ public class StartController {
                 }
             }
         }
+        Gson gson = new Gson();
         if (!eventId.equals("null")) {
-            Gson gson = new Gson();
+
             Event event = eventsService.getEventById(eventId);
             model.addAttribute("eventJson", gson.toJson(event) );
             model.addAttribute("event", event );
@@ -364,6 +366,8 @@ public class StartController {
             if (list != null) {
                 userTemplates = getUserTemplates(list);
             }
+            model.addAttribute("eventJson", gson.toJson(new Event()) );
+            model.addAttribute("event", new Event() );
             model.addAttribute("templates", userTemplates);
             model.addAttribute("template", new Template());
         }
@@ -441,7 +445,8 @@ public class StartController {
         Gson gson = new Gson();
 
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundFootballList(), user.getPlaygroundBasketList(), user.getPlaygroundVoleyList());
-        httpSession.setAttribute("listEvents", gson.toJson(listEvents));
+        model.addAttribute("listEventsJson", gson.toJson(listEvents));
+        model.addAttribute("listEvents", listEvents);
         return "main";
     }
 
@@ -457,6 +462,7 @@ public class StartController {
 
     @RequestMapping(value = "/event")
     public String event(Model model, @RequestParam(name = "eventId") String eventId) {
+        Gson gson = new Gson();
         User user = (User)httpSession.getAttribute("user");
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundFootballList(), user.getPlaygroundBasketList(), user.getPlaygroundVoleyList());
         Event event = FluentIterable.from(listEvents).firstMatch(new Predicate<Event>() {
@@ -466,6 +472,8 @@ public class StartController {
             }
         }).get();
         model.addAttribute("event", event);
+        model.addAttribute("eventJson", gson.toJson(event));
+
         return "event";
     }
 
@@ -506,7 +514,8 @@ public class StartController {
         }
 
         List<Event> listEvents = eventsService.getEvents((List<String>) map.get("playgroundFoottUser"), (List<String>)map.get("playgroundBasketUser"), ((List<String>)map.get("playgroundVoleyUser")));
-        model.addAttribute("listEvents", gson.toJson(listEvents));
+        model.addAttribute("listEventsJson", gson.toJson(listEvents));
+        model.addAttribute("listEvents", listEvents);
         addPlaygroundDataToModel(model);
         model.addAttribute("returnBack", "home");
         model.addAttribute("playgroundCoordinate", "empty");

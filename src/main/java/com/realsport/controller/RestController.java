@@ -70,7 +70,7 @@ public class RestController {
         eventsService.deleteCommentFromEvent(commentId, eventId);
     }
 
-    @RequestMapping("/handleAnswer")
+    @RequestMapping("/handleAnswerMain")
     @ResponseBody
     public Boolean handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
         User user = (User)httpSession.getAttribute("user");
@@ -91,6 +91,35 @@ public class RestController {
             }
         }
         return Boolean.FALSE;
+    }
+
+    @RequestMapping("/handleAnswer")
+    @ResponseBody
+    public Boolean handleAnswer2(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
+        User user = (User)httpSession.getAttribute("user");
+        String userId = (String) httpSession.getAttribute("userId");
+        if (user != null) {
+            Boolean b = user.getEventListActive().get(eventId);
+            if (b.equals(Boolean.TRUE)) {
+                return Boolean.FALSE;
+            } else {
+                user.getEventListActive().put(eventId, Boolean.TRUE); // TODO
+                eventsService.editUserAnswer(eventId, userId, Boolean.TRUE);
+                eventsService.addUserToList(eventId, userId);
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
+
+    @RequestMapping("/addIgrok")
+    public void addIgrok(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
+                         @RequestParam(value="count", required=false, defaultValue="1") String count ) {
+        User user = (User)httpSession.getAttribute("user");
+        String userId = (String) httpSession.getAttribute("userId");
+        user.getCount().put(eventId, Integer.valueOf(count));
+       // eventsService.addCountIgrokFromUser(userId, eventId, Integer.valueOf(count));
+        eventsService.addIgrokToListFromUser(eventId, userId + "add", count);
     }
 
 

@@ -106,16 +106,27 @@ public class EventsService {
         event.setUserFirtsNameCreator("Леонид");
         event.setUserLastNameCreator("Заручевский");
         event.setMaxCountAnswer(21);
+
+        List<User> userList = new ArrayList<>();
+        User user2 = new User();
+        user2.setUserId("1729247081");
+        user2.setFake(true);
+        user2.setCountFake(3);
+        User user3 = new User();
+        user3.setUserId("1729247081");
         User user = new User();
         user.setUserId("172924708");
-        event.setUserList(Collections.singletonList(user));
+        userList.add(user);
+        userList.add(user3);
+        userList.add(user2);
+        event.setUserList(userList);
         Comment comment = new Comment();
         comment.setCommentId("2");
         comment.setFirstName("Игорь");
         comment.setLastName("Рябцев");
         comment.setDate("сегодня в 12:12");
         comment.setMessage("Еще + 5");
-        comment.setUserId("1729247908");
+        comment.setUserId("17292479038");
         event.setCommentsList(Collections.singletonList(comment));
         HistoryEvent event1 = new HistoryEvent();
         event1.setFirstName("Игорь");
@@ -214,9 +225,17 @@ public class EventsService {
         comment.setLastName("Рябцев");
         comment.setDate("сегодня в 12:12");
         comment.setMessage("Еще + 5");
-        comment.setUserId("172924708");
+        comment.setUserId("1729247038");
         List<Comment> list = new ArrayList<>();
         list.add(comment);
         return list;
+    }
+
+    public void addCountIgrokFromUser(String userId, String eventId, Integer integer) {
+
+    }
+
+    public void addIgrokToListFromUser(String eventId, String userId, String count) {
+
     }
 }

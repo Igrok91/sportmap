@@ -237,7 +237,7 @@
     });
 
     var event = ${eventJson};
-    if (event) {
+    if (event.idEvent) {
         $('#tabCreate').addClass('hide');
         $('#savetempl').addClass('hide');
         $('#desc').append(event.description);
