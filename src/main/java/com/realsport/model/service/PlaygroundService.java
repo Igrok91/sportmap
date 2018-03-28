@@ -2,15 +2,18 @@ package com.realsport.model.service;
 
 import com.realsport.model.dao.PlaygroundDao;
 import com.realsport.model.dao.daoException.DataBaseException;
-import com.realsport.model.entityDao.Basketball;
-import com.realsport.model.entityDao.Playfootball;
-import com.realsport.model.entityDao.Voleyball;
+import com.realsport.model.entityDao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import static com.realsport.model.service.EventsService.FOOTBALL;
 
 /**
  * Created by Igor Ryabtsev on 28.12.2016.
@@ -48,27 +51,63 @@ public class PlaygroundService implements PlaygroundDao{
         return  playgroundDao.getFootballById(id);
     }
 
-    public String getFootballPlayersById(String id) {
-        return "45";
+    public List<User> getFootballPlayersById(String id) {
+        List<User> userList = new ArrayList<>();
+        User user3 = new User();
+        user3.setUserId("1729247081");
+        User user = new User();
+        user.setUserId("172924708");
+        userList.add(user);
+        userList.add(user3);
+        return userList;
     }
 
-    public String getFootballPlayById(String id) {
-        return "20";
+    public List<Event> getFootballPlayById(String id) {
+        List<Event>  listFoot= new ArrayList<>();
+        Event event = new Event();
+        event.setUserIdCreator("172924708");
+        event.setIdEvent("172924708");
+        event.setDescription("Го на игру в 8?");
+        event.setMaxCountAnswer(0);
+        event.setAnswer("+");
+        event.setDuration("1");
+        event.setSport(FOOTBALL);
+        event.setPlaygroundId("15");
+        event.setPlaygroundName("У Школы №4");
+        event.setUserFirtsNameCreator("Леонид");
+        event.setUserLastNameCreator("Заручевский");
+        event.setMaxCountAnswer(21);
+        listFoot.add(event);
+        return listFoot;
     }
 
-    public String getBasketballPlayersById(String id) {
-        return "55";
+    public List<User> getBasketballPlayersById(String id) {
+        List<User> userList = new ArrayList<>();
+        User user3 = new User();
+        user3.setUserId("1729247081");
+        User user = new User();
+        user.setUserId("172924708");
+        userList.add(user);
+        userList.add(user3);
+        return userList;
     }
 
-    public String getBasketballPlayById(String id) {
-        return "66";
+    public List<Event> getBasketballPlayById(String id) {
+        return Collections.singletonList(new Event());
     }
 
-    public String getVoleyPlayersById(String id) {
-        return "77";
+    public List<User> getVoleyPlayersById(String id) {
+        List<User> userList = new ArrayList<>();
+        User user3 = new User();
+        user3.setUserId("1729247081");
+        User user = new User();
+        user.setUserId("172924708");
+        userList.add(user);
+        userList.add(user3);
+        return userList;
     }
 
-    public String getVoleyPlayById(String id) {
-        return "23";
+    public List<Event> getVoleyPlayById(String id) {
+        return Collections.singletonList(new Event());
     }
 }

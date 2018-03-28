@@ -270,7 +270,8 @@ public class StartController {
 
     @RequestMapping("/playground")
     public String toGroupFromEvent(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport) {
-
+        User user = (User) httpSession.getAttribute("user");
+        boolean isParticipant = false;
         if (sport.equals("Футбол")) {
             for (Playfootball playfootball : playfootballList) {
                 if (playfootball.getIdplayground() == Integer.parseInt(id)) {
@@ -282,6 +283,12 @@ public class StartController {
                     model.addAttribute("plays", playgroundService.getFootballPlayById(id) );
                 }
             }
+            isParticipant = FluentIterable.from(user.getPlaygroundFootballList()).firstMatch(new Predicate<String>() {
+                @Override
+                public boolean apply(String idPlay) {
+                    return idPlay.equals(id);
+                }
+            }).isPresent();
         } else if (sport.equals("Баскетбол")) {
             for (Basketball basketball : basketballList) {
                 if (basketball.getIdbasketball() == Integer.parseInt(id)) {
@@ -293,6 +300,12 @@ public class StartController {
                     model.addAttribute("plays", playgroundService.getBasketballPlayById(id) );
                 }
             }
+            isParticipant = FluentIterable.from(user.getPlaygroundBasketList()).firstMatch(new Predicate<String>() {
+                @Override
+                public boolean apply(String idPlay) {
+                    return idPlay.equals(id);
+                }
+            }).isPresent();
         } else if (sport.equals("Волейбол")) {
             for (Voleyball voleyball : voleyballList) {
                 if (voleyball.getIdvoleyball() == Integer.parseInt(id)) {
@@ -304,9 +317,17 @@ public class StartController {
                     model.addAttribute("plays", playgroundService.getVoleyPlayById(id) );
                 }
             }
+            isParticipant = FluentIterable.from(user.getPlaygroundVoleyList()).firstMatch(new Predicate<String>() {
+                @Override
+                public boolean apply(String idPlay) {
+                    return idPlay.equals(id);
+                }
+            }).isPresent();
         }
 
+
         model.addAttribute("returnBack", "home");
+        model.addAttribute("isParticipant", isParticipant);
         model.addAttribute("playgroundId", id);
         return "playground";
     }

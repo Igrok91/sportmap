@@ -71,8 +71,16 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="text-center">
-                                    <a href="#" class="btn btn-primary" style="margin:3px">Вступить в группу</a>
-                                    <a href="#" class="btn btn-primary" style="margin:3px">Позвать на игру</a>
+                                    <c:choose>
+                                        <c:when test="${isParticipant == true}">
+                                            <a onclick="handleGroup()" class="btn " style="margin:3px">Выйти из группы</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a onclick="handleGroup()" class="btn " style="margin:3px">Вступить в группу</a>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}" class="btn " style="margin:3px">Позвать на игру</a>
                                 </div>
 
 
@@ -92,12 +100,12 @@
                     </div>
                     <div class="list-group" style="padding-bottom: 1px">
                         <a href="#" class="list-group-item ">
-                            <span class="badge">${players}</span>
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">${players}</span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                             Участники
                         </a>
                         <a href="#" class="list-group-item">
-                            <span class="badge">${plays}</span>
-                            Игры</a>
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">${plays}</span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
+                            События </a>
 
                     </div>
                     <div class="container-fluid">
@@ -136,6 +144,16 @@
     }
     var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp;
     $('#returnBack').attr('href', returnBack);
+
+    function handleGroup() {
+        var playgroundId = '${playgroundId}';
+        var sport = '${sport}';
+        $.ajax({
+            url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport
+        }).then(function (value) {
+
+        });
+    }
 </script>
 </body>
 </html>

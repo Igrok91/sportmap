@@ -84,12 +84,12 @@
                             Группы
                         </a>
 
-                        <a href="#" class="list-group-item">
+                       <%-- <a href="#" class="list-group-item">
                             <span class="badge">25 <span class="glyphicon glyphicon-menu-right"></span></span>
                             Участие в играх</a>
                         <a href="#" class="list-group-item">
                             <span class="badge">4 <span class="glyphicon glyphicon-menu-right"></span></span>
-                            Организация игр</a>
+                            Организация игр</a>--%>
                     </div>
 
                     <div style="padding: 20px">

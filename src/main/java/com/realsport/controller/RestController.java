@@ -2,6 +2,8 @@ package com.realsport.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.TemplateGame;
@@ -21,6 +23,11 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
+
+
+    public static final String FOOTBALL = "Футбол";
+    public static final String BASKETBALL = "Баскетбол";
+    public static final String VOLEYBALL = "Волейбол";
 
     @Autowired
     private UserService userService;
@@ -110,6 +117,70 @@ public class RestController {
             }
         }
         return Boolean.FALSE;
+    }
+
+    @RequestMapping("/handleGroup")
+    @ResponseBody
+    public Boolean handleGroup(@RequestParam(value="playgroundId", required=false, defaultValue="1") String playgroundId,
+                               @RequestParam(value="sport", required=false, defaultValue=" Футбол") String sport) {
+        User user = (User)httpSession.getAttribute("user");
+        String userId = (String) httpSession.getAttribute("userId");
+        Boolean isParticipant = false;
+        if (sport.equals(FOOTBALL)) {
+            String id = FluentIterable.from(user.getPlaygroundFootballList()).filter(new Predicate<String>() {
+                @Override
+                public boolean apply(String id) {
+                    return id.equals(playgroundId);
+                }
+            }).first().orNull();
+            if (id == null) {
+                user.getPlaygroundFootballList().add(playgroundId);
+                isParticipant = Boolean.TRUE;
+            } else {
+                user.getPlaygroundFootballList().remove(id);
+                isParticipant = Boolean.FALSE;
+            }
+        } else if (sport.equals(BASKETBALL)) {
+            boolean isPresent = FluentIterable.from(user.getPlaygroundBasketList()).firstMatch(new Predicate<String>() {
+                @Override
+                public boolean apply(String id) {
+                    return id.equals(playgroundId);
+                }
+            }).isPresent();
+            if (!isPresent) {
+                user.getPlaygroundBasketList().add(playgroundId);
+                isParticipant = Boolean.TRUE;
+            } else {
+                user.getPlaygroundBasketList().removeIf(new Predicate<String>() {
+                    @Override
+                    public boolean apply(String id) {
+                        return id.equals(playgroundId);
+                    }
+                });
+                isParticipant = Boolean.FALSE;
+            }
+        } else if (sport.equals(VOLEYBALL)) {
+            boolean isPresent = FluentIterable.from(user.getPlaygroundVoleyList()).firstMatch(new Predicate<String>() {
+                @Override
+                public boolean apply(String id) {
+                    return id.equals(playgroundId);
+                }
+            }).isPresent();
+            if (!isPresent) {
+                user.getPlaygroundVoleyList().add(playgroundId);
+                isParticipant = Boolean.TRUE;
+            } else {
+                user.getPlaygroundVoleyList().removeIf(new Predicate<String>() {
+                    @Override
+                    public boolean apply(String id) {
+                        return id.equals(playgroundId);
+                    }
+                });
+                isParticipant = Boolean.FALSE;
+            }
+        }
+
+     return Boolean.FALSE;
     }
 
     @RequestMapping("/addIgrok")

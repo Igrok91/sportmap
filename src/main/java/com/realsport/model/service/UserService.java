@@ -24,12 +24,11 @@ public class UserService {
         User user = new User();
         user.setUserId(id);
         List<String> listFootball = new ArrayList<>();
-        listFootball.add("10");
         listFootball.add("15");
 
         List<String> listBasket = new ArrayList<>();
         listBasket.add("7");
-        listBasket.add("8");
+
 
         List<String> listVoley = new ArrayList<>();
         listVoley.add("7");
