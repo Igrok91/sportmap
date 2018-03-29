@@ -73,14 +73,16 @@
                                 <div class="text-center">
                                     <c:choose>
                                         <c:when test="${isParticipant == true}">
-                                            <a onclick="handleGroup()" class="btn " style="margin:3px">Выйти из группы</a>
+                                            <a onclick="handleGroup()" id="exitFromGroup" class="btn btn-default" style="margin:3px">Выйти из группы</a>
+                                            <a onclick="handleGroup()" id="enterToGroup" class="btn btn-primary hide" style="margin:3px">Вступить в группу</a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a onclick="handleGroup()" class="btn " style="margin:3px">Вступить в группу</a>
+                                            <a onclick="handleGroup()" id="exitFromGroup" class="btn btn-default hide" style="margin:3px">Выйти из группы</a>
+                                            <a onclick="handleGroup()" id="enterToGroup" class="btn btn-primary " style="margin:3px">Вступить в группу</a>
                                         </c:otherwise>
                                     </c:choose>
 
-                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}" class="btn " style="margin:3px">Позвать на игру</a>
+                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}" class="btn btn-primary" style="margin:3px">Позвать на игру</a>
                                 </div>
 
 
@@ -100,11 +102,11 @@
                     </div>
                     <div class="list-group" style="padding-bottom: 1px">
                         <a href="#" class="list-group-item ">
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">${players}</span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
+                            <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out value="${players.size()}"/></span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                             Участники
                         </a>
                         <a href="#" class="list-group-item">
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">${plays}</span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
+                            <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out value="${plays.size()}"/></span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                             События </a>
 
                     </div>
@@ -151,7 +153,13 @@
         $.ajax({
             url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport
         }).then(function (value) {
-
+            if (value == true) {
+                $('#exitFromGroup').removeClass('hide');
+                $('#enterToGroup').addClass('hide');
+            } else {
+                $('#exitFromGroup').addClass('hide');
+                $('#enterToGroup').removeClass('hide');
+            }
         });
     }
 </script>

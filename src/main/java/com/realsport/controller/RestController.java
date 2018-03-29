@@ -180,7 +180,7 @@ public class RestController {
             }
         }
 
-     return Boolean.FALSE;
+     return isParticipant;
     }
 
     @RequestMapping("/addIgrok")
