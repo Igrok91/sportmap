@@ -238,4 +238,12 @@ public class EventsService {
     public void addIgrokToListFromUser(String eventId, String userId, String count) {
 
     }
+
+    public void addPlaygroundToUser(String userId, String playgroundId) {
+
+    }
+
+    public void deletePlaygroundFromUser(String userId, String playgroundId) {
+
+    }
 }

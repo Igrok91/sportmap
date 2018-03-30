@@ -135,9 +135,11 @@ public class RestController {
             }).first().orNull();
             if (id == null) {
                 user.getPlaygroundFootballList().add(playgroundId);
+                eventsService.addPlaygroundToUser(userId, playgroundId);
                 isParticipant = Boolean.TRUE;
             } else {
                 user.getPlaygroundFootballList().remove(id);
+                eventsService.deletePlaygroundFromUser(userId, playgroundId);
                 isParticipant = Boolean.FALSE;
             }
         } else if (sport.equals(BASKETBALL)) {
@@ -149,6 +151,7 @@ public class RestController {
             }).isPresent();
             if (!isPresent) {
                 user.getPlaygroundBasketList().add(playgroundId);
+                eventsService.addPlaygroundToUser(userId, playgroundId);
                 isParticipant = Boolean.TRUE;
             } else {
                 user.getPlaygroundBasketList().removeIf(new Predicate<String>() {
@@ -157,6 +160,7 @@ public class RestController {
                         return id.equals(playgroundId);
                     }
                 });
+                eventsService.deletePlaygroundFromUser(userId, playgroundId);
                 isParticipant = Boolean.FALSE;
             }
         } else if (sport.equals(VOLEYBALL)) {
@@ -168,6 +172,7 @@ public class RestController {
             }).isPresent();
             if (!isPresent) {
                 user.getPlaygroundVoleyList().add(playgroundId);
+                eventsService.addPlaygroundToUser(userId, playgroundId);
                 isParticipant = Boolean.TRUE;
             } else {
                 user.getPlaygroundVoleyList().removeIf(new Predicate<String>() {
@@ -176,6 +181,7 @@ public class RestController {
                         return id.equals(playgroundId);
                     }
                 });
+                eventsService.deletePlaygroundFromUser(userId, playgroundId);
                 isParticipant = Boolean.FALSE;
             }
         }

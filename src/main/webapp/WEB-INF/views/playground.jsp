@@ -105,17 +105,27 @@
                             <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out value="${players.size()}"/></span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                             Участники
                         </a>
-                        <a href="#" class="list-group-item">
+              <%--          <a href="#" class="list-group-item">
                             <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out value="${plays.size()}"/></span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                             События </a>
-
+--%>
                     </div>
-                    <div class="container-fluid">
+     <%--               <div class="container-fluid">
                         <div class="row text-center" >
                             <a href="#" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px"><span class="glyphicon  glyphicon-share-alt"  aria-hidden="Комментировать" style="margin-right: 5px"></span> Пригласить в группу</a>
                             <!--   <a href="#" class="btn " ><span class="glyphicon glyphicon-th-list"></span> Рейтинг</a> -->
                         </div>
-                    </div>
+                    </div>--%>
+                    <c:choose>
+                        <c:when test="${plays.size() == 0}">
+                            <div>
+
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+
+                        </c:otherwise>
+                    </c:choose>
 
 
 
