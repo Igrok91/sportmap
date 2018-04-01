@@ -1,9 +1,6 @@
 package com.realsport.model.service;
 
-import com.realsport.model.entityDao.Comment;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.HistoryEvent;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.entityDao.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,7 +29,7 @@ public class EventsService {
             //listFoot.add(game);
     }
 
-    public List<Event> getEvents( List<String> playgroundFoottUser, List<String> playgroundBaskettUser, List<String> playgroundVoleyUser) {
+    public List<Event> getEvents(List<String> playgroundFoottUser, List<String> playgroundBaskettUser, List<String> playgroundVoleyUser) {
         List<Event> eventList = new ArrayList<>();
         // Достаем из бд активные события.
         if (playgroundFoottUser.size() != 0) {
@@ -244,6 +241,10 @@ public class EventsService {
     }
 
     public void deletePlaygroundFromUser(String userId, String playgroundId) {
+
+    }
+
+    public void endGame(String eventId) {
 
     }
 }

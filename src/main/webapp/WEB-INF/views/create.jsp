@@ -45,9 +45,7 @@
         <div class="navbar-brand ">
             Создание опроса
         </div>
-        <div class="pull-right">
-            <button class="navbar-brand btn" style="background: #eeeeee" type="submit" onclick="" id="createGame"><span class="glyphicon glyphicon-ok" aria-hidden=""></span></button>
-        </div>
+
     </div>
 </nav>
 <main>
@@ -79,7 +77,7 @@
 
 
 
-                                <span  style="color: gray;padding-right: 12px">${sport}</span> <span style="color: gray">Участники ${players}</span>
+                                <span  style="color: gray;padding-right: 12px">${sport}</span> <span style="color: gray">Участники ${players.size()}</span>
 
 
                             </div>
@@ -88,7 +86,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="btn-group btn-group-justified" style="padding-bottom: 10px" id="tabCreate" >
-                            <a href="#" class="btn active btn-primary" id="newGame">Новый</a>
+                            <a href="#" class="btn  btn-primary" id="newGame">Новый</a>
                             <a href="#" class="btn " id="templatesGames">Шаблоны</a>
                         </div>
                         <div id="panelCreate">
@@ -200,7 +198,11 @@
                         </div>
                         </div>
 
-
+                        <div class=" btn-group btn-group-justified" style="padding-top: 15px" id="divCreateGame">
+                            <div class="btn-group" >
+                            <button class="btn  btn-primary" type="submit" id="createGame">Опубликовать</button>
+                            </div>
+                        </div>
                         <div id="templatesPanel" class="hide">
                             <c:import url="templates.jsp"/>
 
@@ -247,19 +249,21 @@
 
     $(function() {
         $('#newGame').click(function(event) {
-            $('#newGame').addClass('active btn-primary');
+            $('#newGame').addClass(' btn-primary');
             $('#panelCreate').removeClass('hide');
-            $('#templatesGames').removeClass('active btn-primary');
+            $('#templatesGames').removeClass(' btn-primary');
             $('#templatesPanel').addClass('hide');
+            $('#divCreateGame').removeClass('hide');
         });
     });
 
     $(function() {
         $('#templatesGames').click(function(event) {
-            $('#templatesGames').addClass('active btn-primary');
-            $('#newGame').removeClass('active btn-primary');
+            $('#templatesGames').addClass(' btn-primary');
+            $('#newGame').removeClass(' btn-primary');
             $('#templatesPanel').removeClass('hide');
             $('#panelCreate').addClass('hide');
+            $('#divCreateGame').addClass('hide');
         });
     });
 
@@ -277,10 +281,11 @@
 
     var templates = ${templates};
     if (templates.length != 0) {
-        $('#templatesGames').addClass('active btn-primary');
-        $('#newGame').removeClass('active btn-primary');
+        $('#templatesGames').addClass(' btn-primary');
+        $('#newGame').removeClass(' btn-primary');
         $('#templatesPanel').removeClass('hide');
         $('#panelCreate').addClass('hide');
+        $('#divCreateGame').addClass('hide');
     } else {
         $('#templatesPanelEmpty').removeClass('hide');
     }

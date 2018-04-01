@@ -19,7 +19,7 @@ public class BasketRepositoryImpl implements BasketballRepository{
         ArrayList<Basketball> list = new ArrayList<>();
         for (BasketData f: BasketData.values()) {
             Basketball p = new Basketball();
-            p.setIdbasketball(Integer.parseInt(f.getId()));
+            p.setIdplayground(Integer.parseInt(f.getId()));
             p.setName(f.getName());
             p.setLatitude(f.getLattitude());
             p.setLongitude(f.getLongitude());
@@ -41,7 +41,7 @@ public class BasketRepositoryImpl implements BasketballRepository{
         for (BasketData f: BasketData.values()) {
             if(f.getId().equals(id)){
                 p = new Basketball();
-                p.setIdbasketball(Integer.parseInt(f.getId()));
+                p.setIdplayground(Integer.parseInt(f.getId()));
                 p.setName(f.getName());
                 p.setLatitude(f.getLattitude());
                 p.setLongitude(f.getLongitude());

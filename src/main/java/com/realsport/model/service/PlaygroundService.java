@@ -77,7 +77,22 @@ public class PlaygroundService implements PlaygroundDao{
         event.setUserFirtsNameCreator("Леонид");
         event.setUserLastNameCreator("Заручевский");
         event.setMaxCountAnswer(21);
+
+        Event event2 = new Event();
+        event2.setUserIdCreator("172924708");
+        event2.setIdEvent("172924708");
+        event2.setDescription("Го играть в выходные?");
+        event2.setMaxCountAnswer(0);
+        event2.setAnswer("+");
+        event2.setDuration("1");
+        event2.setSport(FOOTBALL);
+        event2.setPlaygroundId("15");
+        event2.setPlaygroundName("У Школы №4");
+        event2.setUserFirtsNameCreator("Рябцев");
+        event2.setUserLastNameCreator("Игорь");
+        event2.setMaxCountAnswer(21);
         listFoot.add(event);
+        listFoot.add(event2);
         return listFoot;
     }
 
@@ -93,7 +108,7 @@ public class PlaygroundService implements PlaygroundDao{
     }
 
     public List<Event> getBasketballPlayById(String id) {
-        return Collections.singletonList(new Event());
+        return new ArrayList<>();
     }
 
     public List<User> getVoleyPlayersById(String id) {

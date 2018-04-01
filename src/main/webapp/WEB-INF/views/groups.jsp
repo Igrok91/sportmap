@@ -50,34 +50,35 @@
             </div>
             <div class="col-md-8">
                 <div class="list-group" id="listGroupsUser">
-                  <%--  <a href="#" class="list-group-item borderless" >
-                        <div class="media">
-                            <div class="pull-left">
-                                <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40" height="40"/>
-                            </div>
+                    <c:forEach var="group" items="${allPlaygroundUser}">
+                        <a href="group?playgroundId=${group.idplayground}&sport=${group.getSubject()}" class="list-group-item borderless">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <c:if test="${group.getSubject() == 'Футбол'}">
+                                        <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
+                                             height="40"/>
+                                    </c:if>
+                                    <c:if test="${group.getSubject() == 'Баскетбол'}">
+                                        <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
+                                             height="40"/>
+                                    </c:if>
+                                    <c:if test="${group.getSubject() == 'Волейбол'}">
+                                        <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="40"
+                                             height="40"/>
+                                    </c:if>
+
+                                </div>
 
 
-                            <div class="media-body " >
-                                <h4 class="media-heading" id="test"></h4>
-                                <span  style="color: gray" >Футбол</span>
-                                <hr>
+                                <div class="media-body ">
+                                    <h4 class="media-heading"
+                                        style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.name}</h4>
+                                    <span style="color: gray">${group.getSubject()}</span>
+                                    <hr>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item borderless">
-                        <div class="media">
-                            <div class="pull-left">
-                                <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40" height="40" />
-                            </div>
-
-                            <div class="media-body">
-                                <h4 class="media-heading">У Школы № 345</h4>
-                                <span  style="color: gray" >Баскетбол</span>
-                                <hr>
-                            </div>
-                        </div>
-                    </a>
---%>
+                        </a>
+                    </c:forEach>
                 </div>
 
             </div>
@@ -92,69 +93,9 @@
 
 </main>
 <script>
-    var footInfo = ${footInfo};
-    var basketInfo = ${basketInfo};
-    var voleyballInfo = ${voleyballInfo};
-    var sessionUser = ${sessionUser};
-        var playgroundFoottUser = sessionUser.playgroundFoottUser;
-        var playgroundBasketUser = sessionUser.playgroundBasketUser;
-        var playgroundVoleyUser = sessionUser.playgroundVoleyUser;
-
-        var playFootUser = [];
-        var playBasketUser = [];
-        var playVoleyUser = [];
-        if (playgroundFoottUser !== undefined) {
-             playgroundFoottUser.map(function(id, i) {
-
-                 footInfo.map(function(info, i2) {
-                    var idPlayground = info.id;
-                    if (idPlayground == id) {
-                        console.log('yes');
-                        playFootUser.push(info);
-                    }
-                        });
-
-            });
-
-        }
-
-    if (playgroundBasketUser !== undefined) {
-        playgroundBasketUser.map(function(id, i) {
-
-            basketInfo.map(function(info, i2) {
-                var idPlayground = info.id;
-                if (idPlayground == id) {
-                    console.log('yes');
-                    playBasketUser.push(info);
-                }
-            });
-
-        });
-
-    }
-    if (playgroundVoleyUser !== undefined) {
-        playgroundVoleyUser.map(function(id, i) {
-
-            voleyballInfo.map(function(info, i2) {
-                var idPlayground = info.id;
-                if (idPlayground == id) {
-                    console.log('yes');
-                    playVoleyUser.push(info);
-                }
-            });
-
-        });
-
-    }
 
 
-        var allPlaygroundUser = playFootUser.concat(playBasketUser, playVoleyUser );
 
-
-         allPlaygroundUser.map(function(playground, i) {
-                var list = document.getElementById('listGroupsUser');
-                list.appendChild(getElementList(playground, i, "group"));
-         });
 
 
         function getElementList(allPlaygroundUser, index, href) {
@@ -203,10 +144,6 @@
             divMedia.appendChild(divBody);
             a.appendChild(divMedia);
             return a;
-        }
-
-        function sentToServer(test) {
-            alert(test);
         }
 
 

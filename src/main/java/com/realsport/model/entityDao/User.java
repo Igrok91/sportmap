@@ -9,6 +9,7 @@ public class User {
     private String userId;
     private String firstName;
     private String LastName;
+    private String info;
     private boolean isAdmin;
     private boolean isFake = false;
     private int countFake;
@@ -23,6 +24,14 @@ public class User {
     //Список id событий
     private List<String> eventListPast = new ArrayList<>();
 
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 
     public String getUserId() {
         return userId;

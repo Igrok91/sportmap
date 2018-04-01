@@ -42,6 +42,7 @@ public class UserService {
         user.setEventListActive(map);
         user.setFirstName("Игорь");
         user.setLastName("Рябцев");
+        //user.setInfo("Все бесят");
         return user;
 
     }
@@ -75,5 +76,10 @@ public class UserService {
     public int saveTemplateUser(TemplateGame templateId, String userId) {
 
         return 3;
+    }
+
+    public void editUserInfo(String userInfo) {
+
+
     }
 }

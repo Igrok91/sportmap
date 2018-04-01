@@ -129,8 +129,8 @@
         }
 
 
-        var description = document.createElement('h4');
-        description.className = "list-group-item-heading";
+        var description = document.createElement('h5');
+       // description.className = "list-group-item-text";
         description.appendChild(document.createTextNode(template.description));
 
         button.appendChild(clonedNode);

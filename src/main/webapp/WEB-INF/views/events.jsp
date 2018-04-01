@@ -26,7 +26,7 @@
 
     </style>
 </head>
-<body>
+<body >
 
 
 <a href="" class="btn hide" style="padding: 0px" id="templateUserList2">
@@ -47,13 +47,13 @@
         </div>--%>
     </div>
 </nav>
-<div class="container-fluid ">
+<div class="container-fluid " >
 
     <div class="row content">
         <div class="col-md-2">
 
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8" style="padding-bottom: 45px">
             <div class="list-group">
                 <c:forEach var="event" items="${listEvents}">
 
@@ -83,10 +83,10 @@
                                             <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                         style="margin-right: 20px"></span>Проголосовать</a>
                                             </li>
-                                            <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
+                                       <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
                                                     class="glyphicon glyphicon-time"
                                                     style="margin-right: 20px"></span>История
-                                                изменений</a></li>
+                                                изменений</a></li>--%>
                                             <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}"> <span class="glyphicon glyphicon-home"
                                                                                                                         style="margin-right: 20px"></span>К площадке</a>
                                             </li>
@@ -101,8 +101,11 @@
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
                                             </a></li>
-                                            <li><a href="deleteGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-off"
+                                            <li><a href="endGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-off"
                                                                                                     style="margin-right: 20px"></span>Завершить
+                                                опрос</a></li>
+                                            <li><a href="deleteGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-trash"
+                                                                                                    style="margin-right: 20px"></span>Удалить
                                                 опрос</a></li>
 
                                         </c:when>
@@ -115,9 +118,9 @@
                                             <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                          style="margin-right: 20px"></span>Проголосовать</a>
                                             </li>
-                                            <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
+                                        <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
                                                                                                                     style="margin-right: 20px"></span>История
-                                                изменений</a></li>
+                                                изменений</a></li>--%>
                                             <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}"> <span class="glyphicon glyphicon-home"
                                                                                                                         style="margin-right: 20px"></span>К площадке</a>
                                             </li>
@@ -143,21 +146,28 @@
 
 
                     </div>
-                    <div>
-                        <a href="#" class="btn" style="margin-left: 5px"><span class="glyphicon glyphicon-user "
-                                                                               aria-hidden=""
-                                                                               style="margin-right: 5px"></span> ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                    <div style="padding-left: 15px;padding-top: 10px; padding-bottom: 5px">
+                        <a class="pull-left" href="#" >
+                            <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
+                            <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
+                                 alt="Баскетбол" width="30" height="30">
+
                         </a>
+                        <div class="media-body" >
+                            <a href="#" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                            </a>
+                        </div>
+
                     </div>
-                    <hr style="margin-bottom: 9px; margin-top: 0px">
+                    <%--<hr style="margin-bottom: 9px; margin-top: 0px">--%>
                     <div>
                         <span style="color: black; padding-left: 17px; padding-right: 17px">${event.description}</span>
                     </div>
-                    <hr class="hrDescription">
+                    <%--<hr class="hrDescription">--%>
 
                     <div class="panel-body" style="padding-bottom: 0px">
                         <div class="list-group" style="margin-bottom: 5px">
-                            <a href="#" class="list-group-item " onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent})" id="answerButton_${event.idEvent}">
+                            <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent})" id="answerButton_${event.idEvent}">
                                 <c:choose>
                                     <c:when test="${event.maxCountAnswer == 0}">
                                         <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
@@ -167,7 +177,9 @@
                                     </c:otherwise>
                                 </c:choose>
 
-
+                                <div class="pull-left hide" id="answerOk_${event.idEvent}">
+                                    <span class="glyphicon glyphicon-ok "></span>
+                                </div>
                                 <div class="text-center">
                                     +
                                 </div>
@@ -241,11 +253,11 @@
                                         <option>3</option>
                                         <option>4</option>
                                         <option>5</option>
-                                        <option>6</option>
+                                       <%-- <option>6</option>
                                         <option>7</option>
                                         <option>8</option>
                                         <option>9</option>
-                                        <option>10</option>
+                                        <option>10</option>--%>
                                     </select>
                                 </div>
 
@@ -372,13 +384,20 @@
             if (eventListActive) {
                 var eventId = event.idEvent;
                 if (eventListActive[eventId] && eventListActive[eventId] == true) {
-                    $('#answerButton_'+ eventId).addClass('active');
+                   // $('#answerButton_'+ eventId).addClass('active');
+                    $('#answerButton_'+ eventId).removeClass('active');
+                    $('#answerButton_'+ eventId).css('background','#EAEAEC');
+
+                    $('#answerOk_'+ eventId).removeClass('hide');
                     $('#cancelAnswer_'+ eventId).removeClass('hide');
                     $('#doAnswer_'+ eventId).addClass('hide');
                     $('#cancelAnswer2_'+ eventId).removeClass('hide');
                     $('#doAnswer2_'+ eventId).addClass('hide');
                 } else {
-                    $('#answerButton_'+ eventId).removeClass('active');
+                    //$('#answerButton_'+ eventId).removeClass('active');
+                    $('#answerButton_'+ eventId).addClass('active');
+                    $('#answerButton_'+ eventId).css('background','');
+                    $('#answerOk_'+ eventId).addClass('hide');
                     $('#cancelAnswer_'+ eventId).addClass('hide');
                     $('#doAnswer_'+ eventId).removeClass('hide');
                     $('#cancelAnswer2_'+ eventId).addClass('hide');
@@ -482,7 +501,10 @@
                     $('#cancelAnswer2_'+ eventId).removeClass('hide');
                     $('#doAnswer2_'+ eventId).addClass('hide');
                     if (maxCountAnswer == 0) {
-                        $('#answerButton_'+ eventId).addClass('active');
+                        //$('#answerButton_'+ eventId).addClass('active');
+                        $('#answerButton_'+ eventId).removeClass('active');
+                        $('#answerButton_'+ eventId).css('background','#EAEAEC');
+                        $('#answerOk_'+ eventId).removeClass('hide');
                         var count = parseInt($('#badge1_'+ eventId).text());
                         ++count;
                         $('#badge1_'+ eventId).text(count);
@@ -499,7 +521,10 @@
                             console.log(count[0]);
 
                         } else {
-                            $('#answerButton_'+ eventId).addClass('active');
+                            //$('#answerButton_'+ eventId).addClass('active');
+                            $('#answerButton_'+ eventId).removeClass('active');
+                            $('#answerButton_'+ eventId).css('background','#EAEAEC');
+                            $('#answerOk_'+ eventId).removeClass('hide');
                             ++count;
                             $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
                             $('#templateUserList2').removeClass('hide');
@@ -530,7 +555,10 @@
                 $('#cancelAnswer2_'+ eventId).removeClass('hide');
                 $('#doAnswer2_'+ eventId).addClass('hide');
                 if (maxCountAnswer == 0) {
-                    $('#answerButton_'+ eventId).addClass('active');
+                  //  $('#answerButton_'+ eventId).addClass('active');
+                    $('#answerButton_'+ eventId).removeClass('active');
+                    $('#answerButton_'+ eventId).css('background','#EAEAEC');
+                    $('#answerOk_'+ eventId).removeClass('hide');
                     var count = $('#badge1_'+ eventId).text();
                     ++count;
                     $('#badge1_'+ eventId).text(count);
@@ -547,7 +575,10 @@
                         console.log(count[0]);
 
                     } else {
-                        $('#answerButton_'+ eventId).addClass('active');
+                        //$('#answerButton_'+ eventId).addClass('active');
+                        $('#answerButton_'+ eventId).removeClass('active');
+                        $('#answerButton_'+ eventId).css('background','#EAEAEC');
+                        $('#answerOk_'+ eventId).removeClass('hide');
                         ++count;
                         $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
                         $('#templateUserList2').removeClass('hide');
@@ -564,7 +595,10 @@
                 $('#doAnswer_'+ eventId).removeClass('hide');
                 $('#cancelAnswer2_'+ eventId).addClass('hide');
                 $('#doAnswer2_'+ eventId).removeClass('hide');
-                $('#answerButton_'+ eventId).removeClass('active');
+                //$('#answerButton_'+ eventId).removeClass('active');
+                $('#answerButton_'+ eventId).addClass('active');
+                $('#answerButton_'+ eventId).css('background','');
+                $('#answerOk_'+ eventId).addClass('hide');
                 if (maxCountAnswer == 0) {
 
                     var count = $('#badge1_'+ eventId).text();

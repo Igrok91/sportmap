@@ -19,7 +19,7 @@ public class VoleballRepositoryImpl implements VoleyballRepository {
         ArrayList<Voleyball> list = new ArrayList<>();
         for (VoleyData f: VoleyData.values()) {
             Voleyball p = new Voleyball();
-            p.setIdvoleyball(Integer.parseInt(f.getId()));
+            p.setIdplayground(Integer.parseInt(f.getId()));
             p.setName(f.getName());
             p.setLatitude(f.getLattitude());
             p.setLongitude(f.getLongitude());
@@ -41,7 +41,7 @@ public class VoleballRepositoryImpl implements VoleyballRepository {
         for (VoleyData f: VoleyData.values()) {
             if(f.getId().equals(id)){
                 p = new Voleyball();
-                p.setIdvoleyball(Integer.parseInt(f.getId()));
+                p.setIdplayground(Integer.parseInt(f.getId()));
                 p.setName(f.getName());
                 p.setLatitude(f.getLattitude());
                 p.setLongitude(f.getLongitude());

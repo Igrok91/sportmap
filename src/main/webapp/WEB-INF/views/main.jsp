@@ -69,20 +69,35 @@
                 <div class="modal-body">
 
                     <div class="list-group" id="listGroupsCreate">
-    <%--                    <a href="#" class="list-group-item borderless">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40" height="40"/>
-                                </div>
+                        <c:forEach var="group" items="${allPlaygroundUser}">
+                            <a href="create?playgroundId=${group.idplayground}&sport=${group.getSubject()}" class="list-group-item borderless">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <c:if test="${group.getSubject() == 'Футбол'}">
+                                            <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
+                                                 height="40"/>
+                                        </c:if>
+                                        <c:if test="${group.getSubject() == 'Баскетбол'}">
+                                            <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
+                                                 height="40"/>
+                                        </c:if>
+                                        <c:if test="${group.getSubject() == 'Волейбол'}">
+                                            <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="40"
+                                                 height="40"/>
+                                        </c:if>
+
+                                    </div>
 
 
-                                <div class="media-body " >
-                                    <h4 class="media-heading" style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">У Школы № 29</h4>
-                                    <span  style="color: gray" >Футбол</span>
-                                    <hr>
+                                    <div class="media-body ">
+                                        <h4 class="media-heading"
+                                            style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.name}</h4>
+                                        <span style="color: gray">${group.getSubject()}</span>
+                                        <hr>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>--%>
+                            </a>
+                        </c:forEach>
 
                     </div>
                 </div>
@@ -165,14 +180,10 @@
         $('#li5').attr('class', '');
     }
 
-
+    var allPlaygroundUser = ${sessionUser.allPlaygroundUser};
 
     if (allPlaygroundUser.length != 0) {
         $('#create').attr('data-target', '#exampleModal');
-        allPlaygroundUser.map(function(playground, i) {
-            var list = document.getElementById('listGroupsCreate');
-            list.appendChild(getElementList(playground, i, "create"));
-        });
     } else {
         $('#create').attr('data-target', '#falseModal');
     }

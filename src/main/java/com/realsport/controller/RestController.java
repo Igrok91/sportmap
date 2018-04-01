@@ -77,6 +77,11 @@ public class RestController {
         eventsService.deleteCommentFromEvent(commentId, eventId);
     }
 
+    @RequestMapping("editUserInfo")
+    public void editUserInfo(@RequestParam(value="userInfo", required=false, defaultValue="World") String userInfo) {
+        userService.editUserInfo(userInfo);
+    }
+
     @RequestMapping("/handleAnswerMain")
     @ResponseBody
     public Boolean handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
@@ -196,7 +201,7 @@ public class RestController {
         String userId = (String) httpSession.getAttribute("userId");
         user.getCount().put(eventId, Integer.valueOf(count));
        // eventsService.addCountIgrokFromUser(userId, eventId, Integer.valueOf(count));
-        eventsService.addIgrokToListFromUser(eventId, userId + "add", count);
+        eventsService.addIgrokToListFromUser(eventId, userId + "_add", count);
     }
 
 

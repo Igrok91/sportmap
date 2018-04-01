@@ -128,8 +128,11 @@
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
                                                 </a></li>
-                                                <li><a href="deleteGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-off"
-                                                                      style="margin-right: 20px"></span>Завершить
+                                                <li><a href="endGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-off"
+                                                                                                     style="margin-right: 20px"></span>Завершить
+                                                    опрос</a></li>
+                                                <li><a href="deleteGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-trash"
+                                                                                                        style="margin-right: 20px"></span>Удалить
                                                     опрос</a></li>
 
                                             </c:when>
