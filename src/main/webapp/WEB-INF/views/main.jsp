@@ -179,10 +179,10 @@
         $('#li4').attr('class', '');
         $('#li5').attr('class', '');
     }
+    var sessUser =  ${sessionUser};
+    var allPlayUser = sessUser.allPlaygroundUser;
 
-    var allPlaygroundUser = ${sessionUser.allPlaygroundUser};
-
-    if (allPlaygroundUser.length != 0) {
+    if (allPlayUser.length != 0) {
         $('#create').attr('data-target', '#exampleModal');
     } else {
         $('#create').attr('data-target', '#falseModal');

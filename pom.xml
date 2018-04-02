@@ -82,6 +82,12 @@
             <version>24.0-jre</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-datastore</artifactId>
+            <version>1.22.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

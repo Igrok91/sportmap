@@ -72,7 +72,7 @@
 
                                 <div class="media-body ">
                                     <h4 class="media-heading"
-                                        style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.name}</h4>
+                                        style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.getName()}</h4>
                                     <span style="color: gray">${group.getSubject()}</span>
                                     <hr>
                                 </div>
