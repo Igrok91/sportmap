@@ -1,12 +1,17 @@
 package com.realsport.model.service;
 
+import com.realsport.model.dao.DatabaseService;
 import com.realsport.model.entityDao.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class EventsService {
+
+    @Autowired
+    private DatabaseService databaseService;
 
     public static final String FOOTBALL = "Футбол";
     public static final String BASKETBALL = "Баскетбол";
@@ -25,6 +30,7 @@ public class EventsService {
     }
 
     public void publishEvent(Event game, String userId) {
+            databaseService.publishEvent(game);
             game.setIdEvent("2323");
             //listFoot.add(game);
     }
