@@ -3,6 +3,7 @@ package com.realsport.controller;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
+import com.realsport.model.dao.DatabaseService;
 import com.realsport.model.dao.daoException.DataBaseException;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.*;
@@ -62,6 +63,7 @@ public class StartController {
 
     @Autowired
     private UserService userService;
+
 
     @Autowired
     HttpSession httpSession;
