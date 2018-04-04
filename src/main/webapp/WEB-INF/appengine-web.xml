@@ -22,8 +22,10 @@
     <max-instances>11</max-instances>
     <idle-timeout>11m</idle-timeout>
   </basic-scaling>-->
-  <static-error-handlers>
+<!--  <static-error-handlers>
     <handler file="resources/error.html" />
-  </static-error-handlers>
+  </static-error-handlers>-->
+  <sessions-enabled>true</sessions-enabled>
+  <async-session-persistence enabled="true" />
 </appengine-web-app>
 <!-- [END config] -->

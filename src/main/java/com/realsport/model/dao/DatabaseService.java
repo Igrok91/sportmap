@@ -1,15 +1,11 @@
 package com.realsport.model.dao;
 
-import com.google.auth.Credentials;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.datastore.*;
-import com.google.common.collect.Lists;
 import com.realsport.model.entityDao.Event;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.util.Date;
 
 @Service
 public class DatabaseService {
@@ -25,8 +21,8 @@ public class DatabaseService {
 
     {
         GoogleCredentials credentials = GoogleCredentials.newBuilder().setAccessToken(new AccessToken(API_KEY, null)).build();
-        options = DatastoreOptions.newBuilder().setCredentials(credentials).setProjectId(PROJECT_ID).setNamespace(NAMESPACE).build();
-        datastore = options.getService();
+        options = DatastoreOptions.newBuilder().setProjectId(PROJECT_ID).setNamespace(NAMESPACE).build();
+        datastore = DatastoreOptions.getDefaultInstance().getService();
         keyFactory = datastore.newKeyFactory();
 
     }

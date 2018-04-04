@@ -3,7 +3,6 @@ package com.realsport.controller;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
-import com.realsport.model.dao.DatabaseService;
 import com.realsport.model.dao.daoException.DataBaseException;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.*;
@@ -21,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -88,8 +88,8 @@ public class StartController {
                     isFirst = true;
                     setUserDataToModel(user, model);
                 }
-                httpSession.setAttribute("user", user);
-                httpSession.setAttribute("userId", id);
+                httpSession.getServletContext().setAttribute("user", user);
+                httpSession.getServletContext().setAttribute("userId", id);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -122,8 +122,6 @@ public class StartController {
         httpSession.setAttribute("eventListActive", gson.toJson(user.getEventListActive()));
 
         model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
-
-
     }
 
     private List<Playground> getAllPlaygroundUser(User user) {
@@ -425,7 +423,7 @@ public class StartController {
     }
 
     @RequestMapping("/create")
-    public String toCreate(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport,
+    public String toCreate(Model model,  @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport,
                            @RequestParam(value="eventId", required = false, defaultValue = "null") String eventId) {
         if (sport.equals("Футбол")) {
             for (Playfootball playfootball : playfootballList) {
@@ -606,7 +604,7 @@ public class StartController {
                 ,@RequestParam(name = "namePlayground") String  namePlayground
             ,@RequestParam(name = "templateId", required = false, defaultValue = "0") String  templateId
             ,@RequestParam(name = "eventId", required = false, defaultValue = "null") String  eventId)  throws IOException {
-        String userId = (String) httpSession.getAttribute("userId");
+        String userId = (String) httpSession.getServletContext().getAttribute("userId");
         Event game;
         if (templateId.equals("0")) {
             game = new Event();
