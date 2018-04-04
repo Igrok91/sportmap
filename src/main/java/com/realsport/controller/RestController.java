@@ -63,6 +63,7 @@ public class RestController {
         comment.setCommentId(String.valueOf(commentId));
         List<Comment> list = eventsService.getCommentFromEventById(eventId);
         list.add(comment);
+
         return list;
     }
 
@@ -97,13 +98,14 @@ public class RestController {
             if (b.equals(Boolean.TRUE)) {
                 user.getEventListActive().put(eventId, Boolean.FALSE);
                 eventsService.editUserAnswer(eventId, userId, Boolean.FALSE);
-
+                httpSession.setAttribute("user", user);
                 eventsService.deleteUserFromList(eventId, userId);
                 return Boolean.FALSE;
             } else {
                 user.getEventListActive().put(eventId, Boolean.TRUE); // TODO
                 eventsService.editUserAnswer(eventId, userId, Boolean.TRUE);
                 eventsService.addUserToList(eventId, userId);
+                httpSession.setAttribute("user", user);
                 return Boolean.TRUE;
             }
         }
@@ -124,8 +126,10 @@ public class RestController {
                 user.getEventListActive().put(eventId, Boolean.TRUE); // TODO
                 eventsService.editUserAnswer(eventId, userId, Boolean.TRUE);
                 eventsService.addUserToList(eventId, userId);
+                httpSession.setAttribute("user", user);
                 return Boolean.TRUE;
             }
+
         }
         return Boolean.FALSE;
     }
@@ -200,7 +204,7 @@ public class RestController {
                 isParticipant = Boolean.FALSE;
             }
         }
-
+        httpSession.setAttribute("user", user);
      return isParticipant;
     }
 
@@ -213,6 +217,7 @@ public class RestController {
         user.getCount().put(eventId, Integer.valueOf(count));
        // eventsService.addCountIgrokFromUser(userId, eventId, Integer.valueOf(count));
         eventsService.addIgrokToListFromUser(eventId, userId + "_add", count);
+        httpSession.setAttribute("user", user);
     }
 
 

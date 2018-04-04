@@ -48,6 +48,7 @@ public class StartController {
     public static final String FOOTBALL = "football";
     public static final String BASKETBALL = "basketball";
     public static final String VOLEYBALL = "voleyball";
+    public static final int INACTIVE_INTERVAL = 1800;
 
     private static final Integer ADMIN = 172924708;
 
@@ -75,6 +76,8 @@ public class StartController {
 
     @RequestMapping(value = "/start")
     public String onStart(Model model, @RequestParam(value = "viewer_id", required = false) String id, @RequestParam(value = "access_token", required = false) String access_token) {
+        httpSession.setMaxInactiveInterval(INACTIVE_INTERVAL);
+        httpSession.setMaxInactiveInterval(INACTIVE_INTERVAL);
         User user = null;
         boolean isFirst = false;
         if (id != null) {

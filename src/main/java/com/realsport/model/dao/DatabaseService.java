@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 
+import static com.realsport.model.dao.Persistence.getKeyFactory;
 
 
 @Service
@@ -38,8 +39,8 @@ public class DatabaseService {
         }*/
 
         //options = DatastoreOptions.newBuilder().setCredentials(credentials).setNamespace(EVENT).build();
-        datastore = DatastoreOptions.getDefaultInstance().getService();
-        keyFactory = datastore.newKeyFactory();
+        //datastore = DatastoreOptions.getDefaultInstance().getService();
+        //keyFactory = datastore.newKeyFactory();
 
     }
 
@@ -48,6 +49,7 @@ public class DatabaseService {
 
 
     public void publishEvent(Event game) {
+        //KeyFactory  keyFactory = getKeyFactory(EVENT);
         keyFactory.setKind(EVENT);
         //Key key = datastore.allocateId(keyFactory.newKey());
         Transaction tx = datastore.newTransaction();

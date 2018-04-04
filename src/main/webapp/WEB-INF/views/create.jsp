@@ -315,7 +315,6 @@
             success: function (response) {
 
                 var description = response.description;
-                alert(description);
                 var template = {
                     templateId: response.templateId,
                     description: description,
