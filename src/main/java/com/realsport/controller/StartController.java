@@ -88,8 +88,8 @@ public class StartController {
                     isFirst = true;
                     setUserDataToModel(user, model);
                 }
-                httpSession.getServletContext().setAttribute("user", user);
-                httpSession.getServletContext().setAttribute("userId", id);
+                httpSession.setAttribute("user", user);
+                httpSession.setAttribute("userId", id);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -604,7 +604,7 @@ public class StartController {
                 ,@RequestParam(name = "namePlayground") String  namePlayground
             ,@RequestParam(name = "templateId", required = false, defaultValue = "0") String  templateId
             ,@RequestParam(name = "eventId", required = false, defaultValue = "null") String  eventId)  throws IOException {
-        String userId = (String) httpSession.getServletContext().getAttribute("userId");
+        String userId = (String) httpSession.getAttribute("userId");
         Event game;
         if (templateId.equals("0")) {
             game = new Event();

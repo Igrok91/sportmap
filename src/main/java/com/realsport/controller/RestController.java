@@ -86,7 +86,7 @@ public class RestController {
     @ResponseBody
     public Boolean handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
 
-        User user = (User)httpSession.getServletContext().getAttribute("user");
+        User user = (User)httpSession.getAttribute("user");
         System.out.println(user);
         String userId = (String) httpSession.getAttribute("userId");
         if (user != null) {
@@ -112,7 +112,7 @@ public class RestController {
     public Boolean handleAnswer2(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
         User user = (User)httpSession.getAttribute("user");
         System.out.println(user);
-        String userId = (String) httpSession.getServletContext().getAttribute("userId");
+        String userId = (String) httpSession.getAttribute("userId");
         if (user != null) {
             Boolean b = user.getEventListActive().get(eventId);
             if (b.equals(Boolean.TRUE)) {
@@ -132,7 +132,7 @@ public class RestController {
     public Boolean handleGroup(@RequestParam(value="playgroundId", required=false, defaultValue="1") String playgroundId,
                                @RequestParam(value="sport", required=false, defaultValue=" Футбол") String sport) {
         User user = (User)httpSession.getAttribute("user");
-        String userId = (String) httpSession.getServletContext().getAttribute("userId");
+        String userId = (String) httpSession.getAttribute("userId");
         Boolean isParticipant = false;
         if (sport.equals(FOOTBALL)) {
             String id = FluentIterable.from(user.getPlaygroundFootballList()).filter(new Predicate<String>() {
@@ -219,7 +219,7 @@ public class RestController {
         game.setCountAnswer(sel2.equals("infinity") ? 0 : Integer.valueOf(sel2));
         game.setDuration(sel1.substring(0, 1));
 
-        String userId = (String)httpSession.getServletContext().getAttribute("userId");
+        String userId = (String)httpSession.getAttribute("userId");
 
         String minText = getMinText(descr);
         int id = userService.saveTemplateUser(game, userId);
