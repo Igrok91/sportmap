@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.realsport.model.dao.DatabaseService;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.TemplateGame;
@@ -12,6 +13,8 @@ import com.realsport.model.service.EventsService;
 import com.realsport.model.service.UserService;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +27,7 @@ import java.util.List;
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
 
-
+    private Logger logger = LoggerFactory.getLogger(RestController.class);
     public static final String FOOTBALL = "Футбол";
     public static final String BASKETBALL = "Баскетбол";
     public static final String VOLEYBALL = "Волейбол";
@@ -132,7 +135,10 @@ public class RestController {
     public Boolean handleGroup(@RequestParam(value="playgroundId", required=false, defaultValue="1") String playgroundId,
                                @RequestParam(value="sport", required=false, defaultValue=" Футбол") String sport) {
         User user = (User)httpSession.getAttribute("user");
+
         String userId = (String) httpSession.getAttribute("userId");
+        System.out.println("user" + user);
+        System.out.println(userId);
         Boolean isParticipant = false;
         if (sport.equals(FOOTBALL)) {
             String id = FluentIterable.from(user.getPlaygroundFootballList()).filter(new Predicate<String>() {
@@ -141,6 +147,7 @@ public class RestController {
                     return id.equals(playgroundId);
                 }
             }).first().orNull();
+            System.out.println("id= " + id);
             if (id == null) {
                 user.getPlaygroundFootballList().add(playgroundId);
                 eventsService.addPlaygroundToUser(userId, playgroundId);

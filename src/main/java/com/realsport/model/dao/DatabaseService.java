@@ -2,14 +2,21 @@ package com.realsport.model.dao;
 
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.datastore.*;
 import com.realsport.model.entityDao.Event;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.io.*;
+
 
 
 @Service
 public class DatabaseService {
 
+    private Logger logger = LoggerFactory.getLogger(DatabaseService.class);
     private static final String PROJECT_ID = "testdatastore-199913";
     private static final String NAMESPACE = "sportMap";
     private static final String EVENT = "Event";
@@ -20,8 +27,17 @@ public class DatabaseService {
     private KeyFactory keyFactory;
 
     {
-        GoogleCredentials credentials = GoogleCredentials.newBuilder().setAccessToken(new AccessToken(API_KEY, null)).build();
-        options = DatastoreOptions.newBuilder().setProjectId(PROJECT_ID).setNamespace(NAMESPACE).build();
+      /*  GoogleCredentials credentials = null;
+        File credentialsPath = new File("src/main/resources/TestDatastore-a80d177b4553.json");
+        try (FileInputStream serviceAccountStream = new FileInputStream(this.getClass().getResource("/TestDatastore-a80d177b4553.json").getFile())) {
+            credentials = GoogleCredentials.fromStream(serviceAccountStream).toBuilder().setAccessToken(new AccessToken(API_KEY, null)).build();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        //options = DatastoreOptions.newBuilder().setCredentials(credentials).setNamespace(EVENT).build();
         datastore = DatastoreOptions.getDefaultInstance().getService();
         keyFactory = datastore.newKeyFactory();
 
@@ -42,7 +58,10 @@ public class DatabaseService {
                     .set("playgroundName", game.getPlaygroundName())
                     .set("playgroundId", game.getPlaygroundId())
                     .build();
-            tx.add(task);
+            Entity entity = tx.add(task);
+            game.setIdEvent(entity.getKey().getId().toString());
+            System.out.println("IdEvent" +game.getIdEvent());
+            logger.info("IdEvent" + game.getIdEvent());
             tx.commit();
         } finally {
             if (tx.isActive()) {
