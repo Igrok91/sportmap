@@ -1,6 +1,6 @@
 package com.realsport.model.service;
 
-import com.realsport.model.dao.DatabaseService;
+import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.entityDao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.*;
 public class EventsService {
 
     @Autowired
-    private DatabaseService databaseService;
+    private DatastoreService databaseService;
 
     public static final String FOOTBALL = "Футбол";
     public static final String BASKETBALL = "Баскетбол";

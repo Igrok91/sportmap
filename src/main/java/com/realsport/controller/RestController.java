@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.realsport.model.dao.DatabaseService;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.TemplateGame;

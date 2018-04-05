@@ -23,7 +23,7 @@
         /* Remove the navbar's default margin-bottom and rounded borders */
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 510px}
+        .row.content {height: 650px}
 
         /* Set black background color, white text and some padding */
 
@@ -31,10 +31,9 @@
 
         /* On small screens, set height to 'auto' for sidenav and grid */
         @media screen and (max-width: 480px) {
-       /*     .sidenav {
+           .sidenav {
                 height: auto;
-                padding: 15px;
-            }*/
+            }
 
 /*            .row.content {height:auto;}*/
             #pac-input {
@@ -70,7 +69,7 @@
     </div>
 </nav>--%>
 <header>
-    <nav class="nav navbar-static-top navbar-default">
+    <nav class="nav navbar-static-top navbar-default navSportMap">
         <div class="container-fluid ">
             <div class="pull-left" >
                 <a class="navbar-brand" href="#">Поиск</a>

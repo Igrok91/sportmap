@@ -1,31 +1,28 @@
 package com.realsport.model.dao;
 
-import com.google.auth.oauth2.AccessToken;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.datastore.*;
 import com.realsport.model.entityDao.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.*;
-
-import static com.realsport.model.dao.Persistence.getKeyFactory;
 
 
 @Service
-public class DatabaseService {
+public class DatastoreService {
 
-    private Logger logger = LoggerFactory.getLogger(DatabaseService.class);
+    private Logger logger = LoggerFactory.getLogger(DatastoreService.class);
     private static final String PROJECT_ID = "testdatastore-199913";
     private static final String NAMESPACE = "sportMap";
-    private static final String EVENT = "Event";
+    private static final String EVENT = "Events";
     private static final String API_KEY = "AIzaSyAsU2pmAvoBerONIfy-nvtyLpSFKOAFWI8";
 
     private DatastoreOptions options;
     private Datastore datastore;
     private KeyFactory keyFactory;
+
+    @Autowired
+    private Events events;
 
     {
       /*  GoogleCredentials credentials = null;
@@ -44,32 +41,15 @@ public class DatabaseService {
 
     }
 
-    public DatabaseService() {
+    public DatastoreService() {
     }
 
 
     public void publishEvent(Event game) {
         //KeyFactory  keyFactory = getKeyFactory(EVENT);
-        keyFactory.setKind(EVENT);
+       // keyFactory.setKind(EVENT);
         //Key key = datastore.allocateId(keyFactory.newKey());
-        Transaction tx = datastore.newTransaction();
-        try {
-            FullEntity task = FullEntity.newBuilder(keyFactory.newKey())
-                    .set("description", StringValue.newBuilder(game.getDescription()).setExcludeFromIndexes(true).build())
-                    .set("userIdCreator", game.getUserIdCreator())
-                    .set("playgroundName", game.getPlaygroundName())
-                    .set("playgroundId", game.getPlaygroundId())
-                    .build();
-            Entity entity = tx.add(task);
-            game.setIdEvent(entity.getKey().getId().toString());
-            System.out.println("IdEvent" +game.getIdEvent());
-            logger.info("IdEvent" + game.getIdEvent());
-            tx.commit();
-        } finally {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-        }
+        events.publishEvent(game);
 
     }
 }

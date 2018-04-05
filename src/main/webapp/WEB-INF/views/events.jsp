@@ -39,7 +39,7 @@
 </a>
 
 
-<nav class="navbar navbar-static-top navbar-default">
+<nav class="navbar navbar-static-top navbar-default" >
     <div class="container-fluid ">
         <div class="pull-left">
             <a class="navbar-brand" href="#">События</a>
@@ -408,6 +408,7 @@
                 }
             }
         });
+
     }
 
 
@@ -636,6 +637,7 @@
 
 
     }
+
 
 
 

@@ -14,7 +14,8 @@ public class Persistence {
 
     public static Datastore getDatastore() {
         if (datastore.get() == null) {
-            datastore.set(DatastoreOptions.newBuilder().setProjectId(PROJECT_ID).build().getService());
+            //datastore.set(DatastoreOptions.newBuilder().setProjectId(PROJECT_ID).build().getService());
+            datastore.set(DatastoreOptions.getDefaultInstance().getService());
         }
 
         return datastore.get();

@@ -56,6 +56,10 @@
             }
             #web {
                 visibility: visible;
+
+            }
+            .navSportMap {
+                padding-top: 50px;
             }
 
 
@@ -71,7 +75,22 @@
     </style>
 </head>
 <body>
+<header>
+    <nav class="nav navbar-default navbar-fixed-top  " role="navigation" id="web">
+        <div class="container-fluid">
+            <div class="btn-group btn-group-justified">
+                <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
+                    <li id="li1" class="active " ><a id="events"><span class="glyphicon glyphicon-calendar" aria-hidden=""></span>  События<span class="sr-only">(current)</span></a></li>
+                    <li id="li2"><a id="searchPlayground"><span class="glyphicon glyphicon-search" aria-hidden=""></span>  Площадки</a></li>
+                    <li id="li3"><a id="create" data-toggle="modal" data-target="#exampleModal" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="Создать"></span></a></li>
+                    <li id="li4"><a id="groups"><span class="glyphicon glyphicon-th-list" aria-hidden=""></span>  Группы</a></li>
+                    <li id="li5"><a id="profile"><span class="glyphicon glyphicon-user" aria-hidden=""></span>  Профиль</a></li>
+                </ul>
 
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</header>
 
 <footer class="container-fluid text-center navbar-fixed-bottom" style="margin-bottom: 0px; padding-bottom: 0px">
     <div class="row text-center" id="mobile" style="height: 45px">
@@ -81,13 +100,9 @@
             <a href="#" class="btn" style="padding-top: 13px;"  data-toggle="modal" data-target="#exampleModal"><span class="glyphicon glyphicon-plus-sign " aria-hidden="Создать"></span></a>
             <a id="groupsMobile" class="btn" style="padding-top: 13px;"><span class="glyphicon glyphicon-th-list " aria-hidden=""><span class="tablet"> Группы</span></span></a>
             <a id="profileMobile" class="btn " style="padding-top: 13px;"><span class="glyphicon glyphicon-user  " aria-hidden=""><span class="tablet"> Профиль</span></span></a>
-
-
-
-
-
         </div>
     </div>
+<%--
     <nav class="nav navbar-default navbar-fixed-bottom  " role="navigation" id="web">
         <div class="container-fluid">
             <div class="btn-group btn-group-justified">
@@ -102,6 +117,7 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+--%>
 
 
 </footer>
@@ -119,6 +135,7 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', '');
             $('#li5').attr('class', '');
+            resizeMain();
         });
     });
 
@@ -134,6 +151,7 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', '');
             $('#li5').attr('class', '');
+            resizeEvent();
         });
     });
 
@@ -149,6 +167,7 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', 'active');
             $('#li5').attr('class', '');
+            resizeGroup();
         });
     });
 
@@ -163,6 +182,7 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', '');
             $('#li5').attr('class', 'active');
+            resizeMain();
         });
     });
 

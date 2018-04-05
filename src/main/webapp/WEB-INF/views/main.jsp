@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="resources\switch\switch.css" />
     <script src="resources\switch\switch.js"></script>
 
+
     <style>
         .borderless {
             border: 0 none;
@@ -34,8 +35,8 @@
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     </style>
 </head>
-<body>
-<div>
+<body id="body">
+<div >
 
     <div id="event">
         <c:import url="events.jsp"/>
@@ -129,6 +130,7 @@
         </div>
     </div>
 </div>
+<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
     var el = document.querySelector('.checkbox-switch');
     var el2 = document.querySelector('.checkbox-switch2');
@@ -146,6 +148,7 @@
 
     $(document).ready(function(){
         $('#all2').tooltip({title: "Смотреть всех"});
+
     });
     var returnBack = '${returnBack}';
     if (returnBack == 'map') {
@@ -159,6 +162,7 @@
         $('#li3').attr('class', '');
         $('#li4').attr('class', '');
         $('#li5').attr('class', '');
+        setTimeout('resizeMain()', 300);
 
     } else if (returnBack == 'group') {
         console.log("group");
@@ -171,6 +175,7 @@
         $('#li3').attr('class', '');
         $('#li4').attr('class', 'active');
         $('#li5').attr('class', '');
+        setTimeout('resizeGroup()', 300);
     }  else if (returnBack == 'home') {
         console.log("group");
         document.getElementById("event").className = "";
@@ -182,6 +187,9 @@
         $('#li3').attr('class', '');
         $('#li4').attr('class', '');
         $('#li5').attr('class', '');
+        setTimeout('resizeEvent()', 300);
+    } else {
+        setTimeout('resizeEvent()', 300);
     }
     var sessUser =  ${sessionUser};
     var allPlayUser = sessUser.allPlaygroundUser;
@@ -208,8 +216,37 @@
         });
     });
 
+    VK.init(function() {
+    }, function() {
+        // API initialization failed
+        // Can reload page here
+    }, '5.74');
+
+    function resizeEvent() {
+       //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
+        VK.callMethod('resizeWindow', 1000, $('#event').height() + 10);
+        //VK.callMethod('scrollWindow', 0);
+    }
+
+    function resizeGroup() {
+        var  height =  $('#group').height();
+        if (height < 750) {
+            VK.callMethod('resizeWindow', 1000, 750);
+        } else {
+            VK.callMethod('resizeWindow', 1000, height + 10);
+        }
+    }
+
+    function resizeMain() {
+        //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
+        VK.callMethod('resizeWindow', 1000, 750);
+        //VK.callMethod('scrollWindow', 0);
+    }
+
+
 
 </script>
+
 
 </body>
 </html>

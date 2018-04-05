@@ -32,7 +32,7 @@
 </head>
 <body>
 
-<nav class="nav  navbar-static-top navbar-default" >
+<nav class="nav  navbar-static-top navbar-default " >
     <div class="container-fluid ">
         <div class="navbar-brand ">
             Мои группы
