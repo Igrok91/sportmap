@@ -23,7 +23,10 @@
             margin-top: 9px;
             margin-bottom: 9px;
         }
-
+        body
+        {
+            overflow-y:scroll;
+        }
     </style>
 </head>
 <body >

@@ -27,6 +27,10 @@
             box-shadow: none;
 
         }
+        body
+        {
+            overflow-y:scroll;
+        }
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     </style>
 </head>
