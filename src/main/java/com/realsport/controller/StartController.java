@@ -77,7 +77,6 @@ public class StartController {
     @RequestMapping(value = "/start")
     public String onStart(Model model, @RequestParam(value = "viewer_id", required = false) String id, @RequestParam(value = "access_token", required = false) String access_token) {
         httpSession.setMaxInactiveInterval(INACTIVE_INTERVAL);
-        httpSession.setMaxInactiveInterval(INACTIVE_INTERVAL);
         User user = null;
         boolean isFirst = false;
         if (id != null) {
@@ -857,4 +856,6 @@ public class StartController {
     public ArrayList<String> getVoleyballInfoList() {
         return voleyballInfoList;
     }
+
+
 }
