@@ -23,7 +23,7 @@
         /* Remove the navbar's default margin-bottom and rounded borders */
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {height: 650px}
+        .row.content {height: 550px}
 
         /* Set black background color, white text and some padding */
 
@@ -84,7 +84,7 @@
                     <li  ><a href="#" id="football" style="padding-top: 3px;padding-bottom: 3px;">
                         <div class="media">
                             <div class="pull-left" >
-                                <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
+                                <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20" height="20" style="margin-top: 5px" />
                             </div>
 
 
@@ -96,7 +96,7 @@
                     <li><a href="#" id="basketball">
                         <div class="media">
                             <div class="pull-left"  >
-                                <img src="resources/image/basket.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
+                                <img src="resources/image/basket.png" alt="Футбол" width="20" height="20" style="margin-top: 5px" />
                             </div>
 
 
@@ -108,7 +108,7 @@
                     <li><a href="#" id="voleyball">
                         <div class="media">
                             <div class="pull-left"  >
-                                <img src="resources/image/voley.png" alt="Футбол" width="20" height="20" style="margin-top: 7px" />
+                                <img src="resources/image/voley.png" alt="Футбол" width="20" height="20" style="margin-top: 5px" />
                             </div>
 
 
@@ -212,6 +212,7 @@
     }
     var map;
     function initMap() {
+        console.log('init Maps');
          map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 59.93903 , lng: 30.315828},
             zoom: 11,
@@ -390,8 +391,8 @@
 </script>
 <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
 </script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXkXTJQMPNPInJcJt2yT6pNgzksYfpw1c&libraries=places&callback=initMap">
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXkXTJQMPNPInJcJt2yT6pNgzksYfpw1c&libraries=places">
 </script>
 
 </body>

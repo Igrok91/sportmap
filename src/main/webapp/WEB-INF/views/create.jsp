@@ -92,7 +92,7 @@
                         <div id="panelCreate">
                         <div>
                             <div>
-                                <label for="desc"><span><img src="resources/image/новый3.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
+                                <label for="desc"><span><img src="resources/image/new.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
                             </div>
                             <textarea  type="text" class="form-control borderless " name="descr" placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
                             <hr>

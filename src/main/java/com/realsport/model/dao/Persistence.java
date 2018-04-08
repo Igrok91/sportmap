@@ -28,4 +28,8 @@ public class Persistence {
     public static KeyFactory getKeyFactory(Class<?> c) {
         return getDatastore().newKeyFactory().setKind(c.getSimpleName());
     }
+
+    public static KeyFactory getKeyFactory(String name) {
+        return getDatastore().newKeyFactory().setKind(name);
+    }
 }

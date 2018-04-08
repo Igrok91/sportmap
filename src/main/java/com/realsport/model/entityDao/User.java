@@ -9,15 +9,15 @@ import java.util.Map;
 public class User implements Serializable {
     private String userId;
     private String firstName;
-    private String LastName;
+    private String lastName;
     private String info;
-    private boolean isAdmin;
+    private boolean isAdmin = false;
     private boolean isFake = false;
     private int countFake;
     //Список id площадок
-    private List<String> playgroundFootballList;
-    private List<String> playgroundBasketList;
-    private List<String> playgroundVoleyList;
+    private List<String> playgroundFootballList =  new ArrayList<>();
+    private List<String> playgroundBasketList =  new ArrayList<>();;
+    private List<String> playgroundVoleyList =  new ArrayList<>();;
     //Список id событий и значение проголосовал ли
     private Map<String, Boolean> eventListActive = new HashMap<>();
     //Список id событий и количества игроков от пользователя
@@ -99,11 +99,11 @@ public class User implements Serializable {
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public Map<String, Integer> getCount() {
@@ -128,5 +128,15 @@ public class User implements Serializable {
 
     public void setCountFake(int countFake) {
         this.countFake = countFake;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

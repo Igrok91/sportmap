@@ -1,8 +1,10 @@
 package com.realsport.model.service;
 
+import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,12 +14,19 @@ import java.util.Map;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private DatastoreService databaseService;
+
+    @Autowired
+    private VkService vkService;
+
     public boolean isRegister(String id) {
         return true;
     }
 
     public User getUser(String id) {
-        return getUserStub(id);
+        return databaseService.getUser(id);
     }
 
     private User getUserStub(String id) {
@@ -48,7 +57,9 @@ public class UserService {
     }
 
     public User registerUser(String id) {
-        return null;
+        User user = vkService.getDataUserById(id);
+        databaseService.registerUser(user);
+        return user;
     }
 
     public List<TemplateGame> getTemplatesUserById(String userId) {

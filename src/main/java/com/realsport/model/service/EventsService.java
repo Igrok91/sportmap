@@ -2,6 +2,8 @@ package com.realsport.model.service;
 
 import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.entityDao.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import java.util.*;
 
 @Service
 public class EventsService {
+    private Log logger = LogFactory.getLog(EventsService.class);
 
     @Autowired
     private DatastoreService databaseService;
@@ -16,7 +19,7 @@ public class EventsService {
     public static final String FOOTBALL = "Футбол";
     public static final String BASKETBALL = "Баскетбол";
     public static final String VOLEYBALL = "Волейбол";
-    private List<Event> allFootbalEventSpb = new ArrayList<>();
+    private List<Event> allFootbalEvent = new ArrayList<>();
     private List<Event> allBasketEventSpb = new ArrayList<>();
     private List<Event> allVoleyEventSpb = new ArrayList<>();
 
@@ -31,7 +34,6 @@ public class EventsService {
 
     public void publishEvent(Event game, String userId) {
             databaseService.publishEvent(game);
-            game.setIdEvent("2323");
             //listFoot.add(game);
     }
 
@@ -39,8 +41,9 @@ public class EventsService {
         List<Event> eventList = new ArrayList<>();
         // Достаем из бд активные события.
         if (playgroundFoottUser.size() != 0) {
-            allFootbalEventSpb = getAllFootEventsSpb(playgroundFoottUser);
-            eventList.addAll(allFootbalEventSpb);
+            allFootbalEvent = databaseService.getEventsFootballOfGroupUser(playgroundFoottUser);
+            eventList.addAll(allFootbalEvent);
+            System.out.println("allFootbalEvent" + allFootbalEvent.size());
         }
 
         if (playgroundBaskettUser.size() != 0) {

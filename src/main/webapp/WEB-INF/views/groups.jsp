@@ -45,46 +45,56 @@
 
 
         <div class="row content">
-            <div class="col-md-2">
+            <div class="col-sm-2">
 
             </div>
-            <div class="col-md-8">
-                <div class="list-group" id="listGroupsUser">
-                    <c:forEach var="group" items="${allPlaygroundUser}">
-                        <a href="group?playgroundId=${group.idplayground}&sport=${group.getSubject()}" class="list-group-item borderless">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <c:if test="${group.getSubject() == 'Футбол'}">
-                                        <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
-                                             height="40"/>
-                                    </c:if>
-                                    <c:if test="${group.getSubject() == 'Баскетбол'}">
-                                        <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
-                                             height="40"/>
-                                    </c:if>
-                                    <c:if test="${group.getSubject() == 'Волейбол'}">
-                                        <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="40"
-                                             height="40"/>
-                                    </c:if>
+            <div class="col-sm-8">
+                <c:choose>
+                    <c:when test="${allPlaygroundUser.size() == 0}">
+                        <div class="text-center" style="padding-top: 20px">
+                            <span style="color: gray">У вас пока нет групп <br> Чтобы вступить в группу перейдите в посик <span class="glyphicon glyphicon-search" aria-hidden=""></span></span>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="list-group" id="listGroupsUser">
+                            <c:forEach var="group" items="${allPlaygroundUser}">
+                                <a href="group?playgroundId=${group.idplayground}&sport=${group.getSubject()}" class="list-group-item borderless">
+                                    <div class="media">
+                                        <div class="pull-left">
+                                            <c:if test="${group.getSubject() == 'Футбол'}">
+                                                <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
+                                                     height="40"/>
+                                            </c:if>
+                                            <c:if test="${group.getSubject() == 'Баскетбол'}">
+                                                <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
+                                                     height="40"/>
+                                            </c:if>
+                                            <c:if test="${group.getSubject() == 'Волейбол'}">
+                                                <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="40"
+                                                     height="40"/>
+                                            </c:if>
 
-                                </div>
+                                        </div>
 
 
-                                <div class="media-body ">
-                                    <h4 class="media-heading"
-                                        style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.getName()}</h4>
-                                    <span style="color: gray">${group.getSubject()}</span>
-                                    <hr>
-                                </div>
-                            </div>
-                        </a>
-                    </c:forEach>
-                </div>
+                                        <div class="media-body ">
+                                            <h4 class="media-heading"
+                                                style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.getName()}</h4>
+                                            <span style="color: gray">${group.getSubject()}</span>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </a>
+                            </c:forEach>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+
 
             </div>
 
 
-            <div class="col-md-2">
+            <div class="col-sm-8">
 
             </div>
 
@@ -92,6 +102,7 @@
     </div>
 
 </main>
+<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
 
 

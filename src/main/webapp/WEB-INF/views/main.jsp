@@ -163,6 +163,8 @@
         $('#li4').attr('class', '');
         $('#li5').attr('class', '');
         setTimeout('resizeMain()', 300);
+        initMap();
+        isMapInit = true;
 
     } else if (returnBack == 'group') {
         console.log("group");
@@ -175,7 +177,7 @@
         $('#li3').attr('class', '');
         $('#li4').attr('class', 'active');
         $('#li5').attr('class', '');
-        setTimeout('resizeGroup()', 300);
+        setTimeout('resizeGroups()', 300);
     }  else if (returnBack == 'home') {
         console.log("group");
         document.getElementById("event").className = "";
@@ -196,13 +198,17 @@
 
     if (allPlayUser.length != 0) {
         $('#create').attr('data-target', '#exampleModal');
+        $('#createMobile').attr('data-target', '#exampleModal');
     } else {
         $('#create').attr('data-target', '#falseModal');
+        $('#createMobile').attr('data-target', '#falseModal');
     }
-
     $(function() {
         $('#toSearchPlayground').click(function(event) {
-
+            if (!isMapInit) {
+                initMap();
+                isMapInit = true;
+            }
             document.getElementById("event").className = "hide";
             document.getElementById("prof").className = "hide";
             document.getElementById("group").className = "hide";
@@ -224,22 +230,22 @@
 
     function resizeEvent() {
        //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
-        VK.callMethod('resizeWindow', 1000, $('#event').height() + 10);
+        VK.callMethod('resizeWindow', 900, $('#event').height() + 10);
         //VK.callMethod('scrollWindow', 0);
     }
 
-    function resizeGroup() {
+    function resizeGroups() {
         var  height =  $('#group').height();
-        if (height < 750) {
-            VK.callMethod('resizeWindow', 1000, 750);
+        if (height < 650) {
+            VK.callMethod('resizeWindow', 900, 650);
         } else {
-            VK.callMethod('resizeWindow', 1000, height + 10);
+            VK.callMethod('resizeWindow', 900, height + 10);
         }
     }
 
     function resizeMain() {
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
-        VK.callMethod('resizeWindow', 1000, 750);
+        VK.callMethod('resizeWindow', 900, 650);
         //VK.callMethod('scrollWindow', 0);
     }
 

@@ -1,6 +1,8 @@
 package com.realsport.model.entityDao;
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable{
     private String commentId;
     private String userId;
     private String firstName;

@@ -56,7 +56,7 @@
 
                             </ul>
                         </div>
-                        <span  style="margin-right: 15px"><span><img src="D:\бизнес\Проекты\SportMap\Разработка\icon\новый3.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span> Описание </span><br> <span class="list-group-item-heading">   Го на игру в 18 ?</span>
+                        <span  style="margin-right: 15px"><span><img src="D:\бизнес\Проекты\SportMap\Разработка\icon\new.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span> Описание </span><br> <span class="list-group-item-heading">   Го на игру в 18 ?</span>
                         <br>
                         <div >
                             <span  style="margin-right: 15px"><span><img src="D:\бизнес\Проекты\SportMap\Разработка\icon\опрос.png" width="20" height="20" style="margin-right: 5px"></span> Варианты ответа </span>  <br>

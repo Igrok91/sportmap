@@ -53,273 +53,283 @@
 <div class="container-fluid " >
 
     <div class="row content">
-        <div class="col-md-2">
+        <div class="col-sm-2">
 
         </div>
-        <div class="col-md-8" style="padding-bottom: 45px">
-            <div class="list-group">
-                <c:forEach var="event" items="${listEvents}">
+        <div class="col-sm-8" style="padding-bottom: 45px">
+            <c:choose>
+                <c:when test="${listEvents.size() == 0}">
+                    <div class="text-center">
+                        <span style="color: gray">Нет событий</span>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="list-group">
+                        <c:forEach var="event" items="${listEvents}">
 
 
-                <div class="panel " id="${event.idEvent}">
-                    <div class="panel-heading" style="padding-bottom: 3px; padding-top: 6px">
+                            <div class="panel " id="${event.idEvent}">
+                                <div class="panel-heading" style="padding-bottom: 3px; padding-top: 6px">
 
-                        <div>
-                            <a class="pull-left" href="#" >
-                                <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/playbasket.png"
-                                     alt="Баскетбол" width="40" height="40">
-                            </a>
-
-
-                            <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
-                                <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"> <span
-                                        class="glyphicon glyphicon-option-vertical"></span></a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
-                                    <c:choose>
-                                        <c:when test="${event.userIdCreator == userId}">
-                                            <c:set var="playgroundId" value="${event.playgroundId}" />
-                                            <c:set var="sport" value="${event.sport}" />
-                                            <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
-                                                                                                                                                                            style="margin-right: 20px"></span>Отменить голос</a>
-                                            </li>
-                                            <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
-                                                                                                                                                                        style="margin-right: 20px"></span>Проголосовать</a>
-                                            </li>
-                                       <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
-                                                    class="glyphicon glyphicon-time"
-                                                    style="margin-right: 20px"></span>История
-                                                изменений</a></li>--%>
-                                            <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}"> <span class="glyphicon glyphicon-home"
-                                                                                                                        style="margin-right: 20px"></span>К площадке</a>
-                                            </li>
-                                               <li><a href="event?eventId=${event.idEvent}"> <span class="glyphicon glyphicon-share-alt"
-                                                                        style="margin-right: 20px"></span>К записи</a>
-                                                 </li>
+                                    <div>
+                                        <a class="pull-left" href="#" >
+                                            <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
+                                            <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/playbasket.png"
+                                                 alt="Баскетбол" width="40" height="40">
+                                        </a>
 
 
+                                        <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
+                                            <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"> <span
+                                                    class="glyphicon glyphicon-option-vertical"></span></a>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
+                                                <c:choose>
+                                                    <c:when test="${event.userIdCreator == userId}">
+                                                        <c:set var="playgroundId" value="${event.playgroundId}" />
+                                                        <c:set var="sport" value="${event.sport}" />
+                                                        <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                                                                                                                                                        style="margin-right: 20px"></span>Отменить голос</a>
+                                                        </li>
+                                                        <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                                                                                                                                                    style="margin-right: 20px"></span>Проголосовать</a>
+                                                        </li>
+                                                        <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
+                                                                     class="glyphicon glyphicon-time"
+                                                                     style="margin-right: 20px"></span>История
+                                                                 изменений</a></li>--%>
+                                                        <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}"> <span class="glyphicon glyphicon-home"
+                                                                                                                                    style="margin-right: 20px"></span>К площадке</a>
+                                                        </li>
+                                                        <li><a href="event?eventId=${event.idEvent}"> <span class="glyphicon glyphicon-share-alt"
+                                                                                                            style="margin-right: 20px"></span>К записи</a>
+                                                        </li>
 
 
-                                            <li><a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}">
+
+
+                                                        <li><a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}">
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
-                                            </a></li>
-                                            <li><a href="endGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-off"
-                                                                                                    style="margin-right: 20px"></span>Завершить
-                                                опрос</a></li>
-                                            <li><a href="deleteGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-trash"
-                                                                                                    style="margin-right: 20px"></span>Удалить
-                                                опрос</a></li>
+                                                        </a></li>
+                                                        <li><a href="endGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-off"
+                                                                                                             style="margin-right: 20px"></span>Завершить
+                                                            опрос</a></li>
+                                                        <li><a href="deleteGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-trash"
+                                                                                                                style="margin-right: 20px"></span>Удалить
+                                                            опрос</a></li>
 
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:set var="playgroundId" value="${event.playgroundId}" />
-                                            <c:set var="sport" value="${event.sport}" />
-                                            <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
-                                                                                                                                                                             style="margin-right: 20px"></span>Отменить голос</a>
-                                            </li>
-                                            <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
-                                                                                                                                                                         style="margin-right: 20px"></span>Проголосовать</a>
-                                            </li>
-                                        <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
-                                                                                                                    style="margin-right: 20px"></span>История
-                                                изменений</a></li>--%>
-                                            <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}"> <span class="glyphicon glyphicon-home"
-                                                                                                                        style="margin-right: 20px"></span>К площадке</a>
-                                            </li>
-                                            <li><a href="event?eventId=${event.idEvent}"> <span class="glyphicon glyphicon-share-alt"
-                                                                                                style="margin-right: 20px"></span>К записи</a>
-                                            </li>
-                                        </c:otherwise>
-                                    </c:choose>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:set var="playgroundId" value="${event.playgroundId}" />
+                                                        <c:set var="sport" value="${event.sport}" />
+                                                        <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                                                                                                                                                         style="margin-right: 20px"></span>Отменить голос</a>
+                                                        </li>
+                                                        <li><a href="#" onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                                                                                                                                                     style="margin-right: 20px"></span>Проголосовать</a>
+                                                        </li>
+                                                        <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
+                                                                                                                                    style="margin-right: 20px"></span>История
+                                                                изменений</a></li>--%>
+                                                        <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}"> <span class="glyphicon glyphicon-home"
+                                                                                                                                    style="margin-right: 20px"></span>К площадке</a>
+                                                        </li>
+                                                        <li><a href="event?eventId=${event.idEvent}"> <span class="glyphicon glyphicon-share-alt"
+                                                                                                            style="margin-right: 20px"></span>К записи</a>
+                                                        </li>
+                                                    </c:otherwise>
+                                                </c:choose>
 
-                                </ul>
-                            </div>
-                            <div class="media-body" style="padding-left: 10px">
+                                            </ul>
+                                        </div>
+                                        <div class="media-body" style="padding-left: 10px">
 
-                                <h4 class="media-heading"
-                                    style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.playgroundName}</h4>
-
-
-                                <span style="color: gray">${event.date} сегодня в 13:34</span>
-
-                            </div>
-
-                        </div>
+                                            <h4 class="media-heading"
+                                                style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.playgroundName}</h4>
 
 
-                    </div>
-                    <div style="padding-left: 15px;padding-top: 10px; padding-bottom: 5px">
-                        <a class="pull-left" href="#" >
-                            <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                            <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
-                                 alt="Баскетбол" width="30" height="30">
+                                            <span style="color: gray">${event.date} сегодня в 13:34</span>
 
-                        </a>
-                        <div class="media-body" >
-                            <a href="#" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
-                            </a>
-                        </div>
+                                        </div>
 
-                    </div>
-                    <%--<hr style="margin-bottom: 9px; margin-top: 0px">--%>
-                    <div>
-                        <span style="color: black; padding-left: 17px; padding-right: 17px">${event.description}</span>
-                    </div>
-                    <%--<hr class="hrDescription">--%>
+                                    </div>
 
-                    <div class="panel-body" style="padding-bottom: 0px">
-                        <div class="list-group" style="margin-bottom: 5px">
-                            <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent})" id="answerButton_${event.idEvent}">
-                                <c:choose>
-                                    <c:when test="${event.maxCountAnswer == 0}">
-                                        <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="badge" id="badge2_${event.idEvent}">${event.userList.size()} / ${event.maxCountAnswer} </span>
-                                    </c:otherwise>
-                                </c:choose>
-
-                                <div class="pull-left hide" id="answerOk_${event.idEvent}">
-                                    <span class="glyphicon glyphicon-ok "></span>
-                                </div>
-                                <div class="text-center">
-                                    +
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="btn-group " style="margin-top: 5px">
-                            <div class="container-fluid">
-                                <div class="row" id="imgUserList_${event.idEvent}">
-                                    <c:forEach var="user" items="${event.userList}">
-                                        <c:choose>
-                                            <c:when test="${user.isFake() == true}">
-                                                <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
-                                                    <span id="${user.userId}_add_${event.idEvent}" count="${user.countFake}">+${user.countFake}</span>
-
-                                                </a>
-
-                                            </c:when>
-                                            <c:otherwise>
-                                                <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
-                                                    <img src="resources/image/foot.png" alt="Баскетбол" width="30"
-                                                                 height="30" id="${user.userId}_img_${event.idEvent}">
-                                                </a>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                    </c:forEach>
-
-                                    <c:if test="${event.userList.size() > 7}">
-                                        <a href="#" class="btn" style="color: gray"> <span
-                                                class="glyphicon glyphicon-eye-open"
-                                                style="margin-right: 5px"></span>Все</a>
-                                    </c:if>
 
                                 </div>
+                                <div style="padding-left: 15px;padding-top: 10px; padding-bottom: 5px">
+                                    <a class="pull-left" href="#" >
+                                        <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
+                                        <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
+                                             alt="Баскетбол" width="30" height="30">
 
-                            </div>
+                                    </a>
+                                    <div class="media-body" >
+                                        <a href="#" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                                        </a>
+                                    </div>
 
-
-                        </div>
-
-                    </div>
-
-                    <a href="event?eventId=${event.idEvent}" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
-                            class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
-                            style="color: #77A5C5;margin-right: 5px"></span>
-                        <c:if test="${event.commentsList.size() > 0}">
-                            ${event.commentsList.size()}
-                        </c:if></a>
-                    <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px;margin-bottom: 4px"><span
-                            class="glyphicon glyphicon-bullhorn " aria-hidden="Комментировать"
-                            style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
-
-
-
-
-
-                </div>
-
-                    <div class="modal fade" id="addIgrok_${event.idEvent}">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title">Добавить еще от меня</h4>
                                 </div>
-                                <div class="modal-body">
-                                    <select class="form-control borderless" id="countIgrok_${event.idEvent}" name="sel1">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                       <%-- <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                        <option>10</option>--%>
-                                    </select>
+                                    <%--<hr style="margin-bottom: 9px; margin-top: 0px">--%>
+                                <div>
+                                    <span style="color: black; padding-left: 17px; padding-right: 17px">${event.description}</span>
                                 </div>
+                                    <%--<hr class="hrDescription">--%>
 
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                                    <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent})" class="btn btn-primary">Добавить</a>
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div><!-- /.modal -->
+                                <div class="panel-body" style="padding-bottom: 0px">
+                                    <div class="list-group" style="margin-bottom: 5px">
+                                        <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent})" id="answerButton_${event.idEvent}">
+                                            <c:choose>
+                                                <c:when test="${event.maxCountAnswer == 0}">
+                                                    <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge" id="badge2_${event.idEvent}">${event.userList.size()} / ${event.maxCountAnswer} </span>
+                                                </c:otherwise>
+                                            </c:choose>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="historyChange_${event.idEvent}" tabindex="-1" role="dialog" aria-labelledby="historyChangeLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
+                                            <div class="pull-left hide" id="answerOk_${event.idEvent}">
+                                                <span class="glyphicon glyphicon-ok "></span>
+                                            </div>
+                                            <div class="text-center">
+                                                +
+                                            </div>
+                                        </a>
+                                    </div>
 
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    <h5 class="modal-title" id="historyChangeLabel">История изменений</h5>
-                                </div>
-                                <div class="modal-body">
+                                    <div class="btn-group " style="margin-top: 5px">
+                                        <div class="container-fluid">
+                                            <div class="row" id="imgUserList_${event.idEvent}">
+                                                <c:forEach var="user" items="${event.userList}">
+                                                    <c:choose>
+                                                        <c:when test="${user.isFake() == true}">
+                                                            <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
+                                                                <span id="${user.userId}_add_${event.idEvent}" count="${user.countFake}">+${user.countFake}</span>
 
-                                    <div class="list-group">
-                                        <c:forEach var="history" items="${event.historyEvent}">
-                                            <a href="user?userId=${history.userId}" class="list-group-item borderless">
-                                                <div class="media">
-                                                    <div class="pull-left">
-                                                        <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="40"
-                                                             height="40"/>
-                                                    </div>
+                                                            </a>
 
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
+                                                                <img src="resources/image/foot.png" alt="Баскетбол" width="30"
+                                                                     height="30" id="${user.userId}_img_${event.idEvent}">
+                                                            </a>
+                                                        </c:otherwise>
+                                                    </c:choose>
 
-                                                    <div class="media-body ">
-                                                        <p style="margin-bottom: 0px; padding-bottom: 0px; padding-top: 2px">${history.firstName} ${history.lastName}   ${history.action}</p>
-                                                        <span style="color: gray">${history.date}</span>
-                                                        <hr style="margin-top: 0px; margin-bottom: 0px">
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </c:forEach>
+                                                </c:forEach>
+
+                                                <c:if test="${event.userList.size() > 7}">
+                                                    <a href="#" class="btn" style="color: gray"> <span
+                                                            class="glyphicon glyphicon-eye-open"
+                                                            style="margin-right: 5px"></span>Все</a>
+                                                </c:if>
+
+                                            </div>
+
+                                        </div>
 
 
                                     </div>
+
+                                </div>
+
+                                <a href="event?eventId=${event.idEvent}" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
+                                        class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
+                                        style="color: #77A5C5;margin-right: 5px"></span>
+                                    <c:if test="${event.commentsList.size() > 0}">
+                                        ${event.commentsList.size()}
+                                    </c:if></a>
+                                <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px;margin-bottom: 4px"><span
+                                        class="glyphicon glyphicon-bullhorn " aria-hidden="Комментировать"
+                                        style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
+
+
+
+
+
+                            </div>
+
+                            <div class="modal fade" id="addIgrok_${event.idEvent}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title">Добавить еще от меня</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <select class="form-control borderless" id="countIgrok_${event.idEvent}" name="sel1">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                                    <%-- <option>6</option>
+                                                     <option>7</option>
+                                                     <option>8</option>
+                                                     <option>9</option>
+                                                     <option>10</option>--%>
+                                            </select>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                                            <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent})" class="btn btn-primary">Добавить</a>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="historyChange_${event.idEvent}" tabindex="-1" role="dialog" aria-labelledby="historyChangeLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <h5 class="modal-title" id="historyChangeLabel">История изменений</h5>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="list-group">
+                                                <c:forEach var="history" items="${event.historyEvent}">
+                                                    <a href="user?userId=${history.userId}" class="list-group-item borderless">
+                                                        <div class="media">
+                                                            <div class="pull-left">
+                                                                <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="40"
+                                                                     height="40"/>
+                                                            </div>
+
+
+                                                            <div class="media-body ">
+                                                                <p style="margin-bottom: 0px; padding-bottom: 0px; padding-top: 2px">${history.firstName} ${history.lastName}   ${history.action}</p>
+                                                                <span style="color: gray">${history.date}</span>
+                                                                <hr style="margin-top: 0px; margin-bottom: 0px">
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </c:forEach>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </c:forEach>
+                        </c:forEach>
 
-            </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
 
 
         </div>
 
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
 
     </div>
 </div>

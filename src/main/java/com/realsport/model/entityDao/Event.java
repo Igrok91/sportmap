@@ -1,10 +1,11 @@
 package com.realsport.model.entityDao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Event {
+public class Event implements Serializable{
     private String idEvent;
     private String userIdCreator;
     private String userFirtsNameCreator;

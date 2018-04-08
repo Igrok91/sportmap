@@ -1,6 +1,7 @@
 package com.realsport.model.service;
 
 import com.google.gson.JsonElement;
+import com.realsport.model.entityDao.User;
 import com.realsport.vk.InitVk;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
@@ -21,7 +22,7 @@ import static com.realsport.vk.InitVk.getVk;
  * Created by sbt-ryabtsev-is on 12.07.2017.
  */
 @Service
-public class VkMessageService {
+public class VkService {
 
     private final Random random = new Random();
     private static final Integer ADMIN = 172924708;
@@ -49,5 +50,14 @@ public class VkMessageService {
         } catch (ClientException e) {
             throw e;
         }
+    }
+
+    public User getDataUserById(String id) {
+        User user = new User();
+        user.setUserId(id);
+        user.setFirstName("firstName");
+        user.setLastName("firstName");
+        return user;
+
     }
 }
