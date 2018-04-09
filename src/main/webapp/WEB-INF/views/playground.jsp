@@ -41,11 +41,11 @@
     <div class="container " style="margin-top: 15px">
 
 
-        <div class="row content">
-            <div class="col-md-3">
+        <div class="row content" >
+            <div class="col-sm-2">
 
             </div>
-            <div class="col-md-6">
+            <div class="col-sm-8">
                 <div class="panel " id="panelGroup" >
                     <div class="panel-heading ">
                         <div>
@@ -339,7 +339,7 @@
                     </c:choose>
 
 
-                    <div class="col-md-3">
+                    <div class="col-sm-2">
 
                     </div>
 
@@ -350,16 +350,9 @@
 <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
 
-    function resizeGroup() {
-        var  height =  $('#mainPlayground').height();
-        if (height < 650) {
-            VK.callMethod('resizeWindow', 900, 650);
-        } else {
-            VK.callMethod('resizeWindow', 900, height + 10);
-        }
-    }
 
-    setTimeout('resizeGroup()', 400);
+
+
     var sp = '${sport}';
     if (sp == 'Футбол') {
         $('#panelGroup').addClass('panel-success');
@@ -388,6 +381,15 @@
                 $('#enterToGroup').removeClass('hide');
             }
         });
+    }
+    setTimeout('resizePlayground()', 500);
+    function resizePlayground() {
+        var  height =  $('#mainPlayground').height();
+        if (height < 650) {
+            VK.callMethod('resizeWindow', 900, 650);
+        } else {
+            VK.callMethod('resizeWindow', 900, height + 60);
+        }
     }
 </script>
 </body>

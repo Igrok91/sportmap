@@ -28,7 +28,7 @@ public class FootballRepositoryImpl implements PlayfootballRepository {
             p.setSity(f.getCity());
             p.setStreet(f.getStreet());
             p.setHouse(f.getHouse());
-            p.setSubject(f.getSport());
+            p.setSport(f.getSport());
             list.add(p);
 
         }
@@ -50,7 +50,7 @@ public class FootballRepositoryImpl implements PlayfootballRepository {
                 p.setSity(f.getCity());
                 p.setStreet(f.getStreet());
                 p.setHouse(f.getHouse());
-                p.setSubject(f.getSport());
+                p.setSport(f.getSport());
             }
         }
 

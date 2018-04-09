@@ -13,7 +13,7 @@ public class Playground {
     private String street;
     private String house;
     private byte[] image;
-    private String subject;
+    private String sport;
     private String info;
     private String size;
     private String coating;
@@ -100,12 +100,12 @@ public class Playground {
         this.image = image;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getSport() {
+        return sport;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setSport(String sport) {
+        this.sport = sport;
     }
 
     public String getInfo() {
@@ -165,7 +165,7 @@ public class Playground {
         if (street != null ? !street.equals(that.street) : that.street != null) return false;
         if (house != null ? !house.equals(that.house) : that.house != null) return false;
         if (!Arrays.equals(image, that.image)) return false;
-        if (subject != null ? !subject.equals(that.subject) : that.subject != null) return false;
+        if (sport != null ? !sport.equals(that.sport) : that.sport != null) return false;
         if (info != null ? !info.equals(that.info) : that.info != null) return false;
         if (size != null ? !size.equals(that.size) : that.size != null) return false;
         if (coating != null ? !coating.equals(that.coating) : that.coating != null) return false;
@@ -185,7 +185,7 @@ public class Playground {
         result = 31 * result + (street != null ? street.hashCode() : 0);
         result = 31 * result + (house != null ? house.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(image);
-        result = 31 * result + (subject != null ? subject.hashCode() : 0);
+        result = 31 * result + (sport != null ? sport.hashCode() : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
         result = 31 * result + (size != null ? size.hashCode() : 0);
         result = 31 * result + (coating != null ? coating.hashCode() : 0);

@@ -146,7 +146,7 @@ public enum FootData {
         this.creator = creator;
         this.city = city;
         this.street = street;
-        this.house = house;
+         this.house = house;
         this.sport = sport;
     }
 

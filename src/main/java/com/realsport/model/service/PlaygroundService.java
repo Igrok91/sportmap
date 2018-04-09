@@ -1,5 +1,6 @@
 package com.realsport.model.service;
 
+import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.dao.PlaygroundDao;
 import com.realsport.model.dao.daoException.DataBaseException;
 import com.realsport.model.entityDao.*;
@@ -22,9 +23,21 @@ import static com.realsport.model.service.EventsService.FOOTBALL;
 @Service
 public class PlaygroundService implements PlaygroundDao{
 
+    public static final String FOOTBALL = "Футбол";
+    public static final String BASKETBALL = "Баскетбол";
+    public static final String VOLEYBALL = "Волейбол";
+
+
+    public static final String FOOTBALL_PLAYGROUND = "FootballPlayground";
+    public static final String BASKETBALL_PLAYGROUND = "BasketballPlayground";
+    public static final String VOLEYBALL_PLAYGROUND = "VoleyballPlayground";
+
     @Qualifier("productDao")
     @Autowired
     private PlaygroundDao playgroundDao;
+
+    @Autowired
+    private DatastoreService datastoreService;
 
 
     public PlaygroundService() {
@@ -51,18 +64,12 @@ public class PlaygroundService implements PlaygroundDao{
         return  playgroundDao.getFootballById(id);
     }
 
-    public List<User> getFootballPlayersById(String id) {
-        List<User> userList = new ArrayList<>();
-        User user3 = new User();
-        user3.setUserId("1729247081");
-        User user = new User();
-        user.setUserId("172924708");
-        userList.add(user);
-        userList.add(user3);
-        return userList;
+    public List<User> getFootballPlayersGroupById(String id) {
+
+        return datastoreService.getPlayersGroup(id, FOOTBALL_PLAYGROUND);
     }
 
-    public List<Event> getFootballPlayById(String id) {
+    public List<Event> getFootballEventsById(String id) {
         List<Event>  listFoot= new ArrayList<>();
         Event event = new Event();
         event.setUserIdCreator("172924708");
@@ -91,8 +98,22 @@ public class PlaygroundService implements PlaygroundDao{
         event2.setUserFirtsNameCreator("Рябцев");
         event2.setUserLastNameCreator("Игорь");
         event2.setMaxCountAnswer(21);
+        Event event3 = new Event();
+        event3.setUserIdCreator("172924708");
+        event3.setIdEvent("172924708");
+        event3.setDescription("Го играть в выходные?\n\n\n\n");
+        event3.setMaxCountAnswer(0);
+        event3.setAnswer("+");
+        event3.setDuration("1");
+        event3.setSport(FOOTBALL);
+        event3.setPlaygroundId("15");
+        event3.setPlaygroundName("У Школы №4");
+        event3.setUserFirtsNameCreator("Рябцев");
+        event3.setUserLastNameCreator("Игорь");
+        event3.setMaxCountAnswer(21);
         listFoot.add(event);
         listFoot.add(event2);
+        listFoot.add(event3);
         return listFoot;
     }
 

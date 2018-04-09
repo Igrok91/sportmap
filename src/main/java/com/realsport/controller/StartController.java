@@ -14,8 +14,6 @@ import com.realsport.model.service.VkService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -252,20 +250,28 @@ public class StartController {
     }
 
     @RequestMapping("/groupFromMap")
-    public String toGroup(Model model, @RequestParam(value="playgroundId", required=false, defaultValue="5") String id, @RequestParam(value="sport", required=false, defaultValue=FOOTBALL) String sport) {
+    public String toGroup(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport", required=false, defaultValue=FOOTBALL) String sport) {
         User user = (User) httpSession.getAttribute("user");
+        if (user == null) {
+            return "error";
+        }
         boolean isParticipant = false;
         if (sport.equals(FOOTBALL)) {
-            for (Playfootball playfootball : playfootballList) {
-                if (playfootball.getIdplayground() == Integer.parseInt(id)) {
+            Playfootball playfootball = FluentIterable.from(playfootballList).firstMatch(new Predicate<Playfootball>() {
+                @Override
+                public boolean apply(Playfootball playfootball) {
+                    return playfootball.getIdplayground() == Integer.parseInt(id);
+                }
+            }).get();
+                if (playfootball != null) {
                     model.addAttribute("namePlayground", playfootball.getName() );
                     model.addAttribute("street", playfootball.getStreet() );
                     model.addAttribute("house", playfootball.getHouse() );
-                    model.addAttribute("sport", playfootball.getSubject() );
-                    model.addAttribute("players", playgroundService.getFootballPlayersById(id) );
-                    model.addAttribute("listEvents", playgroundService.getFootballPlayById(id) );
+                    model.addAttribute("sport", playfootball.getSport() );
+                    model.addAttribute("players", playgroundService.getFootballPlayersGroupById(id) );
+                    model.addAttribute("listEvents", eventsService.getFootballEventsById(id) );
                 }
-            }
+
             isParticipant = FluentIterable.from(user.getPlaygroundFootballList()).firstMatch(new Predicate<String>() {
                 @Override
                 public boolean apply(String idPlay) {
@@ -278,7 +284,7 @@ public class StartController {
                     model.addAttribute("namePlayground", basketball.getName() );
                     model.addAttribute("street", basketball.getStreet() );
                     model.addAttribute("house", basketball.getHouse() );
-                    model.addAttribute("sport", basketball.getSubject() );
+                    model.addAttribute("sport", basketball.getSport() );
                     model.addAttribute("players", playgroundService.getBasketballPlayersById(id) );
                     model.addAttribute("listEvents", playgroundService.getBasketballPlayById(id) );
                 }
@@ -295,7 +301,7 @@ public class StartController {
                     model.addAttribute("namePlayground", voleyball.getName() );
                     model.addAttribute("street", voleyball.getStreet() );
                     model.addAttribute("house", voleyball.getHouse() );
-                    model.addAttribute("sport", voleyball.getSubject() );
+                    model.addAttribute("sport", voleyball.getSport() );
                     model.addAttribute("players", playgroundService.getVoleyPlayersById(id) );
                     model.addAttribute("listEvents", playgroundService.getVoleyPlayById(id) );
                 }
@@ -323,9 +329,9 @@ public class StartController {
                     model.addAttribute("namePlayground", playfootball.getName() );
                     model.addAttribute("street", playfootball.getStreet() );
                     model.addAttribute("house", playfootball.getHouse() );
-                    model.addAttribute("sport", playfootball.getSubject() );
-                    model.addAttribute("players", playgroundService.getFootballPlayersById(id) );
-                    model.addAttribute("listEvents", playgroundService.getFootballPlayById(id) );
+                    model.addAttribute("sport", playfootball.getSport() );
+                    model.addAttribute("players", playgroundService.getFootballPlayersGroupById(id) );
+                    model.addAttribute("listEvents", playgroundService.getFootballEventsById(id) );
                 }
             }
             isParticipant = FluentIterable.from(user.getPlaygroundFootballList()).firstMatch(new Predicate<String>() {
@@ -340,7 +346,7 @@ public class StartController {
                     model.addAttribute("namePlayground", basketball.getName() );
                     model.addAttribute("street", basketball.getStreet() );
                     model.addAttribute("house", basketball.getHouse() );
-                    model.addAttribute("sport", basketball.getSubject() );
+                    model.addAttribute("sport", basketball.getSport() );
                     model.addAttribute("players", playgroundService.getBasketballPlayersById(id) );
                     model.addAttribute("listEvents", playgroundService.getBasketballPlayById(id) );
                 }
@@ -357,7 +363,7 @@ public class StartController {
                     model.addAttribute("namePlayground", voleyball.getName() );
                     model.addAttribute("street", voleyball.getStreet() );
                     model.addAttribute("house", voleyball.getHouse() );
-                    model.addAttribute("sport", voleyball.getSubject() );
+                    model.addAttribute("sport", voleyball.getSport() );
                     model.addAttribute("players", playgroundService.getVoleyPlayersById(id) );
                     model.addAttribute("listEvents", playgroundService.getVoleyPlayById(id) );
                 }
@@ -386,9 +392,9 @@ public class StartController {
                     model.addAttribute("namePlayground", playfootball.getName() );
                     model.addAttribute("street", playfootball.getStreet() );
                     model.addAttribute("house", playfootball.getHouse() );
-                    model.addAttribute("sport", playfootball.getSubject() );
-                    model.addAttribute("players", playgroundService.getFootballPlayersById(id) );
-                    model.addAttribute("listEvents", playgroundService.getFootballPlayById(id) );
+                    model.addAttribute("sport", playfootball.getSport() );
+                    model.addAttribute("players", playgroundService.getFootballPlayersGroupById(id) );
+                    model.addAttribute("listEvents", playgroundService.getFootballEventsById(id) );
                 }
             }
             isParticipant = FluentIterable.from(user.getPlaygroundFootballList()).firstMatch(new Predicate<String>() {
@@ -403,7 +409,7 @@ public class StartController {
                     model.addAttribute("namePlayground", basketball.getName() );
                     model.addAttribute("street", basketball.getStreet() );
                     model.addAttribute("house", basketball.getHouse() );
-                    model.addAttribute("sport", basketball.getSubject() );
+                    model.addAttribute("sport", basketball.getSport() );
                     model.addAttribute("players", playgroundService.getBasketballPlayersById(id) );
                     model.addAttribute("listEvents", playgroundService.getBasketballPlayById(id) );
                 }
@@ -420,7 +426,7 @@ public class StartController {
                     model.addAttribute("namePlayground", voleyball.getName() );
                     model.addAttribute("street", voleyball.getStreet() );
                     model.addAttribute("house", voleyball.getHouse() );
-                    model.addAttribute("sport", voleyball.getSubject() );
+                    model.addAttribute("sport", voleyball.getSport() );
                     model.addAttribute("players", playgroundService.getVoleyPlayersById(id) );
                     model.addAttribute("listEvents", playgroundService.getVoleyPlayById(id) );
                 }
@@ -450,9 +456,9 @@ public class StartController {
                     model.addAttribute("playId", playfootball.getIdplayground() );
                     model.addAttribute("street", playfootball.getStreet() );
                     model.addAttribute("house", playfootball.getHouse() );
-                    model.addAttribute("sport", playfootball.getSubject() );
-                    model.addAttribute("players", playgroundService.getFootballPlayersById(id) );
-                    model.addAttribute("plays", playgroundService.getFootballPlayById(id) );
+                    model.addAttribute("sport", playfootball.getSport() );
+                    model.addAttribute("players", playgroundService.getFootballPlayersGroupById(id) );
+                    model.addAttribute("plays", playgroundService.getFootballEventsById(id) );
                 }
             }
         } else if (sport.equals("Баскетбол")) {
@@ -462,7 +468,7 @@ public class StartController {
                     model.addAttribute("playId", basketball.getIdplayground() );
                     model.addAttribute("street", basketball.getStreet() );
                     model.addAttribute("house", basketball.getHouse() );
-                    model.addAttribute("sport", basketball.getSubject() );
+                    model.addAttribute("sport", basketball.getSport() );
                     model.addAttribute("players", playgroundService.getBasketballPlayersById(id) );
                     model.addAttribute("plays", playgroundService.getBasketballPlayById(id) );
                 }
@@ -474,7 +480,7 @@ public class StartController {
                     model.addAttribute("playId", voleyball.getIdplayground() );
                     model.addAttribute("street", voleyball.getStreet() );
                     model.addAttribute("house", voleyball.getHouse() );
-                    model.addAttribute("sport", voleyball.getSubject() );
+                    model.addAttribute("sport", voleyball.getSport() );
                     model.addAttribute("players", playgroundService.getVoleyPlayersById(id) );
                     model.addAttribute("plays", playgroundService.getVoleyPlayById(id) );
                 }
@@ -735,7 +741,7 @@ public class StartController {
             map.put("link", p.getLinks());
             map.put("creator", p.getСreator());
             map.put("id", p.getIdplayground());
-            map.put("sport", p.getSubject());
+            map.put("sport", p.getSport());
             String json = gson.toJson(map);
             mapArrayList.add(json);
 
@@ -760,7 +766,7 @@ public class StartController {
             map.put("link", p.getLinks());
             map.put("creator", p.getСreator());
             map.put("id", p.getIdplayground());
-            map.put("sport", p.getSubject());
+            map.put("sport", p.getSport());
             String json = gson.toJson(map);
             mapArrayList.add(json);
         }
@@ -785,7 +791,7 @@ public class StartController {
             map.put("link", p.getLinks());
             map.put("creator", p.getСreator());
             map.put("id", p.getIdplayground());
-            map.put("sport", p.getSubject());
+            map.put("sport", p.getSport());
 
             String json = gson.toJson(map);
             mapArrayList.add(json);

@@ -174,7 +174,7 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', 'active');
             $('#li5').attr('class', '');
-            resizeGroup();
+            resizeGroups();
         });
     });
 

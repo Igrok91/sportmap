@@ -28,7 +28,7 @@ public class BasketRepositoryImpl implements BasketballRepository{
             p.setSity(f.getCity());
             p.setStreet(f.getStreet());
             p.setHouse(f.getHouse());
-            p.setSubject(f.getSubject());
+            p.setSport(f.getSubject());
             list.add(p);
 
         }

@@ -256,4 +256,8 @@ public class EventsService {
     public void endGame(String eventId) {
 
     }
+
+    public List<Event> getFootballEventsById(String id) {
+        return null;
+    }
 }

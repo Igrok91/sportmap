@@ -230,7 +230,14 @@
 
     function resizeEvent() {
        //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
-        VK.callMethod('resizeWindow', 900, $('#event').height() + 10);
+
+        var  height =  $('#event').height();
+        if (height < 650) {
+            VK.callMethod('resizeWindow', 900, 650);
+        } else {
+            VK.callMethod('resizeWindow', 900, height + 10);
+        }
+
         //VK.callMethod('scrollWindow', 0);
     }
 

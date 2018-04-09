@@ -41,9 +41,11 @@ public class DatastoreService {
     @Autowired
     private Events events;
 
-
     @Autowired
     private Users users;
+
+    @Autowired
+    private Playgrounds playgrounds;
 
 
 
@@ -72,6 +74,7 @@ public class DatastoreService {
         //KeyFactory  keyFactory = getKeyFactory(EVENT);
        // keyFactory.setKind(EVENT);
         //Key key = datastore.allocateId(keyFactory.newKey());
+        logger.info("Публикация события " + game.getDescription() + " Sport " + game.getSport());
         if (game.getSport().equals(FOOTBALL)) {
             events.setKeyFactory(EVENTS_FOOTBALL);
             events.publishEvent(game);
@@ -95,5 +98,10 @@ public class DatastoreService {
     public List<Event> getEventsFootballOfGroupUser(List<String> playgroundFoottUser) {
         return events.eventsFootballOfGroupUser(playgroundFoottUser);
 
+    }
+
+    public List<User> getPlayersGroup(String id, String playgroundKind) {
+        playgrounds.setKeyFactory(playgroundKind);
+        return null;
     }
 }
