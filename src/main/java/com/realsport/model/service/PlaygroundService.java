@@ -3,10 +3,12 @@ package com.realsport.model.service;
 import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.dao.PlaygroundDao;
 import com.realsport.model.dao.daoException.DataBaseException;
+import com.realsport.model.dao.kinds.KindSport;
 import com.realsport.model.entityDao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 
 import java.util.ArrayList;
@@ -43,17 +45,17 @@ public class PlaygroundService implements PlaygroundDao{
 
     @Override
     public List<FootballPlayground> getFootballPlayground() throws DataBaseException {
-        return playgroundDao.getFootballPlayground();
+        return datastoreService.getFootballPlayground();
     }
 
     @Override
     public List<VoleyballPlayground> getVoleyballPlayground() throws DataBaseException {
-        return playgroundDao.getVoleyballPlayground();
+        return datastoreService.getVoleyballPlayground();
     }
 
     @Override
     public List<BasketballPlayground> getBasketballPlayground() throws DataBaseException {
-        return playgroundDao.getBasketballPlayground();
+        return datastoreService.getBasketballPlayground();
     }
 
     @Override
@@ -61,10 +63,6 @@ public class PlaygroundService implements PlaygroundDao{
         return  playgroundDao.getFootballById(id);
     }
 
-    public List<User> getFootballPlayersGroupById(String id) {
-
-        return datastoreService.getPlayersGroup(id, FOOTBALL_PLAYGROUND);
-    }
 
     public List<Event> getFootballEventsById(String id) {
         List<Event>  listFoot= new ArrayList<>();
@@ -143,4 +141,5 @@ public class PlaygroundService implements PlaygroundDao{
     public List<Event> getVoleyPlayById(String id) {
         return Collections.singletonList(new Event());
     }
-}
+
+    }

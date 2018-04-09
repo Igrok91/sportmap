@@ -1,9 +1,8 @@
 package com.realsport.model.dao.kinds;
 
 import com.google.cloud.datastore.*;
-import com.realsport.model.entityDao.Comment;
+import com.realsport.model.entityDao.*;
 import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -158,4 +157,6 @@ public class Events {
         }
         return userList;
     }
+
+
 }

@@ -2,8 +2,7 @@ package com.realsport.model.dao;
 
 import com.google.cloud.datastore.*;
 import com.realsport.model.dao.kinds.*;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.entityDao.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
@@ -69,7 +68,10 @@ public class DatastoreService {
     public DatastoreService() {
     }
 
-
+    /**
+     * Публикация события
+     * @param game
+     */
     public void publishEvent(Event game) {
         //KeyFactory  keyFactory = getKeyFactory(EVENT);
        // keyFactory.setKind(EVENT);
@@ -95,13 +97,29 @@ public class DatastoreService {
         return users.getUser(id);
     }
 
+    /**
+     * Получение футбольныйх событий по группам пользователя
+     * @param playgroundFoottUser
+     * @return
+     */
     public List<Event> getEventsFootballOfGroupUser(List<String> playgroundFoottUser) {
         return events.eventsFootballOfGroupUser(playgroundFoottUser);
-
     }
 
-    public List<User> getPlayersGroup(String id, String playgroundKind) {
-        playgrounds.setKeyFactory(playgroundKind);
-        return null;
+
+    /**
+     * Получение всех  площадок
+     * @return
+     */
+    public List<FootballPlayground> getFootballPlayground() {
+        return playgrounds.getFootballPlayground();
+    }
+
+    public List<VoleyballPlayground> getVoleyballPlayground() {
+        return playgrounds.getVoleyballPlayground();
+    }
+
+    public List<BasketballPlayground> getBasketballPlayground() {
+        return playgrounds.getBasketballPlayground();
     }
 }

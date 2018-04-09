@@ -2,9 +2,7 @@ package com.realsport.model.dao.kinds;
 
 import com.google.cloud.datastore.*;
 import com.google.cloud.datastore.StructuredQuery.CompositeFilter;
-import com.realsport.model.entityDao.Comment;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.entityDao.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
@@ -75,6 +73,20 @@ public class Playgrounds {
         keyFactory = getKeyFactory(c);
     }
 
+    /**
+     * Получение всех площадок
+     */
+    public List<FootballPlayground> getFootballPlayground() {
+        return null;
+    }
+
+    public List<VoleyballPlayground> getVoleyballPlayground() {
+        return null;
+    }
+
+    public List<BasketballPlayground> getBasketballPlayground() {
+        return null;
+    }
 
 
 }
