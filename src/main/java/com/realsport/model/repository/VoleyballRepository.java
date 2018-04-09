@@ -1,7 +1,7 @@
 package com.realsport.model.repository;
 
 
-import com.realsport.model.entityDao.Voleyball;
+import com.realsport.model.entityDao.VoleyballPlayground;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public interface VoleyballRepository  {
 
 
-    List<Voleyball> findAllVoleyball();
+    List<VoleyballPlayground> findAllVoleyball();
 
-    Voleyball findPlayGroundById(String id);
+    VoleyballPlayground findPlayGroundById(String id);
 }

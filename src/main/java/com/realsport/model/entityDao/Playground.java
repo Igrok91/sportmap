@@ -1,6 +1,9 @@
 package com.realsport.model.entityDao;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class Playground {
     private int idplayground;
@@ -18,7 +21,8 @@ public class Playground {
     private String size;
     private String coating;
     private Byte school;
-    private String institutions;
+    private List<MinUser> players = new ArrayList<>();
+
 
     public int getIdplayground() {
         return idplayground;
@@ -140,57 +144,33 @@ public class Playground {
         this.school = school;
     }
 
-    public String getInstitutions() {
-        return institutions;
+
+    public List<MinUser> getPlayers() {
+        return players;
     }
 
-    public void setInstitutions(String institutions) {
-        this.institutions = institutions;
+    public void setPlayers(List<MinUser> players) {
+        this.players = players;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Playground that = (Playground) o;
-
-        if (idplayground != that.idplayground) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null) return false;
-        if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) return false;
-        if (links != null ? !links.equals(that.links) : that.links != null) return false;
-        if (сreator != null ? !сreator.equals(that.сreator) : that.сreator != null) return false;
-        if (sity != null ? !sity.equals(that.sity) : that.sity != null) return false;
-        if (street != null ? !street.equals(that.street) : that.street != null) return false;
-        if (house != null ? !house.equals(that.house) : that.house != null) return false;
-        if (!Arrays.equals(image, that.image)) return false;
-        if (sport != null ? !sport.equals(that.sport) : that.sport != null) return false;
-        if (info != null ? !info.equals(that.info) : that.info != null) return false;
-        if (size != null ? !size.equals(that.size) : that.size != null) return false;
-        if (coating != null ? !coating.equals(that.coating) : that.coating != null) return false;
-        if (school != null ? !school.equals(that.school) : that.school != null) return false;
-        return institutions != null ? institutions.equals(that.institutions) : that.institutions == null;
+        return idplayground == that.idplayground &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(latitude, that.latitude) &&
+                Objects.equals(longitude, that.longitude) &&
+                Objects.equals(sity, that.sity) &&
+                Objects.equals(street, that.street) &&
+                Objects.equals(house, that.house) &&
+                Objects.equals(sport, that.sport);
     }
 
     @Override
     public int hashCode() {
-        int result = idplayground;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
-        result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
-        result = 31 * result + (links != null ? links.hashCode() : 0);
-        result = 31 * result + (сreator != null ? сreator.hashCode() : 0);
-        result = 31 * result + (sity != null ? sity.hashCode() : 0);
-        result = 31 * result + (street != null ? street.hashCode() : 0);
-        result = 31 * result + (house != null ? house.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(image);
-        result = 31 * result + (sport != null ? sport.hashCode() : 0);
-        result = 31 * result + (info != null ? info.hashCode() : 0);
-        result = 31 * result + (size != null ? size.hashCode() : 0);
-        result = 31 * result + (coating != null ? coating.hashCode() : 0);
-        result = 31 * result + (school != null ? school.hashCode() : 0);
-        result = 31 * result + (institutions != null ? institutions.hashCode() : 0);
-        return result;
+
+        return Objects.hash(idplayground, name, latitude, longitude, sity, street, house, sport);
     }
 }

@@ -1,7 +1,7 @@
 package com.realsport.model.repository.impl.spb;
 
 
-import com.realsport.model.entityDao.Voleyball;
+import com.realsport.model.entityDao.VoleyballPlayground;
 import com.realsport.model.repository.VoleyballRepository;
 import com.realsport.model.repository.impl.spb.data.VoleyData;
 import org.springframework.stereotype.Component;
@@ -15,10 +15,10 @@ import java.util.List;
 @Component
 public class VoleballRepositoryImpl implements VoleyballRepository {
     @Override
-    public List<Voleyball> findAllVoleyball() {
-        ArrayList<Voleyball> list = new ArrayList<>();
+    public List<VoleyballPlayground> findAllVoleyball() {
+        ArrayList<VoleyballPlayground> list = new ArrayList<>();
         for (VoleyData f: VoleyData.values()) {
-            Voleyball p = new Voleyball();
+            VoleyballPlayground p = new VoleyballPlayground();
             p.setIdplayground(Integer.parseInt(f.getId()));
             p.setName(f.getName());
             p.setLatitude(f.getLattitude());
@@ -36,11 +36,11 @@ public class VoleballRepositoryImpl implements VoleyballRepository {
     }
 
     @Override
-    public Voleyball findPlayGroundById(String id) {
-        Voleyball p = null;
+    public VoleyballPlayground findPlayGroundById(String id) {
+        VoleyballPlayground p = null;
         for (VoleyData f: VoleyData.values()) {
             if(f.getId().equals(id)){
-                p = new Voleyball();
+                p = new VoleyballPlayground();
                 p.setIdplayground(Integer.parseInt(f.getId()));
                 p.setName(f.getName());
                 p.setLatitude(f.getLattitude());

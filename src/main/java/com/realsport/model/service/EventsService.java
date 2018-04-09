@@ -1,6 +1,7 @@
 package com.realsport.model.service;
 
 import com.realsport.model.dao.DatastoreService;
+import com.realsport.model.dao.kinds.KindSport;
 import com.realsport.model.entityDao.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +25,9 @@ public class EventsService {
     private List<Event> allVoleyEventSpb = new ArrayList<>();
 
 
-
+    public static final String FOOTBALL_PLAYGROUND = "FootballPlayground";
+    public static final String BASKETBALL_PLAYGROUND = "BasketballPlayground";
+    public static final String VOLEYBALL_PLAYGROUND = "VoleyballPlayground";
 
 
 
@@ -257,7 +260,8 @@ public class EventsService {
 
     }
 
-    public List<Event> getFootballEventsById(String id) {
-        return null;
+    public List<Event> getEventsByIdGroup(String id, KindSport kindSport) {
+      return null;
+
     }
 }

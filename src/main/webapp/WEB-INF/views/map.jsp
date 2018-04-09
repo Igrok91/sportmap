@@ -93,7 +93,7 @@
                             </div>
                         </div>
                     </a></li>
-                    <li><a href="#" id="basketball">
+                    <li><a href="#" id="basketballPlayground">
                         <div class="media">
                             <div class="pull-left"  >
                                 <img src="resources/image/basket.png" alt="Футбол" width="20" height="20" style="margin-top: 5px" />
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                     </a></li>
-                    <li><a href="#" id="voleyball">
+                    <li><a href="#" id="voleyballPlayground">
                         <div class="media">
                             <div class="pull-left"  >
                                 <img src="resources/image/voley.png" alt="Футбол" width="20" height="20" style="margin-top: 5px" />
@@ -373,14 +373,14 @@
         });
     });
     $(function() {
-        $('#basketball').click(function(event) {
+        $('#basketballPlayground').click(function(event) {
             markerCluster.clearMarkers();
             markerCluster.addMarkers(basketMarkers);
         });
     });
 
     $(function() {
-        $('#voleyball').click(function(event) {
+        $('#voleyballPlayground').click(function(event) {
             markerCluster.clearMarkers();
             markerCluster.addMarkers(voleyMarkers);
         });

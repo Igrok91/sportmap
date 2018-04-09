@@ -110,8 +110,8 @@
             <div class="text-center">
                 <span style="color: gray">Фильтры:</span>
                 <a  class="btn" id="football"><img  src="resources/image/foot.png" alt="Футбол" width="40" height="40"/></a>
-                <a  class="btn" id="basketball"><img  src="resources/image/basket.png" alt="Баскетбол" width="40" height="40"/></a>
-                <a  class="btn" id="voleyball"><img  src="resources/image/voley.png" alt="Волейбол" width="40" height="40"/></a>
+                <a  class="btn" id="basketballPlayground"><img  src="resources/image/basket.png" alt="Баскетбол" width="40" height="40"/></a>
+                <a  class="btn" id="voleyballPlayground"><img  src="resources/image/voley.png" alt="Волейбол" width="40" height="40"/></a>
 
             </div>
 

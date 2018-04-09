@@ -1,6 +1,6 @@
 package com.realsport.model.repository.impl.spb;
 
-import com.realsport.model.entityDao.Playfootball;
+import com.realsport.model.entityDao.FootballPlayground;
 import com.realsport.model.repository.PlayfootballRepository;
 import com.realsport.model.repository.impl.spb.data.FootData;
 import org.springframework.stereotype.Component;
@@ -15,10 +15,10 @@ import java.util.List;
 public class FootballRepositoryImpl implements PlayfootballRepository {
 
     @Override
-    public List<Playfootball> findAllPlayfootball() {
-        ArrayList<Playfootball> list = new ArrayList<>();
+    public List<FootballPlayground> findAllPlayfootball() {
+        ArrayList<FootballPlayground> list = new ArrayList<>();
         for (FootData f: FootData.values()) {
-            Playfootball p = new Playfootball();
+            FootballPlayground p = new FootballPlayground();
             p.setIdplayground(Integer.parseInt(f.getId()));
             p.setName(f.getName());
             p.setLatitude(f.getLattitude());
@@ -36,11 +36,11 @@ public class FootballRepositoryImpl implements PlayfootballRepository {
     }
 
     @Override
-    public Playfootball findPlayGroundById(String id) {
-        Playfootball p = null;
+    public FootballPlayground findPlayGroundById(String id) {
+        FootballPlayground p = null;
         for (FootData f: FootData.values()) {
             if(f.getId().equals(id)){
-                p = new Playfootball();
+                p = new FootballPlayground();
                 p.setIdplayground(Integer.parseInt(f.getId()));
                 p.setName(f.getName());
                 p.setLatitude(f.getLattitude());

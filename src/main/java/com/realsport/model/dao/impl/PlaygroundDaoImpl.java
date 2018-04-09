@@ -3,9 +3,9 @@ package com.realsport.model.dao.impl;
 import com.realsport.model.dao.PlaygroundDao;
 import com.realsport.model.dao.daoException.DataBaseException;
 
-import com.realsport.model.entityDao.Basketball;
-import com.realsport.model.entityDao.Playfootball;
-import com.realsport.model.entityDao.Voleyball;
+import com.realsport.model.entityDao.BasketballPlayground;
+import com.realsport.model.entityDao.FootballPlayground;
+import com.realsport.model.entityDao.VoleyballPlayground;
 import com.realsport.model.repository.BasketballRepository;
 import com.realsport.model.repository.PlayfootballRepository;
 import com.realsport.model.repository.VoleyballRepository;
@@ -40,27 +40,27 @@ public class PlaygroundDaoImpl implements PlaygroundDao {
      * @throws DataBaseException
      */
     @Override
-    public List<Playfootball> getFootballPlayground()  throws DataBaseException {
-        List<Playfootball> list = footRepository.findAllPlayfootball();
+    public List<FootballPlayground> getFootballPlayground()  throws DataBaseException {
+        List<FootballPlayground> list = footRepository.findAllPlayfootball();
 
         return list;
     }
 
     @Override
-    public List<Voleyball> getVoleyballPlayground() throws DataBaseException {
-        List<Voleyball> list = voleyballRepository.findAllVoleyball();
+    public List<VoleyballPlayground> getVoleyballPlayground() throws DataBaseException {
+        List<VoleyballPlayground> list = voleyballRepository.findAllVoleyball();
         return list;
     }
 
     @Override
-    public List<Basketball> getBasketballPlayground() throws DataBaseException {
-        List<Basketball> list = basketballRepository.findAllBasketball();
+    public List<BasketballPlayground> getBasketballPlayground() throws DataBaseException {
+        List<BasketballPlayground> list = basketballRepository.findAllBasketball();
         return list;
     }
 
     @Override
-    public Playfootball getFootballById(String id) throws DataBaseException {
-        Playfootball play = footRepository.findPlayGroundById(id);
+    public FootballPlayground getFootballById(String id) throws DataBaseException {
+        FootballPlayground play = footRepository.findPlayGroundById(id);
         return play;
     }
 }

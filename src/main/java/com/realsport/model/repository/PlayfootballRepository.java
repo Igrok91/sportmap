@@ -1,7 +1,7 @@
 package com.realsport.model.repository;
 
 
-import com.realsport.model.entityDao.Playfootball;
+import com.realsport.model.entityDao.FootballPlayground;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface PlayfootballRepository  {
 
-    List<Playfootball> findAllPlayfootball();
+    List<FootballPlayground> findAllPlayfootball();
 
-    Playfootball findPlayGroundById(String id);
+    FootballPlayground findPlayGroundById(String id);
 }

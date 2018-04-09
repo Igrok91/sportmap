@@ -10,11 +10,8 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import static com.realsport.model.service.EventsService.FOOTBALL;
 
 /**
  * Created by Igor Ryabtsev on 28.12.2016.
@@ -45,22 +42,22 @@ public class PlaygroundService implements PlaygroundDao{
     }
 
     @Override
-    public List<Playfootball> getFootballPlayground() throws DataBaseException {
+    public List<FootballPlayground> getFootballPlayground() throws DataBaseException {
         return playgroundDao.getFootballPlayground();
     }
 
     @Override
-    public List<Voleyball> getVoleyballPlayground() throws DataBaseException {
+    public List<VoleyballPlayground> getVoleyballPlayground() throws DataBaseException {
         return playgroundDao.getVoleyballPlayground();
     }
 
     @Override
-    public List<Basketball> getBasketballPlayground() throws DataBaseException {
+    public List<BasketballPlayground> getBasketballPlayground() throws DataBaseException {
         return playgroundDao.getBasketballPlayground();
     }
 
     @Override
-    public Playfootball getFootballById(String id) throws DataBaseException {
+    public FootballPlayground getFootballById(String id) throws DataBaseException {
         return  playgroundDao.getFootballById(id);
     }
 

@@ -5,6 +5,6 @@ import java.util.Arrays;
 /**
  * Created by IgorR on 02.07.2017.
  */
-public class Playfootball extends Playground{
+public class BasketballPlayground extends Playground{
 
 }

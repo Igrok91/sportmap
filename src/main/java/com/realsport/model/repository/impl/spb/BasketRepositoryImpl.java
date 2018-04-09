@@ -1,6 +1,6 @@
 package com.realsport.model.repository.impl.spb;
 
-import com.realsport.model.entityDao.Basketball;
+import com.realsport.model.entityDao.BasketballPlayground;
 
 import com.realsport.model.repository.BasketballRepository;
 import com.realsport.model.repository.impl.spb.data.BasketData;
@@ -15,10 +15,10 @@ import java.util.List;
 @Component
 public class BasketRepositoryImpl implements BasketballRepository{
     @Override
-    public List<Basketball> findAllBasketball() {
-        ArrayList<Basketball> list = new ArrayList<>();
+    public List<BasketballPlayground> findAllBasketball() {
+        ArrayList<BasketballPlayground> list = new ArrayList<>();
         for (BasketData f: BasketData.values()) {
-            Basketball p = new Basketball();
+            BasketballPlayground p = new BasketballPlayground();
             p.setIdplayground(Integer.parseInt(f.getId()));
             p.setName(f.getName());
             p.setLatitude(f.getLattitude());
@@ -36,11 +36,11 @@ public class BasketRepositoryImpl implements BasketballRepository{
     }
 
     @Override
-    public Basketball findPlayGroundById(String id) {
-        Basketball p = null;
+    public BasketballPlayground findPlayGroundById(String id) {
+        BasketballPlayground p = null;
         for (BasketData f: BasketData.values()) {
             if(f.getId().equals(id)){
-                p = new Basketball();
+                p = new BasketballPlayground();
                 p.setIdplayground(Integer.parseInt(f.getId()));
                 p.setName(f.getName());
                 p.setLatitude(f.getLattitude());
