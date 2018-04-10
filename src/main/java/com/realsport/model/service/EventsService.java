@@ -261,7 +261,7 @@ public class EventsService {
     }
 
     public List<Event> getEventsByIdGroup(String id, KindSport kindSport) {
-      return null;
+      return new ArrayList<>();
 
     }
 }

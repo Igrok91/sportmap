@@ -145,7 +145,7 @@ public class StartController {
                 FootballPlayground p = FluentIterable.from(footballPlaygroundList).firstMatch(new Predicate<FootballPlayground>() {
                     @Override
                     public boolean apply(FootballPlayground playfootball) {
-                        return playfootball.getIdplayground() == Integer.valueOf(id);
+                        return playfootball.getIdplayground().equals(id);
                     }
                 }).orNull();
                 if (p != null) {
@@ -159,7 +159,7 @@ public class StartController {
                 BasketballPlayground p = FluentIterable.from(basketballPlaygroundList).firstMatch(new Predicate<BasketballPlayground>() {
                     @Override
                     public boolean apply(BasketballPlayground basketball) {
-                        return basketball.getIdplayground() == Integer.valueOf(id);
+                        return basketball.getIdplayground().equals(id);
                     }
                 }).orNull();
                 if (p != null) {
@@ -173,7 +173,7 @@ public class StartController {
                 VoleyballPlayground p = FluentIterable.from(voleyballPlaygroundList).firstMatch(new Predicate<VoleyballPlayground>() {
                     @Override
                     public boolean apply(VoleyballPlayground voleyball) {
-                        return voleyball.getIdplayground() == Integer.valueOf(id);
+                        return voleyball.getIdplayground().equals(id);
                     }
                 }).orNull();
                 if (p != null) {
@@ -276,7 +276,7 @@ public class StartController {
                 FootballPlayground footballPlayground = FluentIterable.from(footballPlaygroundList).firstMatch(new Predicate<FootballPlayground>() {
                     @Override
                     public boolean apply(FootballPlayground playfootball) {
-                        return playfootball.getIdplayground() == Integer.parseInt(idGroup);
+                        return playfootball.getIdplayground().equals(idGroup);
                     }
                 }).get();
                 if (footballPlayground != null) {
@@ -289,7 +289,7 @@ public class StartController {
                 BasketballPlayground basketballPlayground = FluentIterable.from(basketballPlaygroundList).firstMatch(new Predicate<BasketballPlayground>() {
                     @Override
                     public boolean apply(BasketballPlayground basketballPlayground) {
-                        return basketballPlayground.getIdplayground() == Integer.parseInt(idGroup);
+                        return basketballPlayground.getIdplayground().equals(idGroup);
                     }
                 }).get();
 
@@ -303,7 +303,7 @@ public class StartController {
                 VoleyballPlayground voleyballPlayground = FluentIterable.from(voleyballPlaygroundList).firstMatch(new Predicate<VoleyballPlayground>() {
                     @Override
                     public boolean apply(VoleyballPlayground voleyballPlayground) {
-                        return voleyballPlayground.getIdplayground() == Integer.parseInt(idGroup);
+                        return voleyballPlayground.getIdplayground().equals(idGroup);
                     }
                 }).get();
                 if (voleyballPlayground != null) {
@@ -364,7 +364,7 @@ public class StartController {
                            @RequestParam(value="eventId", required = false, defaultValue = "null") String eventId) {
         if (sport.equals("Футбол")) {
             for (FootballPlayground footballPlayground : footballPlaygroundList) {
-                if (footballPlayground.getIdplayground() == Integer.parseInt(id)) {
+                if (footballPlayground.getIdplayground().equals(id)) {
                     model.addAttribute("namePlayground", footballPlayground.getName() );
                     model.addAttribute("playId", footballPlayground.getIdplayground() );
                     model.addAttribute("street", footballPlayground.getStreet() );
@@ -376,7 +376,7 @@ public class StartController {
             }
         } else if (sport.equals("Баскетбол")) {
             for (BasketballPlayground basketballPlayground : basketballPlaygroundList) {
-                if (basketballPlayground.getIdplayground() == Integer.parseInt(id)) {
+                if (basketballPlayground.getIdplayground().equals(id)) {
                     model.addAttribute("namePlayground", basketballPlayground.getName() );
                     model.addAttribute("playId", basketballPlayground.getIdplayground() );
                     model.addAttribute("street", basketballPlayground.getStreet() );
@@ -388,7 +388,7 @@ public class StartController {
             }
         } else if (sport.equals("Волейбол")) {
             for (VoleyballPlayground voleyballPlayground : voleyballPlaygroundList) {
-                if (voleyballPlayground.getIdplayground() == Integer.parseInt(id)) {
+                if (voleyballPlayground.getIdplayground().equals(id)) {
                     model.addAttribute("namePlayground", voleyballPlayground.getName() );
                     model.addAttribute("playId", voleyballPlayground.getIdplayground() );
                     model.addAttribute("street", voleyballPlayground.getStreet() );
@@ -442,7 +442,7 @@ public class StartController {
                 Gson gson = new Gson();
 
                 for (FootballPlayground p : footballPlaygroundList) {
-                    if (p.getIdplayground() == Integer.parseInt(id)) {
+                    if (p.getIdplayground().equals(id)) {
                         map.put("lat", Double.parseDouble(p.getLatitude()));
                         map.put("lng", Double.parseDouble(p.getLongitude()));
                         json = gson.toJson(map);
@@ -456,7 +456,7 @@ public class StartController {
                 Gson gson = new Gson();
 
                 for (BasketballPlayground p : basketballPlaygroundList) {
-                    if (p.getIdplayground() == Integer.parseInt(id)) {
+                    if (p.getIdplayground().equals(id)) {
                         map.put("lat", Double.parseDouble(p.getLatitude()));
                         map.put("lng", Double.parseDouble(p.getLongitude()));
                         json = gson.toJson(map);
@@ -470,7 +470,7 @@ public class StartController {
                 Gson gson = new Gson();
 
                 for (VoleyballPlayground p : voleyballPlaygroundList) {
-                    if (p.getIdplayground() == Integer.parseInt(id)) {
+                    if (p.getIdplayground().equals(id)) {
                         map.put("lat", Double.parseDouble(p.getLatitude()));
                         map.put("lng", Double.parseDouble(p.getLongitude()));
                         json = gson.toJson(map);
@@ -651,8 +651,6 @@ public class StartController {
             map.put("namePlayground", p.getName());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
-            map.put("link", p.getLinks());
-            map.put("creator", p.getСreator());
             map.put("id", p.getIdplayground());
             map.put("sport", p.getSport());
             String json = gson.toJson(map);
@@ -676,8 +674,6 @@ public class StartController {
             map.put("namePlayground", p.getName());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
-            map.put("link", p.getLinks());
-            map.put("creator", p.getСreator());
             map.put("id", p.getIdplayground());
             map.put("sport", p.getSport());
             String json = gson.toJson(map);
@@ -701,8 +697,6 @@ public class StartController {
             map.put("namePlayground", p.getName());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
-            map.put("link", p.getLinks());
-            map.put("creator", p.getСreator());
             map.put("id", p.getIdplayground());
             map.put("sport", p.getSport());
 

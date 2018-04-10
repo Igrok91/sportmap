@@ -19,7 +19,7 @@ public class FootballRepositoryImpl implements PlayfootballRepository {
         ArrayList<FootballPlayground> list = new ArrayList<>();
         for (FootData f: FootData.values()) {
             FootballPlayground p = new FootballPlayground();
-            p.setIdplayground(Integer.parseInt(f.getId()));
+            p.setIdplayground(f.getId());
             p.setName(f.getName());
             p.setLatitude(f.getLattitude());
             p.setLongitude(f.getLongitude());
@@ -41,7 +41,7 @@ public class FootballRepositoryImpl implements PlayfootballRepository {
         for (FootData f: FootData.values()) {
             if(f.getId().equals(id)){
                 p = new FootballPlayground();
-                p.setIdplayground(Integer.parseInt(f.getId()));
+                p.setIdplayground(f.getId());
                 p.setName(f.getName());
                 p.setLatitude(f.getLattitude());
                 p.setLongitude(f.getLongitude());

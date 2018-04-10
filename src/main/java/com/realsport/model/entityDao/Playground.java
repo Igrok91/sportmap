@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Playground {
-    private int idplayground;
+    private String idplayground;
     private String name;
     private String latitude;
     private String longitude;
@@ -18,17 +18,15 @@ public class Playground {
     private byte[] image;
     private String sport;
     private String info;
-    private String size;
-    private String coating;
     private Byte school;
     private List<MinUser> players = new ArrayList<>();
 
 
-    public int getIdplayground() {
+    public String getIdplayground() {
         return idplayground;
     }
 
-    public void setIdplayground(int idplayground) {
+    public void setIdplayground(String idplayground) {
         this.idplayground = idplayground;
     }
 
@@ -120,21 +118,7 @@ public class Playground {
         this.info = info;
     }
 
-    public String getSize() {
-        return size;
-    }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getCoating() {
-        return coating;
-    }
-
-    public void setCoating(String coating) {
-        this.coating = coating;
-    }
 
     public Byte getSchool() {
         return school;

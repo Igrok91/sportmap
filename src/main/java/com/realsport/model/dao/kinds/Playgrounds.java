@@ -77,15 +77,56 @@ public class Playgrounds {
      * Получение всех площадок
      */
     public List<FootballPlayground> getFootballPlayground() {
-        return null;
+        Query<Entity> entityQuery = Query.newEntityQueryBuilder()
+                .setKind(FOOTBALL_PLAYGROUND).build();
+        QueryResults<Entity>  queryResults = getDatastore().run(entityQuery);
+        return convertEntityToPlayground(queryResults);
     }
 
+    private List<FootballPlayground> convertEntityToPlayground(QueryResults<Entity> queryResults) {
+        List<FootballPlayground> list = new ArrayList<>();
+        for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
+            Entity entity = it.next();
+            List<EntityValue> listValues = entity.getList("players");
+            LatLng latLng = entity.getLatLng("latlong");
+            FootballPlayground playground = new FootballPlayground();
+            playground.setIdplayground(entity.getKey().getId().toString());
+            playground.setName(entity.getString("name"));
+            playground.setLatitude(String.valueOf(latLng.getLatitude()));
+            playground.setLongitude(String.valueOf(latLng.getLongitude()));
+            playground.setSity(entity.getString("city"));
+            playground.setStreet(entity.getString("street"));
+            playground.setHouse(entity.getString("house"));
+            playground.setSport(entity.getString("sport"));
+            //playground.setPlayers(convertListValueToUserList(listValues));
+            list.add(playground);
+            logger.info(playground.getPlayers());
+        }
+        return list;
+    }
+
+    private List<MinUser> convertListValueToUserList(List<EntityValue> listValues) {
+        List<MinUser> list = new ArrayList<>();
+        logger.info("Количество участников = " + listValues.size());
+        if (listValues.size() != 0) {
+            for (EntityValue value : listValues) {
+                MinUser minUser = new MinUser();
+                minUser.setUserId(value.get().getString("userId"));
+                minUser.setUserId(value.get().getString("firstName"));
+                minUser.setUserId(value.get().getString("lastName"));
+                list.add(minUser);
+            }
+        }
+        return list;
+    }
+
+
     public List<VoleyballPlayground> getVoleyballPlayground() {
-        return null;
+        return new ArrayList<>();
     }
 
     public List<BasketballPlayground> getBasketballPlayground() {
-        return null;
+        return new ArrayList<>();
     }
 
 
