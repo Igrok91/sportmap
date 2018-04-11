@@ -1,6 +1,9 @@
 package com.realsport.model.service;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
+import com.realsport.model.dao.kinds.Events;
 import com.realsport.model.dao.kinds.KindSport;
 import com.realsport.model.entityDao.*;
 import org.apache.commons.logging.Log;
@@ -37,29 +40,30 @@ public class EventsService {
 
     public void publishEvent(Event game, String userId) {
             databaseService.publishEvent(game);
-            //listFoot.add(game);
     }
 
-    public List<Event> getEvents(List<String> playgroundFoottUser, List<String> playgroundBaskettUser, List<String> playgroundVoleyUser) {
-        List<Event> eventList = new ArrayList<>();
+    public List<Event> getEvents(List<String> playgroundUser) {
+        List<Event> eventOfGroupUser = new ArrayList<>();
         // Достаем из бд активные события.
-        if (playgroundFoottUser.size() != 0) {
-            allFootbalEvent = databaseService.getEventsFootballOfGroupUser(playgroundFoottUser);
-            eventList.addAll(allFootbalEvent);
-            System.out.println("allFootbalEvent" + allFootbalEvent.size());
-        }
+        if (playgroundUser.size() != 0) {
+           List<Event> allActiveEventList = databaseService.getAllEvents();
 
-        if (playgroundBaskettUser.size() != 0) {
-            allBasketEventSpb = getAllBasketEventsSpb(playgroundFoottUser);
-            eventList.addAll(allBasketEventSpb);
-        }
 
-        if (playgroundVoleyUser.size() != 0) {
-            allVoleyEventSpb = getAllVoleyEventsSpb(playgroundFoottUser);
-            eventList.addAll(allVoleyEventSpb);
+            if (allActiveEventList.size() != 0) {
+                for (String id : playgroundUser) {
+                    List<Event> event = FluentIterable.from(allActiveEventList).filter(new Predicate<Event>() {
+                        @Override
+                        public boolean apply(Event event) {
+                            return event.getPlaygroundId().equals(id);
+                        }
+                    }).toList();
+                    if (Objects.nonNull(event)) {
+                        eventOfGroupUser.addAll(event);
+                    }
+                }
+            }
         }
-
-        return eventList;
+        return eventOfGroupUser;
     }
 
     private List<Event> getAllVoleyEventsSpb(List<String> playgroundFoottUser) {
@@ -249,18 +253,19 @@ public class EventsService {
     }
 
     public void addPlaygroundToUser(String userId, String playgroundId) {
+        databaseService.addPlaygroundToUser(userId, playgroundId);
 
     }
 
     public void deletePlaygroundFromUser(String userId, String playgroundId) {
-
+        databaseService.deletePlaygroundFromUser(userId, playgroundId);
     }
 
     public void endGame(String eventId) {
 
     }
 
-    public List<Event> getEventsByIdGroup(String id, KindSport kindSport) {
+    public List<Event> getEventsByIdGroup(String id) {
       return new ArrayList<>();
 
     }

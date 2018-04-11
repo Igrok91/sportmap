@@ -65,7 +65,7 @@ public class Users {
     public void registerUser(User user) {
         Transaction tx = getDatastore().newTransaction();
         try {
-            FullEntity task = FullEntity.newBuilder(keyFactory.newKey())
+            FullEntity task = FullEntity.newBuilder(keyFactory.newKey(user.getUserId()))
                     .set("firstName", user.getFirstName())
                     .set("userId", user.getUserId())
                     .set("lastName", user.getLastName())

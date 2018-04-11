@@ -15,9 +15,7 @@ public class User implements Serializable {
     private boolean isFake = false;
     private int countFake;
     //Список id площадок
-    private List<String> playgroundFootballList =  new ArrayList<>();
-    private List<String> playgroundBasketList =  new ArrayList<>();;
-    private List<String> playgroundVoleyList =  new ArrayList<>();;
+    private List<String> playgroundIdlList =  new ArrayList<>();
     //Список id событий и значение проголосовал ли
     private Map<String, Boolean> eventListActive = new HashMap<>();
     //Список id событий и количества игроков от пользователя
@@ -50,28 +48,12 @@ public class User implements Serializable {
         isAdmin = admin;
     }
 
-    public List<String> getPlaygroundFootballList() {
-        return playgroundFootballList;
+    public List<String> getPlaygroundIdlList() {
+        return playgroundIdlList;
     }
 
-    public void setPlaygroundFootballList(List<String> playgroundFootballList) {
-        this.playgroundFootballList = playgroundFootballList;
-    }
-
-    public List<String> getPlaygroundBasketList() {
-        return playgroundBasketList;
-    }
-
-    public void setPlaygroundBasketList(List<String> playgroundBasketList) {
-        this.playgroundBasketList = playgroundBasketList;
-    }
-
-    public List<String> getPlaygroundVoleyList() {
-        return playgroundVoleyList;
-    }
-
-    public void setPlaygroundVoleyList(List<String> playgroundVoleyList) {
-        this.playgroundVoleyList = playgroundVoleyList;
+    public void setPlaygroundIdlList(List<String> playgroundIdlList) {
+        this.playgroundIdlList = playgroundIdlList;
     }
 
     public Map<String, Boolean> getEventListActive() {

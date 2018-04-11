@@ -96,18 +96,18 @@ public class RestController {
         String userId = (String) httpSession.getAttribute("userId");
         if (user != null) {
             Boolean b = user.getEventListActive().get(eventId);
-            if (b.equals(Boolean.TRUE)) {
+            if (b == null || b.equals(Boolean.FALSE)) {
+                user.getEventListActive().put(eventId, Boolean.TRUE);
+                eventsService.editUserAnswer(eventId, userId, Boolean.TRUE);
+                eventsService.addUserToList(eventId, userId);
+                httpSession.setAttribute("user", user);
+                return Boolean.TRUE;
+            } else {
                 user.getEventListActive().put(eventId, Boolean.FALSE);
                 eventsService.editUserAnswer(eventId, userId, Boolean.FALSE);
                 httpSession.setAttribute("user", user);
                 eventsService.deleteUserFromList(eventId, userId);
                 return Boolean.FALSE;
-            } else {
-                user.getEventListActive().put(eventId, Boolean.TRUE); // TODO
-                eventsService.editUserAnswer(eventId, userId, Boolean.TRUE);
-                eventsService.addUserToList(eventId, userId);
-                httpSession.setAttribute("user", user);
-                return Boolean.TRUE;
             }
         }
         return Boolean.FALSE;
@@ -121,14 +121,14 @@ public class RestController {
         String userId = (String) httpSession.getAttribute("userId");
         if (user != null) {
             Boolean b = user.getEventListActive().get(eventId);
-            if (b.equals(Boolean.TRUE)) {
-                return Boolean.FALSE;
-            } else {
-                user.getEventListActive().put(eventId, Boolean.TRUE); // TODO
+            if (b == null || b.equals(Boolean.FALSE)) {
+                user.getEventListActive().put(eventId, Boolean.TRUE);
                 eventsService.editUserAnswer(eventId, userId, Boolean.TRUE);
                 eventsService.addUserToList(eventId, userId);
                 httpSession.setAttribute("user", user);
                 return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
             }
 
         }
@@ -143,8 +143,7 @@ public class RestController {
 
         String userId = (String) httpSession.getAttribute("userId");
         Boolean isParticipant = false;
-        if (sport.equals(FOOTBALL)) {
-            String id = FluentIterable.from(user.getPlaygroundFootballList()).filter(new Predicate<String>() {
+            String id = FluentIterable.from(user.getPlaygroundIdlList()).filter(new Predicate<String>() {
                 @Override
                 public boolean apply(String id) {
                     return id.equals(playgroundId);
@@ -152,57 +151,16 @@ public class RestController {
             }).first().orNull();
             System.out.println("id= " + id);
             if (id == null) {
-                user.getPlaygroundFootballList().add(playgroundId);
+                logger.info("User c id " + userId + " вступил в группу " + playgroundId);
+                user.getPlaygroundIdlList().add(playgroundId);
                 eventsService.addPlaygroundToUser(userId, playgroundId);
                 isParticipant = Boolean.TRUE;
             } else {
-                user.getPlaygroundFootballList().remove(id);
+                logger.info("User c id " + userId + " вышел из группы " + playgroundId);
+                user.getPlaygroundIdlList().remove(id);
                 eventsService.deletePlaygroundFromUser(userId, playgroundId);
                 isParticipant = Boolean.FALSE;
             }
-        } else if (sport.equals(BASKETBALL)) {
-            boolean isPresent = FluentIterable.from(user.getPlaygroundBasketList()).firstMatch(new Predicate<String>() {
-                @Override
-                public boolean apply(String id) {
-                    return id.equals(playgroundId);
-                }
-            }).isPresent();
-            if (!isPresent) {
-                user.getPlaygroundBasketList().add(playgroundId);
-                eventsService.addPlaygroundToUser(userId, playgroundId);
-                isParticipant = Boolean.TRUE;
-            } else {
-                user.getPlaygroundBasketList().removeIf(new Predicate<String>() {
-                    @Override
-                    public boolean apply(String id) {
-                        return id.equals(playgroundId);
-                    }
-                });
-                eventsService.deletePlaygroundFromUser(userId, playgroundId);
-                isParticipant = Boolean.FALSE;
-            }
-        } else if (sport.equals(VOLEYBALL)) {
-            boolean isPresent = FluentIterable.from(user.getPlaygroundVoleyList()).firstMatch(new Predicate<String>() {
-                @Override
-                public boolean apply(String id) {
-                    return id.equals(playgroundId);
-                }
-            }).isPresent();
-            if (!isPresent) {
-                user.getPlaygroundVoleyList().add(playgroundId);
-                eventsService.addPlaygroundToUser(userId, playgroundId);
-                isParticipant = Boolean.TRUE;
-            } else {
-                user.getPlaygroundVoleyList().removeIf(new Predicate<String>() {
-                    @Override
-                    public boolean apply(String id) {
-                        return id.equals(playgroundId);
-                    }
-                });
-                eventsService.deletePlaygroundFromUser(userId, playgroundId);
-                isParticipant = Boolean.FALSE;
-            }
-        }
         httpSession.setAttribute("user", user);
      return isParticipant;
     }

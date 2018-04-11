@@ -272,6 +272,38 @@
 
         var  allInfowindow = [];
 
+        /*$.ajax({
+            url: 'initPlaygroundInfo'
+        }).then(function (value) {
+            console.log(value);
+            var playgroundInfo = value;
+            playgroundInfo.map(function(playground, i) {
+                if (playground.sport === 'Футбол') {
+                    footInfo.push(playground);
+                    var locations = {
+                        "lat": playground.lat,
+                        "lng": playground.lng
+                    }
+                    footLocations.push(locations);
+                } else if (playground.sport === 'Баскетбол') {
+                    basketInfo.push(playground);
+                    var locations = {
+                        "lat": playground.lat,
+                        "lng": playground.lng
+                    }
+                    basketLocation.push(locations);
+                } else if (playground.sport === 'Волейбол') {
+                    voleyballInfo.push(playground);
+                    var locations = {
+                        "lat": playground.lat,
+                        "lng": playground.lng
+                    }
+                    voleyLocation.push(locations);
+                }
+            });
+        }*/
+
+
         // Add some markers to the map.
         // Note: The code uses the JavaScript Array.prototype.map() method to
         // create an array of markers based on a given "footLocations" array.

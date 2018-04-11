@@ -58,18 +58,18 @@
                     <c:otherwise>
                         <div class="list-group" id="listGroupsUser">
                             <c:forEach var="group" items="${allPlaygroundUser}">
-                                <a href="group?playgroundId=${group.idplayground}&sport=${group.getSubject()}" class="list-group-item borderless">
+                                <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}" class="list-group-item borderless">
                                     <div class="media">
                                         <div class="pull-left">
-                                            <c:if test="${group.getSubject() == 'Футбол'}">
+                                            <c:if test="${group.getSport() == 'Футбол'}">
                                                 <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
                                                      height="40"/>
                                             </c:if>
-                                            <c:if test="${group.getSubject() == 'Баскетбол'}">
+                                            <c:if test="${group.getSport() == 'Баскетбол'}">
                                                 <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
                                                      height="40"/>
                                             </c:if>
-                                            <c:if test="${group.getSubject() == 'Волейбол'}">
+                                            <c:if test="${group.getSport() == 'Волейбол'}">
                                                 <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="40"
                                                      height="40"/>
                                             </c:if>
@@ -80,7 +80,7 @@
                                         <div class="media-body ">
                                             <h4 class="media-heading"
                                                 style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.getName()}</h4>
-                                            <span style="color: gray">${group.getSubject()}</span>
+                                            <span style="color: gray">${group.getSport()}</span>
                                             <hr>
                                         </div>
                                     </div>

@@ -79,10 +79,10 @@
     <div class="container-fluid ">
 
         <div class="row content">
-            <div class="col-md-2">
+            <div class="col-sm-2">
 
             </div>
-            <div class="col-md-8">
+            <div class="col-sm-8">
                 <div class="list-group">
 
                     <div class="panel " id="eventPanel">
@@ -315,7 +315,7 @@
             </div>
 
         </div>
-        <div class="col-md-2">
+        <div class="col-sm-2">
 
         </div>
     </div>

@@ -1,29 +1,34 @@
 package com.realsport.model.dao.kinds;
 
 import com.google.cloud.datastore.*;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.*;
 import com.realsport.model.entityDao.Event;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
-import com.google.cloud.datastore.StructuredQuery.CompositeFilter;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static com.realsport.model.dao.Persistence.getDatastore;
 import static com.realsport.model.dao.Persistence.getKeyFactory;
 
 @Component
 public class Events {
-    private Logger logger = LoggerFactory.getLogger(Events.class);
+    private Log logger = LogFactory.getLog(Events.class);
 
-    public static final String EVENTS_FOOTBALL = "EventsFootball";
-    public static final String EVENTS_BASKETBALL = "EventsBasketball";
-    public static final String EVENTS_VOLEYBALL = "EventsVoleyball";
-    private KeyFactory keyFactory;
+
+    public static final String EVENTS = "Events";
+
+
+    private List<Event> allActiveEventList = new ArrayList<>();
+
+    private static final KeyFactory keyFactory = getKeyFactory(Events.class);
+
 
     public void publishEvent(Event game) {
         Transaction tx = getDatastore().newTransaction();
@@ -64,27 +69,24 @@ public class Events {
         }
     }
 
-    public  void setKeyFactory(String c) {
-        keyFactory = getKeyFactory(c);
-    }
-
-    public List<Event> eventsFootballOfGroupUser(List<String> playgroundFoottUser) {
-        Datastore datastore = getDatastore();
-
-        List<Entity>  listEntity = new ArrayList<>();
-        for (String id: playgroundFoottUser) {
+    public List<Event> getAllEvents() {
+        try {
+            Datastore datastore = getDatastore();
+            List<Entity>  listEntity = new ArrayList<>();
             Query<Entity> entityQuery = Query.newEntityQueryBuilder()
-                    .setKind(EVENTS_FOOTBALL)
-                    .setFilter(CompositeFilter.and(StructuredQuery.PropertyFilter.eq("playgroundId", id)
-                            ,StructuredQuery.PropertyFilter.eq("active", true)))
+                    .setKind(EVENTS)
+                    .setFilter(StructuredQuery.PropertyFilter.eq("active", true))
                     .build();
             QueryResults<Entity>  queryResults = datastore.run(entityQuery);
-            if (queryResults.hasNext()) {
-                listEntity.add(queryResults.next());
+            for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
+                listEntity.add(it.next());
             }
+            allActiveEventList = getEventsFromEntity(listEntity);
+        } catch (Exception e) {
+            logger.error(e);
+            logger.warn("Событий еще нет");
         }
-        List<Event> list = getEventsFromEntity(listEntity);
-        return  list;
+        return  allActiveEventList;
 
     }
 
@@ -98,7 +100,7 @@ public class Events {
             event.setUserLastNameCreator(entity.getString("userLastNameCreator"));
             event.setDescription(entity.getString("description"));
             event.setAnswer("+");
-            event.setMaxCountAnswer(Integer.parseInt(entity.getString("maxCountAnswer")));
+            event.setMaxCountAnswer(Integer.parseInt(String.valueOf(entity.getLong("maxCountAnswer"))));
             event.setDuration(entity.getString("duration"));
             event.setSport(entity.getString("sport"));
             event.setPlaygroundId(entity.getString("playgroundId"));

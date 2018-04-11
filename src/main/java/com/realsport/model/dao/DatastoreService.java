@@ -5,8 +5,6 @@ import com.realsport.model.dao.kinds.*;
 import com.realsport.model.entityDao.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,16 +75,7 @@ public class DatastoreService {
        // keyFactory.setKind(EVENT);
         //Key key = datastore.allocateId(keyFactory.newKey());
         logger.info("Публикация события " + game.getDescription() + " Sport " + game.getSport());
-        if (game.getSport().equals(FOOTBALL)) {
-            events.setKeyFactory(EVENTS_FOOTBALL);
-            events.publishEvent(game);
-        } else if (game.getSport().equals(VOLEYBALL)) {
-            events.setKeyFactory(EVENTS_VOLEYBALL);
-            events.publishEvent(game);
-        } else if (game.getSport().equals(BASKETBALL)) {
-            events.setKeyFactory(EVENTS_BASKETBALL);
-            events.publishEvent(game);
-        }
+        events.publishEvent(game);
     }
 
     public void registerUser(User user) {
@@ -99,11 +88,10 @@ public class DatastoreService {
 
     /**
      * Получение футбольныйх событий по группам пользователя
-     * @param playgroundFoottUser
      * @return
      */
-    public List<Event> getEventsFootballOfGroupUser(List<String> playgroundFoottUser) {
-        return events.eventsFootballOfGroupUser(playgroundFoottUser);
+    public List<Event> getAllEvents() {
+        return events.getAllEvents();
     }
 
 
@@ -111,15 +99,19 @@ public class DatastoreService {
      * Получение всех  площадок
      * @return
      */
-    public List<FootballPlayground> getFootballPlayground() {
-        return playgrounds.getFootballPlayground();
+    public List<Playground> getAllPlayground() {
+        return playgrounds.getAllPlayground();
     }
 
-    public List<VoleyballPlayground> getVoleyballPlayground() {
-        return playgrounds.getVoleyballPlayground();
+    public Playground getPlaygroundById(String idGroup) {
+        return playgrounds.getPlaygroundById(idGroup);
     }
 
-    public List<BasketballPlayground> getBasketballPlayground() {
-        return playgrounds.getBasketballPlayground();
+    public void addPlaygroundToUser(String userId, String playgroundId) {
+        playgrounds.addPlaygroundToUser(userId, playgroundId);
+    }
+
+    public void deletePlaygroundFromUser(String userId, String playgroundId) {
+        playgrounds.deletePlaygroundFromUser(userId, playgroundId);
     }
 }

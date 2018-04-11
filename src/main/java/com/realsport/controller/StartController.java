@@ -3,7 +3,6 @@ package com.realsport.controller;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
-import com.realsport.model.dao.daoException.DataBaseException;
 import com.realsport.model.dao.kinds.KindSport;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.*;
@@ -22,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -34,9 +34,12 @@ import java.util.*;
 public class StartController {
     Log logger = LogFactory.getLog(StartController.class);
 
-    private List<FootballPlayground> footballPlaygroundList = new ArrayList<>();
-    private List<VoleyballPlayground> voleyballPlaygroundList = new ArrayList<>();
-    private List<BasketballPlayground> basketballPlaygroundList = new ArrayList<>();
+    private List<Playground> footballPlaygroundList = new ArrayList<>();
+    private List<Playground> voleyballPlaygroundList = new ArrayList<>();
+    private List<Playground> basketballPlaygroundList = new ArrayList<>();
+
+    private List<Playground> allPlaygroundList = new ArrayList<>();
+
 
     ArrayList<String> footLocationList = new ArrayList<>();
     ArrayList<String> basketLocationList = new ArrayList<>();
@@ -86,10 +89,8 @@ public class StartController {
                 if (user != null) {
                     setPlaygroundDataToModel(model, id);
                     setUserDataToModel(user, model);
-
                     Gson gson = new Gson();
-
-                    List<Event> listEvents = eventsService.getEvents(user.getPlaygroundFootballList(), user.getPlaygroundBasketList(), user.getPlaygroundVoleyList());
+                    List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
                     model.addAttribute("listEventsJson", gson.toJson(listEvents));
                     model.addAttribute("listEvents", listEvents);
                     model.addAttribute("playgroundCoordinate", "empty");
@@ -115,17 +116,7 @@ public class StartController {
         HashMap<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
         map.put("isAdmin", user.isAdmin());
-      //  if (user.getPlaygroundFootballList().size() != 0) {
-            map.put("playgroundFoottUser", user.getPlaygroundFootballList());
-      //  }
-
-       // if (user.getPlaygroundBasketList().size() != 0) {
-            map.put("playgroundBasketUser", user.getPlaygroundBasketList());
-      //  }
-
-       // if (user.getPlaygroundVoleyList().size() != 0) {
-            map.put("playgroundVoleyUser", user.getPlaygroundVoleyList());
-       // }
+        map.put("playgroundUser", user.getPlaygroundIdlList());
 
         map.put("allPlaygroundUser", getAllPlaygroundUser(user));
         String jsonUser = gson.toJson(map);
@@ -137,67 +128,33 @@ public class StartController {
 
     private List<Playground> getAllPlaygroundUser(User user) {
         List<Playground> allList = new ArrayList<>();
-        List<FootballPlayground> footballPlaygroundListUser = new ArrayList<>();
-        List<VoleyballPlayground> voleyballlListUser = new ArrayList<>();
-        List<BasketballPlayground> basketballPlaygroundListUser = new ArrayList<>();
-        if ( user.getPlaygroundFootballList().size() != 0) {
-            for (String id : user.getPlaygroundFootballList()) {
-                FootballPlayground p = FluentIterable.from(footballPlaygroundList).firstMatch(new Predicate<FootballPlayground>() {
+        if ( user.getPlaygroundIdlList().size() != 0) {
+            for (String id : user.getPlaygroundIdlList()) {
+                Playground p = FluentIterable.from(allPlaygroundList).firstMatch(new Predicate<Playground>() {
                     @Override
-                    public boolean apply(FootballPlayground playfootball) {
+                    public boolean apply(Playground playfootball) {
                         return playfootball.getIdplayground().equals(id);
                     }
                 }).orNull();
                 if (p != null) {
-                    footballPlaygroundListUser.add(p);
+                    allList.add(p);
                 }
             }
         }
-
-        if ( user.getPlaygroundBasketList().size() != 0) {
-            for (String id : user.getPlaygroundBasketList()) {
-                BasketballPlayground p = FluentIterable.from(basketballPlaygroundList).firstMatch(new Predicate<BasketballPlayground>() {
-                    @Override
-                    public boolean apply(BasketballPlayground basketball) {
-                        return basketball.getIdplayground().equals(id);
-                    }
-                }).orNull();
-                if (p != null) {
-                    basketballPlaygroundListUser.add(p);
-                }
-            }
-        }
-
-        if ( user.getPlaygroundVoleyList().size() != 0) {
-            for (String id : user.getPlaygroundVoleyList()) {
-                VoleyballPlayground p = FluentIterable.from(voleyballPlaygroundList).firstMatch(new Predicate<VoleyballPlayground>() {
-                    @Override
-                    public boolean apply(VoleyballPlayground voleyball) {
-                        return voleyball.getIdplayground().equals(id);
-                    }
-                }).orNull();
-                if (p != null) {
-                    voleyballlListUser.add(p);
-                }
-            }
-        }
-        allList.addAll(footballPlaygroundListUser);
-        allList.addAll(basketballPlaygroundListUser);
-        allList.addAll(voleyballlListUser);
-
         return allList;
-
     }
+
 
 
     private void setPlaygroundDataToModel(Model model, String id) throws Exception {
         try {
             //messageService.sendMessage(ADMIN, "В приложение зашел пользователь с id " + id);
-
+            allPlaygroundList = playgroundService.getAllPlayground();
+            logger.info("allPlaygroundList " + allPlaygroundList.size() );
             // Получение данных по площадкам из базы данных
-            voleyballPlaygroundList = playgroundService.getVoleyballPlayground();
-            footballPlaygroundList = playgroundService.getFootballPlayground();
-            basketballPlaygroundList = playgroundService.getBasketballPlayground();
+            voleyballPlaygroundList = playgroundService.getVoleyballPlayground(allPlaygroundList);
+            footballPlaygroundList = playgroundService.getFootballPlayground(allPlaygroundList);
+            basketballPlaygroundList = playgroundService.getBasketballPlayground(allPlaygroundList);
         /*    if (voleyballPlaygroundList == null || footballPlaygroundList == null || basketballPlaygroundList == null) {
                 throw new DataBaseException(DataBaseException.ERORR_MESSAGE);
             }*/
@@ -260,60 +217,23 @@ public class StartController {
     @RequestMapping("/groupFromMap")
     public String toGroup(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport", required=false, defaultValue=FOOTBALL) String sport) {
         User user = (User) httpSession.getAttribute("user");
+
         if (user == null) {
             return "error";
         }
-        addGroupToModel(model, id, KindSport.valueOf(sport), user);
-
+        logger.info("Переход к User c id " + user.getUserId());
+        addGroupToModel(model, id, user);
         model.addAttribute("returnBack", "map");
         return "playground";
     }
 
-    private void addGroupToModel(Model model, String idGroup, KindSport sport, User user) {
-        boolean isParticipant = false;
-        switch (sport) {
-            case FOOTBALL:
-                FootballPlayground footballPlayground = FluentIterable.from(footballPlaygroundList).firstMatch(new Predicate<FootballPlayground>() {
-                    @Override
-                    public boolean apply(FootballPlayground playfootball) {
-                        return playfootball.getIdplayground().equals(idGroup);
-                    }
-                }).get();
-                if (footballPlayground != null) {
-                    addGroupDataToModel(model, footballPlayground, idGroup, KindSport.FOOTBALL);
-                }
+    private void addGroupToModel(Model model, String idGroup, User user) {
+        Playground playground = playgroundService.getPlaygroundById(idGroup);
+            if (playground != null) {
+                addGroupDataToModel(model, playground, idGroup);
+            }
 
-                isParticipant = isParticipant(user.getPlaygroundFootballList(), idGroup);
-                break;
-            case BASKETBALL:
-                BasketballPlayground basketballPlayground = FluentIterable.from(basketballPlaygroundList).firstMatch(new Predicate<BasketballPlayground>() {
-                    @Override
-                    public boolean apply(BasketballPlayground basketballPlayground) {
-                        return basketballPlayground.getIdplayground().equals(idGroup);
-                    }
-                }).get();
-
-                if (basketballPlayground != null) {
-                    addGroupDataToModel(model, basketballPlayground, idGroup, KindSport.BASKETBALL);
-                }
-
-                isParticipant = isParticipant(user.getPlaygroundBasketList(), idGroup);
-                break;
-            case VOLEYBALL:
-                VoleyballPlayground voleyballPlayground = FluentIterable.from(voleyballPlaygroundList).firstMatch(new Predicate<VoleyballPlayground>() {
-                    @Override
-                    public boolean apply(VoleyballPlayground voleyballPlayground) {
-                        return voleyballPlayground.getIdplayground().equals(idGroup);
-                    }
-                }).get();
-                if (voleyballPlayground != null) {
-                    addGroupDataToModel(model, voleyballPlayground, idGroup, KindSport.VOLEYBALL);
-                }
-
-                isParticipant = isParticipant(user.getPlaygroundVoleyList(), idGroup);
-                break;
-        }
-        model.addAttribute("isParticipant", isParticipant);
+        model.addAttribute("isParticipant", isParticipant(user.getPlaygroundIdlList(), idGroup));
     }
 
     private boolean isParticipant(List<String> playgroundList, String idGroup) {
@@ -325,14 +245,14 @@ public class StartController {
         }).isPresent();
     }
 
-    private void addGroupDataToModel(Model model, Playground playground, String idGroup, KindSport kindSport) {
+    private void addGroupDataToModel(Model model, Playground playground, String idGroup) {
         model.addAttribute("playgroundId", playground.getIdplayground());
         model.addAttribute("namePlayground", playground.getName() );
         model.addAttribute("street", playground.getStreet() );
         model.addAttribute("house", playground.getHouse() );
         model.addAttribute("sport", playground.getSport() );
         model.addAttribute("players", playground.getPlayers() );
-        model.addAttribute("listEvents", eventsService.getEventsByIdGroup(idGroup, kindSport) );
+        model.addAttribute("listEvents", eventsService.getEventsByIdGroup(idGroup) );
     }
 
     @RequestMapping("/group")
@@ -341,7 +261,7 @@ public class StartController {
         if (user == null) {
             return "error";
         }
-        addGroupToModel(model, id, KindSport.valueOf(sport), user);
+        addGroupToModel(model, id, user);
 
         model.addAttribute("returnBack", "group");
         return "playground";
@@ -354,7 +274,7 @@ public class StartController {
             return "error";
         }
 
-        addGroupToModel(model, id, KindSport.valueOf(sport), user);
+        addGroupToModel(model, id, user);
         model.addAttribute("returnBack", "home");
         return "playground";
     }
@@ -362,8 +282,8 @@ public class StartController {
     @RequestMapping("/create")
     public String toCreate(Model model,  @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport,
                            @RequestParam(value="eventId", required = false, defaultValue = "null") String eventId) {
-        if (sport.equals("Футбол")) {
-            for (FootballPlayground footballPlayground : footballPlaygroundList) {
+
+            for (Playground footballPlayground : allPlaygroundList) {
                 if (footballPlayground.getIdplayground().equals(id)) {
                     model.addAttribute("namePlayground", footballPlayground.getName() );
                     model.addAttribute("playId", footballPlayground.getIdplayground() );
@@ -371,34 +291,10 @@ public class StartController {
                     model.addAttribute("house", footballPlayground.getHouse() );
                     model.addAttribute("sport", footballPlayground.getSport() );
                     model.addAttribute("players", footballPlayground.getPlayers() );
-                    model.addAttribute("plays", playgroundService.getFootballEventsById(id) );
                 }
             }
-        } else if (sport.equals("Баскетбол")) {
-            for (BasketballPlayground basketballPlayground : basketballPlaygroundList) {
-                if (basketballPlayground.getIdplayground().equals(id)) {
-                    model.addAttribute("namePlayground", basketballPlayground.getName() );
-                    model.addAttribute("playId", basketballPlayground.getIdplayground() );
-                    model.addAttribute("street", basketballPlayground.getStreet() );
-                    model.addAttribute("house", basketballPlayground.getHouse() );
-                    model.addAttribute("sport", basketballPlayground.getSport() );
-                    model.addAttribute("players", playgroundService.getBasketballPlayersById(id) );
-                    model.addAttribute("plays", playgroundService.getBasketballPlayById(id) );
-                }
-            }
-        } else if (sport.equals("Волейбол")) {
-            for (VoleyballPlayground voleyballPlayground : voleyballPlaygroundList) {
-                if (voleyballPlayground.getIdplayground().equals(id)) {
-                    model.addAttribute("namePlayground", voleyballPlayground.getName() );
-                    model.addAttribute("playId", voleyballPlayground.getIdplayground() );
-                    model.addAttribute("street", voleyballPlayground.getStreet() );
-                    model.addAttribute("house", voleyballPlayground.getHouse() );
-                    model.addAttribute("sport", voleyballPlayground.getSport() );
-                    model.addAttribute("players", playgroundService.getVoleyPlayersById(id) );
-                    model.addAttribute("plays", playgroundService.getVoleyPlayById(id) );
-                }
-            }
-        }
+
+
         Gson gson = new Gson();
         if (!eventId.equals("null")) {
 
@@ -427,8 +323,6 @@ public class StartController {
 
     @RequestMapping(value = "/home")
     public String toHome(Model model, @RequestParam(value="where", required = false, defaultValue = "home") String where, @RequestParam(value="playgroundId", required = false) String id, @RequestParam(value="sport", required = false) String sport ) {
-       // User user = (User) httpSession.getAttribute("sessionUser");
-        //String userId = (String) httpSession.getAttribute("userId");
         if (where.equals("group")) {
             addPlaygroundDataToModel(model);
             model.addAttribute("returnBack", where);
@@ -437,47 +331,16 @@ public class StartController {
         } else if (where.equals("map")) {
             addPlaygroundDataToModel(model);
             String json = null;
-            if (sport.equals("Футбол")) {
-                HashMap<String, Double> map = new HashMap<>();
-                Gson gson = new Gson();
+            HashMap<String, Double> map = new HashMap<>();
+            Gson gson = new Gson();
 
-                for (FootballPlayground p : footballPlaygroundList) {
+                for (Playground p : allPlaygroundList) {
                     if (p.getIdplayground().equals(id)) {
                         map.put("lat", Double.parseDouble(p.getLatitude()));
                         map.put("lng", Double.parseDouble(p.getLongitude()));
                         json = gson.toJson(map);
                     }
-
                 }
-            }
-
-            if (sport.equals("Баскетбол")) {
-                HashMap<String, Double> map = new HashMap<>();
-                Gson gson = new Gson();
-
-                for (BasketballPlayground p : basketballPlaygroundList) {
-                    if (p.getIdplayground().equals(id)) {
-                        map.put("lat", Double.parseDouble(p.getLatitude()));
-                        map.put("lng", Double.parseDouble(p.getLongitude()));
-                        json = gson.toJson(map);
-                    }
-
-                }
-            }
-
-            if (sport.equals("Волейбол")) {
-                HashMap<String, Double> map = new HashMap<>();
-                Gson gson = new Gson();
-
-                for (VoleyballPlayground p : voleyballPlaygroundList) {
-                    if (p.getIdplayground().equals(id)) {
-                        map.put("lat", Double.parseDouble(p.getLatitude()));
-                        map.put("lng", Double.parseDouble(p.getLongitude()));
-                        json = gson.toJson(map);
-                    }
-
-                }
-            }
 
             model.addAttribute("returnBack", where);
             model.addAttribute("sport", sport);
@@ -488,11 +351,11 @@ public class StartController {
             model.addAttribute("playgroundCoordinate", "empty");
         }
 
-        User user = (User)httpSession.getAttribute("user");
+        User user = (User) httpSession.getAttribute("user");
         setUserDataToModel(user, model);
         Gson gson = new Gson();
 
-        List<Event> listEvents = eventsService.getEvents(user.getPlaygroundFootballList(), user.getPlaygroundBasketList(), user.getPlaygroundVoleyList());
+        List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
         model.addAttribute("listEventsJson", gson.toJson(listEvents));
         model.addAttribute("listEvents", listEvents);
         return "main";
@@ -520,7 +383,7 @@ public class StartController {
     public String event(Model model, @RequestParam(name = "eventId") String eventId) {
         Gson gson = new Gson();
         User user = (User)httpSession.getAttribute("user");
-        List<Event> listEvents = eventsService.getEvents(user.getPlaygroundFootballList(), user.getPlaygroundBasketList(), user.getPlaygroundVoleyList());
+        List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
         Event event = FluentIterable.from(listEvents).firstMatch(new Predicate<Event>() {
             @Override
             public boolean apply(Event event) {
@@ -577,53 +440,6 @@ public class StartController {
     }
 
 
-    /**
-     * Возвращает представление карты Google со всеми данными
-     *
-     * @param model
-     * @param id
-     * @return
-     */
-    @RequestMapping(value = "/maps")
-    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id, @RequestParam(value = "access_token", required = false) String access_token) throws Exception {
-        try {
-            //messageService.sendMessage(ADMIN, "В приложение зашел пользователь с id " + id);
-
-            // Получение данных по площадкам из базы данных
-            voleyballPlaygroundList = playgroundService.getVoleyballPlayground();
-            footballPlaygroundList = playgroundService.getFootballPlayground();
-            basketballPlaygroundList = playgroundService.getBasketballPlayground();
-            if (voleyballPlaygroundList == null || footballPlaygroundList == null || basketballPlaygroundList == null) {
-                throw new DataBaseException(DataBaseException.ERORR_MESSAGE);
-            }
-            // Получение координат площадок и конвертация в JSON
-            ArrayList<String> footLocationList = getСoordinateFootPlayground(footballPlaygroundList);
-            ArrayList<String> basketLocationList = getСoordinateBasketPlayground(basketballPlaygroundList);
-            ArrayList<String> voleyLocationList = getСoordinateVoleyPlayground(voleyballPlaygroundList);
-
-            // Получение основных данных по площадкам и конвертация данных в формат JSON
-            ArrayList<String> footInfoList = getFootInfoList(footballPlaygroundList);
-            ArrayList<String> basketInfoList = getBasketInfoList(basketballPlaygroundList);
-            ArrayList<String> voleyballInfoList = getVoleyballInfoList(voleyballPlaygroundList);
-
-            // Добавление данных в модель
-            model.addAttribute("footLocation", footLocationList);
-            model.addAttribute("basketLocation", basketLocationList);
-            model.addAttribute("voleyLocation", voleyLocationList);
-
-            model.addAttribute("footInfo", footInfoList);
-            model.addAttribute("basketInfo", basketInfoList);
-            model.addAttribute("voleyballInfo", voleyballInfoList);
-            model.addAttribute("errorMaps", "success");
-        } catch (Exception e) {
-            model.addAttribute("errorMaps", "fail");
-            messageService.sendMessage(ADMIN, errorCreateMaps(id, e));
-            e.printStackTrace();
-        }
-
-        return "map";
-    }
-
     private ArrayList<String> getUserTemplates(List<TemplateGame> list) {
         HashMap<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
@@ -643,11 +459,11 @@ public class StartController {
      * @param voleyballPlaygroundList
      * @return
      */
-    private ArrayList<String> getVoleyballInfoList(List<VoleyballPlayground> voleyballPlaygroundList) {
+    private ArrayList<String> getVoleyballInfoList(List<Playground> voleyballPlaygroundList) {
         HashMap<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList = new ArrayList<>();
-        for (VoleyballPlayground p : voleyballPlaygroundList) {
+        for (Playground p : voleyballPlaygroundList) {
             map.put("namePlayground", p.getName());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
@@ -666,11 +482,11 @@ public class StartController {
      * @param basketballPlaygroundList
      * @return
      */
-    private ArrayList<String> getBasketInfoList(List<BasketballPlayground> basketballPlaygroundList) {
+    private ArrayList<String> getBasketInfoList(List<Playground> basketballPlaygroundList) {
         HashMap<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList = new ArrayList<>();
-        for (BasketballPlayground p : basketballPlaygroundList) {
+        for (Playground p : basketballPlaygroundList) {
             map.put("namePlayground", p.getName());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
@@ -682,6 +498,7 @@ public class StartController {
 
         return mapArrayList;
     }
+
 
     /**
      * Получение основных данных по площадкам и конвертация данных в формат JSON
@@ -689,11 +506,11 @@ public class StartController {
      * @param footballPlaygroundList
      * @return
      */
-    private ArrayList<String> getFootInfoList(List<FootballPlayground> footballPlaygroundList) {
+    private ArrayList<String> getFootInfoList(List<Playground> footballPlaygroundList) {
         HashMap<String, Object> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList = new ArrayList<>();
-        for (FootballPlayground p : footballPlaygroundList) {
+        for (Playground p : footballPlaygroundList) {
             map.put("namePlayground", p.getName());
             map.put("street", p.getStreet());
             map.put("house", p.getHouse());
@@ -712,11 +529,11 @@ public class StartController {
      * @param list
      * @return
      */
-    private ArrayList<String> getСoordinateFootPlayground(List<FootballPlayground> list) {
+    private ArrayList<String> getСoordinateFootPlayground(List<Playground> list) {
         HashMap<String, Double> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList = new ArrayList<>();
-        for (FootballPlayground p : list) {
+        for (Playground p : list) {
             map.put("lat", Double.parseDouble(p.getLatitude()));
             map.put("lng", Double.parseDouble(p.getLongitude()));
             String json = gson.toJson(map);
@@ -731,11 +548,11 @@ public class StartController {
      * @param list
      * @return
      */
-    private ArrayList<String> getСoordinateBasketPlayground(List<BasketballPlayground> list) {
+    private ArrayList<String> getСoordinateBasketPlayground(List<Playground> list) {
         HashMap<String, Double> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList = new ArrayList<>();
-        for (BasketballPlayground p : list) {
+        for (Playground p : list) {
             map.put("lat", Double.parseDouble(p.getLatitude()));
             map.put("lng", Double.parseDouble(p.getLongitude()));
             String json = gson.toJson(map);
@@ -750,11 +567,11 @@ public class StartController {
      * @param list
      * @return
      */
-    private ArrayList<String> getСoordinateVoleyPlayground(List<VoleyballPlayground> list) {
+    private ArrayList<String> getСoordinateVoleyPlayground(List<Playground> list) {
         HashMap<String, Double> map = new HashMap<>();
         Gson gson = new Gson();
         ArrayList<String> mapArrayList = new ArrayList<>();
-        for (VoleyballPlayground p : list) {
+        for (Playground p : list) {
             map.put("lat", Double.parseDouble(p.getLatitude()));
             map.put("lng", Double.parseDouble(p.getLongitude()));
             String json = gson.toJson(map);

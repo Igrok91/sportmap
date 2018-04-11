@@ -1,5 +1,7 @@
 package com.realsport.model.service;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.dao.PlaygroundDao;
 import com.realsport.model.dao.daoException.DataBaseException;
@@ -8,7 +10,6 @@ import com.realsport.model.entityDao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 
 import java.util.ArrayList;
@@ -31,9 +32,6 @@ public class PlaygroundService implements PlaygroundDao{
     public static final String BASKETBALL_PLAYGROUND = "BasketballPlayground";
     public static final String VOLEYBALL_PLAYGROUND = "VoleyballPlayground";
 
-    @Qualifier("productDao")
-    @Autowired
-    private PlaygroundDao playgroundDao;
 
     @Autowired
     private DatastoreService datastoreService;
@@ -44,24 +42,39 @@ public class PlaygroundService implements PlaygroundDao{
     }
 
     @Override
-    public List<FootballPlayground> getFootballPlayground() throws DataBaseException {
-        return datastoreService.getFootballPlayground();
+    public List<Playground> getFootballPlayground(List<Playground> allPlaygroundList) throws DataBaseException {
+        List<Playground> footballPlaygrounds = FluentIterable.from(allPlaygroundList).filter(new Predicate<Playground>() {
+            @Override
+            public boolean apply(Playground playground) {
+                return playground.getSport().equals(KindSport.FOOTBALL.getSport());
+            }
+        }).toList();
+        return footballPlaygrounds;
     }
 
     @Override
-    public List<VoleyballPlayground> getVoleyballPlayground() throws DataBaseException {
-        return datastoreService.getVoleyballPlayground();
+    public List<Playground> getVoleyballPlayground(List<Playground> allPlaygroundList) throws DataBaseException {
+        List<Playground> playgrounds = FluentIterable.from(allPlaygroundList).filter(new Predicate<Playground>() {
+            @Override
+            public boolean apply(Playground playground) {
+                return playground.getSport().equals(KindSport.VOLEYBALL.getSport());
+            }
+        }).toList();
+        return playgrounds;
     }
 
     @Override
-    public List<BasketballPlayground> getBasketballPlayground() throws DataBaseException {
-        return datastoreService.getBasketballPlayground();
+    public List<Playground> getBasketballPlayground(List<Playground> allPlaygroundList) throws DataBaseException {
+        List<Playground> playgrounds = FluentIterable.from(allPlaygroundList).filter(new Predicate<Playground>() {
+            @Override
+            public boolean apply(Playground playground) {
+                return playground.getSport().equals(KindSport.BASKETBALL.getSport());
+            }
+        }).toList();
+        return playgrounds;
     }
 
-    @Override
-    public FootballPlayground getFootballById(String id) throws DataBaseException {
-        return  playgroundDao.getFootballById(id);
-    }
+
 
 
     public List<Event> getFootballEventsById(String id) {
@@ -142,4 +155,11 @@ public class PlaygroundService implements PlaygroundDao{
         return Collections.singletonList(new Event());
     }
 
+    public List<Playground> getAllPlayground() {
+        return datastoreService.getAllPlayground();
     }
+
+    public Playground getPlaygroundById(String idGroup) {
+        return datastoreService.getPlaygroundById(idGroup);
+    }
+}

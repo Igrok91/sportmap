@@ -160,7 +160,7 @@
                                     <a class="pull-left" href="#" >
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
-                                             alt="Баскетбол" width="30" height="30">
+                                             alt="Баскетбол" width="35" height="35">
 
                                     </a>
                                     <div class="media-body" >

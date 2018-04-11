@@ -25,6 +25,10 @@
             margin-top: 9px;
             margin-bottom: 9px;
         }
+        a.disabled {
+            pointer-events: none; /* делаем элемент неактивным для взаимодействия */
+            cursor: default; /*  курсор в виде стрелки */
+        }
     </style>
 </head>
 <body>
@@ -36,6 +40,8 @@
         </div>
     </div>
 </nav>
+
+
 <main id="mainPlayground">
 
     <div class="container " style="margin-top: 15px">
@@ -88,7 +94,7 @@
                                         </c:otherwise>
                                     </c:choose>
 
-                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}" class="btn btn-primary"
+                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}" class="btn btn-primary" id="goGame"
                                        style="margin:3px">Позвать на игру</a>
                                 </div>
 
@@ -107,17 +113,24 @@
 
                     </div>
                     <div class="list-group" >
-                        <a href="#" class="list-group-item ">
-                            <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out
-                                    value="${players.size()}"/></span> <span class="glyphicon glyphicon-menu-right"
-                                                                             style="color: gray"></span></span>
-                            Участники
-                        </a>
+                        <c:choose>
+                            <c:when test="${players.size() == 0}">
+                                <a class="list-group-item ">
+                                     <span class="badge" style="background: #ffffff"><span style="color: gray" id="players"><c:out
+                                             value="${players.size()}"/></span> </span>
+                                    Участники
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="list-group-item " data-toggle="modal" data-target="#playersModal">
+                                     <span class="badge" style="background: #ffffff"><span style="color: gray" id="players"><c:out
+                                             value="${players.size()}"/></span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
+                                    Участники
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
 
-                        <%--          <a href="#" class="list-group-item">
-                                      <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out value="${plays.size()}"/></span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
-                                      События </a>
-          --%>
+
                     </div>
                     <%--               <div class="container-fluid">
                                        <div class="row text-center" >
@@ -347,6 +360,45 @@
             </div>
         </div>
 </main>
+<!-- Modal -->
+<div class="modal fade" id="playersModal" tabindex="-1" role="dialog" aria-labelledby="playersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" id="playersModalLabel">Участники</h5>
+            </div>
+            <div class="modal-body">
+     
+                        <div class="list-group" id="listGroupsUser">
+                            <c:forEach var="user" items="${players}">
+                                <a href="toUser?userId=${user.userId}" class="list-group-item borderless" id="${user.userId}">
+                                    <div class="media">
+                                        <div class="pull-left">
+                                            <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
+                                                 height="40"/>
+                                        </div>
+
+
+                                        <div class="media-body ">
+                                                <%--       <h4 class="media-heading"
+                                                           style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
+                                            <span style="color: gray">${user.firstName} ${user.lastName}</span>
+                                                <%--<hr>--%>
+                                        </div>
+                                    </div>
+                                </a>
+                            </c:forEach>
+
+                        </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
 
@@ -376,9 +428,20 @@
             if (value == true) {
                 $('#exitFromGroup').removeClass('hide');
                 $('#enterToGroup').addClass('hide');
+                $('#goGame').removeClass("disabled");
+
+                var count2 = parseInt($('#players').text());
+                count2 = count2 + 1;
+                $('#players').text(count2);
+
             } else {
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');
+                $('#goGame').addClass("disabled");
+
+                var count2 = parseInt($('#players').text());
+                count2 = count2 - 1;
+                $('#players').text(count2);
             }
         });
     }
@@ -390,6 +453,11 @@
         } else {
             VK.callMethod('resizeWindow', 900, height + 60);
         }
+    }
+
+    var isParticipant = ${isParticipant};
+    if (isParticipant === false) {
+        $('#goGame').addClass("disabled");
     }
 </script>
 </body>

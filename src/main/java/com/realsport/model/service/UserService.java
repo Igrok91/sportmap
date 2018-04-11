@@ -45,9 +45,7 @@ public class UserService {
         Map<String, Boolean> map = new HashMap<>();
         map.put("172924708", Boolean.TRUE);
         map.put("12345", Boolean.FALSE);
-        user.setPlaygroundBasketList(listBasket);
-        user.setPlaygroundFootballList(listFootball);
-        user.setPlaygroundVoleyList(listVoley);
+
         user.setEventListActive(map);
         user.setFirstName("Игорь");
         user.setLastName("Рябцев");
