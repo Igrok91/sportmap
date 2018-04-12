@@ -56,7 +56,7 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div class="list-group" id="listGroupsUser">
+                        <div class="list-group" id="listGroupsUser" style="padding-top: 7px">
                             <c:forEach var="group" items="${allPlaygroundUser}">
                                 <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}" class="list-group-item borderless">
                                     <div class="media">

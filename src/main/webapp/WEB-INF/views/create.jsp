@@ -29,7 +29,7 @@
             box-shadow: none;
 
         }
-        disabled {
+        a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
         }
@@ -41,7 +41,7 @@
     </style>
 </head>
 <body>
-<form action="createGame"  method="post">
+<form action="createGame"  method="post" onsubmit="disabledButton()">
 <nav class="nav navbar-static-top navbar-default" style="background: #eeeeee">
     <div class="container-fluid ">
         <div class="pull-left" >
@@ -98,7 +98,7 @@
                             <div>
                                 <label for="desc"><span><img src="resources/image/new.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
                             </div>
-                            <textarea  type="text" onkeypress="handleText()" class="form-control borderless " name="descr" placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
+                            <textarea  type="text" onkeypress="handleText()" class="form-control borderless " name="descr" placeholder="Го на игру в 18 ?" rows="1" id="desc" required></textarea>
                             <hr>
                         </div>
 
@@ -108,7 +108,7 @@
 
                         <div class="row text-center " style="padding-top: 5px">
                             <div class="container-fluid">
-                                <a href="#" onclick="saveToTemplates()" id="savetempl" class="btn"><span class="glyphicon glyphicon-floppy-save " aria-hidden=""></span> <span id="savetempltext">Сохранить в шаблоны</span></a>
+                                <a href="#" onclick="saveToTemplates()" id="savetempl" class="btn disabled"><span class="glyphicon glyphicon-floppy-save " aria-hidden=""></span> <span id="savetempltext">Сохранить в шаблоны</span></a>
                             </div>
                         </div>
 
@@ -204,7 +204,7 @@
 
                         <div class=" btn-group btn-group-justified" style="padding-top: 15px" id="divCreateGame">
                             <div class="btn-group" >
-                            <button class="btn  btn-primary disabled" type="submit" id="createGame">Опубликовать</button>
+                            <button class="btn  btn-primary" type="submit"  id="createGame" disabled>Опубликовать</button>
                             </div>
                         </div>
                         <div id="templatesPanel" class="hide">
@@ -296,42 +296,44 @@
 
     function saveToTemplates() {
         var description = $('#desc').val();
-        var answer = '+';
-        var sel2 = $('#sel2').val();
-        var sel1 = $('#sel1').val();
+        if (description.split('').length > 3) {
+            var answer = '+';
+            var sel2 = $('#sel2').val();
+            var sel1 = $('#sel1').val();
 
-        if (sel2 === 'Без ограничений') {
-            sel2 = 'infinity';
-        }
-
-        $('#savetempltext').text('Сохранено в шаблоны');
-
-        $('#savetempl').css({"pointer-events": "none"});
-
-        $.ajax({
-            url: 'saveTemplate',
-            method: "POST",
-            data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1}),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                //xhr.setRequestHeader("Content-Type", "application/json");
-            },
-            success: function (response) {
-
-                var description = response.description;
-                var template = {
-                    templateId: response.templateId,
-                    description: description,
-                }
-
-                var list = document.getElementById('listTemplates');
-                list.appendChild(getTemplatesList(template));
-                if (list.childNodes.length != 1) {
-                    $('#templatesPanelEmpty').addClass('hide');
-
-                }
+            if (sel2 === 'Без ограничений') {
+                sel2 = 'infinity';
             }
-        });
+
+            $('#savetempltext').text('Сохранено в шаблоны');
+
+            $('#savetempl').css({"pointer-events": "none"});
+
+            $.ajax({
+                url: 'saveTemplate',
+                method: "POST",
+                data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1}),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Accept", "application/json");
+                    //xhr.setRequestHeader("Content-Type", "application/json");
+                },
+                success: function (response) {
+
+                    var description = response.description;
+                    var template = {
+                        templateId: response.templateId,
+                        description: description,
+                    }
+
+                    var list = document.getElementById('listTemplates');
+                    list.appendChild(getTemplatesList(template));
+                    if (list.childNodes.length != 1) {
+                        $('#templatesPanelEmpty').addClass('hide');
+
+                    }
+                }
+            });
+        }
     }
 
     function createGame() {
@@ -386,12 +388,21 @@
         $('#createGame').attr('href', href);
     }
     function handleText() {
-        var text = $('#desc').text();
+        var text = $('#desc').val().split('');
+        console.log("description " + text.length);
+        var createGame = document.getElementById('createGame');
         if (text.length > 3) {
-            $('#createGame').removeClass('disabled');
+            createGame.removeAttribute('disabled');
+            $('#savetempl').removeClass('disabled');
         } else {
-            $('#createGame').addClass('disabled');
+            createGame.setAttribute('disabled', 'disabled');
+            $('#savetempl').addClass('disabled');
         }
+    }
+
+    function disabledButton() {
+        var createGame = document.getElementById('createGame');
+        createGame.setAttribute('disabled', 'disabled');
     }
 
 </script>

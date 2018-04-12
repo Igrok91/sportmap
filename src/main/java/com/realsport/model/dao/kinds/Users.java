@@ -24,50 +24,6 @@ public class Users {
     private static final KeyFactory keyFactory = getKeyFactory(Users.class);
 
 
-    public Users() {
-
-    }
-
-
-    public void publishEvent(Event game) {
-        Transaction tx = getDatastore().newTransaction();
-        try {
-   /*         User u = new User();
-            u.setUserId("1234");
-            u.setFirstName("firstName");
-            game.setUserList(Collections.singletonList(u));
-            List<EntityValue> list = new ArrayList<>();
-            for (User user: game.getUserList()) {
-                FullEntity userEntity = FullEntity.newBuilder(keyFactory.newKey(user.getUserId()))
-                        .set("firstName", "firstName")
-                        .build();
-                EntityValue value = EntityValue.of(userEntity);
-                list.add(value);
-            }*/
-            FullEntity task = FullEntity.newBuilder(keyFactory.newKey())
-                    .set("description", StringValue.newBuilder(game.getDescription()).setExcludeFromIndexes(true).build())
-                    .set("userIdCreator", game.getUserIdCreator())
-                    .set("playgroundName", game.getPlaygroundName())
-                    .set("playgroundId", game.getPlaygroundId())
-                    .set("userFirtsNameCreator", "firstName")
-                    .set("userLastNameCreator", "firstName")
-                    .set("maxCountAnswer", game.getMaxCountAnswer())
-                    .set("duration", game.getDuration())
-                    .set("sport", game.getSport())
-                    .set("active", game.isActive())
-                    .set("dateCreation", String.valueOf(game.getDateCreation()))
-                    .build();
-            Entity entity = tx.add(task);
-            game.setIdEvent(entity.getKey().getId().toString());
-            logger.info(" Создание события с Id" + game.getIdEvent());
-            tx.commit();
-        } finally {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-        }
-    }
-
     public void registerUser(User user) {
         Transaction tx = getDatastore().newTransaction();
         try {
@@ -103,7 +59,13 @@ public class Users {
 
     public User getUser(String id) {
         logger.info("Поиск пользователя");
-            Query<Entity> entityQuery = Query.newEntityQueryBuilder()
+        Datastore datastore = getDatastore();
+        Entity entity = datastore.get(keyFactory.newKey(id));
+        if (Objects.nonNull(entity)) {
+            logger.info("Пользователь найден");
+            return getUserFromEntity(entity);
+        }
+            /*Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                     .setKind("Users")
                     .setFilter(StructuredQuery.PropertyFilter.eq("userId", id))
                     .build();
@@ -112,7 +74,7 @@ public class Users {
                 logger.info("Пользователь найден");
                 return getUserFromEntity(entity.next());
 
-            }
+            }*/
         logger.info("Пользователь не найден");
         return null;
     }

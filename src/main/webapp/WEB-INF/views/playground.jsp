@@ -56,10 +56,10 @@
         </div>
 
 
-        <div class="media-body ">
+        <div class="media-body " style="padding-top: 10px; padding-left: 3px">
             <%--       <h4 class="media-heading"
                        style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
-            <span style="color: gray">${firstName} ${lastName}</span>
+            <span>${firstName} ${lastName}</span>
             <%--<hr>--%>
         </div>
     </div>
@@ -405,10 +405,10 @@
                                         </div>
 
 
-                                        <div class="media-body ">
+                                        <div class="media-body " style="padding-top: 10px; padding-left: 3px">
                                                 <%--       <h4 class="media-heading"
                                                            style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
-                                            <span  style="padding-top: 5px;margin-top: 10px">${user.firstName} ${user.lastName}</span>
+                                            <span >${user.firstName} ${user.lastName}</span>
                                                 <%--<hr>--%>
                                         </div>
                                     </div>

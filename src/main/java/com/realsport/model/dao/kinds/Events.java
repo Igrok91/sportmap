@@ -1,8 +1,6 @@
 package com.realsport.model.dao.kinds;
 
 import com.google.cloud.datastore.*;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.*;
 import com.realsport.model.entityDao.Event;
 import org.apache.commons.logging.Log;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import static com.realsport.model.dao.Persistence.getDatastore;
 import static com.realsport.model.dao.Persistence.getKeyFactory;
@@ -45,6 +42,8 @@ public class Events {
                 EntityValue value = EntityValue.of(userEntity);
                 list.add(value);
             }*/
+            List<User> list = game.getUserList();
+            List<EntityValue> entityList = getEntityListFromUserList(list);
             FullEntity task = FullEntity.newBuilder(keyFactory.newKey())
                     .set("description", StringValue.newBuilder(game.getDescription()).setExcludeFromIndexes(true).build())
                     .set("userIdCreator", game.getUserIdCreator())
@@ -52,11 +51,12 @@ public class Events {
                     .set("playgroundId", game.getPlaygroundId())
                     .set("userFirtsNameCreator", "firstName")
                     .set("userLastNameCreator", "firstName")
-                    .set("maxCountAnswer", game.getMaxCountAnswer())
+                    .set("maxCountAnswer", String.valueOf(game.getMaxCountAnswer()))
                     .set("duration", game.getDuration())
                     .set("sport", game.getSport())
                     .set("active", game.isActive())
                     .set("dateCreation", String.valueOf(game.getDateCreation()))
+                    .set("userList", ListValue.of(entityList))
                     .build();
             Entity entity = tx.add(task);
             game.setIdEvent(entity.getKey().getId().toString());
@@ -67,6 +67,25 @@ public class Events {
                 tx.rollback();
             }
         }
+    }
+
+    private List<EntityValue> getEntityListFromUserList(List<User> listUser) {
+        if (listUser.size() != 0) {
+            List<EntityValue> list = new ArrayList<>();
+            for (User user : listUser) {
+                FullEntity userEntity = FullEntity.newBuilder(keyFactory.newKey(user.getUserId()))
+                        .set("userId", user.getUserId())
+                        .set("firstName", user.getUserId())
+                        .set("lastName", user.getUserId())
+                        .set("isFake", BooleanValue.of(user.isFake()))
+                        .set("countFake", LongValue.of(user.getCountFake()))
+                        .build();
+                EntityValue value = EntityValue.of(userEntity);
+                list.add(value);
+                return list;
+            }
+        }
+        return new ArrayList<>();
     }
 
     public List<Event> getAllEvents() {
@@ -100,7 +119,7 @@ public class Events {
             event.setUserLastNameCreator(entity.getString("userLastNameCreator"));
             event.setDescription(entity.getString("description"));
             event.setAnswer("+");
-            event.setMaxCountAnswer(Integer.parseInt(String.valueOf(entity.getLong("maxCountAnswer"))));
+            event.setMaxCountAnswer(Integer.parseInt(entity.getString("maxCountAnswer")));
             event.setDuration(entity.getString("duration"));
             event.setSport(entity.getString("sport"));
             event.setPlaygroundId(entity.getString("playgroundId"));
@@ -153,8 +172,8 @@ public class Events {
             user.setFirstName(fullEntity.getString("firstName"));
             user.setLastName(fullEntity.getString("lastName"));
             user.setFake(fullEntity.getBoolean("isFake"));
-            user.setAdmin(fullEntity.getBoolean("isAdmin"));
-            user.setCountFake(Integer.parseInt(fullEntity.getString("countFake")));
+
+            user.setCountFake((int) fullEntity.getLong("countFake"));
             userList.add(user);
         }
         return userList;
