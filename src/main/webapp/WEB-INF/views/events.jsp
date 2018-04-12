@@ -18,7 +18,10 @@
     <style>
 
         /* Set black background color, white text and some padding */
-
+        disabled {
+            pointer-events: none; /* делаем элемент неактивным для взаимодействия */
+            cursor: default; /*  курсор в виде стрелки */
+        }
         .hrDescription {
             margin-top: 9px;
             margin-bottom: 9px;
@@ -156,7 +159,7 @@
 
 
                                 </div>
-                                <div style="padding-left: 15px;padding-top: 10px; padding-bottom: 5px">
+                                <div style="padding-left: 15px;padding-top: 10px; padding-bottom: 12px">
                                     <a class="pull-left" href="#" >
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"

@@ -29,6 +29,10 @@
             box-shadow: none;
 
         }
+        disabled {
+            pointer-events: none; /* делаем элемент неактивным для взаимодействия */
+            cursor: default; /*  курсор в виде стрелки */
+        }
 
         hr {
             margin-top: 0px;
@@ -94,7 +98,7 @@
                             <div>
                                 <label for="desc"><span><img src="resources/image/new.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
                             </div>
-                            <textarea  type="text" class="form-control borderless " name="descr" placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
+                            <textarea  type="text" onkeypress="handleText()" class="form-control borderless " name="descr" placeholder="Го на игру в 18 ?" rows="1" id="desc"></textarea>
                             <hr>
                         </div>
 
@@ -200,7 +204,7 @@
 
                         <div class=" btn-group btn-group-justified" style="padding-top: 15px" id="divCreateGame">
                             <div class="btn-group" >
-                            <button class="btn  btn-primary" type="submit" id="createGame">Опубликовать</button>
+                            <button class="btn  btn-primary disabled" type="submit" id="createGame">Опубликовать</button>
                             </div>
                         </div>
                         <div id="templatesPanel" class="hide">
@@ -380,6 +384,14 @@
     function toHome() {
         var href = 'home';
         $('#createGame').attr('href', href);
+    }
+    function handleText() {
+        var text = $('#desc').text();
+        if (text.length > 3) {
+            $('#createGame').removeClass('disabled');
+        } else {
+            $('#createGame').addClass('disabled');
+        }
     }
 
 </script>

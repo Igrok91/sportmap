@@ -6,16 +6,17 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.Comment;
+import com.realsport.model.entityDao.MinUser;
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 import com.realsport.model.service.EventsService;
+import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.UserService;
 
 
+import com.vk.api.sdk.objects.users.UserMin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,9 @@ public class RestController {
 
     @Autowired
     private EventsService eventsService;
+
+    @Autowired
+    private PlaygroundService playgroundService;
 
     @RequestMapping("removeTemplate")
     public void removeTemplate(@RequestParam(value="templateId", required=false, defaultValue="World") String templateId) {
@@ -153,16 +157,26 @@ public class RestController {
             if (id == null) {
                 logger.info("User c id " + userId + " вступил в группу " + playgroundId);
                 user.getPlaygroundIdlList().add(playgroundId);
-                eventsService.addPlaygroundToUser(userId, playgroundId);
+                playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
+                userService.addPlaygroundToUser(userId, playgroundId);
                 isParticipant = Boolean.TRUE;
             } else {
                 logger.info("User c id " + userId + " вышел из группы " + playgroundId);
                 user.getPlaygroundIdlList().remove(id);
-                eventsService.deletePlaygroundFromUser(userId, playgroundId);
+                playgroundService.deleteUserFromPlayground(userId, playgroundId);
+                userService.deletePlaygroundFromUser(userId, playgroundId);
                 isParticipant = Boolean.FALSE;
             }
         httpSession.setAttribute("user", user);
      return isParticipant;
+    }
+
+    private MinUser getUserMin(User user) {
+        MinUser userMin = new MinUser();
+        userMin.setUserId(user.getUserId());
+        userMin.setFirstName(user.getFirstName());
+        userMin.setLastName(user.getLastName());
+        return userMin;
     }
 
     @RequestMapping("/addIgrok")

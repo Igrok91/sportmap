@@ -107,11 +107,21 @@ public class DatastoreService {
         return playgrounds.getPlaygroundById(idGroup);
     }
 
-    public void addPlaygroundToUser(String userId, String playgroundId) {
-        playgrounds.addPlaygroundToUser(userId, playgroundId);
+    public void addUserToPlayground(MinUser user, String playgroundId) {
+        playgrounds.addUserToPlayground(user, playgroundId);
+    }
+
+    public void deleteUserFromPlayground(String userId, String playgroundId) {
+            playgrounds.deleteUserFromPlayground(userId, playgroundId);
     }
 
     public void deletePlaygroundFromUser(String userId, String playgroundId) {
-        playgrounds.deletePlaygroundFromUser(userId, playgroundId);
+        users.deletePlaygroundFromUser(userId, playgroundId);
     }
+
+    public void addPlaygroundToUser(String userId, String playgroundId) {
+        users.addPlaygroundToUser(userId, playgroundId);
+    }
+
+
 }

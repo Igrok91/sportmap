@@ -162,4 +162,12 @@ public class PlaygroundService implements PlaygroundDao{
     public Playground getPlaygroundById(String idGroup) {
         return datastoreService.getPlaygroundById(idGroup);
     }
+
+    public void addUserToPlayground(MinUser minUser, String playgroundId) {
+        datastoreService.addUserToPlayground(minUser, playgroundId);
+    }
+
+    public void deleteUserFromPlayground(String userId, String playgroundId) {
+        datastoreService.deleteUserFromPlayground(userId, playgroundId);
+    }
 }

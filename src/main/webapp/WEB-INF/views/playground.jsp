@@ -29,6 +29,13 @@
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
         }
+
+        .borderless {
+            border: 0 none;
+
+            box-shadow: none;
+
+        }
     </style>
 </head>
 <body>
@@ -41,7 +48,22 @@
     </div>
 </nav>
 
+<a href="toUser?userId=${userId}" class="list-group-item borderless hide" id="list_template">
+    <div class="media">
+        <div class="pull-left">
+            <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
+                 height="40"/>
+        </div>
 
+
+        <div class="media-body ">
+            <%--       <h4 class="media-heading"
+                       style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
+            <span style="color: gray">${firstName} ${lastName}</span>
+            <%--<hr>--%>
+        </div>
+    </div>
+</a>
 <main id="mainPlayground">
 
     <div class="container " style="margin-top: 15px">
@@ -369,13 +391,13 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h5 class="modal-title" id="playersModalLabel">Участники</h5>
+                <h5 class="modal-title" id="playersModalLabel">Участники группы</h5>
             </div>
             <div class="modal-body">
      
                         <div class="list-group" id="listGroupsUser">
                             <c:forEach var="user" items="${players}">
-                                <a href="toUser?userId=${user.userId}" class="list-group-item borderless" id="${user.userId}">
+                                <a href="toUser?userId=${user.userId}" class="list-group-item borderless" id="list_${user.userId}">
                                     <div class="media">
                                         <div class="pull-left">
                                             <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
@@ -386,7 +408,7 @@
                                         <div class="media-body ">
                                                 <%--       <h4 class="media-heading"
                                                            style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
-                                            <span style="color: gray">${user.firstName} ${user.lastName}</span>
+                                            <span  style="padding-top: 5px;margin-top: 10px">${user.firstName} ${user.lastName}</span>
                                                 <%--<hr>--%>
                                         </div>
                                     </div>
@@ -425,6 +447,7 @@
         $.ajax({
             url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport
         }).then(function (value) {
+            var userId = '${userId}';
             if (value == true) {
                 $('#exitFromGroup').removeClass('hide');
                 $('#enterToGroup').addClass('hide');
@@ -433,7 +456,12 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 + 1;
                 $('#players').text(count2);
+                $('#list_template').removeClass('hide');
 
+                var userData = document.getElementById("list_template").cloneNode(true);
+                userData.id = "list_" + userId;
+                $('#list_template').addClass('hide');
+                $('#listGroupsUser').append(userData)
             } else {
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');
@@ -442,6 +470,7 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 - 1;
                 $('#players').text(count2);
+                $('#list_' + userId).remove();
             }
         });
     }

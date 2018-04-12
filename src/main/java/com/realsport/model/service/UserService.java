@@ -91,4 +91,12 @@ public class UserService {
 
 
     }
+
+    public void addPlaygroundToUser(String userId, String playgroundId) {
+        databaseService.addPlaygroundToUser(userId, playgroundId);
+    }
+
+    public void deletePlaygroundFromUser(String userId, String playgroundId) {
+        databaseService.deletePlaygroundFromUser(userId, playgroundId);
+    }
 }

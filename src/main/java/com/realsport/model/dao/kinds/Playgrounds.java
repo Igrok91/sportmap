@@ -71,8 +71,8 @@ public class Playgrounds {
             for (EntityValue value : listValues) {
                 MinUser minUser = new MinUser();
                 minUser.setUserId(value.get().getString("userId"));
-                minUser.setUserId(value.get().getString("firstName"));
-                minUser.setUserId(value.get().getString("lastName"));
+                minUser.setFirstName(value.get().getString("firstName"));
+                minUser.setLastName(value.get().getString("lastName"));
                 list.add(minUser);
             }
         }
@@ -107,7 +107,6 @@ public class Playgrounds {
     }
 
     private Playground convertEntityToPlayground(Entity entity) {
-        //List<EntityValue> listValues = entity.getList("players");
         LatLng latLng = entity.getLatLng("latlong");
         Playground playground = new Playground();
         playground.setIdplayground(entity.getKey().getId().toString());
@@ -118,29 +117,38 @@ public class Playgrounds {
         playground.setStreet(entity.getString("street"));
         playground.setHouse(entity.getString("house"));
         playground.setSport(entity.getString("sport"));
+        try {
+            List<EntityValue>  listValues = entity.getList("players");
+            playground.setPlayers(convertListValueToUserList(listValues));
+        } catch (Exception e) {
+            logger.warn(e);
+        }
+
         return playground;
     }
 
-    public void addPlaygroundToUser(String userId, String playgroundId) {
+    public void addUserToPlayground(MinUser minUser, String playgroundId) {
         Transaction transaction = getDatastore().newTransaction();
-
         try {
-            Entity task = transaction.get(keyFactory.newKey(userId));
-            logger.info("task" + task);
+            logger.info("playgroundId = " + playgroundId);
+            Entity task = transaction.get(keyFactory.newKey(Long.valueOf(playgroundId)));
+            logger.info("task " + task);
             if (Objects.nonNull(task)) {
-            ListValue listValue = null;
+            List<EntityValue> listValue = null;
             try {
-                listValue = task.getValue("playgroundIdlList");
+                listValue = task.getList("players");
             } catch (Exception e) {
                 logger.warn(e);
             }
                 if (Objects.nonNull(listValue)) {
-                    listValue.toBuilder().addValue(StringValue.of(playgroundId));
-                    transaction.put(Entity.newBuilder(task).set("playgroundIdlList", listValue).build());
+                    List<EntityValue> list = new ArrayList<>();
+                    list.addAll(listValue);
+                    list.add(getEntityValueFromMinUser(minUser));
+                    transaction.put(Entity.newBuilder(task).set("players", list).build());
                 } else {
-                    transaction.put(Entity.newBuilder(task).set("playgroundIdlList", ListValue.of(playgroundId)).build());
+                    transaction.put(Entity.newBuilder(task).set("players", ListValue.of(getEntityValueFromMinUser(minUser))).build());
                 }
-                logger.info("Добавили в список групп пользователя " + userId + " группу " + playgroundId);
+                logger.info("Добавили  пользователя " + minUser + " в группу " + playgroundId);
 
             }
             transaction.commit();
@@ -151,7 +159,46 @@ public class Playgrounds {
         }
     }
 
-    public void deletePlaygroundFromUser(String userId, String playgroundId) {
+    private EntityValue getEntityValueFromMinUser(MinUser minUser) {
+        FullEntity entity = FullEntity.newBuilder()
+                .set("userId", minUser.getUserId())
+                .set("firstName", minUser.getFirstName())
+                .set("lastName", minUser.getLastName())
+                .build();
+        return EntityValue.of(entity);
+    }
 
+    public void deleteUserFromPlayground(String userId, String playgroundId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity task = transaction.get(keyFactory.newKey(Long.valueOf(playgroundId)));
+            logger.info("task" + task);
+            if (Objects.nonNull(task)) {
+                List<EntityValue> listValue = null;
+                try {
+                    listValue = task.getList("players");
+                } catch (Exception e) {
+                    logger.warn(e);
+                }
+                if (Objects.nonNull(listValue)) {
+                    List<EntityValue> list = FluentIterable.from(listValue).filter(new Predicate<EntityValue>() {
+                        @Override
+                        public boolean apply(EntityValue entityValue) {
+                            return !entityValue.get().getString("userId").equals(userId);
+                        }
+                    }).toList();
+                    transaction.put(Entity.newBuilder(task).set("players", list).build());
+                } else {
+                    transaction.put(Entity.newBuilder(task).set("players", ListValue.of(playgroundId)).build());
+                }
+                logger.info("Удалили из списка Участников группы пользователя " + userId);
+
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
     }
 }

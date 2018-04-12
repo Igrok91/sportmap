@@ -55,8 +55,8 @@ public class VkService {
     public User getDataUserById(String id) {
         User user = new User();
         user.setUserId(id);
-        user.setFirstName("firstName");
-        user.setLastName("firstName");
+        user.setFirstName("Игорь");
+        user.setLastName("Рябцев");
         return user;
 
     }

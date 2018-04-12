@@ -3,8 +3,6 @@ package com.realsport.model.service;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
-import com.realsport.model.dao.kinds.Events;
-import com.realsport.model.dao.kinds.KindSport;
 import com.realsport.model.entityDao.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,7 +36,7 @@ public class EventsService {
         return null;
     }
 
-    public void publishEvent(Event game, String userId) {
+    public void publishEvent(Event game) {
             databaseService.publishEvent(game);
     }
 
@@ -252,10 +250,6 @@ public class EventsService {
 
     }
 
-    public void addPlaygroundToUser(String userId, String playgroundId) {
-        databaseService.addPlaygroundToUser(userId, playgroundId);
-
-    }
 
     public void deletePlaygroundFromUser(String userId, String playgroundId) {
         databaseService.deletePlaygroundFromUser(userId, playgroundId);

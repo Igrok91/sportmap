@@ -1,6 +1,8 @@
 package com.realsport.model.dao.kinds;
 
 import com.google.cloud.datastore.*;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.User;
 import org.apache.commons.logging.Log;
@@ -8,6 +10,10 @@ import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import static com.realsport.model.dao.Persistence.getDatastore;
 import static com.realsport.model.dao.Persistence.getKeyFactory;
@@ -85,6 +91,12 @@ public class Users {
         user.setUserId(entity.getString("userId"));
         user.setFirstName(entity.getString("firstName"));
         user.setLastName(entity.getString("lastName"));
+        try {
+            user.setPlaygroundIdlList(convertListValuePlaygroundIdToList(entity.getList("playgroundIdList")));
+        } catch (Exception e) {
+            logger.warn(e);
+        }
+
         logger.info("Данные пользователя " + user);
         return user;
     }
@@ -103,5 +115,82 @@ public class Users {
             }
         logger.info("Пользователь не найден");
         return null;
+    }
+
+    private List<String> convertListValuePlaygroundIdToList(List<StringValue> listValues) {
+        List<String> list = new ArrayList<>();
+        logger.info("Количество участников = " + listValues.size());
+        if (listValues.size() != 0) {
+            for (StringValue value : listValues) {
+                list.add(value.get());
+            }
+        }
+        return list;
+    }
+
+    public void addPlaygroundToUser(String userId, String playgroundId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity task = transaction.get(keyFactory.newKey(userId));
+            logger.info("task" + task);
+            if (Objects.nonNull(task)) {
+                List<StringValue> listValue = null;
+                try {
+                    listValue = task.getList("playgroundIdList");
+                } catch (Exception e) {
+                    logger.warn(e);
+                }
+                if (Objects.nonNull(listValue)) {
+                    List<StringValue> list = new ArrayList<>();
+                    list.addAll(listValue);
+                    list.add(StringValue.of(playgroundId));
+                    transaction.put(Entity.newBuilder(task).set("playgroundIdList", list).build());
+                } else {
+                    transaction.put(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
+                }
+                logger.info("Добавили в список групп пользователя " + userId + " группу " + playgroundId);
+
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+    }
+
+    public void deletePlaygroundFromUser(String userId, String playgroundId) {
+        Transaction transaction = getDatastore().newTransaction();
+        KeyFactory keyFactory = getKeyFactory("Users");
+        try {
+            Entity task = transaction.get(keyFactory.newKey(userId));
+            logger.info("task" + task);
+            if (Objects.nonNull(task)) {
+                List<StringValue> listValue = null;
+                try {
+                    listValue = task.getList("playgroundIdList");
+                } catch (Exception e) {
+                    logger.warn(e);
+                }
+                if (Objects.nonNull(listValue)) {
+                    List<StringValue> list = FluentIterable.from(listValue).filter(new Predicate<StringValue>() {
+                        @Override
+                        public boolean apply(StringValue stringValue) {
+                            return !stringValue.get().equals(playgroundId);
+                        }
+                    }).toList();
+                    transaction.put(Entity.newBuilder(task).set("playgroundIdList", list).build());
+                } else {
+                    transaction.put(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
+                }
+                logger.info("Добавили в список групп пользователя " + userId + " группу " + playgroundId);
+
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
     }
 }

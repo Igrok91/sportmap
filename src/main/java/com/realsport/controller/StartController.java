@@ -99,7 +99,14 @@ public class StartController {
                     isFirst = true;
                 }
                 httpSession.setAttribute("user", user);
+                MinUser minUser = new MinUser();
+                minUser.setUserId(id);
+                minUser.setFirstName(user.getFirstName());
+                minUser.setLastName(user.getLastName());
                 httpSession.setAttribute("userId", id);
+                httpSession.setAttribute("firstName", user.getFirstName());
+                httpSession.setAttribute("lastName", user.getLastName());
+                httpSession.setAttribute("minUser", minUser);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -283,14 +290,14 @@ public class StartController {
     public String toCreate(Model model,  @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport,
                            @RequestParam(value="eventId", required = false, defaultValue = "null") String eventId) {
 
-            for (Playground footballPlayground : allPlaygroundList) {
-                if (footballPlayground.getIdplayground().equals(id)) {
-                    model.addAttribute("namePlayground", footballPlayground.getName() );
-                    model.addAttribute("playId", footballPlayground.getIdplayground() );
-                    model.addAttribute("street", footballPlayground.getStreet() );
-                    model.addAttribute("house", footballPlayground.getHouse() );
-                    model.addAttribute("sport", footballPlayground.getSport() );
-                    model.addAttribute("players", footballPlayground.getPlayers() );
+            for (Playground playground : allPlaygroundList) {
+                if (playground.getIdplayground().equals(id)) {
+                    model.addAttribute("namePlayground", playground.getName() );
+                    model.addAttribute("playId", playground.getIdplayground() );
+                    model.addAttribute("street", playground.getStreet() );
+                    model.addAttribute("house", playground.getHouse() );
+                    model.addAttribute("sport", playground.getSport() );
+                    model.addAttribute("players", playground.getPlayers() );
                 }
             }
 
@@ -405,6 +412,7 @@ public class StartController {
             ,@RequestParam(name = "templateId", required = false, defaultValue = "0") String  templateId
             ,@RequestParam(name = "eventId", required = false, defaultValue = "null") String  eventId)  throws IOException {
         String userId = (String) httpSession.getAttribute("userId");
+        User user = (User) httpSession.getAttribute("user");
         Event game;
         if (templateId.equals("0")) {
             game = new Event();
@@ -417,19 +425,18 @@ public class StartController {
             game.setSport(sport);
             game.setDateCreation(getDateCreation());
             game.setPlaygroundName(namePlayground);
+            List<User> list = new ArrayList<>();
+            list.add(user);
+            game.setUserList(list);
         } else {
             game = eventsService.createEventByTemplate(templateId);
         }
-
-        Gson gson = new Gson();
-        String jsonUser = (String)httpSession.getAttribute("sessionUser");
-        HashMap<String, Object> map = gson.fromJson(jsonUser, HashMap.class);
 
         if (!eventId.equals("null")) {
             game.setIdEvent(eventId);
             eventsService.editEventById(eventId);
         } else {
-            eventsService.publishEvent(game, userId);
+            eventsService.publishEvent(game);
         }
         return "redirect:/home";
     }
