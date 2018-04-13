@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.entity.Template;
-import com.realsport.model.entityDao.Comment;
-import com.realsport.model.entityDao.MinUser;
-import com.realsport.model.entityDao.TemplateGame;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.entityDao.*;
 import com.realsport.model.service.EventsService;
 import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.UserService;
@@ -24,6 +21,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -32,6 +30,7 @@ public class RestController {
     public static final String FOOTBALL = "Футбол";
     public static final String BASKETBALL = "Баскетбол";
     public static final String VOLEYBALL = "Волейбол";
+    public static final String SESSION_NULL = "sessionNull";
 
     @Autowired
     private UserService userService;
@@ -79,80 +78,93 @@ public class RestController {
     }
 
 
-    @RequestMapping("deleteComment")
+    @RequestMapping("/deleteComment")
     public void deleteComment(@RequestParam(value="commentId", required=false, defaultValue="World") String commentId,
                               @RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
         eventsService.deleteCommentFromEvent(commentId, eventId);
     }
 
-    @RequestMapping("editUserInfo")
+    @RequestMapping("/editUserInfo")
     public void editUserInfo(@RequestParam(value="userInfo", required=false, defaultValue="World") String userInfo) {
         userService.editUserInfo(userInfo);
     }
 
     @RequestMapping("/handleAnswerMain")
     @ResponseBody
-    public Boolean handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
+    public String handleAnswerMain(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
 
-        User user = (User)httpSession.getAttribute("user");
-        System.out.println(user);
+        User user = (User) httpSession.getAttribute("user");
+
         String userId = (String) httpSession.getAttribute("userId");
-        if (user != null) {
-            Boolean b = FluentIterable.from(user.getEventListActive()).firstMatch(new Predicate<String>() {
-                @Override
-                public boolean apply(String s) {
-                    return s.equals(eventId);
+        List<Event> eventList = (List<Event>) httpSession.getAttribute("listEvents");
+        if (user != null && eventList != null) {
+                Event event= FluentIterable.from(eventList).firstMatch(new Predicate<Event>() {
+                    @Override
+                    public boolean apply(Event event) {
+                        return event.getIdEvent().equals(eventId);
+                    }
+                }).orNull();
+                Boolean b;
+                if (event != null && event.getUserList().size() != 0) {
+                    b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
+                        @Override
+                        public boolean apply(User user) {
+                            return user.getUserId().equals(userId);
+                        }
+                    }).isPresent();
+
+                    if (b == null || b.equals(Boolean.FALSE)) {
+                        eventsService.addUserToListPlayground(eventId, user, false);
+                        return "true";
+                    } else {
+                        eventsService.deleteUserFromList(eventId, userId);
+                        return "false";
+                    }
                 }
-            }).isPresent();
-            if (b == null || b.equals(Boolean.FALSE)) {
-                user.getEventListActive().add(eventId);
-                eventsService.editUserAnswer(eventId, userId);
-                eventsService.addUserToListPlayground(eventId, userId);
-                httpSession.setAttribute("user", user);
-                return Boolean.TRUE;
-            } else {
-                user.getEventListActive().remove(eventId);
-                eventsService.editUserAnswer(eventId, userId);
-                eventsService.deleteUserFromList(eventId, userId);
-                httpSession.setAttribute("user", user);
-                return Boolean.FALSE;
-            }
         }
-        return Boolean.FALSE;
+        return SESSION_NULL;
     }
 
     @RequestMapping("/handleAnswer")
     @ResponseBody
-    public Boolean handleAnswer2(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
-        User user = (User)httpSession.getAttribute("user");
-        System.out.println(user);
+    public String handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
+        User user = (User) httpSession.getAttribute("user");
         String userId = (String) httpSession.getAttribute("userId");
-        if (user != null) {
-            Boolean b = FluentIterable.from(user.getEventListActive()).firstMatch(new Predicate<String>() {
+        List<Event> eventList = (List<Event>) httpSession.getAttribute("listEvents");
+        if (user != null && eventList != null) {
+            Event event = FluentIterable.from(eventList).firstMatch(new Predicate<Event>() {
                 @Override
-                public boolean apply(String s) {
-                    return s.equals(eventId);
+                public boolean apply(Event event) {
+                    return event.getIdEvent().equals(eventId);
                 }
-            }).isPresent();
-            if (b == null || b.equals(Boolean.FALSE)) {
-                user.getEventListActive().add(eventId);
-                eventsService.editUserAnswer(eventId, userId);
-                eventsService.addUserToListPlayground(eventId, userId);
-                httpSession.setAttribute("user", user);
-                return Boolean.TRUE;
-            } else {
-                return Boolean.FALSE;
+            }).orNull();
+            Boolean b;
+            if (event != null && event.getUserList().size() != 0) {
+                b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
+                    @Override
+                    public boolean apply(User user) {
+                        return user.getUserId().equals(userId);
+                    }
+                }).isPresent();
+                if (b == null || b.equals(Boolean.FALSE)) {
+                    eventsService.addUserToListPlayground(eventId, user, false);
+                    logger.info("Boolean.TRUE.toString() " + Boolean.TRUE.toString());
+                    return "true";
+                } else {
+                    return "false";
+                }
             }
-
         }
-        return Boolean.FALSE;
+
+        return SESSION_NULL;
     }
 
     @RequestMapping("/handleGroup")
     @ResponseBody
     public Boolean handleGroup(@RequestParam(value="playgroundId", required=false, defaultValue="1") String playgroundId,
                                @RequestParam(value="sport", required=false, defaultValue=" Футбол") String sport) {
-        User user = (User)httpSession.getAttribute("user");
+
+        User user = (User) httpSession.getAttribute("user");
 
         String userId = (String) httpSession.getAttribute("userId");
         Boolean isParticipant = false;
@@ -191,13 +203,14 @@ public class RestController {
     @RequestMapping("/addIgrok")
     public void addIgrok(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
                          @RequestParam(value="count", required=false, defaultValue="1") String count ) {
-        User user = (User)httpSession.getAttribute("user");
-        System.out.println(user);
+        User user = (User) httpSession.getAttribute("user");
+        logger.info("Добавляем " + count + " игроков от пользователся" );
         String userId = (String) httpSession.getAttribute("userId");
-        user.getCount().put(eventId, Integer.valueOf(count));
-       // eventsService.addCountIgrokFromUser(userId, eventId, Integer.valueOf(count));
-        eventsService.addIgrokToListFromUser(eventId, userId + "_add", count);
-        httpSession.setAttribute("user", user);
+        if (Objects.nonNull(user)) {
+            user.setFake(true);
+            user.setCountFake(Integer.parseInt(count));
+            eventsService.addUserToListPlayground(eventId, user, true);
+        }
     }
 
 

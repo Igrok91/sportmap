@@ -16,10 +16,6 @@ public class User implements Serializable {
     private int countFake;
     //Список id площадок
     private List<String> playgroundIdlList =  new ArrayList<>();
-    //Список id событий и значение проголосовал ли
-    private  List<String> eventListActive = new ArrayList<>();
-    //Список id событий и количества игроков от пользователя
-    private Map<String, Integer> count = new HashMap<>();
 
 
 
@@ -71,14 +67,6 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
-    public Map<String, Integer> getCount() {
-        return count;
-    }
-
-    public void setCount(Map<String, Integer> count) {
-        this.count = count;
-    }
-
     public boolean isFake() {
         return isFake;
     }
@@ -95,13 +83,6 @@ public class User implements Serializable {
         this.countFake = countFake;
     }
 
-    public List<String> getEventListActive() {
-        return eventListActive;
-    }
-
-    public void setEventListActive(List<String> eventListActive) {
-        this.eventListActive = eventListActive;
-    }
 
     @Override
     public String toString() {

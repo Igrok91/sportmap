@@ -512,7 +512,7 @@
             }).then(function (value) {
                 console.log('answer ' + value);
                 var userId = '${userId}';
-                if (value == true) {
+                if (value === 'true') {
                     $('#cancelAnswer_'+ eventId).removeClass('hide');
                     $('#doAnswer_'+ eventId).addClass('hide');
                     $('#cancelAnswer2_'+ eventId).removeClass('hide');
@@ -566,7 +566,7 @@
         }).then(function (value) {
             console.log('answer ' + value);
             var userId = '${userId}';
-            if (value == true) {
+            if (value === 'true') {
                 $('#cancelAnswer_'+ eventId).removeClass('hide');
                 $('#doAnswer_'+ eventId).addClass('hide');
                 $('#cancelAnswer2_'+ eventId).removeClass('hide');

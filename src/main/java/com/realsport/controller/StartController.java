@@ -52,7 +52,7 @@ public class StartController {
     public static final String FOOTBALL = "football";
     public static final String BASKETBALL = "basketball";
     public static final String VOLEYBALL = "voleyball";
-    public static final int INACTIVE_INTERVAL = 1800;
+    public static final int INACTIVE_INTERVAL = 3600;
 
     private static final Integer ADMIN = 172924708;
 
@@ -128,7 +128,7 @@ public class StartController {
         map.put("allPlaygroundUser", getAllPlaygroundUser(user));
         String jsonUser = gson.toJson(map);
         httpSession.setAttribute("sessionUser", jsonUser);
-        httpSession.setAttribute("eventListActive", gson.toJson(user.getEventListActive()));
+
 
         model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
     }
@@ -438,9 +438,6 @@ public class StartController {
             eventsService.editEventById(eventId);
         } else {
             eventsService.publishEvent(game);
-            userService.addPlaygroundToEventListActive(playgroundId, userId);
-            user.getEventListActive().add(game.getIdEvent());
-            logger.info("EventListActive " + user.getEventListActive().size()  + " " +  user.getEventListActive().get(0));
         }
         httpSession.setAttribute("user", user);
         return "redirect:/home";

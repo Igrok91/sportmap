@@ -211,9 +211,6 @@ public class EventsService {
 
     }
 
-    public void addUserToListPlayground(String eventId, String userId) {
-
-    }
 
     public void deleteUserFromList(String eventId, String userId) {
 
@@ -261,6 +258,10 @@ public class EventsService {
 
     public List<Event> getEventsByIdGroup(String id) {
       return new ArrayList<>();
+
+    }
+
+    public void addUserToListPlayground(String eventId, User user, boolean isFake) {
 
     }
 }

@@ -46,7 +46,7 @@ public class Playgrounds {
         List<Playground> list = new ArrayList<>();
         for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
             Entity entity = it.next();
-            //List<EntityValue> listValues = entity.getList("players");
+
             LatLng latLng = entity.getLatLng("latlong");
             Playground playground = new Playground();
             playground.setIdplayground(entity.getKey().getId().toString());
@@ -57,7 +57,13 @@ public class Playgrounds {
             playground.setStreet(entity.getString("street"));
             playground.setHouse(entity.getString("house"));
             playground.setSport(entity.getString("sport"));
-            //playground.setPlayers(convertListValueToUserList(listValues));
+            try {
+                List<EntityValue> listValues = entity.getList("players");
+                playground.setPlayers(convertListValueToUserList(listValues));
+            } catch (Exception e) {
+                logger.warn(e);
+            }
+
             list.add(playground);
             logger.info(playground.getPlayers());
         }
