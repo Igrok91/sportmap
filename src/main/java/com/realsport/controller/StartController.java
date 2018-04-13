@@ -414,6 +414,7 @@ public class StartController {
         String userId = (String) httpSession.getAttribute("userId");
         User user = (User) httpSession.getAttribute("user");
         Event game;
+        logger.info("Description Event " + descr);
         if (templateId.equals("0")) {
             game = new Event();
             game.setDescription(descr);
@@ -437,7 +438,11 @@ public class StartController {
             eventsService.editEventById(eventId);
         } else {
             eventsService.publishEvent(game);
+            userService.addPlaygroundToEventListActive(playgroundId, userId);
+            user.getEventListActive().add(game.getIdEvent());
+            logger.info("EventListActive " + user.getEventListActive().size()  + " " +  user.getEventListActive().get(0));
         }
+        httpSession.setAttribute("user", user);
         return "redirect:/home";
     }
 

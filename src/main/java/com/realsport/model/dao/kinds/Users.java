@@ -123,7 +123,6 @@ public class Users {
 
     public void deletePlaygroundFromUser(String userId, String playgroundId) {
         Transaction transaction = getDatastore().newTransaction();
-        KeyFactory keyFactory = getKeyFactory("Users");
         try {
             Entity task = transaction.get(keyFactory.newKey(userId));
             logger.info("task" + task);
@@ -145,6 +144,37 @@ public class Users {
                 } else {
                     transaction.put(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
                 }
+                logger.info("Удалили из списка групп пользователя " + userId + " группу " + playgroundId);
+
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+    }
+
+    public void addPlaygroundToEventListActive(String playgroundId, String userId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity user = transaction.get(keyFactory.newKey(userId));
+            logger.info("user" + user);
+            if (Objects.nonNull(user)) {
+                List<StringValue> listValue = null;
+                try {
+                    listValue = user.getList("eventListActive");
+                } catch (Exception e) {
+                    logger.warn(e);
+                }
+                if (Objects.nonNull(listValue)) {
+                    List<StringValue> list = new ArrayList<>();
+                    list.addAll(listValue);
+                    list.add(StringValue.of(playgroundId));
+                    transaction.put(Entity.newBuilder(user).set("eventListActive", list).build());
+                } else {
+                    transaction.put(Entity.newBuilder(user).set("eventListActive", ListValue.of(playgroundId)).build());
+                }
                 logger.info("Добавили в список групп пользователя " + userId + " группу " + playgroundId);
 
             }
@@ -154,5 +184,6 @@ public class Users {
                 transaction.rollback();
             }
         }
+
     }
 }

@@ -207,11 +207,11 @@ public class EventsService {
 
     }
 
-    public void editUserAnswer(String eventId, String userId, Boolean aFalse) {
+    public void editUserAnswer(String eventId, String userId) {
 
     }
 
-    public void addUserToList(String eventId, String userId) {
+    public void addUserToListPlayground(String eventId, String userId) {
 
     }
 

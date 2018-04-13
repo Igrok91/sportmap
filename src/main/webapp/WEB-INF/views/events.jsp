@@ -399,7 +399,16 @@
 
             if (eventListActive) {
                 var eventId = event.idEvent;
-                if (eventListActive[eventId] && eventListActive[eventId] == true) {
+                console.log("eventListActive " + eventListActive);
+                console.log("eventId " + eventId);
+                var isActive = false;
+                eventListActive.map(function (id, index) {
+                    if (id === eventId) {
+                        isActive = true;
+                    }
+                });
+               // if (eventListActive[eventId] && eventListActive[eventId] == true) {
+                if (isActive) {
                    // $('#answerButton_'+ eventId).addClass('active');
                     $('#answerButton_'+ eventId).removeClass('active');
                     $('#answerButton_'+ eventId).css('background','#EAEAEC');
@@ -423,15 +432,6 @@
         });
 
     }
-
-
-
-
-
-
-
-
-
 
     function addIgrok(maxCountAnswer, eventId) {
         var addIgr = $('#countIgrok_' + eventId).val();

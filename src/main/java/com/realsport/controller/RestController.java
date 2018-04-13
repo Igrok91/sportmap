@@ -14,7 +14,6 @@ import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.UserService;
 
 
-import com.vk.api.sdk.objects.users.UserMin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,18 +98,23 @@ public class RestController {
         System.out.println(user);
         String userId = (String) httpSession.getAttribute("userId");
         if (user != null) {
-            Boolean b = user.getEventListActive().get(eventId);
+            Boolean b = FluentIterable.from(user.getEventListActive()).firstMatch(new Predicate<String>() {
+                @Override
+                public boolean apply(String s) {
+                    return s.equals(eventId);
+                }
+            }).isPresent();
             if (b == null || b.equals(Boolean.FALSE)) {
-                user.getEventListActive().put(eventId, Boolean.TRUE);
-                eventsService.editUserAnswer(eventId, userId, Boolean.TRUE);
-                eventsService.addUserToList(eventId, userId);
+                user.getEventListActive().add(eventId);
+                eventsService.editUserAnswer(eventId, userId);
+                eventsService.addUserToListPlayground(eventId, userId);
                 httpSession.setAttribute("user", user);
                 return Boolean.TRUE;
             } else {
-                user.getEventListActive().put(eventId, Boolean.FALSE);
-                eventsService.editUserAnswer(eventId, userId, Boolean.FALSE);
-                httpSession.setAttribute("user", user);
+                user.getEventListActive().remove(eventId);
+                eventsService.editUserAnswer(eventId, userId);
                 eventsService.deleteUserFromList(eventId, userId);
+                httpSession.setAttribute("user", user);
                 return Boolean.FALSE;
             }
         }
@@ -124,11 +128,16 @@ public class RestController {
         System.out.println(user);
         String userId = (String) httpSession.getAttribute("userId");
         if (user != null) {
-            Boolean b = user.getEventListActive().get(eventId);
+            Boolean b = FluentIterable.from(user.getEventListActive()).firstMatch(new Predicate<String>() {
+                @Override
+                public boolean apply(String s) {
+                    return s.equals(eventId);
+                }
+            }).isPresent();
             if (b == null || b.equals(Boolean.FALSE)) {
-                user.getEventListActive().put(eventId, Boolean.TRUE);
-                eventsService.editUserAnswer(eventId, userId, Boolean.TRUE);
-                eventsService.addUserToList(eventId, userId);
+                user.getEventListActive().add(eventId);
+                eventsService.editUserAnswer(eventId, userId);
+                eventsService.addUserToListPlayground(eventId, userId);
                 httpSession.setAttribute("user", user);
                 return Boolean.TRUE;
             } else {

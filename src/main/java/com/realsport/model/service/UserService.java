@@ -46,7 +46,7 @@ public class UserService {
         map.put("172924708", Boolean.TRUE);
         map.put("12345", Boolean.FALSE);
 
-        user.setEventListActive(map);
+        //user.setEventListActive(map);
         user.setFirstName("Игорь");
         user.setLastName("Рябцев");
         //user.setInfo("Все бесят");
@@ -98,5 +98,9 @@ public class UserService {
 
     public void deletePlaygroundFromUser(String userId, String playgroundId) {
         databaseService.deletePlaygroundFromUser(userId, playgroundId);
+    }
+
+    public void addPlaygroundToEventListActive(String playgroundId, String userId) {
+        databaseService.addPlaygroundToEventListActive(playgroundId, userId);
     }
 }

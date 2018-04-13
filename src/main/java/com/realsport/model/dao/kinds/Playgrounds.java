@@ -188,8 +188,6 @@ public class Playgrounds {
                         }
                     }).toList();
                     transaction.put(Entity.newBuilder(task).set("players", list).build());
-                } else {
-                    transaction.put(Entity.newBuilder(task).set("players", ListValue.of(playgroundId)).build());
                 }
                 logger.info("Удалили из списка Участников группы пользователя " + userId);
 

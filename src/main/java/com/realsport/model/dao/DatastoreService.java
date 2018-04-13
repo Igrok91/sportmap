@@ -124,4 +124,7 @@ public class DatastoreService {
     }
 
 
+    public void addPlaygroundToEventListActive(String playgroundId, String userId) {
+        users.addPlaygroundToEventListActive(playgroundId, userId);
+    }
 }

@@ -60,10 +60,10 @@
 
 
         <div class="row content">
-            <div class="col-md-2">
+            <div class="col-sm-2">
 
             </div>
-            <div class="col-md-8">
+            <div class="col-sm-8">
 
                 <div class="panel panel-default" id="headingCreate" style="margin-top: 15px">
                     <div class="panel-heading " >
@@ -98,7 +98,7 @@
                             <div>
                                 <label for="desc"><span><img src="resources/image/new.png" width="20" height="20" style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
                             </div>
-                            <textarea  type="text" onkeypress="handleText()" class="form-control borderless " name="descr" placeholder="Го на игру в 18 ?" rows="1" id="desc" required></textarea>
+                            <textarea  type="text" class="form-control borderless " name="descr" placeholder="Го на игру в 18 ?" rows="1" id="desc" required></textarea>
                             <hr>
                         </div>
 
@@ -217,7 +217,7 @@
                 </div>
 
 
-                <div class="col-md-2">
+                <div class="col-sm-2">
 
                 </div>
 
@@ -387,20 +387,26 @@
         var href = 'home';
         $('#createGame').attr('href', href);
     }
+    var isDisabled = true;
     function handleText() {
-        var text = $('#desc').val().split('');
-        console.log("description " + text.length);
-        var createGame = document.getElementById('createGame');
-        if (text.length > 3) {
-            createGame.removeAttribute('disabled');
-            $('#savetempl').removeClass('disabled');
-        } else {
-            createGame.setAttribute('disabled', 'disabled');
-            $('#savetempl').addClass('disabled');
+        if (isDisabled) {
+            var text = $('#desc').val().split('');
+            console.log("description " + text.length);
+            var createGame = document.getElementById('createGame');
+            if (text.length > 3) {
+                createGame.removeAttribute('disabled');
+                $('#savetempl').removeClass('disabled');
+            } else {
+                createGame.setAttribute('disabled', 'disabled');
+                $('#savetempl').addClass('disabled');
+            }
         }
+
     }
+    setInterval(handleText, 300);
 
     function disabledButton() {
+        isDisabled = false;
         var createGame = document.getElementById('createGame');
         createGame.setAttribute('disabled', 'disabled');
     }

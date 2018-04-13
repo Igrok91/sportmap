@@ -17,11 +17,10 @@ public class User implements Serializable {
     //Список id площадок
     private List<String> playgroundIdlList =  new ArrayList<>();
     //Список id событий и значение проголосовал ли
-    private Map<String, Boolean> eventListActive = new HashMap<>();
+    private  List<String> eventListActive = new ArrayList<>();
     //Список id событий и количества игроков от пользователя
     private Map<String, Integer> count = new HashMap<>();
-    //Список id событий
-    private List<String> eventListPast = new ArrayList<>();
+
 
 
     public String getInfo() {
@@ -54,22 +53,6 @@ public class User implements Serializable {
 
     public void setPlaygroundIdlList(List<String> playgroundIdlList) {
         this.playgroundIdlList = playgroundIdlList;
-    }
-
-    public Map<String, Boolean> getEventListActive() {
-        return eventListActive;
-    }
-
-    public void setEventListActive(Map<String, Boolean> eventListActive) {
-        this.eventListActive = eventListActive;
-    }
-
-    public List<String> getEventListPast() {
-        return eventListPast;
-    }
-
-    public void setEventListPast(List<String> eventListPast) {
-        this.eventListPast = eventListPast;
     }
 
     public String getFirstName() {
@@ -112,6 +95,13 @@ public class User implements Serializable {
         this.countFake = countFake;
     }
 
+    public List<String> getEventListActive() {
+        return eventListActive;
+    }
+
+    public void setEventListActive(List<String> eventListActive) {
+        this.eventListActive = eventListActive;
+    }
 
     @Override
     public String toString() {
