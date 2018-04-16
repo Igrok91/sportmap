@@ -25,11 +25,11 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <session-config>
+<!--    <session-config>
         <session-timeout>30</session-timeout>
-    </session-config>
+    </session-config>-->
 
-    <servlet>
+<!--    <servlet>
         <servlet-name>_ah_sessioncleanup</servlet-name>
         <servlet-class>com.google.apphosting.utils.servlet.SessionCleanupServlet</servlet-class>
     </servlet>
@@ -37,7 +37,7 @@
     <servlet-mapping>
         <servlet-name>_ah_sessioncleanup</servlet-name>
         <url-pattern>/_ah/sessioncleanup</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
 
 <!--    <security-constraint>
         <web-resource-collection>

@@ -68,7 +68,7 @@
 <nav class="navbar navbar-static-top navbar-default">
     <div class="container-fluid ">
         <div class="pull-left">
-            <a class="navbar-brand btn" href="home"><span class="glyphicon glyphicon-menu-left"
+            <a class="navbar-brand btn" href="home?&userId=${userId}"><span class="glyphicon glyphicon-menu-left"
                                                           aria-hidden=""></span></a>
             <a class="navbar-brand" href="#">Событие</a>
         </div>
@@ -595,7 +595,7 @@
         var maxCountAnswer = '${event.maxCountAnswer}';
         var eventId = '${event.idEvent}';
                 $.ajax({
-                    url: 'handleAnswerMain?eventId=' + eventId,
+                    url: 'handleAnswerMain?eventId=' + eventId + '&userId=' + ${userId} ,
                 }).then(function (value) {
                     console.log('answer ' + value);
                     var userId = '${userId}';
@@ -680,7 +680,7 @@
 
         if (text.length != 0) {
             $.ajax({
-                url: 'sendCommentUser',
+                url: 'sendCommentUser?userId=' + ${userId},
                 method: 'POST',
                 data: ({message: text, eventId: eventId })
             }).then(function (commentList) {

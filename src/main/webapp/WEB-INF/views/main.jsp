@@ -75,7 +75,7 @@
 
                     <div class="list-group" id="listGroupsCreate">
                         <c:forEach var="group" items="${allPlaygroundUser}">
-                            <a href="create?playgroundId=${group.idplayground}&sport=${group.getSport()}" class="list-group-item borderless">
+                            <a href="create?playgroundId=${group.idplayground}&sport=${group.getSport()}&userId=${userId}" class="list-group-item borderless">
                                 <div class="media">
                                     <div class="pull-left">
                                         <c:if test="${group.getSport() == 'Футбол'}">

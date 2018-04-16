@@ -38,26 +38,23 @@ public class RestController {
     private UserService userService;
 
     @Autowired
-    HttpSession httpSession;
-
-    @Autowired
     private EventsService eventsService;
 
     @Autowired
     private PlaygroundService playgroundService;
 
     @RequestMapping("removeTemplate")
-    public void removeTemplate(@RequestParam(value="templateId", required=false, defaultValue="World") String templateId) {
-        String userId = (String)httpSession.getAttribute("userId");
+    public void removeTemplate(@RequestParam(value="templateId", required=false, defaultValue="World") String templateId
+                                , @RequestParam(value = "userId") String userId) {
         userService.removeTemplateUser(templateId, userId);
     }
 
     @RequestMapping(value = "sendCommentUser", method = RequestMethod.POST)
     @ResponseBody
-    public List<Comment> sendCommentUser(@RequestParam(value="message", required=false, defaultValue="World") String message,
-                                         @RequestParam(value="eventId", required=false, defaultValue="5") String eventId) {
-        String userId = (String)httpSession.getAttribute("userId");
-        User user = (User)httpSession.getAttribute("user");
+    public List<Comment> sendCommentUser( @RequestParam(value="message", required=false, defaultValue="World") String message,
+                                          @RequestParam(value="eventId", required=false, defaultValue="5") String eventId
+                                        , @RequestParam(value = "userId") String userId) {
+        User user = userService.getUser(userId);
         Comment comment = new Comment();
         comment.setUserId(userId);
         comment.setMessage(message);
@@ -73,12 +70,6 @@ public class RestController {
     }
 
 
-    @RequestMapping("test")
-    public void test(@RequestParam(value="test", required=false, defaultValue="World") String templateId) {
-        String userId = (String)httpSession.getAttribute("userId");
-        userService.removeTemplateUser(templateId, userId);
-    }
-
 
     @RequestMapping("/deleteComment")
     public void deleteComment(@RequestParam(value="commentId", required=false, defaultValue="World") String commentId,
@@ -93,32 +84,26 @@ public class RestController {
 
     @RequestMapping("/handleAnswerMain")
     @ResponseBody
-    public String handleAnswerMain(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
+    public String handleAnswerMain(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId
+                                , @RequestParam(value = "userId") String userId) {
 
-        User user = (User) httpSession.getAttribute("user");
+        User user = userService.getUser(userId);
 
-        String userId = (String) httpSession.getAttribute("userId");
-        List<String> eventList = (List<String>) httpSession.getAttribute("eventUserActive");
-        logger.info(eventList.size());
-        if (user != null && eventList != null) {
-                Boolean b = FluentIterable.from(eventList).firstMatch(new Predicate<String>() {
+        Event event = eventsService.getEventById(eventId);
+        if (user != null && event != null) {
+                Boolean b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
                     @Override
-                    public boolean apply(String s) {
-                        logger.info("сравнение event " + s + " " + eventId);
-                        return s.equals(eventId);
+                    public boolean apply(User user) {
+                         return user.getUserId().equals(userId);
                     }
                 }).isPresent();
 
                     if (b == null || b.equals(Boolean.FALSE)) {
                         eventsService.addUserToEvent(eventId, user, false);
-                        eventList.add(eventId);
-                        httpSession.setAttribute("eventUserActive" , eventList);
                         logger.info("Пользователь " + user + " поставил плюс");
                         return "true";
                     } else {
                         eventsService.deleteUserFromEvent(eventId, userId);
-                        eventList.remove(eventId);
-                        httpSession.setAttribute("eventUserActive" , eventList);
                         logger.info("Пользователь " + user + " поставил минус");
                         return "false";
                     }
@@ -130,22 +115,20 @@ public class RestController {
 
     @RequestMapping("/handleAnswer")
     @ResponseBody
-    public String handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
-        User user = (User) httpSession.getAttribute("user");
-        String userId = (String) httpSession.getAttribute("userId");
-        List<String> eventList = (List<String>) httpSession.getAttribute("eventUserActive");
-        if (user != null && eventList != null) {
+    public String handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
+                               @RequestParam(value = "userId") String userId) {
+        User user = userService.getUser(userId);
+        Event event = eventsService.getEventById(eventId);
+        if (user != null && event != null) {
 
-            Boolean b = FluentIterable.from(eventList).firstMatch(new Predicate<String>() {
+            Boolean b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
                 @Override
-                public boolean apply(String s) {
-                    return s.equals(eventId);
+                public boolean apply(User user) {
+                    return user.getUserId().equals(userId);
                 }
             }).isPresent();
                 if (b == null || b.equals(Boolean.FALSE)) {
                     eventsService.addUserToEvent(eventId, user, false);
-                    eventList.add(eventId);
-                    httpSession.setAttribute("eventUserActive" , eventList);
                     logger.info("Boolean.TRUE.toString() " + Boolean.TRUE.toString());
                     return "true";
                 } else {
@@ -160,11 +143,10 @@ public class RestController {
     @RequestMapping("/handleGroup")
     @ResponseBody
     public Boolean handleGroup(@RequestParam(value="playgroundId", required=false, defaultValue="1") String playgroundId,
-                               @RequestParam(value="sport", required=false, defaultValue=" Футбол") String sport) {
+                               @RequestParam(value="sport", required=false, defaultValue=" Футбол") String sport,
+                               @RequestParam(value = "userId") String userId) {
 
-        User user = (User) httpSession.getAttribute("user");
-
-        String userId = (String) httpSession.getAttribute("userId");
+        User user = userService.getUser(userId);
         Boolean isParticipant = false;
             String id = FluentIterable.from(user.getPlaygroundIdlList()).filter(new Predicate<String>() {
                 @Override
@@ -186,7 +168,6 @@ public class RestController {
                 userService.deletePlaygroundFromUser(userId, playgroundId);
                 isParticipant = Boolean.FALSE;
             }
-        httpSession.setAttribute("user", user);
      return isParticipant;
     }
 
@@ -200,8 +181,9 @@ public class RestController {
 
     @RequestMapping("/addIgrok")
     public void addIgrok(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
-                         @RequestParam(value="count", required=false, defaultValue="1") String count ) {
-        User user = (User) httpSession.getAttribute("user");
+                         @RequestParam(value="count", required=false, defaultValue="1") String count,
+                         @RequestParam(value = "userId") String userId) {
+        User user = userService.getUser(userId);
         logger.info("Добавляем " + count + " игроков от пользователя" );
         if (Objects.nonNull(user)) {
             user.setFake(true);
@@ -213,15 +195,15 @@ public class RestController {
 
     @RequestMapping(value = "saveTemplate", method = RequestMethod.POST)
     @ResponseBody
-    public String saveTemplate(@RequestParam(name = "descr") String  descr, @RequestParam(name = "answer") String  answer, @RequestParam(name = "sel2") String  sel2
-                                                    , @RequestParam(name = "sel1") String  sel1) throws IOException {
+    public String saveTemplate(@RequestParam(name = "descr") String  descr, @RequestParam(name = "answer") String  answer,
+                               @RequestParam(name = "sel2") String  sel2,
+                               @RequestParam(name = "sel1") String  sel1,
+                               @RequestParam(value = "userId") String userId) throws IOException {
         TemplateGame game = new TemplateGame();
         game.setDescription(descr);
         game.setListAnswer(Collections.singletonList(answer));
         game.setCountAnswer(sel2.equals("infinity") ? 0 : Integer.valueOf(sel2));
         game.setDuration(sel1.substring(0, 1));
-
-        String userId = (String)httpSession.getAttribute("userId");
 
         String minText = getMinText(descr);
         int id = userService.saveTemplateUser(game, userId);

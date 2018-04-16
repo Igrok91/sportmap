@@ -151,7 +151,7 @@
 
    function removeTemplate(id) {
        $.ajax({
-           url: 'removeTemplate?templateId=' + id
+           url: 'removeTemplate?templateId=' + id + '&userId=' + ${userId}
        }).then(function () {
                var list = document.getElementById('listTemplates');
                var child = document.getElementById(id);

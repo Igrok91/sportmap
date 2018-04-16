@@ -58,7 +58,7 @@
                     <c:otherwise>
                         <div class="list-group" id="listGroupsUser" style="padding-top: 7px">
                             <c:forEach var="group" items="${allPlaygroundUser}">
-                                <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}" class="list-group-item borderless">
+                                <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}&userId=${userId}" class="list-group-item borderless">
                                     <div class="media">
                                         <div class="pull-left">
                                             <c:if test="${group.getSport() == 'Футбол'}">

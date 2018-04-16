@@ -116,7 +116,7 @@
                                         </c:otherwise>
                                     </c:choose>
 
-                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}" class="btn btn-primary" id="goGame"
+                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" class="btn btn-primary" id="goGame"
                                        style="margin:3px">Позвать на игру</a>
                                 </div>
 
@@ -438,14 +438,14 @@
         $('#panelGroup').addClass('panel-info');
         $('#imageGroup').attr("src", "resources/image/сетка.png")
     }
-    var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp;
+    var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp + '&userId=' + ${userId};
     $('#returnBack').attr('href', returnBack);
 
     function handleGroup() {
         var playgroundId = '${playgroundId}';
         var sport = '${sport}';
         $.ajax({
-            url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport
+            url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport + '&userId=' + ${userId}
         }).then(function (value) {
             var userId = '${userId}';
             if (value == true) {

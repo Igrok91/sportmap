@@ -45,7 +45,7 @@
 <nav class="nav navbar-static-top navbar-default" style="background: #eeeeee">
     <div class="container-fluid ">
         <div class="pull-left" >
-            <a class="navbar-brand btn" href="/home?where=create" id="returnBackFromCreate" ><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
+            <a class="navbar-brand btn" href="/home?where=create&userId=${userId}" id="returnBackFromCreate" ><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
         </div>
         <div class="navbar-brand ">
             Создание опроса
@@ -182,6 +182,8 @@
                     value="" />
              <input id="eventId" type="hidden" name="eventId"
                     value="${event.idEvent}" />
+             <input type="hidden" name="userId"
+                    value="${userId}" />
 
                             <div style="padding-bottom: 10px">
                                 <div >
@@ -311,7 +313,7 @@
             $.ajax({
                 url: 'saveTemplate',
                 method: "POST",
-                data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1}),
+                data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1, userId: ${userId}}),
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Accept", "application/json");
                     //xhr.setRequestHeader("Content-Type", "application/json");

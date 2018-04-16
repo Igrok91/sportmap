@@ -25,7 +25,7 @@
 <!--  <static-error-handlers>
     <handler file="resources/error.html" />
   </static-error-handlers>-->
-  <sessions-enabled>true</sessions-enabled>
+  <!--<sessions-enabled>true</sessions-enabled>-->
   <!--<async-session-persistence enabled="true" />-->
 </appengine-web-app>
 <!-- [END config] -->

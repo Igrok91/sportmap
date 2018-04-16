@@ -215,4 +215,46 @@ public class Events {
             }
         }
     }
+
+    public Event getEventById(String eventId) {
+            Entity event = getDatastore().get(keyFactory.newKey(Long.valueOf(eventId)));
+            if (Objects.nonNull(event)) {
+                logger.info("Получаем событие" + eventId);
+                return getEventFromEntity(event);
+            }
+            return null;
+    }
+
+    private Event getEventFromEntity(Entity entity) {
+        Event event = new Event();
+        event.setIdEvent(entity.getKey().getId().toString());
+        event.setUserIdCreator(entity.getString("userIdCreator"));
+        event.setUserFirtsNameCreator(entity.getString("userFirtsNameCreator"));
+        event.setUserLastNameCreator(entity.getString("userLastNameCreator"));
+        event.setDescription(entity.getString("description"));
+        event.setAnswer("+");
+        event.setMaxCountAnswer(Integer.parseInt(entity.getString("maxCountAnswer")));
+        event.setDuration(entity.getString("duration"));
+        event.setSport(entity.getString("sport"));
+        event.setPlaygroundId(entity.getString("playgroundId"));
+        event.setPlaygroundName(entity.getString("playgroundName"));
+        event.setDateCreation(entity.getTimestamp("dateCreation"));
+        try{
+            List<EntityValue> entityValues = entity.getList("userList");
+            event.setUserList(getUserListFromEntity(entityValues));
+
+        } catch (DatastoreException ex) {
+            logger.warn(ex.getMessage());
+        }
+        try{
+            List<EntityValue> entityComment = entity.getList("commentsList");
+            if (entityComment.size() != 0) {
+                event.setCommentsList(getCommentListFromEntity(entityComment));
+            }
+        } catch (DatastoreException ex) {
+            logger.warn(ex.getMessage());
+        }
+        event.setPlaygroundName(entity.getString("playgroundName"));
+        return event;
+    }
 }

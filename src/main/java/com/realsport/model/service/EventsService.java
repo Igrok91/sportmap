@@ -165,36 +165,7 @@ public class EventsService {
     }
 
     public Event getEventById(String eventId) {
-        Event event = new Event();
-        event.setUserIdCreator("172924708");
-        event.setIdEvent("172924708");
-        event.setDescription("Го на игру в 8?");
-        event.setMaxCountAnswer(0);
-        event.setAnswer("+");
-        event.setDuration("1");
-        event.setSport(FOOTBALL);
-        event.setPlaygroundId("15");
-        event.setPlaygroundName("У Школы №4");
-        event.setUserFirtsNameCreator("Леонид");
-        event.setUserLastNameCreator("Заручевский");
-        event.setMaxCountAnswer(21);
-        event.setUserList(Collections.singletonList(new User()));
-        Comment comment = new Comment();
-        comment.setFirstName("Игорь");
-        comment.setLastName("Рябцев");
-        comment.setDate("сегодня в 12:12");
-        comment.setMessage("Еще + 5");
-        comment.setUserId("1234");
-        event.setCommentsList(Collections.singletonList(comment));
-        HistoryEvent event1 = new HistoryEvent();
-        event1.setFirstName("Игорь");
-        event1.setLastName("Рябцев");
-        event1.setDate("сегодня в 12:12");
-        event1.setAction("создал опрос");
-        event1.setUserId("12345*-");
-        event.setHistoryEvent(Collections.singletonList(event1));
-
-        return event;
+        return databaseService.getEventById(eventId);
     }
 
     public void editEventById(String eventId) {

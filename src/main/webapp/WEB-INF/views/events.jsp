@@ -100,24 +100,24 @@
                                                                      class="glyphicon glyphicon-time"
                                                                      style="margin-right: 20px"></span>История
                                                                  изменений</a></li>--%>
-                                                        <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}"> <span class="glyphicon glyphicon-home"
+                                                        <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
                                                                                                                                     style="margin-right: 20px"></span>К площадке</a>
                                                         </li>
-                                                        <li><a href="event?eventId=${event.idEvent}"> <span class="glyphicon glyphicon-share-alt"
+                                                        <li><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt"
                                                                                                             style="margin-right: 20px"></span>К записи</a>
                                                         </li>
 
 
 
 
-                                                        <li><a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}">
+                                                        <li><a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}">
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
                                                         </a></li>
-                                                        <li><a href="endGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-off"
+                                                        <li><a href="endGame?eventId=${event.idEvent}&userId=${userId}"><span class="glyphicon glyphicon-off"
                                                                                                              style="margin-right: 20px"></span>Завершить
                                                             опрос</a></li>
-                                                        <li><a href="deleteGame?eventId=${event.idEvent}"><span class="glyphicon glyphicon-trash"
+                                                        <li><a href="deleteGame?eventId=${event.idEvent}&userId=${userId}"><span class="glyphicon glyphicon-trash"
                                                                                                                 style="margin-right: 20px"></span>Удалить
                                                             опрос</a></li>
 
@@ -134,10 +134,10 @@
                                                         <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
                                                                                                                                     style="margin-right: 20px"></span>История
                                                                 изменений</a></li>--%>
-                                                        <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}"> <span class="glyphicon glyphicon-home"
+                                                        <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
                                                                                                                                     style="margin-right: 20px"></span>К площадке</a>
                                                         </li>
-                                                        <li><a href="event?eventId=${event.idEvent}"> <span class="glyphicon glyphicon-share-alt"
+                                                        <li><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt"
                                                                                                             style="margin-right: 20px"></span>К записи</a>
                                                         </li>
                                                     </c:otherwise>
@@ -436,7 +436,7 @@
         var addIgr = $('#countIgrok_' + eventId).val();
         var userId = ${userId};
         $.ajax({
-            url: 'addIgrok?eventId=' + eventId + '&count=' + addIgr
+            url: 'addIgrok?eventId=' + eventId + '&count=' + addIgr + '&userId=' + ${userId}
         }).then(function (value) {
             if (maxCountAnswer == 0) {
                 var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
@@ -505,7 +505,7 @@
 
     function handleAnswer(maxCountAnswer, eventId) {
             $.ajax({
-                url: 'handleAnswer?eventId=' + eventId
+                url: 'handleAnswer?eventId=' + eventId + '&userId=' + ${userId}
             }).then(function (value) {
                 console.log('answer ' + value);
                 var userId = '${userId}';
@@ -560,7 +560,7 @@
 
     function handleAnswerMain(maxCountAnswer, eventId) {
         $.ajax({
-            url: 'handleAnswerMain?eventId=' + eventId
+            url: 'handleAnswerMain?eventId=' + eventId + '&userId=' + ${userId}
         }).then(function (value) {
             console.log('answer ' + value);
             var userId = '${userId}';
@@ -642,17 +642,10 @@
                     $('#' + userId + '_imgUser_'+ eventId + '_fake' ).remove();
                 }
 
-
             }
         });
-
-
     }
 
-
-
-
 </script>
-
 </body>
 </html>

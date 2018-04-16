@@ -36,6 +36,7 @@ import java.util.*;
  */
 @Controller
 public class StartController {
+
     Log logger = LogFactory.getLog(StartController.class);
 
     private List<Playground> footballPlaygroundList = new ArrayList<>();
@@ -74,9 +75,6 @@ public class StartController {
     private UserService userService;
 
 
-    @Autowired
-    HttpSession httpSession;
-
     @RequestMapping(value = "/error2")
     public String error() {
         return "error2";
@@ -84,7 +82,6 @@ public class StartController {
 
     @RequestMapping(value = "/start")
     public String onStart(Model model, @RequestParam(value = "viewer_id", required = false) String id, @RequestParam(value = "access_token", required = false) String access_token) {
-        httpSession.setMaxInactiveInterval(INACTIVE_INTERVAL);
         User user = null;
         boolean isFirst = false;
         if (id != null) {
@@ -99,20 +96,20 @@ public class StartController {
                     model.addAttribute("listEvents", listEvents);
                     model.addAttribute("playgroundCoordinate", "empty");
                     // События в которых пользователь поставил плюс
-                    httpSession.setAttribute("eventUserActive", getEventUserActive(listEvents, id));
+                    model.addAttribute("eventUserActive", getEventUserActive(listEvents, id));
                 } else {
                     user = userService.registerUser(id);
                     isFirst = true;
                 }
-                httpSession.setAttribute("user", user);
+                model.addAttribute("user", user);
                 MinUser minUser = new MinUser();
                 minUser.setUserId(id);
                 minUser.setFirstName(user.getFirstName());
                 minUser.setLastName(user.getLastName());
-                httpSession.setAttribute("userId", id);
-                httpSession.setAttribute("firstName", user.getFirstName());
-                httpSession.setAttribute("lastName", user.getLastName());
-                httpSession.setAttribute("minUser", minUser);
+                model.addAttribute("userId", id);
+                model.addAttribute("firstName", user.getFirstName());
+                model.addAttribute("lastName", user.getLastName());
+                model.addAttribute("minUser", minUser);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -156,7 +153,7 @@ public class StartController {
 
         map.put("allPlaygroundUser", getAllPlaygroundUser(user));
         String jsonUser = gson.toJson(map);
-        httpSession.setAttribute("sessionUser", jsonUser);
+        model.addAttribute("sessionUser", jsonUser);
 
 
         model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
@@ -235,31 +232,25 @@ public class StartController {
 
     @RequestMapping(value = "/begin")
     public String onStart(Model model) {
-        User user = (User) httpSession.getAttribute("sessionUser");
-        String userId = (String) httpSession.getAttribute("userId");
 
 
         return "main";
     }
 
-    @RequestMapping(value = "/searchPlayground")
-    public String onSearchPlayground(Model model) {
-        User user = (User) httpSession.getAttribute("sessionUser");
-        String userId = (String) httpSession.getAttribute("userId");
-
-        return "searchPlayground";
-    }
-
     @RequestMapping("/groupFromMap")
-    public String toGroup(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport", required=false, defaultValue=FOOTBALL) String sport) {
-        User user = (User) httpSession.getAttribute("user");
+    public String toGroup(Model model, @RequestParam(value="playgroundId") String id
+            , @RequestParam(value="sport", required=false, defaultValue=FOOTBALL) String sport
+            ,@RequestParam(value = "userId") String userId) {
+        User user = userService.getUser(userId);
 
         if (user == null) {
             return "error";
         }
-        logger.info("Переход к User c id " + user.getUserId());
+        logger.info("Переход в группу " + id);
         addGroupToModel(model, id, user);
         model.addAttribute("returnBack", "map");
+        model.addAttribute("userId", userId);
+
         return "playground";
     }
 
@@ -268,6 +259,8 @@ public class StartController {
             if (playground != null) {
                 addGroupDataToModel(model, playground, idGroup);
             }
+        model.addAttribute("firstName", user.getFirstName());
+        model.addAttribute("lastName", user.getLastName());
 
         model.addAttribute("isParticipant", isParticipant(user.getPlaygroundIdlList(), idGroup));
     }
@@ -289,35 +282,43 @@ public class StartController {
         model.addAttribute("sport", playground.getSport() );
         model.addAttribute("players", playground.getPlayers() );
         model.addAttribute("listEvents", eventsService.getEventsByIdGroup(idGroup) );
+
     }
 
     @RequestMapping("/group")
-    public String toGroupUser(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport) {
-        User user = (User) httpSession.getAttribute("user");
+    public String toGroupUser(Model model, @RequestParam(value="playgroundId") String id
+            , @RequestParam(value="sport") String sport
+            ,@RequestParam(value = "userId") String userId) {
+        User user = userService.getUser(userId);
         if (user == null) {
             return "error";
         }
         addGroupToModel(model, id, user);
 
         model.addAttribute("returnBack", "group");
+        model.addAttribute("userId", userId);
         return "playground";
     }
 
     @RequestMapping("/playground")
-    public String toGroupFromEvent(Model model, @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport) {
-        User user = (User) httpSession.getAttribute("user");
+    public String toGroupFromEvent(Model model, @RequestParam(value="playgroundId") String id
+            , @RequestParam(value="sport") String sport
+            , @RequestParam(value = "userId") String userId) {
+        User user = userService.getUser(userId);
         if (user == null) {
             return "error";
         }
 
         addGroupToModel(model, id, user);
         model.addAttribute("returnBack", "home");
+        model.addAttribute("userId", userId);
         return "playground";
     }
 
     @RequestMapping("/create")
     public String toCreate(Model model,  @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport,
-                           @RequestParam(value="eventId", required = false, defaultValue = "null") String eventId) {
+                           @RequestParam(value="eventId", required = false, defaultValue = "null") String eventId
+                            ,@RequestParam(value = "userId") String userId) {
 
             for (Playground playground : allPlaygroundList) {
                 if (playground.getIdplayground().equals(id)) {
@@ -340,7 +341,6 @@ public class StartController {
             model.addAttribute("templates", new ArrayList<>());
             model.addAttribute("template", new Template());
         } else {
-            String userId = (String) httpSession.getAttribute("userId");
             List<TemplateGame> list = userService.getTemplatesUserById(userId);
             ArrayList<String> userTemplates = new ArrayList<>();
             if (list != null) {
@@ -352,13 +352,15 @@ public class StartController {
             model.addAttribute("template", new Template());
         }
         model.addAttribute("returnBack", "home");
-
+        model.addAttribute("userId", userId);
         model.addAttribute("playgroundId", id);
         return "create";
     }
 
     @RequestMapping(value = "/home")
-    public String toHome(Model model, @RequestParam(value="where", required = false, defaultValue = "home") String where, @RequestParam(value="playgroundId", required = false) String id, @RequestParam(value="sport", required = false) String sport ) {
+    public String toHome(Model model, @RequestParam(value="where", required = false, defaultValue = "home") String where
+            , @RequestParam(value="playgroundId", required = false) String id, @RequestParam(value="sport", required = false) String sport
+            , @RequestParam(value = "userId") String userId) {
         if (where.equals("group")) {
             addPlaygroundDataToModel(model);
             model.addAttribute("returnBack", where);
@@ -387,13 +389,18 @@ public class StartController {
             model.addAttribute("playgroundCoordinate", "empty");
         }
 
-        User user = (User) httpSession.getAttribute("user");
+        User user = userService.getUser(userId);
         setUserDataToModel(user, model);
         Gson gson = new Gson();
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
-        httpSession.setAttribute("eventUserActive", getEventUserActive(listEvents, user.getUserId()));
+        model.addAttribute("eventUserActive", getEventUserActive(listEvents, user.getUserId()));
         model.addAttribute("listEventsJson", gson.toJson(listEvents));
         model.addAttribute("listEvents", listEvents);
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("user", user);
+        model.addAttribute("firstName", user.getFirstName());
+        model.addAttribute("lastName", user.getLastName());
         return "main";
     }
 
@@ -416,9 +423,10 @@ public class StartController {
 
 
     @RequestMapping(value = "/event")
-    public String event(Model model, @RequestParam(name = "eventId") String eventId) {
+    public String event(Model model, @RequestParam(name = "eventId") String eventId,
+                        @RequestParam(value = "userId") String userId) {
         Gson gson = new Gson();
-        User user = (User)httpSession.getAttribute("user");
+        User user = userService.getUser(userId);
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
         Event event = FluentIterable.from(listEvents).firstMatch(new Predicate<Event>() {
             @Override
@@ -429,19 +437,27 @@ public class StartController {
         model.addAttribute("event", event);
         model.addAttribute("eventJson", gson.toJson(event));
 
+        model.addAttribute("userId", userId);
+        model.addAttribute("user", user);
+        model.addAttribute("eventUserActive", getEventUserActive(listEvents, userId));
         return "event";
     }
 
 
 
     @RequestMapping(value = "/createGame", method = RequestMethod.POST)
-    public String createGame(Model model, @RequestParam(name = "descr", required = false, defaultValue = "description") String  descr, @RequestParam(name = "answer", required = false, defaultValue="+") String  answer, @RequestParam(name = "sel2", required = false, defaultValue="Без ограничений") String  sel2
-            , @RequestParam(name = "sel1", required = false, defaultValue="3") String  sel1, @RequestParam(name = "sport", required = false, defaultValue="Футбол") String  sport, @RequestParam(name = "playgroundId", required = false, defaultValue="123") String  playgroundId
-                ,@RequestParam(name = "namePlayground") String  namePlayground
-            ,@RequestParam(name = "templateId", required = false, defaultValue = "0") String  templateId
-            ,@RequestParam(name = "eventId", required = false, defaultValue = "null") String  eventId)  throws IOException {
-        String userId = (String) httpSession.getAttribute("userId");
-        User user = (User) httpSession.getAttribute("user");
+    public String createGame(Model model, @RequestParam(name = "descr", required = false
+            , defaultValue = "description") String  descr
+            , @RequestParam(name = "answer", required = false, defaultValue="+") String  answer
+            , @RequestParam(name = "sel2", required = false, defaultValue="Без ограничений") String  sel2
+            , @RequestParam(name = "sel1", required = false, defaultValue="3") String  sel1
+            , @RequestParam(name = "sport", required = false, defaultValue="Футбол") String  sport
+            , @RequestParam(name = "playgroundId", required = false, defaultValue="123") String  playgroundId
+            , @RequestParam(name = "namePlayground") String  namePlayground
+            , @RequestParam(name = "templateId", required = false, defaultValue = "0") String  templateId
+            , @RequestParam(name = "eventId", required = false, defaultValue = "null") String  eventId
+            , @RequestParam(value = "userId") String userId)  throws IOException {
+        User user = userService.getUser(userId);
         Event game;
         logger.info("Description Event " + descr);
         if (templateId.equals("0")) {
@@ -468,7 +484,9 @@ public class StartController {
         } else {
             eventsService.publishEvent(game);
         }
-        httpSession.setAttribute("user", user);
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("user", user);
         return "redirect:/home";
     }
 

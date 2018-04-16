@@ -135,4 +135,8 @@ public class DatastoreService {
     public void deleteUserFromEvent(String eventId, String userId) {
         events.deleteUserFromEvent(eventId, userId);
     }
+
+    public Event getEventById(String eventId) {
+           return events.getEventById(eventId);
+    }
 }
