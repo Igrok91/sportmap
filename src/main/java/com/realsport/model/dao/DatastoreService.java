@@ -91,7 +91,7 @@ public class DatastoreService {
      * @return
      */
     public List<Event> getAllEvents() {
-        return events.getAllEvents();
+        return events.getAllActiveEvents();
     }
 
 
@@ -112,7 +112,7 @@ public class DatastoreService {
     }
 
     public void deleteUserFromPlayground(String userId, String playgroundId) {
-            playgrounds.deleteUserFromPlayground(userId, playgroundId);
+        playgrounds.deleteUserFromPlayground(userId, playgroundId);
     }
 
     public void deletePlaygroundFromUser(String userId, String playgroundId) {
@@ -126,5 +126,13 @@ public class DatastoreService {
 
     public void addPlaygroundToEventListActive(String playgroundId, String userId) {
         users.addPlaygroundToEventListActive(playgroundId, userId);
+    }
+
+    public void addUserToEvent(String eventId, User user, boolean isFake) {
+        events.addUserToEvent(eventId, user, isFake);
+    }
+
+    public void deleteUserFromEvent(String eventId, String userId) {
+        events.deleteUserFromEvent(eventId, userId);
     }
 }

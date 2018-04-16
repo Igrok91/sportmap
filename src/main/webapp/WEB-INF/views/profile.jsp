@@ -82,7 +82,7 @@
                     </div>
                     <div class="panel-body">
                         <div>
-                            <h5 style="color: gray"><span class="glyphicon glyphicon-info-sign"></span> Обо мне:
+                            <h5 style="color: gray"><span class="glyphicon glyphicon-info-sign"></span>
                                     <span id="informationUser" style="color: #1b1b1b; padding-left: 10px" >
                                      <c:choose>
                                            <c:when test="${user.info == null}">

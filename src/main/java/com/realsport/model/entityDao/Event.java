@@ -1,5 +1,7 @@
 package com.realsport.model.entityDao;
 
+import com.google.cloud.Timestamp;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,8 +21,8 @@ public class Event implements Serializable{
     private String playgroundId;
     private String playgroundName;
     private boolean active = true;
-    private Date dateCreation;
-    private String date;
+    private Timestamp dateCreation;
+    private Timestamp date;
     private List<User> userList = new ArrayList<>();
     private List<Comment> commentsList = new ArrayList<>();
     private List<HistoryEvent> historyEvent = new ArrayList<>();
@@ -96,11 +98,11 @@ public class Event implements Serializable{
         this.active = active;
     }
 
-    public Date getDateCreation() {
+    public Timestamp getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(Date dateCreation) {
+    public void setDateCreation(Timestamp dateCreation) {
         this.dateCreation = dateCreation;
     }
 
@@ -136,11 +138,11 @@ public class Event implements Serializable{
         this.answer = answer;
     }
 
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

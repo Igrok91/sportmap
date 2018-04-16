@@ -341,10 +341,9 @@
 
 <script>
     var listEvents = ${listEventsJson};
-    var eventListActive = ${eventListActive};
     console.log(listEvents.length);
     if (listEvents) {
-        var userId = '${userId}';
+        var userId = "${userId}";
         listEvents.map(function (event, i) {
             var maxCountAnswer = event.maxCountAnswer;
             var usersList = event.userList;
@@ -397,17 +396,17 @@
                 $('#badge2_'+ id).text(count + ' / ' + maxCountAnswer );
             }
 
-            if (eventListActive) {
+
                 var eventId = event.idEvent;
-                console.log("eventListActive " + eventListActive);
                 console.log("eventId " + eventId);
+                var listUser = event.userList;
                 var isActive = false;
-                eventListActive.map(function (id, index) {
-                    if (id === eventId) {
+                listUser.map(function (user, i) {
+                    if (user.userId === userId ) {
                         isActive = true;
                     }
                 });
-               // if (eventListActive[eventId] && eventListActive[eventId] == true) {
+
                 if (isActive) {
                    // $('#answerButton_'+ eventId).addClass('active');
                     $('#answerButton_'+ eventId).removeClass('active');
@@ -428,7 +427,7 @@
                     $('#cancelAnswer2_'+ eventId).addClass('hide');
                     $('#doAnswer2_'+ eventId).removeClass('hide');
                 }
-            }
+
         });
 
     }
@@ -505,8 +504,6 @@
     }
 
     function handleAnswer(maxCountAnswer, eventId) {
-        if (eventListActive) {
-
             $.ajax({
                 url: 'handleAnswer?eventId=' + eventId
             }).then(function (value) {
@@ -531,7 +528,7 @@
                         userImg.href = "user?userId=" + userId;
                         $('#imgUserList_'+ eventId).append(userImg);
                         $('#templateUserList2').addClass('hide');
-                    } else {
+                    } else if (value === 'false'){
                         var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
                         console.log(count[0]);
                         if (count[0] == maxCountAnswer) {
@@ -551,13 +548,14 @@
                             $('#imgUserList_'+ eventId).append(userImg)
                             $('#templateUserList2').addClass('hide');
                         }
+                    } else {
+
                     }
                 } else {
                     $('#addIgrok_' + eventId).modal('show');
                 }
 
             });
-        }
     }
 
     function handleAnswerMain(maxCountAnswer, eventId) {

@@ -31,20 +31,19 @@ public class EventsService {
     public static final String VOLEYBALL_PLAYGROUND = "VoleyballPlayground";
 
 
-
     private List<Event> getAllEvents() {
         return null;
     }
 
     public void publishEvent(Event game) {
-            databaseService.publishEvent(game);
+        databaseService.publishEvent(game);
     }
 
     public List<Event> getEvents(List<String> playgroundUser) {
         List<Event> eventOfGroupUser = new ArrayList<>();
         // Достаем из бд активные события.
         if (playgroundUser.size() != 0) {
-           List<Event> allActiveEventList = databaseService.getAllEvents();
+            List<Event> allActiveEventList = databaseService.getAllEvents();
 
 
             if (allActiveEventList.size() != 0) {
@@ -103,7 +102,7 @@ public class EventsService {
     }
 
     private List<Event> getAllFootEventsSpb(List<String> playgroundFoottUser) {
-        List<Event>  listFoot= new ArrayList<>();
+        List<Event> listFoot = new ArrayList<>();
         Event event = new Event();
         event.setUserIdCreator("172924708");
         event.setIdEvent("172924708");
@@ -151,7 +150,7 @@ public class EventsService {
     }
 
     public Event createEventByTemplate(String templateId) {
-        Event  game = new Event();
+        Event game = new Event();
         game.setDescription("template");
         game.setAnswer("+");
         game.setMaxCountAnswer(0);
@@ -159,7 +158,7 @@ public class EventsService {
         game.setUserIdCreator("2312312");
         game.setPlaygroundId("23555");
         game.setSport("Футбол");
-        game.setDateCreation(new Date());
+        //game.setDateCreation(new Date());
         game.setPlaygroundName("template");
 
         return game;
@@ -212,8 +211,8 @@ public class EventsService {
     }
 
 
-    public void deleteUserFromList(String eventId, String userId) {
-
+    public void deleteUserFromEvent(String eventId, String userId) {
+        databaseService.deleteUserFromEvent(eventId, userId);
     }
 
     public int addCommentToEvent(String eventId, Comment message) {
@@ -257,11 +256,11 @@ public class EventsService {
     }
 
     public List<Event> getEventsByIdGroup(String id) {
-      return new ArrayList<>();
+        return new ArrayList<>();
 
     }
 
-    public void addUserToListPlayground(String eventId, User user, boolean isFake) {
-
+    public void addUserToEvent(String eventId, User user, boolean isFake) {
+        databaseService.addUserToEvent(eventId, user, isFake);
     }
 }

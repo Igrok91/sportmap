@@ -1,5 +1,7 @@
 package com.realsport.controller;
 
+import com.google.cloud.Timestamp;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -85,7 +89,7 @@ public class StartController {
         boolean isFirst = false;
         if (id != null) {
             try {
-                user = userService.getUser(id);
+                 user = userService.getUser(id);
                 if (user != null) {
                     setPlaygroundDataToModel(model, id);
                     setUserDataToModel(user, model);
@@ -94,6 +98,8 @@ public class StartController {
                     model.addAttribute("listEventsJson", gson.toJson(listEvents));
                     model.addAttribute("listEvents", listEvents);
                     model.addAttribute("playgroundCoordinate", "empty");
+                    // События в которых пользователь поставил плюс
+                    httpSession.setAttribute("eventUserActive", getEventUserActive(listEvents, id));
                 } else {
                     user = userService.registerUser(id);
                     isFirst = true;
@@ -117,6 +123,29 @@ public class StartController {
         }
 
         return !isFirst ? "main" : "begin";
+    }
+
+    private List<String> getEventUserActive(List<Event> listEvents, String id) {
+        List<Event> activeUserEvent = FluentIterable.from(listEvents).filter(new Predicate<Event>() {
+            @Override
+            public boolean apply(Event event) {
+                List<User> list = event.getUserList();
+                boolean isActive = false;
+                for (User user : list) {
+                    if (user.getUserId().equals(id)) {
+
+                        isActive = true;
+                    }
+                }
+                return isActive;
+            }
+        }).toList();
+        logger.info("activeUserEvent " + activeUserEvent);
+        List<String> stringList = new ArrayList<>();
+        for (Event event : activeUserEvent) {
+            stringList.add(event.getIdEvent());
+        }
+        return stringList;
     }
 
     private void setUserDataToModel(User user, Model model) {
@@ -361,8 +390,8 @@ public class StartController {
         User user = (User) httpSession.getAttribute("user");
         setUserDataToModel(user, model);
         Gson gson = new Gson();
-
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
+        httpSession.setAttribute("eventUserActive", getEventUserActive(listEvents, user.getUserId()));
         model.addAttribute("listEventsJson", gson.toJson(listEvents));
         model.addAttribute("listEvents", listEvents);
         return "main";
@@ -424,7 +453,7 @@ public class StartController {
             game.setUserIdCreator(userId);
             game.setPlaygroundId(playgroundId);
             game.setSport(sport);
-            game.setDateCreation(getDateCreation());
+            game.setDateCreation(Timestamp.now());
             game.setPlaygroundName(namePlayground);
             List<User> list = new ArrayList<>();
             list.add(user);
@@ -612,5 +641,8 @@ public class StartController {
         return voleyballInfoList;
     }
 
-
+    public static HttpSession session() {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        return attr.getRequest().getSession(true); // true == allow create
+    }
 }

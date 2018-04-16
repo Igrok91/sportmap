@@ -15,6 +15,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -96,31 +98,32 @@ public class RestController {
         User user = (User) httpSession.getAttribute("user");
 
         String userId = (String) httpSession.getAttribute("userId");
-        List<Event> eventList = (List<Event>) httpSession.getAttribute("listEvents");
+        List<String> eventList = (List<String>) httpSession.getAttribute("eventUserActive");
+        logger.info(eventList.size());
         if (user != null && eventList != null) {
-                Event event= FluentIterable.from(eventList).firstMatch(new Predicate<Event>() {
+                Boolean b = FluentIterable.from(eventList).firstMatch(new Predicate<String>() {
                     @Override
-                    public boolean apply(Event event) {
-                        return event.getIdEvent().equals(eventId);
+                    public boolean apply(String s) {
+                        logger.info("сравнение event " + s + " " + eventId);
+                        return s.equals(eventId);
                     }
-                }).orNull();
-                Boolean b;
-                if (event != null && event.getUserList().size() != 0) {
-                    b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
-                        @Override
-                        public boolean apply(User user) {
-                            return user.getUserId().equals(userId);
-                        }
-                    }).isPresent();
+                }).isPresent();
 
                     if (b == null || b.equals(Boolean.FALSE)) {
-                        eventsService.addUserToListPlayground(eventId, user, false);
+                        eventsService.addUserToEvent(eventId, user, false);
+                        eventList.add(eventId);
+                        httpSession.setAttribute("eventUserActive" , eventList);
+                        logger.info("Пользователь " + user + " поставил плюс");
                         return "true";
                     } else {
-                        eventsService.deleteUserFromList(eventId, userId);
+                        eventsService.deleteUserFromEvent(eventId, userId);
+                        eventList.remove(eventId);
+                        httpSession.setAttribute("eventUserActive" , eventList);
+                        logger.info("Пользователь " + user + " поставил минус");
                         return "false";
                     }
-                }
+
+
         }
         return SESSION_NULL;
     }
@@ -130,31 +133,26 @@ public class RestController {
     public String handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId) {
         User user = (User) httpSession.getAttribute("user");
         String userId = (String) httpSession.getAttribute("userId");
-        List<Event> eventList = (List<Event>) httpSession.getAttribute("listEvents");
+        List<String> eventList = (List<String>) httpSession.getAttribute("eventUserActive");
         if (user != null && eventList != null) {
-            Event event = FluentIterable.from(eventList).firstMatch(new Predicate<Event>() {
+
+            Boolean b = FluentIterable.from(eventList).firstMatch(new Predicate<String>() {
                 @Override
-                public boolean apply(Event event) {
-                    return event.getIdEvent().equals(eventId);
+                public boolean apply(String s) {
+                    return s.equals(eventId);
                 }
-            }).orNull();
-            Boolean b;
-            if (event != null && event.getUserList().size() != 0) {
-                b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
-                    @Override
-                    public boolean apply(User user) {
-                        return user.getUserId().equals(userId);
-                    }
-                }).isPresent();
+            }).isPresent();
                 if (b == null || b.equals(Boolean.FALSE)) {
-                    eventsService.addUserToListPlayground(eventId, user, false);
+                    eventsService.addUserToEvent(eventId, user, false);
+                    eventList.add(eventId);
+                    httpSession.setAttribute("eventUserActive" , eventList);
                     logger.info("Boolean.TRUE.toString() " + Boolean.TRUE.toString());
                     return "true";
                 } else {
                     return "false";
                 }
             }
-        }
+
 
         return SESSION_NULL;
     }
@@ -204,12 +202,11 @@ public class RestController {
     public void addIgrok(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
                          @RequestParam(value="count", required=false, defaultValue="1") String count ) {
         User user = (User) httpSession.getAttribute("user");
-        logger.info("Добавляем " + count + " игроков от пользователся" );
-        String userId = (String) httpSession.getAttribute("userId");
+        logger.info("Добавляем " + count + " игроков от пользователя" );
         if (Objects.nonNull(user)) {
             user.setFake(true);
             user.setCountFake(Integer.parseInt(count));
-            eventsService.addUserToListPlayground(eventId, user, true);
+            eventsService.addUserToEvent(eventId, user, true);
         }
     }
 

@@ -1,15 +1,16 @@
 package com.realsport.model.dao.kinds;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.*;
 import com.realsport.model.entityDao.Event;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.realsport.model.dao.Persistence.getDatastore;
 import static com.realsport.model.dao.Persistence.getKeyFactory;
@@ -30,18 +31,6 @@ public class Events {
     public void publishEvent(Event game) {
         Transaction tx = getDatastore().newTransaction();
         try {
-   /*         User u = new User();
-            u.setUserId("1234");
-            u.setFirstName("firstName");
-            game.setUserList(Collections.singletonList(u));
-            List<EntityValue> list = new ArrayList<>();
-            for (User user: game.getUserList()) {
-                FullEntity userEntity = FullEntity.newBuilder(keyFactory.newKey(user.getUserId()))
-                        .set("firstName", "firstName")
-                        .build();
-                EntityValue value = EntityValue.of(userEntity);
-                list.add(value);
-            }*/
             List<User> list = game.getUserList();
             List<EntityValue> entityList = getEntityListFromUserList(list);
             FullEntity task = FullEntity.newBuilder(keyFactory.newKey())
@@ -55,7 +44,7 @@ public class Events {
                     .set("duration", game.getDuration())
                     .set("sport", game.getSport())
                     .set("active", game.isActive())
-                    .set("dateCreation", String.valueOf(game.getDateCreation()))
+                    .set("dateCreation", TimestampValue.of(game.getDateCreation()))
                     .set("userList", ListValue.of(entityList))
                     .build();
             Entity entity = tx.add(task);
@@ -75,8 +64,8 @@ public class Events {
             for (User user : listUser) {
                 FullEntity userEntity = FullEntity.newBuilder(keyFactory.newKey(user.getUserId()))
                         .set("userId", user.getUserId())
-                        .set("firstName", user.getUserId())
-                        .set("lastName", user.getUserId())
+                        .set("firstName", user.getFirstName())
+                        .set("lastName", user.getLastName())
                         .set("isFake", BooleanValue.of(user.isFake()))
                         .set("countFake", LongValue.of(user.getCountFake()))
                         .build();
@@ -88,7 +77,7 @@ public class Events {
         return new ArrayList<>();
     }
 
-    public List<Event> getAllEvents() {
+    public List<Event> getAllActiveEvents() {
         try {
             Datastore datastore = getDatastore();
             List<Entity>  listEntity = new ArrayList<>();
@@ -124,7 +113,7 @@ public class Events {
             event.setSport(entity.getString("sport"));
             event.setPlaygroundId(entity.getString("playgroundId"));
             event.setPlaygroundName(entity.getString("playgroundName"));
-            event.setDateCreation(new Date());
+            event.setDateCreation(entity.getTimestamp("dateCreation"));
             try{
                 List<EntityValue> entityValues = entity.getList("userList");
                 event.setUserList(getUserListFromEntity(entityValues));
@@ -180,4 +169,50 @@ public class Events {
     }
 
 
+    public void addUserToEvent(String eventId, User user, boolean isFake) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            if (Objects.nonNull(event)) {
+                List<EntityValue> list = event.getList("userList");
+                if (Objects.nonNull(list) ) {
+                    List<EntityValue> listValue = new ArrayList<>();
+                    listValue.addAll(list);
+                    listValue.addAll(getEntityListFromUserList(Collections.singletonList(user)));
+                    transaction.put(Entity.newBuilder(event).set("userList", listValue).build());
+                    logger.info("Добавили  пользователя " + user + " в событие " + eventId);
+                }
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+    }
+
+    public void deleteUserFromEvent(String eventId, String userId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            if (Objects.nonNull(event)) {
+                List<EntityValue> list = event.getList("userList");
+                if (Objects.nonNull(list) && list.size() != 0) {
+                    List<EntityValue> listValue = FluentIterable.from(list).filter(new Predicate<EntityValue>() {
+                        @Override
+                        public boolean apply(EntityValue entityValue) {
+                            return !entityValue.get().getString("userId").equals(userId);
+                        }
+                    }).toList();
+                    transaction.put(Entity.newBuilder(event).set("userList", listValue).build());
+                    logger.info("Удалили пользователя " + userId + " из события " + eventId);
+                }
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+    }
 }
