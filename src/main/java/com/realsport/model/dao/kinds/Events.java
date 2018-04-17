@@ -181,7 +181,7 @@ public class Events {
                         @Override
                         public boolean apply(EntityValue entityValue) {
                             FullEntity fullEntity = entityValue.get();
-                            return !fullEntity.getString("userId").equals(user.getUserId()) && !(fullEntity.getBoolean("isFake") == true);
+                            return fullEntity.getString("userId").equals(user.getUserId()) && fullEntity.getBoolean("isFake") == false;
                         }
                     }).toList();
                     listValue.addAll(listFilter);

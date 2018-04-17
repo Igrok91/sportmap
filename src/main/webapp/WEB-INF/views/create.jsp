@@ -41,7 +41,7 @@
     </style>
 </head>
 <body>
-<form action="createGame"  method="post" onsubmit="disabledButton()">
+
 <nav class="nav navbar-static-top navbar-default" style="background: #eeeeee">
     <div class="container-fluid ">
         <div class="pull-left" >
@@ -73,7 +73,14 @@
                                 <img class="media-object" src="resources/image/playbasket.png" alt="Баскетбол" width="40" height="40" id="imageGroupCreate" >
                             </a>
 
-
+                            <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
+                                <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"> <span
+                                        class="glyphicon glyphicon-option-vertical"></span></a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
+                                    <li><a href="#" onclick="removeTemplate()" style="padding-top: 3px;padding-bottom: 3px;"> <span class="glyphicon glyphicon-trash" style="margin-right: 20px"></span>Удалить шаблоны</a>
+                                    </li>
+                                </ul>
+                            </div>
                             <div class="media-body" style="padding-left: 10px">
 
                                 <h4 class="media-heading" style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">
@@ -87,8 +94,10 @@
                             </div>
 
                         </div>
+
                     </div>
                     <div class="panel-body">
+                        <form action="createGame"  method="post" onsubmit="disabledButton()">
                         <div class="btn-group btn-group-justified" style="padding-bottom: 10px" id="tabCreate" >
                             <a href="#" class="btn  btn-primary" id="newGame">Новый</a>
                             <a href="#" class="btn " id="templatesGames">Шаблоны</a>
@@ -208,6 +217,8 @@
                             <button class="btn  btn-primary" type="submit"  id="createGame" disabled>Опубликовать</button>
                             </div>
                         </div>
+
+                        </form>
                         <div id="templatesPanel" class="hide">
                             <c:import url="templates.jsp"/>
 
@@ -226,7 +237,6 @@
         </div>
     </div>
 </main>
-</form>
 
 <script>
     var el3 = document.querySelector('.checkbox-switch3');

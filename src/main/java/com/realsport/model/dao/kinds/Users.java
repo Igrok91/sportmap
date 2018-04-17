@@ -272,12 +272,7 @@ public class Users {
                     logger.warn(e);
                 }
                 if (Objects.nonNull(listValue)) {
-                    List<EntityValue> entityValues = FluentIterable.from(listValue).filter(new Predicate<EntityValue>() {
-                        @Override
-                        public boolean apply(EntityValue entityValue) {
-                            return !entityValue.get().getString("templateId").equals(templateId);
-                        }
-                    }).toList();
+                    List<EntityValue> entityValues = new ArrayList<>();
                     transaction.put(Entity.newBuilder(user).set("templates", entityValues).build());
                 }
                 logger.info("Удалили  из списка шаблонов пользователя " + userId + " шаблон " + templateId);

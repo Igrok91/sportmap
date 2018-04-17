@@ -35,18 +35,16 @@
 <main>
 
     <div class="container-fluid ">
-   <div class="pull-right hide" id="dropdownTemplate" >
-       <button class="btn"  id="templateButton" style="padding-left: 4px;padding-right: 4px;background: white">  <span class="glyphicon glyphicon-remove " style="color: #77A5C5"></span></button>
-        </div>
+ <%--  <div class="pull-right hide" id="dropdownTemplate" >
+        <button class="btn"  id="templateButton" style="padding-left: 6px;padding-right: 6px;background: white">  <span class="glyphicon glyphicon-remove " style="color: #77A5C5"></span></button>
+    </div>--%>
         <div class="row content">
                 <div class="list-group" id="listTemplates">
                     <c:forEach var="templ" items="${template}">
                         <a href="createGameFromTemplate?templateId=${templ.templateId}&userId=${userId}&playgroundId=${playgroundId}" class="list-group-item  borderless" id="${templ.templateId}">
-                            <div class="pull-right" >
-                                <button class="btn"  onclick="removeTemplate(${templ.templateId})" style="padding-left: 4px;padding-right: 4px;background: white">  <span class="glyphicon glyphicon-remove " style="color: #77A5C5"></span></button>
-                            </div>
                             <h5>${templ.description}</h5>
                         </a>
+
                     </c:forEach>
                    <%-- <button type="button"  class="list-group-item  borderless">
                         <div class="pull-right dropdown" >
@@ -108,17 +106,16 @@
     });*/
 
     function getTemplatesList(template) {
-        var templButton = document.getElementById("templateButton");
+    /*    var templButton = document.getElementById("templateButton");
         templateButton.onclick = function () {
             removeTemplate(template.templateId);
         };
         var clonedNode = document.getElementById("dropdownTemplate").cloneNode(true);
-        clonedNode.className = "pull-right";
+        clonedNode.className = "pull-right";*/
 
 /*        clonedNode.childNodes[3].childNodes[1].childNodes[0].onclick = function () {
             removeTemplate(template.templateId);
         };*/
-
 
         var a = document.createElement('a');
 
@@ -127,12 +124,10 @@
 
         a.href = "createGameFromTemplate?templateId=" + template.templateId + "&userId=" + ${userId} + "&playgroundId=" + ${playgroundId};
 
-
         var description = document.createElement('h5');
        // description.className = "list-group-item-text";
         description.appendChild(document.createTextNode(template.description));
 
-        a.appendChild(clonedNode);
         a.appendChild(description);
 
         return a;
@@ -143,20 +138,16 @@
            url: 'removeTemplate?templateId=' + id + '&userId=' + ${userId}
        }).then(function () {
                var list = document.getElementById('listTemplates');
-               var child = document.getElementById(id);
-
-               while (child.firstChild) {
-                   child.removeChild(child.firstChild);
+               while (list.firstChild) {
+                   list.removeChild(list.firstChild);
                }
-               list.removeChild(child);
-           if (list.childNodes.length == 1) {
+
+           if (list.childNodes.length == 0) {
                $('#templatesPanelEmpty').removeClass('hide');
 
            }
-           if (id == (templates.length +1)) {
                $('#savetempltext').text('Сохранить в шаблоны');
                $('#savetempl').css({"pointer-events": ""});
-           }
 
            });
    }
