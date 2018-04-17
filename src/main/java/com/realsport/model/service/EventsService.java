@@ -1,5 +1,6 @@
 package com.realsport.model.service;
 
+import com.google.cloud.Timestamp;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
@@ -158,7 +159,7 @@ public class EventsService {
         game.setUserIdCreator("2312312");
         game.setPlaygroundId("23555");
         game.setSport("Футбол");
-        //game.setDateCreation(new Date());
+        game.setDateCreation(Timestamp.now());
         game.setPlaygroundName("template");
 
         return game;

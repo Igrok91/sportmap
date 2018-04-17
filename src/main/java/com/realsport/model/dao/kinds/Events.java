@@ -177,7 +177,14 @@ public class Events {
                 List<EntityValue> list = event.getList("userList");
                 if (Objects.nonNull(list) ) {
                     List<EntityValue> listValue = new ArrayList<>();
-                    listValue.addAll(list);
+                    List<EntityValue> listFilter = FluentIterable.from(list).filter(new Predicate<EntityValue>() {
+                        @Override
+                        public boolean apply(EntityValue entityValue) {
+                            FullEntity fullEntity = entityValue.get();
+                            return !fullEntity.getString("userId").equals(user.getUserId()) && !(fullEntity.getBoolean("isFake") == true);
+                        }
+                    }).toList();
+                    listValue.addAll(listFilter);
                     listValue.addAll(getEntityListFromUserList(Collections.singletonList(user)));
                     transaction.put(Entity.newBuilder(event).set("userList", listValue).build());
                     logger.info("Добавили  пользователя " + user + " в событие " + eventId);

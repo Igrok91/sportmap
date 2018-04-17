@@ -179,7 +179,7 @@
                     value="${namePlayground}" />
 
              <input id="templId" type="hidden" name="templateId"
-                    value="" />
+                    value="empty" />
              <input id="eventId" type="hidden" name="eventId"
                     value="${event.idEvent}" />
              <input type="hidden" name="userId"
@@ -330,7 +330,7 @@
 
                     var list = document.getElementById('listTemplates');
                     list.appendChild(getTemplatesList(template));
-                    if (list.childNodes.length != 1) {
+                    if (list.childNodes.length != 0) {
                         $('#templatesPanelEmpty').addClass('hide');
 
                     }

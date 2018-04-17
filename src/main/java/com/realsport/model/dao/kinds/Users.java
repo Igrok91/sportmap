@@ -201,9 +201,9 @@ public class Users {
     private List<TemplateGame> getTemplatesFromEntity(List<EntityValue> list) {
         List<TemplateGame> listTemplate = new ArrayList<>();
         for (EntityValue entityValue : list) {
-            Entity fullEntity = (Entity) entityValue.get();
+            FullEntity fullEntity = entityValue.get();
             TemplateGame game = new TemplateGame();
-            game.setTemplateId(String.valueOf(fullEntity.getLong("templateId")));
+            game.setTemplateId(fullEntity.getString("templateId"));
             game.setDescription(fullEntity.getString("description"));
             game.setCountAnswer((int) fullEntity.getLong("countAnswer"));
             game.setDuration(fullEntity.getString("duration"));
@@ -233,7 +233,7 @@ public class Users {
                     list.add(getEntityFromTemplates(template, id));
                     transaction.put(Entity.newBuilder(user).set("templates", list).build());
                 } else {
-                    id = "0";
+                    id = "1";
                     transaction.put(Entity.newBuilder(user).set("templates", ListValue.of(getEntityFromTemplates(template, id))).build());
                 }
                 logger.info("Добавили в список шаблонов пользователя " + userId + " шаблон " + template);
@@ -256,5 +256,38 @@ public class Users {
                 .set("duration", template.getDuration())
                 .build();
         return EntityValue.of(entity);
+    }
+
+    public void removeTemplateUser(String templateId, String userId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity user = transaction.get(keyFactory.newKey(userId));
+            logger.info("user" + user);
+            if (Objects.nonNull(user)) {
+                List<EntityValue> listValue = null;
+                try {
+                    listValue = user.getList("templates");
+
+                } catch (Exception e) {
+                    logger.warn(e);
+                }
+                if (Objects.nonNull(listValue)) {
+                    List<EntityValue> entityValues = FluentIterable.from(listValue).filter(new Predicate<EntityValue>() {
+                        @Override
+                        public boolean apply(EntityValue entityValue) {
+                            return !entityValue.get().getString("templateId").equals(templateId);
+                        }
+                    }).toList();
+                    transaction.put(Entity.newBuilder(user).set("templates", entityValues).build());
+                }
+                logger.info("Удалили  из списка шаблонов пользователя " + userId + " шаблон " + templateId);
+
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
     }
 }

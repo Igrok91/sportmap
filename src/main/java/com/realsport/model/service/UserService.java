@@ -64,8 +64,8 @@ public class UserService {
         return databaseService.getTemplatesUserById(userId);
     }
 
-    public void removeTemplateUser(String id, String templateId) {
-
+    public void removeTemplateUser(String templateId, String id) {
+         databaseService.removeTemplateUser(templateId, id);
     }
 
     public String saveTemplateUser(TemplateGame template, String userId) {

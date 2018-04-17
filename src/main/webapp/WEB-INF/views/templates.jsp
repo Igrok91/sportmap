@@ -33,26 +33,27 @@
 <body>
 
 <main>
-    <form action="createGameFromTemplate"  method="post">
+
     <div class="container-fluid ">
-        <div class="pull-right dropdown hide" id="dropdownTemplate" >
-            <a href="#" class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3" style="padding-left: 0px;padding-right: 0px">  <span class="glyphicon glyphicon-option-vertical "></span></a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
-                <li><a href="#"  id="removeTemlates"><span class="glyphicon glyphicon-trash" style="margin-right: 20px"></span>Удалить</a></li>
-            </ul>
+   <div class="pull-right hide" id="dropdownTemplate" >
+       <button class="btn"  id="templateButton" style="padding-left: 4px;padding-right: 4px;background: white">  <span class="glyphicon glyphicon-remove " style="color: #77A5C5"></span></button>
         </div>
         <div class="row content">
-
                 <div class="list-group" id="listTemplates">
+                    <c:forEach var="templ" items="${template}">
+                        <a href="createGameFromTemplate?templateId=${templ.templateId}&userId=${userId}&playgroundId=${playgroundId}" class="list-group-item  borderless" id="${templ.templateId}">
+                            <div class="pull-right" >
+                                <button class="btn"  onclick="removeTemplate(${templ.templateId})" style="padding-left: 4px;padding-right: 4px;background: white">  <span class="glyphicon glyphicon-remove " style="color: #77A5C5"></span></button>
+                            </div>
+                            <h5>${templ.description}</h5>
+                        </a>
+                    </c:forEach>
                    <%-- <button type="button"  class="list-group-item  borderless">
                         <div class="pull-right dropdown" >
                             <a href="#" class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3" style="padding-left: 0px;padding-right: 0px">  <span class="glyphicon glyphicon-option-vertical "></span></a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
 
                                 <li><a href="#" ><span class="glyphicon glyphicon-trash" style="margin-right: 20px"></span>Удалить</a></li>
-                                <li><a href="#" >
-                                    <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
-                                </a></li>
 
                             </ul>
                         </div>
@@ -91,7 +92,6 @@
 
     </div>
     </div>
-    </form>
 </main>
 
 
@@ -101,52 +101,41 @@
     var sport = '${sport}';
 
 
-    templates.map(function (template, i) {
+ /*   templates.map(function (template, i) {
         var list = document.getElementById('listTemplates');
         list.appendChild(getTemplatesList(template));
 
-    });
+    });*/
 
     function getTemplatesList(template) {
-        var clonedNode = document.getElementById("dropdownTemplate").cloneNode(true);
-        clonedNode.className = "pull-right dropdown";
-
-        clonedNode.childNodes[3].childNodes[1].childNodes[0].onclick = function () {
+        var templButton = document.getElementById("templateButton");
+        templateButton.onclick = function () {
             removeTemplate(template.templateId);
         };
+        var clonedNode = document.getElementById("dropdownTemplate").cloneNode(true);
+        clonedNode.className = "pull-right";
+
+/*        clonedNode.childNodes[3].childNodes[1].childNodes[0].onclick = function () {
+            removeTemplate(template.templateId);
+        };*/
 
 
-        var button = document.createElement('button');
+        var a = document.createElement('a');
 
-        button.id = template.templateId;
-        button.className = 'list-group-item borderless ';
-        button.type = 'submit';
+        a.id = template.templateId;
+        a.className = 'list-group-item borderless ';
 
-
-
-        button.onclick = function () {
-            setIdTemplate(template.templateId);
-        }
+        a.href = "createGameFromTemplate?templateId=" + template.templateId + "&userId=" + ${userId} + "&playgroundId=" + ${playgroundId};
 
 
         var description = document.createElement('h5');
        // description.className = "list-group-item-text";
         description.appendChild(document.createTextNode(template.description));
 
-        button.appendChild(clonedNode);
-        button.appendChild(description);
-  /*      var answer = template.listAnswer;
+        a.appendChild(clonedNode);
+        a.appendChild(description);
 
-        answer.map(function (answer, i) {
-            var p = document.createElement('p');
-            p.className = "list-group-item-text";
-            p.appendChild(document.createTextNode(answer));
-            button.appendChild(p);
-        });*/
-
-
-
-        return button;
+        return a;
     }
 
    function removeTemplate(id) {

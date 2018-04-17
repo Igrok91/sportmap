@@ -147,4 +147,8 @@ public class DatastoreService {
     public String saveTemplateUser(TemplateGame template, String userId) {
         return users.saveTemplateUser(template, userId);
     }
+
+    public void removeTemplateUser(String templateId, String id) {
+        users.removeTemplateUser(templateId, id);
+    }
 }

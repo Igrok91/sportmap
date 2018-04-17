@@ -528,7 +528,7 @@
                         userImg.href = "user?userId=" + userId;
                         $('#imgUserList_'+ eventId).append(userImg);
                         $('#templateUserList2').addClass('hide');
-                    } else if (value === 'false'){
+                    } else {
                         var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
                         console.log(count[0]);
                         if (count[0] == maxCountAnswer) {
@@ -548,8 +548,6 @@
                             $('#imgUserList_'+ eventId).append(userImg)
                             $('#templateUserList2').addClass('hide');
                         }
-                    } else {
-
                     }
                 } else {
                     $('#addIgrok_' + eventId).modal('show');

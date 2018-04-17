@@ -345,11 +345,12 @@ public class StartController {
             ArrayList<String> userTemplates = new ArrayList<>();
             if (list != null) {
                 userTemplates = getUserTemplates(list);
+                logger.info("TemplateGame size " + list.size());
             }
             model.addAttribute("eventJson", gson.toJson(new Event()) );
             model.addAttribute("event", new Event() );
             model.addAttribute("templates", userTemplates);
-            model.addAttribute("template", new Template());
+            model.addAttribute("template", list);
         }
         model.addAttribute("returnBack", "home");
         model.addAttribute("userId", userId);
@@ -460,7 +461,7 @@ public class StartController {
         User user = userService.getUser(userId);
         Event game;
         logger.info("Description Event " + descr);
-        if (templateId.equals("0")) {
+        if (templateId.equals("empty")) {
             game = new Event();
             game.setDescription(descr);
             game.setAnswer(answer);
@@ -484,6 +485,22 @@ public class StartController {
         } else {
             eventsService.publishEvent(game);
         }
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("user", user);
+        return "redirect:/home";
+    }
+
+
+    @RequestMapping(value = "/createGameFromTemplate")
+    public String createGameFromTemplate(Model model,
+                                         @RequestParam(name = "templateId") String  templateId,
+                                         @RequestParam(value = "userId") String userId,
+                                         @RequestParam(value = "playgroundId") String playgroundId)  throws IOException {
+        User user = userService.getUser(userId);
+        Event game = eventsService.createEventByTemplate(templateId);
+
+        eventsService.publishEvent(game);
 
         model.addAttribute("userId", userId);
         model.addAttribute("user", user);
