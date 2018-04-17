@@ -310,10 +310,12 @@
 
             $('#savetempl').css({"pointer-events": "none"});
 
+            var userId = '${userId}';
+
             $.ajax({
                 url: 'saveTemplate',
                 method: "POST",
-                data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1, userId: ${userId}}),
+                data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1, userId: userId}),
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Accept", "application/json");
                     //xhr.setRequestHeader("Content-Type", "application/json");

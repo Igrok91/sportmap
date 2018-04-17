@@ -503,7 +503,6 @@ public class StartController {
         for (TemplateGame p : list) {
             map.put("templateId", p.getTemplateId());
             map.put("description", p.getDescription());
-            map.put("listAnswer", p.getListAnswer());
             String json = gson.toJson(map);
             templates.add(json);
         }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Template implements Serializable {
-    private int templateId;
+    private String templateId;
     private String description;
     private String answer;
     private String sel2;
@@ -42,11 +42,11 @@ public class Template implements Serializable {
         this.sel1 = sel1;
     }
 
-    public int getTemplateId() {
+    public String getTemplateId() {
         return templateId;
     }
 
-    public void setTemplateId(int templateId) {
+    public void setTemplateId(String templateId) {
         this.templateId = templateId;
     }
 }

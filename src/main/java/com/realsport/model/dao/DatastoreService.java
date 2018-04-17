@@ -139,4 +139,12 @@ public class DatastoreService {
     public Event getEventById(String eventId) {
            return events.getEventById(eventId);
     }
+
+    public List<TemplateGame> getTemplatesUserById(String userId) {
+        return users.getTemplatesUserById(userId);
+    }
+
+    public String saveTemplateUser(TemplateGame template, String userId) {
+        return users.saveTemplateUser(template, userId);
+    }
 }

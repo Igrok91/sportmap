@@ -60,31 +60,17 @@ public class UserService {
         return user;
     }
 
-    public List<TemplateGame> getTemplatesUserById(String userId) {
-        List<TemplateGame> list = new ArrayList<>();
-        List<String> listAnswer = new ArrayList<>();
-        listAnswer.add("+");
-
-        TemplateGame game = new TemplateGame();
-        game.setTemplateId("1");
-        game.setDescription("Го на игру в 7?");
-        game.setListAnswer(listAnswer);
-        TemplateGame game2 = new TemplateGame();
-        game2.setTemplateId("2");
-        game2.setDescription("Го на игру в 8?");
-        game2.setListAnswer(listAnswer);
-        list.add(game);
-        list.add(game2);
-        return list;
+    public List<TemplateGame> getTemplatesUserById(String userId) { ;
+        return databaseService.getTemplatesUserById(userId);
     }
 
     public void removeTemplateUser(String id, String templateId) {
 
     }
 
-    public int saveTemplateUser(TemplateGame templateId, String userId) {
+    public String saveTemplateUser(TemplateGame template, String userId) {
+       return databaseService.saveTemplateUser(template, userId);
 
-        return 3;
     }
 
     public void editUserInfo(String userInfo) {

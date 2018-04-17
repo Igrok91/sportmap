@@ -14,8 +14,10 @@ public class User implements Serializable {
     private boolean isAdmin = false;
     private boolean isFake = false;
     private int countFake;
-    //Список id площадок
+    // Список id площадок
     private List<String> playgroundIdlList =  new ArrayList<>();
+    // Список шаблонов пользователя
+    private List<TemplateGame> templateGames =  new ArrayList<>();
 
 
 
@@ -83,6 +85,13 @@ public class User implements Serializable {
         this.countFake = countFake;
     }
 
+    public List<TemplateGame> getTemplateGames() {
+        return templateGames;
+    }
+
+    public void setTemplateGames(List<TemplateGame> templateGames) {
+        this.templateGames = templateGames;
+    }
 
     @Override
     public String toString() {

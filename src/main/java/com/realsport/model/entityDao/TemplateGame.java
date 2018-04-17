@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TemplateGame {
-    private String description;
     private String templateId;
-    private List<String> listAnswer;
+    private String description;
     private int countAnswer;
     private String duration;
 
@@ -16,14 +15,6 @@ public class TemplateGame {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<String> getListAnswer() {
-        return listAnswer;
-    }
-
-    public void setListAnswer(List<String> listAnswer) {
-        this.listAnswer = listAnswer;
     }
 
     public String getTemplateId() {
@@ -48,5 +39,14 @@ public class TemplateGame {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return "TemplateGame{" +
+                "description='" + description + '\'' +
+                ", countAnswer=" + countAnswer +
+                ", duration='" + duration + '\'' +
+                '}';
     }
 }
