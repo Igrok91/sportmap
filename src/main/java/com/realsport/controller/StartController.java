@@ -1,11 +1,9 @@
 package com.realsport.controller;
 
 import com.google.cloud.Timestamp;
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
-import com.realsport.model.dao.kinds.KindSport;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.*;
 import com.realsport.model.service.EventsService;
@@ -23,7 +21,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -447,17 +444,17 @@ public class StartController {
 
 
     @RequestMapping(value = "/createGame", method = RequestMethod.POST)
-    public String createGame(Model model, @RequestParam(name = "descr", required = false
-            , defaultValue = "description") String  descr
-            , @RequestParam(name = "answer", required = false, defaultValue="+") String  answer
-            , @RequestParam(name = "sel2", required = false, defaultValue="Без ограничений") String  sel2
-            , @RequestParam(name = "sel1", required = false, defaultValue="3") String  sel1
-            , @RequestParam(name = "sport", required = false, defaultValue="Футбол") String  sport
-            , @RequestParam(name = "playgroundId", required = false, defaultValue="123") String  playgroundId
-            , @RequestParam(name = "namePlayground") String  namePlayground
-            , @RequestParam(name = "templateId", required = false, defaultValue = "0") String  templateId
-            , @RequestParam(name = "eventId", required = false, defaultValue = "null") String  eventId
-            , @RequestParam(value = "userId") String userId)  throws IOException {
+    public String createGame(Model model,
+                             @RequestParam(name = "descr", required = false, defaultValue = "description") String  descr,
+                             @RequestParam(name = "answer", required = false, defaultValue="+") String  answer,
+                             @RequestParam(name = "sel2", required = false, defaultValue="Без ограничений") String  sel2,
+                             @RequestParam(name = "sel1", required = false, defaultValue="3") String  sel1,
+                             @RequestParam(name = "sport", required = false, defaultValue="Футбол") String  sport,
+                             @RequestParam(name = "playgroundId", required = false, defaultValue="123") String  playgroundId,
+                             @RequestParam(name = "namePlayground") String  namePlayground,
+                             @RequestParam(name = "templateId", required = false, defaultValue = "0") String  templateId,
+                             @RequestParam(name = "eventId", required = false, defaultValue = "null") String  eventId,
+                             @RequestParam(value = "userId") String userId)  throws IOException {
         User user = userService.getUser(userId);
         Event game;
         logger.info("Description Event " + descr);
@@ -476,7 +473,7 @@ public class StartController {
             list.add(user);
             game.setUserList(list);
         } else {
-            game = eventsService.createEventByTemplate(templateId);
+            game = eventsService.createEventByTemplate(templateId, templateId);
         }
 
         if (!eventId.equals("null")) {
@@ -496,9 +493,20 @@ public class StartController {
     public String createGameFromTemplate(Model model,
                                          @RequestParam(name = "templateId") String  templateId,
                                          @RequestParam(value = "userId") String userId,
-                                         @RequestParam(value = "playgroundId") String playgroundId)  throws IOException {
+                                         @RequestParam(value = "playgroundId") String playgroundId,
+                                         @RequestParam(name = "sport", required = false, defaultValue="Футбол")  String  sport,
+                                         @RequestParam(name = "namePlayground") String  namePlayground)  throws IOException {
         User user = userService.getUser(userId);
-        Event game = eventsService.createEventByTemplate(templateId);
+        Event game = eventsService.createEventByTemplate(templateId, userId);
+        if (Objects.nonNull(game)) {
+            List<User> list = new ArrayList<>();
+            list.add(user);
+            game.setUserList(list);
+            game.setDateCreation(Timestamp.now());
+            game.setPlaygroundId(playgroundId);
+            game.setSport(sport);
+            game.setPlaygroundName(namePlayground);
+        }
 
         eventsService.publishEvent(game);
 

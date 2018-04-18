@@ -151,4 +151,8 @@ public class DatastoreService {
     public void removeTemplateUser(String templateId, String id) {
         users.removeTemplateUser(templateId, id);
     }
+
+    public Event createEventByTemplate(String templateId, String id) {
+        return users.createEventByTemplate(templateId);
+    }
 }

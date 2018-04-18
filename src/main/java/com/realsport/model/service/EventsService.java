@@ -1,6 +1,5 @@
 package com.realsport.model.service;
 
-import com.google.cloud.Timestamp;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
@@ -150,21 +149,6 @@ public class EventsService {
         return listFoot;
     }
 
-    public Event createEventByTemplate(String templateId) {
-        Event game = new Event();
-        game.setDescription("template");
-        game.setAnswer("+");
-        game.setMaxCountAnswer(0);
-        game.setDuration("5");
-        game.setUserIdCreator("2312312");
-        game.setPlaygroundId("23555");
-        game.setSport("Футбол");
-        game.setDateCreation(Timestamp.now());
-        game.setPlaygroundName("template");
-
-        return game;
-    }
-
     public Event getEventById(String eventId) {
         return databaseService.getEventById(eventId);
     }
@@ -234,5 +218,9 @@ public class EventsService {
 
     public void addUserToEvent(String eventId, User user, boolean isFake) {
         databaseService.addUserToEvent(eventId, user, isFake);
+    }
+
+    public Event createEventByTemplate(String id, String templateId) {
+        return databaseService.createEventByTemplate(templateId, id);
     }
 }

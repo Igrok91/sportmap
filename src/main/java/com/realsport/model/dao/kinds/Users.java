@@ -3,6 +3,7 @@ package com.realsport.model.dao.kinds;
 import com.google.cloud.datastore.*;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 import org.apache.commons.logging.Log;
@@ -284,5 +285,35 @@ public class Users {
                 transaction.rollback();
             }
         }
+    }
+
+    public Event createEventByTemplate(String templateId) {
+       /* Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity user = transaction.get(keyFactory.newKey(userId));
+            logger.info("user" + user);
+            if (Objects.nonNull(user)) {
+                List<EntityValue> listValue = null;
+                try {
+                    listValue = user.getList("templates");
+
+                } catch (Exception e) {
+                    logger.warn(e);
+                }
+                if (Objects.nonNull(listValue)) {
+                    List<EntityValue> entityValues = new ArrayList<>();
+                    transaction.put(Entity.newBuilder(user).set("templates", entityValues).build());
+                }
+                logger.info("Удалили  из списка шаблонов пользователя " + userId + " шаблон " + templateId);
+
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+        */
+        return null;
     }
 }

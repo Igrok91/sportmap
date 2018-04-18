@@ -41,7 +41,7 @@
         <div class="row content">
                 <div class="list-group" id="listTemplates">
                     <c:forEach var="templ" items="${template}">
-                        <a href="createGameFromTemplate?templateId=${templ.templateId}&userId=${userId}&playgroundId=${playgroundId}" class="list-group-item  borderless" id="${templ.templateId}">
+                        <a href="createGameFromTemplate?templateId=${templ.templateId}&userId=${userId}&playgroundId=${playgroundId}&sport=${sport}&namePlayground=${namePlayground}" onclick="disabledLink('${templ.templateId}')" class="list-group-item  borderless" id="${templ.templateId}">
                             <h5>${templ.description}</h5>
                         </a>
 
@@ -122,7 +122,9 @@
         a.id = template.templateId;
         a.className = 'list-group-item borderless ';
 
-        a.href = "createGameFromTemplate?templateId=" + template.templateId + "&userId=" + ${userId} + "&playgroundId=" + ${playgroundId};
+        a.href = "createGameFromTemplate?templateId=" +
+            template.templateId + "&userId=" + ${userId} + "&playgroundId=" +
+            ${playgroundId} + "&sport=" + ${sport} + "&namePlayground=" + ${namePlayground};
 
         var description = document.createElement('h5');
        // description.className = "list-group-item-text";
@@ -153,6 +155,12 @@
    }
     function setIdTemplate(templateId) {
         $('#templId').attr('value', templateId);
+    }
+    function disabledLink(id) {
+        $('#' + id).addClass("disabled");
+        templates.map(function (templ) {
+            $('#' + templ.templateId).addClass("disabled");
+        });
     }
 </script>
 </body>
