@@ -158,9 +158,9 @@
     }
     function disabledLink(id) {
         $('#' + id).addClass("disabled");
-        templates.map(function (templ) {
+       /* templates.map(function (templ) {
             $('#' + templ.templateId).addClass("disabled");
-        });
+        });*/
     }
 </script>
 </body>

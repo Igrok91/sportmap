@@ -155,4 +155,8 @@ public class DatastoreService {
     public Event createEventByTemplate(String templateId, String id) {
         return users.createEventByTemplate(templateId, id);
     }
+
+    public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
+        events.editEventById(eventId, description, maxCountAnswer, duration);
+    }
 }

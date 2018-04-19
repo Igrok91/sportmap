@@ -114,6 +114,7 @@ public class Events {
             event.setPlaygroundId(entity.getString("playgroundId"));
             event.setPlaygroundName(entity.getString("playgroundName"));
             event.setDateCreation(entity.getTimestamp("dateCreation"));
+            logger.info(entity.getString("description"));
             try{
                 List<EntityValue> entityValues = entity.getList("userList");
                 event.setUserList(getUserListFromEntity(entityValues));
@@ -226,7 +227,7 @@ public class Events {
     public Event getEventById(String eventId) {
             Entity event = getDatastore().get(keyFactory.newKey(Long.valueOf(eventId)));
             if (Objects.nonNull(event)) {
-                logger.info("Получаем событие" + eventId);
+                logger.info("Получаем событие " + eventId);
                 return getEventFromEntity(event);
             }
             return null;
@@ -263,5 +264,9 @@ public class Events {
         }
         event.setPlaygroundName(entity.getString("playgroundName"));
         return event;
+    }
+
+    public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
+
     }
 }

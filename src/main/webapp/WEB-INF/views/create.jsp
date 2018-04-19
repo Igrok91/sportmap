@@ -73,7 +73,7 @@
                                 <img class="media-object" src="resources/image/playbasket.png" alt="Баскетбол" width="40" height="40" id="imageGroupCreate" >
                             </a>
 
-                            <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
+                            <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; " id="removeTemplates">
                                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"> <span
                                         class="glyphicon glyphicon-option-vertical"></span></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
@@ -257,16 +257,19 @@
     if (event.idEvent) {
         $('#tabCreate').addClass('hide');
         $('#savetempl').addClass('hide');
+        $('#removeTemplates').addClass('hide');
         $('#desc').append(event.description);
         mySwitch3.on();
-
     }
 
     $(function() {
         $('#newGame').click(function(event) {
-            $('#newGame').addClass(' btn-primary');
+            $('#newGame').removeClass(' btn-primary');
+            $('#newGame').addClass('btn-default');
+            $('#templatesGames').removeClass('btn-default');
+            $('#templatesGames').addClass(' btn-primary');
             $('#panelCreate').removeClass('hide');
-            $('#templatesGames').removeClass(' btn-primary');
+
             $('#templatesPanel').addClass('hide');
             $('#divCreateGame').removeClass('hide');
         });
@@ -274,8 +277,10 @@
 
     $(function() {
         $('#templatesGames').click(function(event) {
-            $('#templatesGames').addClass(' btn-primary');
-            $('#newGame').removeClass(' btn-primary');
+            $('#templatesGames').removeClass('btn-primary');
+            $('#templatesGames').addClass('btn-default');
+            $('#newGame').removeClass('btn-default');
+            $('#newGame').addClass(' btn-primary');
             $('#templatesPanel').removeClass('hide');
             $('#panelCreate').addClass('hide');
             $('#divCreateGame').addClass('hide');
@@ -296,8 +301,10 @@
 
     var templates = ${templates};
     if (templates.length != 0) {
-        $('#templatesGames').addClass(' btn-primary');
-        $('#newGame').removeClass(' btn-primary');
+        $('#templatesGames').removeClass('btn-primary');
+        $('#templatesGames').addClass('btn-default');
+        $('#newGame').removeClass('btn-default');
+        $('#newGame').addClass(' btn-primary');
         $('#templatesPanel').removeClass('hide');
         $('#panelCreate').addClass('hide');
         $('#divCreateGame').addClass('hide');

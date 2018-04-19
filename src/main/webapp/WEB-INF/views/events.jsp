@@ -159,7 +159,8 @@
 
 
                                 </div>
-                                <div style="padding-left: 15px;padding-top: 10px; padding-bottom: 12px">
+                                <div class="panel-body" style="padding-bottom: 0px">
+                                <div style="padding-bottom: 12px">
                                     <a class="pull-left" href="#" >
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
@@ -173,12 +174,12 @@
 
                                 </div>
                                     <%--<hr style="margin-bottom: 9px; margin-top: 0px">--%>
-                                <div>
-                                    <span style="color: black; padding-left: 17px; padding-right: 17px">${event.description}</span>
+                                <div style="padding-bottom: 12px">
+                                    <span style="color: black" id="descrEvent_${event.idEvent}">${event.description}</span>
                                 </div>
                                     <%--<hr class="hrDescription">--%>
 
-                                <div class="panel-body" style="padding-bottom: 0px">
+
                                     <div class="list-group" style="margin-bottom: 5px">
                                         <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent})" id="answerButton_${event.idEvent}">
                                             <c:choose>
@@ -236,7 +237,7 @@
 
                                 </div>
 
-                                <a href="event?eventId=${event.idEvent}" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
+                                <a href="event?eventId=${event.idEvent}&userId=${userId}" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
                                         class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
                                         style="color: #77A5C5;margin-right: 5px"></span>
                                     <c:if test="${event.commentsList.size() > 0}">
@@ -363,6 +364,13 @@
                 element.className = 'panel panel-info';
                 imgPlayground.src = "resources/image/сетка.png";
             }
+            var description = event.description.split('\n');
+            $('#descrEvent_' + id).html('');
+            description.map(function (message, i) {
+
+                $('#descrEvent_' + id).append(message);
+                $('#descrEvent_' + id).append('<br>');
+            });
             // Определяем истинное значение игроков
             if (maxCountAnswer == 0) {
                 var count = parseInt($('#badge1_'+id).text());

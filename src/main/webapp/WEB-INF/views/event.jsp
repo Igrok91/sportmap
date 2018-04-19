@@ -410,7 +410,6 @@
         $('#imageGroup3').attr("src", "resources/image/сетка.png")
     }
     var userId = '${userId}';
-    var eventListActive = ${eventListActive};
     var maxCountAnswer = '${event.maxCountAnswer}';
     var event = ${eventJson};
     var usersList = event.userList;
@@ -445,9 +444,15 @@
         }
         $('#badge2').text(count + ' / ' + maxCountAnswer );
     }
+    var listUser = event.userList;
+    var isActive = false;
+    listUser.map(function (user, i) {
+        if (user.userId === userId ) {
+            isActive = true;
+        }
+    });
 
-
-    if (eventListActive) {
+    if (isActive) {
         var eventId = '${event.idEvent}';
         if (eventListActive[eventId] && eventListActive[eventId] == true) {
             $('#answerButton').addClass('active');

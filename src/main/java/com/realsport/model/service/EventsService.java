@@ -153,8 +153,8 @@ public class EventsService {
         return databaseService.getEventById(eventId);
     }
 
-    public void editEventById(String eventId) {
-
+    public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
+        databaseService.editEventById(eventId, description, maxCountAnswer, duration);
     }
 
     public void deleteGame(String eventId) {

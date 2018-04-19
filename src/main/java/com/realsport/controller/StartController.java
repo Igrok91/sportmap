@@ -336,7 +336,7 @@ public class StartController {
             model.addAttribute("eventJson", gson.toJson(event) );
             model.addAttribute("event", event );
             model.addAttribute("templates", new ArrayList<>());
-            model.addAttribute("template", new Template());
+            model.addAttribute("template", Collections.EMPTY_LIST);
         } else {
             List<TemplateGame> list = userService.getTemplatesUserById(userId);
             ArrayList<String> userTemplates = new ArrayList<>();
@@ -458,7 +458,6 @@ public class StartController {
         User user = userService.getUser(userId);
         Event game;
         logger.info("Description Event " + descr);
-        if (templateId.equals("empty")) {
             game = new Event();
             game.setDescription(descr);
             game.setAnswer(answer);
@@ -472,13 +471,12 @@ public class StartController {
             List<User> list = new ArrayList<>();
             list.add(user);
             game.setUserList(list);
-        } else {
-            game = eventsService.createEventByTemplate(templateId, templateId);
-        }
 
+        logger.info("event id " + eventId);
         if (!eventId.equals("null")) {
+            logger.info("Изменяем событие с id " + eventId);
             game.setIdEvent(eventId);
-            eventsService.editEventById(eventId);
+            eventsService.editEventById(eventId, game.getDescription(), game.getMaxCountAnswer(), game.getDuration());
         } else {
             eventsService.publishEvent(game);
         }
