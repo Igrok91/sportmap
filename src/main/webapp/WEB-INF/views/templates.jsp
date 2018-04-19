@@ -124,7 +124,7 @@
 
         a.href = "createGameFromTemplate?templateId=" +
             template.templateId + "&userId=" + ${userId} + "&playgroundId=" +
-            ${playgroundId} + "&sport=" + ${sport} + "&namePlayground=" + ${namePlayground};
+            "${playgroundId}" + "&sport=" + "${sport}" + "&namePlayground=" + "${namePlayground}";
 
         var description = document.createElement('h5');
        // description.className = "list-group-item-text";

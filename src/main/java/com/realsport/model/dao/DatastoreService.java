@@ -153,6 +153,6 @@ public class DatastoreService {
     }
 
     public Event createEventByTemplate(String templateId, String id) {
-        return users.createEventByTemplate(templateId);
+        return users.createEventByTemplate(templateId, id);
     }
 }

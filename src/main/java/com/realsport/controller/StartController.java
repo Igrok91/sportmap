@@ -506,9 +506,9 @@ public class StartController {
             game.setPlaygroundId(playgroundId);
             game.setSport(sport);
             game.setPlaygroundName(namePlayground);
+            game.setUserIdCreator(userId);
+            eventsService.publishEvent(game);
         }
-
-        eventsService.publishEvent(game);
 
         model.addAttribute("userId", userId);
         model.addAttribute("user", user);

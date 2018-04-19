@@ -205,13 +205,22 @@ public class Users {
             FullEntity fullEntity = entityValue.get();
             TemplateGame game = new TemplateGame();
             game.setTemplateId(fullEntity.getString("templateId"));
-            game.setDescription(fullEntity.getString("description"));
+            game.setDescription(getMinText(fullEntity.getString("description")));
             game.setCountAnswer((int) fullEntity.getLong("countAnswer"));
             game.setDuration(fullEntity.getString("duration"));
             listTemplate.add(game);
         }
         return listTemplate;
     }
+
+    private String getMinText(String description) {
+        String minText = description;
+        if (description.length() > 35) {
+            minText = description.substring(0, 30) + "...";
+        }
+        return minText;
+    }
+
 
     public String saveTemplateUser(TemplateGame template, String userId) {
         Transaction transaction = getDatastore().newTransaction();
@@ -287,11 +296,12 @@ public class Users {
         }
     }
 
-    public Event createEventByTemplate(String templateId) {
-       /* Transaction transaction = getDatastore().newTransaction();
+    public Event createEventByTemplate(String templateId, String userId) {
+        Transaction transaction = getDatastore().newTransaction();
         try {
             Entity user = transaction.get(keyFactory.newKey(userId));
-            logger.info("user" + user);
+            logger.info("user " + user);
+            logger.info("userId " + userId);
             if (Objects.nonNull(user)) {
                 List<EntityValue> listValue = null;
                 try {
@@ -301,19 +311,33 @@ public class Users {
                     logger.warn(e);
                 }
                 if (Objects.nonNull(listValue)) {
-                    List<EntityValue> entityValues = new ArrayList<>();
-                    transaction.put(Entity.newBuilder(user).set("templates", entityValues).build());
+                    EntityValue entityValue = FluentIterable.from(listValue).firstMatch(new Predicate<EntityValue>() {
+                        @Override
+                        public boolean apply(EntityValue entityValue) {
+                            return entityValue.get().getString("templateId").equals(templateId);
+                        }
+                    }).orNull();
+                    if (Objects.nonNull(entityValue)) {
+                        return getEventFromTemplateEntity(entityValue);
+                    }
                 }
-                logger.info("Удалили  из списка шаблонов пользователя " + userId + " шаблон " + templateId);
-
+                logger.info("Создание  события по шаблону пользователем " + userId + ", шаблон " + templateId);
             }
-            transaction.commit();
         } finally {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
+        if (transaction.isActive()) {
+            transaction.rollback();
         }
-        */
+    }
         return null;
+    }
+
+    private Event getEventFromTemplateEntity(EntityValue entityValue) {
+        FullEntity fullEntity = entityValue.get();
+        Event game = new Event();
+        game.setAnswer("+");
+        game.setDescription(fullEntity.getString("description"));
+        game.setMaxCountAnswer((int) fullEntity.getLong("countAnswer"));
+        game.setDuration(fullEntity.getString("duration"));
+        return game;
     }
 }

@@ -220,7 +220,7 @@ public class EventsService {
         databaseService.addUserToEvent(eventId, user, isFake);
     }
 
-    public Event createEventByTemplate(String id, String templateId) {
+    public Event createEventByTemplate(String templateId, String id) {
         return databaseService.createEventByTemplate(templateId, id);
     }
 }
