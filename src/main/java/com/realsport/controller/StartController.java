@@ -83,7 +83,7 @@ public class StartController {
         boolean isFirst = false;
         if (id != null) {
             try {
-                 user = userService.getUser(id);
+                user = userService.getUser(id);
                 if (user != null) {
                     setPlaygroundDataToModel(model, id);
                     setUserDataToModel(user, model);
@@ -158,7 +158,7 @@ public class StartController {
 
     private List<Playground> getAllPlaygroundUser(User user) {
         List<Playground> allList = new ArrayList<>();
-        if ( user.getPlaygroundIdlList().size() != 0) {
+        if (user.getPlaygroundIdlList().size() != 0) {
             for (String id : user.getPlaygroundIdlList()) {
                 Playground p = FluentIterable.from(allPlaygroundList).firstMatch(new Predicate<Playground>() {
                     @Override
@@ -175,12 +175,11 @@ public class StartController {
     }
 
 
-
     private void setPlaygroundDataToModel(Model model, String id) throws Exception {
         try {
             //messageService.sendMessage(ADMIN, "В приложение зашел пользователь с id " + id);
             allPlaygroundList = playgroundService.getAllPlayground();
-            logger.info("allPlaygroundList " + allPlaygroundList.size() );
+            logger.info("allPlaygroundList " + allPlaygroundList.size());
             // Получение данных по площадкам из базы данных
             voleyballPlaygroundList = playgroundService.getVoleyballPlayground(allPlaygroundList);
             footballPlaygroundList = playgroundService.getFootballPlayground(allPlaygroundList);
@@ -235,9 +234,9 @@ public class StartController {
     }
 
     @RequestMapping("/groupFromMap")
-    public String toGroup(Model model, @RequestParam(value="playgroundId") String id
-            , @RequestParam(value="sport", required=false, defaultValue=FOOTBALL) String sport
-            ,@RequestParam(value = "userId") String userId) {
+    public String toGroup(Model model, @RequestParam(value = "playgroundId") String id
+            , @RequestParam(value = "sport", required = false, defaultValue = FOOTBALL) String sport
+            , @RequestParam(value = "userId") String userId) {
         User user = userService.getUser(userId);
 
         if (user == null) {
@@ -253,9 +252,9 @@ public class StartController {
 
     private void addGroupToModel(Model model, String idGroup, User user) {
         Playground playground = playgroundService.getPlaygroundById(idGroup);
-            if (playground != null) {
-                addGroupDataToModel(model, playground, idGroup);
-            }
+        if (playground != null) {
+            addGroupDataToModel(model, playground, idGroup);
+        }
         model.addAttribute("firstName", user.getFirstName());
         model.addAttribute("lastName", user.getLastName());
 
@@ -273,19 +272,19 @@ public class StartController {
 
     private void addGroupDataToModel(Model model, Playground playground, String idGroup) {
         model.addAttribute("playgroundId", playground.getIdplayground());
-        model.addAttribute("namePlayground", playground.getName() );
-        model.addAttribute("street", playground.getStreet() );
-        model.addAttribute("house", playground.getHouse() );
-        model.addAttribute("sport", playground.getSport() );
-        model.addAttribute("players", playground.getPlayers() );
-        model.addAttribute("listEvents", eventsService.getEventsByIdGroup(idGroup) );
+        model.addAttribute("namePlayground", playground.getName());
+        model.addAttribute("street", playground.getStreet());
+        model.addAttribute("house", playground.getHouse());
+        model.addAttribute("sport", playground.getSport());
+        model.addAttribute("players", playground.getPlayers());
+        model.addAttribute("listEvents", eventsService.getEventsByIdGroup(idGroup));
 
     }
 
     @RequestMapping("/group")
-    public String toGroupUser(Model model, @RequestParam(value="playgroundId") String id
-            , @RequestParam(value="sport") String sport
-            ,@RequestParam(value = "userId") String userId) {
+    public String toGroupUser(Model model, @RequestParam(value = "playgroundId") String id
+            , @RequestParam(value = "sport") String sport
+            , @RequestParam(value = "userId") String userId) {
         User user = userService.getUser(userId);
         if (user == null) {
             return "error";
@@ -298,8 +297,8 @@ public class StartController {
     }
 
     @RequestMapping("/playground")
-    public String toGroupFromEvent(Model model, @RequestParam(value="playgroundId") String id
-            , @RequestParam(value="sport") String sport
+    public String toGroupFromEvent(Model model, @RequestParam(value = "playgroundId") String id
+            , @RequestParam(value = "sport") String sport
             , @RequestParam(value = "userId") String userId) {
         User user = userService.getUser(userId);
         if (user == null) {
@@ -313,28 +312,28 @@ public class StartController {
     }
 
     @RequestMapping("/create")
-    public String toCreate(Model model,  @RequestParam(value="playgroundId") String id, @RequestParam(value="sport") String sport,
-                           @RequestParam(value="eventId", required = false, defaultValue = "null") String eventId
-                            ,@RequestParam(value = "userId") String userId) {
+    public String toCreate(Model model, @RequestParam(value = "playgroundId") String id, @RequestParam(value = "sport") String sport,
+                           @RequestParam(value = "eventId", required = false, defaultValue = "null") String eventId
+            , @RequestParam(value = "userId") String userId) {
 
-            for (Playground playground : allPlaygroundList) {
-                if (playground.getIdplayground().equals(id)) {
-                    model.addAttribute("namePlayground", playground.getName() );
-                    model.addAttribute("playId", playground.getIdplayground() );
-                    model.addAttribute("street", playground.getStreet() );
-                    model.addAttribute("house", playground.getHouse() );
-                    model.addAttribute("sport", playground.getSport() );
-                    model.addAttribute("players", playground.getPlayers() );
-                }
+        for (Playground playground : allPlaygroundList) {
+            if (playground.getIdplayground().equals(id)) {
+                model.addAttribute("namePlayground", playground.getName());
+                model.addAttribute("playId", playground.getIdplayground());
+                model.addAttribute("street", playground.getStreet());
+                model.addAttribute("house", playground.getHouse());
+                model.addAttribute("sport", playground.getSport());
+                model.addAttribute("players", playground.getPlayers());
             }
+        }
 
 
         Gson gson = new Gson();
         if (!eventId.equals("null")) {
 
             Event event = eventsService.getEventById(eventId);
-            model.addAttribute("eventJson", gson.toJson(event) );
-            model.addAttribute("event", event );
+            model.addAttribute("eventJson", gson.toJson(event));
+            model.addAttribute("event", event);
             model.addAttribute("templates", new ArrayList<>());
             model.addAttribute("template", Collections.EMPTY_LIST);
         } else {
@@ -344,8 +343,8 @@ public class StartController {
                 userTemplates = getUserTemplates(list);
                 logger.info("TemplateGame size " + list.size());
             }
-            model.addAttribute("eventJson", gson.toJson(new Event()) );
-            model.addAttribute("event", new Event() );
+            model.addAttribute("eventJson", gson.toJson(new Event()));
+            model.addAttribute("event", new Event());
             model.addAttribute("templates", userTemplates);
             model.addAttribute("template", list);
         }
@@ -356,8 +355,8 @@ public class StartController {
     }
 
     @RequestMapping(value = "/home")
-    public String toHome(Model model, @RequestParam(value="where", required = false, defaultValue = "home") String where
-            , @RequestParam(value="playgroundId", required = false) String id, @RequestParam(value="sport", required = false) String sport
+    public String toHome(Model model, @RequestParam(value = "where", required = false, defaultValue = "home") String where
+            , @RequestParam(value = "playgroundId", required = false) String id, @RequestParam(value = "sport", required = false) String sport
             , @RequestParam(value = "userId") String userId) {
         if (where.equals("group")) {
             addPlaygroundDataToModel(model);
@@ -370,13 +369,13 @@ public class StartController {
             HashMap<String, Double> map = new HashMap<>();
             Gson gson = new Gson();
 
-                for (Playground p : allPlaygroundList) {
-                    if (p.getIdplayground().equals(id)) {
-                        map.put("lat", Double.parseDouble(p.getLatitude()));
-                        map.put("lng", Double.parseDouble(p.getLongitude()));
-                        json = gson.toJson(map);
-                    }
+            for (Playground p : allPlaygroundList) {
+                if (p.getIdplayground().equals(id)) {
+                    map.put("lat", Double.parseDouble(p.getLatitude()));
+                    map.put("lng", Double.parseDouble(p.getLongitude()));
+                    json = gson.toJson(map);
                 }
+            }
 
             model.addAttribute("returnBack", where);
             model.addAttribute("sport", sport);
@@ -405,7 +404,7 @@ public class StartController {
     // Удаляем атрибут active
     @RequestMapping(value = "/deleteGame")
     public String deleteGame(@RequestParam(name = "eventId", required = false) String eventId) {
-        if (eventId != null ) {
+        if (eventId != null) {
             eventsService.deleteGame(eventId);
         }
         return "redirect:/home";
@@ -413,7 +412,7 @@ public class StartController {
 
     @RequestMapping(value = "/endGame")
     public String endGame(@RequestParam(name = "eventId", required = false) String eventId) {
-        if (eventId != null ) {
+        if (eventId != null) {
             eventsService.endGame(eventId);
         }
         return "redirect:/home";
@@ -442,35 +441,34 @@ public class StartController {
     }
 
 
-
     @RequestMapping(value = "/createGame", method = RequestMethod.POST)
     public String createGame(Model model,
-                             @RequestParam(name = "descr", required = false, defaultValue = "description") String  descr,
-                             @RequestParam(name = "answer", required = false, defaultValue="+") String  answer,
-                             @RequestParam(name = "sel2", required = false, defaultValue="Без ограничений") String  sel2,
-                             @RequestParam(name = "sel1", required = false, defaultValue="3") String  sel1,
-                             @RequestParam(name = "sport", required = false, defaultValue="Футбол") String  sport,
-                             @RequestParam(name = "playgroundId", required = false, defaultValue="123") String  playgroundId,
-                             @RequestParam(name = "namePlayground") String  namePlayground,
-                             @RequestParam(name = "templateId", required = false, defaultValue = "0") String  templateId,
-                             @RequestParam(name = "eventId", required = false, defaultValue = "null") String  eventId,
-                             @RequestParam(value = "userId") String userId)  throws IOException {
+                             @RequestParam(name = "descr", required = false, defaultValue = "description") String descr,
+                             @RequestParam(name = "answer", required = false, defaultValue = "+") String answer,
+                             @RequestParam(name = "sel2", required = false, defaultValue = "Без ограничений") String sel2,
+                             @RequestParam(name = "sel1", required = false, defaultValue = "3") String sel1,
+                             @RequestParam(name = "sport", required = false, defaultValue = "Футбол") String sport,
+                             @RequestParam(name = "playgroundId", required = false, defaultValue = "123") String playgroundId,
+                             @RequestParam(name = "namePlayground") String namePlayground,
+                             @RequestParam(name = "templateId", required = false, defaultValue = "0") String templateId,
+                             @RequestParam(name = "eventId", required = false, defaultValue = "null") String eventId,
+                             @RequestParam(value = "userId") String userId) throws IOException {
         User user = userService.getUser(userId);
         Event game;
         logger.info("Description Event " + descr);
-            game = new Event();
-            game.setDescription(descr);
-            game.setAnswer(answer);
-            game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 0 : Integer.valueOf(sel2));
-            game.setDuration(sel1.substring(0, 1));
-            game.setUserIdCreator(userId);
-            game.setPlaygroundId(playgroundId);
-            game.setSport(sport);
-            game.setDateCreation(Timestamp.now());
-            game.setPlaygroundName(namePlayground);
-            List<User> list = new ArrayList<>();
-            list.add(user);
-            game.setUserList(list);
+        game = new Event();
+        game.setDescription(descr);
+        game.setAnswer(answer);
+        game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 0 : Integer.valueOf(sel2));
+        game.setDuration(sel1.substring(0, 1));
+        game.setUserIdCreator(userId);
+        game.setPlaygroundId(playgroundId);
+        game.setSport(sport);
+        game.setDateCreation(Timestamp.now());
+        game.setPlaygroundName(namePlayground);
+        List<User> list = new ArrayList<>();
+        list.add(user);
+        game.setUserList(list);
 
         logger.info("event id " + eventId);
         if (!eventId.equals("null")) {
@@ -489,11 +487,11 @@ public class StartController {
 
     @RequestMapping(value = "/createGameFromTemplate")
     public String createGameFromTemplate(Model model,
-                                         @RequestParam(name = "templateId") String  templateId,
+                                         @RequestParam(name = "templateId") String templateId,
                                          @RequestParam(value = "userId") String userId,
                                          @RequestParam(value = "playgroundId") String playgroundId,
-                                         @RequestParam(name = "sport", required = false, defaultValue="Футбол")  String  sport,
-                                         @RequestParam(name = "namePlayground") String  namePlayground)  throws IOException {
+                                         @RequestParam(name = "sport", required = false, defaultValue = "Футбол") String sport,
+                                         @RequestParam(name = "namePlayground") String namePlayground) throws IOException {
         User user = userService.getUser(userId);
         Event game = eventsService.createEventByTemplate(templateId, userId);
         if (Objects.nonNull(game)) {
@@ -531,6 +529,7 @@ public class StartController {
         }
         return templates;
     }
+
     /**
      * Получение основных данных по площадкам и конвертация данных в формат JSON
      *

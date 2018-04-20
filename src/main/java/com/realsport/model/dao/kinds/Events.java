@@ -267,6 +267,33 @@ public class Events {
     }
 
     public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
+       /* Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            if (Objects.nonNull(event)) {
+                List<EntityValue> list = event.getList("userList");
+                if (Objects.nonNull(list) ) {
+                    List<EntityValue> listValue = new ArrayList<>();
+                    List<EntityValue> listFilter = FluentIterable.from(list).filter(new Predicate<EntityValue>() {
+                        @Override
+                        public boolean apply(EntityValue entityValue) {
+                            FullEntity fullEntity = entityValue.get();
+                            return fullEntity.getString("userId").equals(user.getUserId()) && fullEntity.getBoolean("isFake") == false;
+                        }
+                    }).toList();
+                    listValue.addAll(listFilter);
+                    listValue.addAll(getEntityListFromUserList(Collections.singletonList(user)));
+                    transaction.put(Entity.newBuilder(event).set("userList", listValue).build());
+                    logger.info("Добавили  пользователя " + user + " в событие " + eventId);
+                }
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }*/
+
 
     }
 }
