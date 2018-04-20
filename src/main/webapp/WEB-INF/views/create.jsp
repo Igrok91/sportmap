@@ -47,8 +47,11 @@
         <div class="pull-left" >
             <a class="navbar-brand btn" href="/home?where=create&userId=${userId}" id="returnBackFromCreate" ><span class="glyphicon glyphicon-menu-left" aria-hidden=""></span></a>
         </div>
-        <div class="navbar-brand ">
+        <div class="navbar-brand " id="createPoll">
             Создание опроса
+        </div>
+        <div class="navbar-brand hide" id="editPoll">
+            Редактирование опроса
         </div>
 
     </div>
@@ -215,6 +218,7 @@
                         <div class=" btn-group btn-group-justified" style="padding-top: 15px" id="divCreateGame">
                             <div class="btn-group" >
                             <button class="btn  btn-primary" type="submit"  id="createGame" disabled>Опубликовать</button>
+                            <button class="btn  btn-primary hide" type="submit"  id="editGame" disabled>Редактировать</button>
                             </div>
                         </div>
 
@@ -258,8 +262,14 @@
         $('#tabCreate').addClass('hide');
         $('#savetempl').addClass('hide');
         $('#removeTemplates').addClass('hide');
+        $('#editPoll').removeClass('hide');
+        $('#createPoll').addClass('hide');
+        $('#createGame').addClass('hide');
+        $('#editGame').removeClass('hide');
+
         $('#desc').append(event.description);
         mySwitch3.on();
+
     }
 
     $(function() {

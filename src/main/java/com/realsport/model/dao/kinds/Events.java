@@ -40,7 +40,7 @@ public class Events {
                     .set("playgroundId", game.getPlaygroundId())
                     .set("userFirtsNameCreator", "firstName")
                     .set("userLastNameCreator", "firstName")
-                    .set("maxCountAnswer", String.valueOf(game.getMaxCountAnswer()))
+                    .set("maxCountAnswer", StringValue.of(String.valueOf(game.getMaxCountAnswer())))
                     .set("duration", game.getDuration())
                     .set("sport", game.getSport())
                     .set("active", game.isActive())
@@ -108,7 +108,7 @@ public class Events {
             event.setUserLastNameCreator(entity.getString("userLastNameCreator"));
             event.setDescription(entity.getString("description"));
             event.setAnswer("+");
-            event.setMaxCountAnswer(Integer.parseInt(entity.getString("maxCountAnswer")));
+            event.setMaxCountAnswer(Integer.parseInt((entity.getString("maxCountAnswer"))));
             event.setDuration(entity.getString("duration"));
             event.setSport(entity.getString("sport"));
             event.setPlaygroundId(entity.getString("playgroundId"));
@@ -267,32 +267,23 @@ public class Events {
     }
 
     public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
-       /* Transaction transaction = getDatastore().newTransaction();
+        Transaction transaction = getDatastore().newTransaction();
         try {
             Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
             if (Objects.nonNull(event)) {
-                List<EntityValue> list = event.getList("userList");
-                if (Objects.nonNull(list) ) {
-                    List<EntityValue> listValue = new ArrayList<>();
-                    List<EntityValue> listFilter = FluentIterable.from(list).filter(new Predicate<EntityValue>() {
-                        @Override
-                        public boolean apply(EntityValue entityValue) {
-                            FullEntity fullEntity = entityValue.get();
-                            return fullEntity.getString("userId").equals(user.getUserId()) && fullEntity.getBoolean("isFake") == false;
-                        }
-                    }).toList();
-                    listValue.addAll(listFilter);
-                    listValue.addAll(getEntityListFromUserList(Collections.singletonList(user)));
-                    transaction.put(Entity.newBuilder(event).set("userList", listValue).build());
-                    logger.info("Добавили  пользователя " + user + " в событие " + eventId);
+                    transaction.put(Entity.newBuilder(event).
+                            set("description", StringValue.of(description)).
+                            set("duration", StringValue.of(duration)).
+                            set("maxCountAnswer", StringValue.of(String.valueOf(maxCountAnswer))).
+                            build());
+                    logger.info("Изменили событие c id " + eventId);
                 }
-            }
             transaction.commit();
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-        }*/
+        }
 
 
     }
