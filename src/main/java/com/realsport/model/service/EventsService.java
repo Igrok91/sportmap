@@ -1,5 +1,6 @@
 package com.realsport.model.service;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
@@ -221,5 +222,37 @@ public class EventsService {
 
     public Event createEventByTemplate(String templateId, String id) {
         return databaseService.createEventByTemplate(templateId, id);
+    }
+
+    public List<MinUser> getUserListEvent(List<User> userList) {
+        List<MinUser> minUserList = new ArrayList<>();
+        List<MinUser> withoutFake = FluentIterable.from(userList).filter(new Predicate<User>() {
+            @Override
+            public boolean apply(User user) {
+                return !user.isFake();
+            }
+        }).transform(new Function<User, MinUser>() {
+            @Override
+            public MinUser apply(User user) {
+                MinUser minUser = new MinUser();
+                minUser.setUserId(user.getUserId());
+                minUser.setFirstName(user.getFirstName());
+                minUser.setLastName(user.getLastName());
+                return minUser;
+            }
+        }).toList();
+        minUserList.addAll(withoutFake);
+        for (MinUser u : minUserList) {
+          User user = FluentIterable.from(userList).firstMatch(new Predicate<User>() {
+              @Override
+              public boolean apply(User user) {
+                  return user.isFake();
+              }
+          }).orNull();
+          if (Objects.nonNull(user)) {
+              u.setCountFake(user.getCountFake());
+          }
+        }
+        return minUserList;
     }
 }

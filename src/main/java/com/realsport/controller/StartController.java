@@ -430,6 +430,21 @@ public class StartController {
         return "redirect:/home";
     }
 
+    @RequestMapping(value = "/toPlayers")
+    public String toPlayers(Model model, @RequestParam(name = "eventId", required = false) String eventId,
+                             @RequestParam(value = "userId") String userId) throws Exception {
+        if (eventId != null) {
+            Event event = eventsService.getEventById(eventId);
+            List<MinUser> list = eventsService.getUserListEvent(event.getUserList());
+
+            model.addAttribute("userId", userId);
+            model.addAttribute("userList", list);
+            model.addAttribute("returnBack", "home");
+        }
+        return "playersEvent";
+    }
+
+
     @RequestMapping(value = "/endGame")
     public String endGame(Model model, @RequestParam(name = "eventId", required = false) String eventId,
                           @RequestParam(value = "userId") String userId,

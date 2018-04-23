@@ -10,6 +10,8 @@ public class MinUser implements Serializable {
     private String userId;
     private String firstName;
     private String lastName;
+    private int countFake;
+
 
     public String getUserId() {
         return userId;
@@ -42,5 +44,14 @@ public class MinUser implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
+    }
+
+
+    public int getCountFake() {
+        return countFake;
+    }
+
+    public void setCountFake(int countFake) {
+        this.countFake = countFake;
     }
 }

@@ -90,7 +90,7 @@
                                 <div class="panel-heading" style="padding-bottom: 3px; padding-top: 6px">
 
                                     <div>
-                                        <a class="pull-left" href="#" >
+                                        <a class="pull-left" href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" >
                                             <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                             <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/playbasket.png"
                                                  alt="Баскетбол" width="40" height="40">
@@ -236,12 +236,11 @@
                                                     </c:choose>
 
                                                 </c:forEach>
+                                                <div id="watch_${event.idEvent}" class="hide">
+                                                    <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}"  class="btn "> <span
+                                                            class="glyphicon glyphicon-eye-open" style="margin-right: 5px"></span></a>
+                                                </div>
 
-                                                <c:if test="${event.userList.size() > 1}">
-                                                    <a href="#" data-toggle="modal" data-target="eventIgrokModal_${event.idEvent}" class="btn"> <span
-                                                            class="glyphicon glyphicon-eye-open"
-                                                            style="margin-right: 5px"></span></a>
-                                                </c:if>
 
                                             </div>
 
@@ -341,46 +340,6 @@
                                 </div>
                             </div>
 
-                            <!-- Modal Players -->
-                            <div class="modal fade" id="eventIgrokModal_${event.idEvent}" tabindex="-1" role="dialog" aria-labelledby="playersModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                            <h5 class="modal-title" id="playersModalLabel">Участники</h5>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <div class="list-group" id="listGroupsUser_${event.idEvent}">
-                                                <c:forEach var="user" items="${event.userList}">
-                                                    <a href="toUser?userId=${user.userId}" class="list-group-item borderless" id="list_${user.userId}">
-                                                        <div class="media">
-                                                            <div class="pull-left">
-                                                                <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
-                                                                     height="40"/>
-                                                            </div>
-
-
-                                                            <div class="media-body " style="padding-top: 10px; padding-left: 3px">
-                                                                    <%--       <h4 class="media-heading"
-                                                                               style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
-                                                                <span >${user.firstName} ${user.lastName}</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </c:forEach>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
                         </c:forEach>
 
                     </div>
@@ -402,10 +361,11 @@
 
 <script>
     var listEvents = ${listEventsJson};
+    var isWatch = false;
     console.log(listEvents.length);
     if (listEvents) {
         var userId = "${userId}";
-        listEvents.map(function (event, i) {
+        listEvents.forEach(function (event, i) {
             var maxCountAnswer = event.maxCountAnswer;
             var usersList = event.userList;
             var isFake = false;
@@ -426,17 +386,22 @@
             }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
-            description.map(function (message, i) {
+            description.forEach(function (message, i) {
 
                 $('#descrEvent_' + id).append(message);
                 $('#descrEvent_' + id).append('<br>');
             });
+
+            if (usersList.length > 1) {
+                isWatch = true;
+                $('#watch_' + id).removeClass('hide');
+            }
             // Определяем истинное значение игроков
             if (maxCountAnswer == 0) {
                 var count = parseInt($('#badge1_'+id).text());
                 console.log("badge1 " + $('#badge1_'+id).text())
                 if (usersList) {
-                    usersList.map(function (user, i) {
+                    usersList.forEach(function (user, i) {
                         if (user.countFake != 0) {
                             count = (count - 1) + user.countFake;
                            // isFake = true;
@@ -451,7 +416,7 @@
                 var count = parseInt($('#badge2_'+id).text().split(' / ')[0]);
                 console.log("badge2 " + $('#badge2_'+id).text());
                 if (usersList) {
-                    usersList.map(function (user, i) {
+                    usersList.forEach(function (user, i) {
                         if (user.countFake != 0) {
                             count = (count - 1) + user.countFake;
                            // isFake = true;
@@ -469,7 +434,7 @@
                 console.log("eventId " + eventId);
                 var listUser = event.userList;
                 var isActive = false;
-                listUser.map(function (user, i) {
+                listUser.forEach(function (user, i) {
                     if (user.userId === userId ) {
                         isActive = true;
                     }
@@ -519,20 +484,21 @@
                 var count = parseInt($('#badge1_'+ eventId).text());
                 count = count + parseInt(addIgr);
                 $('#badge1_' + eventId).text(count);
-                $('#templateUserList2').removeClass('hide');
-                $('#imageUser').addClass('hide');
-                var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                userImg.id = userId + '_imgUser_' + eventId + '_fake';
-                userImg.href = "user?userId=" + userId;
-                var span = document.createElement('span');
-                span.id = userId + '_add_' + eventId;
-                span.setAttribute('count', addIgr);
-                span.appendChild(document.createTextNode("+" + addIgr));
-                userImg.appendChild(span);
-                $('#imgUserList_'+ eventId).append(userImg);
-                $('#templateUserList2').addClass('hide');
-                $('#imageUser').removeClass('hide');
-
+                if (!isWatch) {
+                    $('#templateUserList2').removeClass('hide');
+                    $('#imageUser').addClass('hide');
+                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                    userImg.id = userId + '_imgUser_' + eventId + '_fake';
+                    userImg.href = "user?userId=" + userId;
+                    var span = document.createElement('span');
+                    span.id = userId + '_add_' + eventId;
+                    span.setAttribute('count', addIgr);
+                    span.appendChild(document.createTextNode("+" + addIgr));
+                    userImg.appendChild(span);
+                    $('#imgUserList_' + eventId).append(userImg);
+                    $('#templateUserList2').addClass('hide');
+                    $('#imageUser').removeClass('hide');
+                }
                 $('#addIgrok_'+ eventId).modal('hide');
 
             } else {
@@ -552,19 +518,22 @@
                     }
                     count = count + parseInt(addIgr);
                     $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
-                    $('#templateUserList2').removeClass('hide');
-                    $('#imageUser').addClass('hide');
-                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                    userImg.id = userId + '_imgUser_' + eventId + '_fake';;
-                    userImg.href = "user?userId=" + userId;
-                    var span = document.createElement('span');
-                    span.id = userId + '_add_' + eventId;
-                    span.setAttribute('count', addIgr);
-                    span.appendChild(document.createTextNode("+" + addIgr));
-                    userImg.appendChild(span);
-                    $('#imgUserList_' + eventId).append(userImg)
-                    $('#templateUserList2').addClass('hide');
-                    $('#imageUser').removeClass('hide');
+                    if (!isWatch) {
+                        $('#templateUserList2').removeClass('hide');
+                        $('#imageUser').addClass('hide');
+                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                        userImg.id = userId + '_imgUser_' + eventId + '_fake';
+                        ;
+                        userImg.href = "user?userId=" + userId;
+                        var span = document.createElement('span');
+                        span.id = userId + '_add_' + eventId;
+                        span.setAttribute('count', addIgr);
+                        span.appendChild(document.createTextNode("+" + addIgr));
+                        userImg.appendChild(span);
+                        $('#imgUserList_' + eventId).append(userImg)
+                        $('#templateUserList2').addClass('hide');
+                        $('#imageUser').removeClass('hide');
+                    }
                     $('#addIgrok_' + eventId).modal('hide');
                 }
             }
@@ -590,12 +559,14 @@
                         var count = parseInt($('#badge1_'+ eventId).text());
                         ++count;
                         $('#badge1_'+ eventId).text(count);
-                        $('#templateUserList2').removeClass('hide');
-                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                        userImg.id = userId + '_imgUser_' + eventId;
-                        userImg.href = "user?userId=" + userId;
-                        $('#imgUserList_'+ eventId).append(userImg);
-                        $('#templateUserList2').addClass('hide');
+                        if (!isWatch) {
+                            $('#templateUserList2').removeClass('hide');
+                            var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                            userImg.id = userId + '_imgUser_' + eventId;
+                            userImg.href = "user?userId=" + userId;
+                            $('#imgUserList_' + eventId).append(userImg);
+                            $('#templateUserList2').addClass('hide');
+                        }
                     } else {
                         var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
                         console.log(count[0]);
@@ -609,12 +580,14 @@
                             $('#answerOk_'+ eventId).removeClass('hide');
                             ++count;
                             $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                            $('#templateUserList2').removeClass('hide');
-                            var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                            userImg.id = userId + '_imgUser_' + eventId;
-                            userImg.href = "user?userId=" + userId;
-                            $('#imgUserList_'+ eventId).append(userImg)
-                            $('#templateUserList2').addClass('hide');
+                            if (!isWatch) {
+                                $('#templateUserList2').removeClass('hide');
+                                var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                userImg.id = userId + '_imgUser_' + eventId;
+                                userImg.href = "user?userId=" + userId;
+                                $('#imgUserList_' + eventId).append(userImg)
+                                $('#templateUserList2').addClass('hide');
+                            }
                         }
                     }
                 } else {
@@ -643,12 +616,14 @@
                     var count = $('#badge1_'+ eventId).text();
                     ++count;
                     $('#badge1_'+ eventId).text(count);
-                    $('#templateUserList2').removeClass('hide');
-                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                    userImg.id = userId + '_imgUser_' + eventId;
-                    userImg.href = "user?userId=" + userId;
-                    $('#imgUserList_'+ eventId).append(userImg);
-                    $('#templateUserList2').addClass('hide');
+                    if (!isWatch) {
+                        $('#templateUserList2').removeClass('hide');
+                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                        userImg.id = userId + '_imgUser_' + eventId;
+                        userImg.href = "user?userId=" + userId;
+                        $('#imgUserList_' + eventId).append(userImg);
+                        $('#templateUserList2').addClass('hide');
+                    }
                 } else {
                     var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
                     console.log(count[0]);
@@ -662,12 +637,14 @@
                         $('#answerOk_'+ eventId).removeClass('hide');
                         ++count;
                         $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                        $('#templateUserList2').removeClass('hide');
-                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                        userImg.id = userId + '_imgUser_' + eventId;
-                        userImg.href = "user?userId=" + userId;
-                        $('#imgUserList_'+ eventId).append(userImg)
-                        $('#templateUserList2').addClass('hide');
+                        if (!isWatch) {
+                            $('#templateUserList2').removeClass('hide');
+                            var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                            userImg.id = userId + '_imgUser_' + eventId;
+                            userImg.href = "user?userId=" + userId;
+                            $('#imgUserList_' + eventId).append(userImg)
+                            $('#templateUserList2').addClass('hide');
+                        }
                     }
                 }
 
@@ -726,85 +703,84 @@
                 if (value.length != listEvents.length || usersList.length > 1 ) {
                     location.reload();
                 }
-                value.map(function (event, i) {
+
+                value.forEach(function (event, i) {
                     var eventId = event.idEvent;
                     var usersList = event.userList;
                     var commentList = event.commentsList;
                     if (commentList.length > 0 ) {
                         $('#countComment').text(commentList.length);
                     }
-
+                    if (usersList > 1) {
+                        isWatch = true;
+                        $('#watch_' + eventId).removeClass('hide');
+                    }
 
                     if(event.maxCountAnswer == 0) {
-                        if (usersList) {
                             var count = usersList.length;
                             $('#imgUserList_'+ eventId).empty();
                             $('#templateUserList2').removeClass('hide');
-                            usersList.map(function (user, i) {
+                            usersList.forEach(function (user, i) {
+                                // Если фейк
                                 if (user.countFake != 0) {
                                     count = (count - 1) + user.countFake;
-                                    $('#imageUser').addClass('hide');
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    var addIgr = user.countFake;
-                                    userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
-                                    userImg.href = "user?userId=" + user.userId;
-                                    var span = document.createElement('span');
-                                    span.id = user.userId + '_add_' + eventId;
-                                    span.setAttribute('count', addIgr);
-                                    span.appendChild(document.createTextNode("+" + addIgr));
-                                    userImg.appendChild(span);
-                                    $('#imgUserList_'+ eventId).append(userImg);
-                                    $('#imageUser').removeClass('hide');
+                                    if (!isWatch) {
+                                        $('#imageUser').addClass('hide');
+                                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                        var addIgr = user.countFake;
+                                        userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
+                                        userImg.href = "user?userId=" + user.userId;
+                                        var span = document.createElement('span');
+                                        span.id = user.userId + '_add_' + eventId;
+                                        span.setAttribute('count', addIgr);
+                                        span.appendChild(document.createTextNode("+" + addIgr));
+                                        userImg.appendChild(span);
+                                        $('#imgUserList_' + eventId).append(userImg);
+                                        $('#imageUser').removeClass('hide');
+                                    }
                                 } else {
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    userImg.id = user.userId + '_imgUser_' + eventId;
-                                    userImg.href = "user?userId=" + user.userId;
-                                    $('#imgUserList_'+ eventId).append(userImg);
+                                    if (!isWatch) {
+                                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                        userImg.id = user.userId + '_imgUser_' + eventId;
+                                        userImg.href = "user?userId=" + user.userId;
+                                        $('#imgUserList_' + eventId).append(userImg);
+                                    }
                                 }
 
                             });
                             $('#templateUserList2').addClass('hide');
-                            $('#listGroupsUser_' + eventId).empty();
-                            usersList.map(function (user, i) {
-                                var fio = document.getElementById("fio");
-                                fio.appendChild(document.createTextNode(user.firstName + " " + user.lastName));
-                                var user = document.getElementById("listPlayersTemplate").cloneNode(true);
-                                user.id = "list_" + userId;
-                                user.href = "toUser?userId=" + userId;
-                                $('#list_' + userId).removeClass('hide');
-                                $('#listGroupsUser_' + eventId).append(user);
-                            })
-                        }
                         $('#badge1_' + eventId).text(count);
                     } else {
-                        if (usersList) {
                             var count = usersList.length;
                             $('#imgUserList_'+ eventId).empty();
                             $('#templateUserList2').removeClass('hide');
-                            usersList.map(function (user, i) {
+                            usersList.forEach(function (user, i) {
                                 if (user.countFake != 0) {
                                     count = (count - 1) + user.countFake;
-                                    $('#imageUser').addClass('hide');
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    var addIgr = user.countFake;
-                                    userImg.id = user.userId + '_imgUser_' + eventId;
-                                    userImg.href = "user?userId=" + user.userId;
-                                    var span = document.createElement('span');
-                                    span.id = user.userId + '_add_' + eventId;
-                                    span.setAttribute('count', addIgr);
-                                    span.appendChild(document.createTextNode("+" + addIgr));
-                                    userImg.appendChild(span);
-                                    $('#imgUserList_'+ eventId).append(userImg);
-                                    $('#imageUser').removeClass('hide');
+                                    if (!isWatch) {
+                                        $('#imageUser').addClass('hide');
+                                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                        var addIgr = user.countFake;
+                                        userImg.id = user.userId + '_imgUser_' + eventId;
+                                        userImg.href = "user?userId=" + user.userId;
+                                        var span = document.createElement('span');
+                                        span.id = user.userId + '_add_' + eventId;
+                                        span.setAttribute('count', addIgr);
+                                        span.appendChild(document.createTextNode("+" + addIgr));
+                                        userImg.appendChild(span);
+                                        $('#imgUserList_' + eventId).append(userImg);
+                                        $('#imageUser').removeClass('hide');
+                                    }
                                 } else {
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    userImg.id = user.userId + '_imgUser_' + eventId;
-                                    userImg.href = "user?userId=" + user.userId;
-                                    $('#imgUserList_'+ eventId).append(userImg);
+                                    if (!isWatch) {
+                                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                        userImg.id = user.userId + '_imgUser_' + eventId;
+                                        userImg.href = "user?userId=" + user.userId;
+                                        $('#imgUserList_' + eventId).append(userImg);
+                                    }
                                 }
                             });
                             $('#templateUserList2').addClass('hide');
-                        }
                         $('#badge2_' + eventId).text(count + ' / ' + event.maxCountAnswer);
                     }
                 });
@@ -813,6 +789,7 @@
     }
 
     setInterval(updateData, 5000);
+
 </script>
 </body>
 </html>
