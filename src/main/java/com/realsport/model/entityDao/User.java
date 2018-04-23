@@ -92,6 +92,9 @@ public class User implements Serializable {
     public void setTemplateGames(List<TemplateGame> templateGames) {
         this.templateGames = templateGames;
     }
+    public void addTemplateGames(TemplateGame templateGames) {
+        this.templateGames.add(templateGames);
+    }
 
     @Override
     public String toString() {

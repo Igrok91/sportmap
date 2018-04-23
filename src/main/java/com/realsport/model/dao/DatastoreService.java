@@ -159,4 +159,12 @@ public class DatastoreService {
     public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
         events.editEventById(eventId, description, maxCountAnswer, duration);
     }
+
+    public void deleteGame(String eventId) {
+        events.deleteGame(eventId);
+    }
+
+    public void endGame(String eventId) {
+        events.endGame(eventId);
+    }
 }

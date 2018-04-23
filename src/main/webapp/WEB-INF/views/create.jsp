@@ -185,7 +185,7 @@
                             </div>
                      <input type="hidden" name="sport"
                              value="${sport}" />
-                       <input type="hidden" name="playgroundId"
+             <input type="hidden" name="playgroundId"
                                 value="${playgroundId}" />
              <input type="hidden" name="namePlayground"
                     value="${namePlayground}" />
@@ -423,11 +423,14 @@
             var text = $('#desc').val().split('');
             console.log("description " + text.length);
             var createGame = document.getElementById('createGame');
+            var editGame = document.getElementById('editGame');
             if (text.length > 3) {
                 createGame.removeAttribute('disabled');
+                editGame.removeAttribute('disabled');
                 $('#savetempl').removeClass('disabled');
             } else {
                 createGame.setAttribute('disabled', 'disabled');
+                editGame.setAttribute('disabled', 'disabled');
                 $('#savetempl').addClass('disabled');
             }
         }

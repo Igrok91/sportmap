@@ -182,7 +182,7 @@ public class Events {
                         @Override
                         public boolean apply(EntityValue entityValue) {
                             FullEntity fullEntity = entityValue.get();
-                            return fullEntity.getString("userId").equals(user.getUserId()) && fullEntity.getBoolean("isFake") == false;
+                            return !(fullEntity.getString("userId").equals(user.getUserId()) && fullEntity.getBoolean("isFake") == true);
                         }
                     }).toList();
                     listValue.addAll(listFilter);
@@ -284,7 +284,36 @@ public class Events {
                 transaction.rollback();
             }
         }
+    }
 
+    public void deleteGame(String eventId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            transaction.delete(keyFactory.newKey(Long.valueOf(eventId)));
+            logger.info("Удаляем игру с id " + eventId);
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+    }
 
+    public void endGame(String eventId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            if (Objects.nonNull(event)) {
+                transaction.put(Entity.newBuilder(event).
+                        set("active", BooleanValue.of(false)).
+                        build());
+                logger.info("Завершаем событие c id " + eventId);
+            }
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
     }
 }

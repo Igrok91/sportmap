@@ -158,8 +158,7 @@ public class EventsService {
     }
 
     public void deleteGame(String eventId) {
-
-
+        databaseService.deleteGame(eventId);
     }
 
     public void editUserAnswer(String eventId, String userId) {
@@ -208,7 +207,7 @@ public class EventsService {
     }
 
     public void endGame(String eventId) {
-
+        databaseService.endGame(eventId);
     }
 
     public List<Event> getEventsByIdGroup(String id) {

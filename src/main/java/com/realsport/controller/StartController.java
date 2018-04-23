@@ -1,15 +1,14 @@
 package com.realsport.controller;
 
+import com.google.appengine.api.memcache.MemcacheService;
 import com.google.cloud.Timestamp;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
+import com.realsport.model.entity.LastEditData;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.*;
-import com.realsport.model.service.EventsService;
-import com.realsport.model.service.UserService;
-import com.realsport.model.service.PlaygroundService;
-import com.realsport.model.service.VkService;
+import com.realsport.model.service.*;
 
 
 import org.apache.commons.logging.Log;
@@ -24,9 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.cache.Cache;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
+
+import static com.realsport.model.cache.CacheObserver.getCacheObserver;
+import static com.realsport.model.cache.CacheUser.getCacheUser;
 
 /**
  * Created by Igor on 31.03.2017.
@@ -71,6 +74,9 @@ public class StartController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CacheService cacheService;
+
 
     @RequestMapping(value = "/error2")
     public String error() {
@@ -83,7 +89,7 @@ public class StartController {
         boolean isFirst = false;
         if (id != null) {
             try {
-                user = userService.getUser(id);
+                user = getUser(id);
                 if (user != null) {
                     setPlaygroundDataToModel(model, id);
                     setUserDataToModel(user, model);
@@ -237,7 +243,7 @@ public class StartController {
     public String toGroup(Model model, @RequestParam(value = "playgroundId") String id
             , @RequestParam(value = "sport", required = false, defaultValue = FOOTBALL) String sport
             , @RequestParam(value = "userId") String userId) {
-        User user = userService.getUser(userId);
+        User user = getUser(userId);
 
         if (user == null) {
             return "error";
@@ -248,6 +254,17 @@ public class StartController {
         model.addAttribute("userId", userId);
 
         return "playground";
+    }
+
+    private User getUser(String userId) {
+        Cache cache = getCacheUser();
+        User user = (User) cache.get(userId);
+        if (Objects.isNull(user)) {
+            logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
+            user = userService.getUser(userId);
+            cache.put(userId, user);
+        }
+        return user;
     }
 
     private void addGroupToModel(Model model, String idGroup, User user) {
@@ -285,7 +302,7 @@ public class StartController {
     public String toGroupUser(Model model, @RequestParam(value = "playgroundId") String id
             , @RequestParam(value = "sport") String sport
             , @RequestParam(value = "userId") String userId) {
-        User user = userService.getUser(userId);
+        User user = getUser(userId);
         if (user == null) {
             return "error";
         }
@@ -300,7 +317,7 @@ public class StartController {
     public String toGroupFromEvent(Model model, @RequestParam(value = "playgroundId") String id
             , @RequestParam(value = "sport") String sport
             , @RequestParam(value = "userId") String userId) {
-        User user = userService.getUser(userId);
+        User user = getUser(userId);
         if (user == null) {
             return "error";
         }
@@ -313,8 +330,8 @@ public class StartController {
 
     @RequestMapping("/create")
     public String toCreate(Model model, @RequestParam(value = "playgroundId") String id, @RequestParam(value = "sport") String sport,
-                           @RequestParam(value = "eventId", required = false, defaultValue = "null") String eventId
-            , @RequestParam(value = "userId") String userId) {
+                           @RequestParam(value = "eventId", required = false, defaultValue = "null") String eventId,
+                           @RequestParam(value = "userId") String userId) {
 
         for (Playground playground : allPlaygroundList) {
             if (playground.getIdplayground().equals(id)) {
@@ -335,7 +352,7 @@ public class StartController {
             model.addAttribute("eventJson", gson.toJson(event));
             model.addAttribute("event", event);
             model.addAttribute("templates", new ArrayList<>());
-            model.addAttribute("template", Collections.EMPTY_LIST);
+            model.addAttribute("template", new ArrayList<>());
         } else {
             List<TemplateGame> list = userService.getTemplatesUserById(userId);
             ArrayList<String> userTemplates = new ArrayList<>();
@@ -385,8 +402,7 @@ public class StartController {
             model.addAttribute("returnBack", "home");
             model.addAttribute("playgroundCoordinate", "empty");
         }
-
-        User user = userService.getUser(userId);
+        User user = getUser(userId);
         setUserDataToModel(user, model);
         Gson gson = new Gson();
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
@@ -403,18 +419,26 @@ public class StartController {
 
     // Удаляем атрибут active
     @RequestMapping(value = "/deleteGame")
-    public String deleteGame(@RequestParam(name = "eventId", required = false) String eventId) {
+    public String deleteGame(Model model, @RequestParam(name = "eventId", required = false) String eventId,
+                             @RequestParam(value = "userId") String userId,
+                             @RequestParam(value = "playgroundId", required = false) String id) throws Exception {
         if (eventId != null) {
             eventsService.deleteGame(eventId);
         }
+        model.addAttribute("userId", userId);
+        cacheService.putToCache(id, userId);
         return "redirect:/home";
     }
 
     @RequestMapping(value = "/endGame")
-    public String endGame(@RequestParam(name = "eventId", required = false) String eventId) {
+    public String endGame(Model model, @RequestParam(name = "eventId", required = false) String eventId,
+                          @RequestParam(value = "userId") String userId,
+                          @RequestParam(value = "playgroundId", required = false) String id) throws Exception {
         if (eventId != null) {
             eventsService.endGame(eventId);
         }
+        model.addAttribute("userId", userId);
+        cacheService.putToCache(id, userId);
         return "redirect:/home";
     }
 
@@ -423,7 +447,7 @@ public class StartController {
     public String event(Model model, @RequestParam(name = "eventId") String eventId,
                         @RequestParam(value = "userId") String userId) {
         Gson gson = new Gson();
-        User user = userService.getUser(userId);
+        User user = getUser(userId);
         List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
         Event event = FluentIterable.from(listEvents).firstMatch(new Predicate<Event>() {
             @Override
@@ -452,8 +476,8 @@ public class StartController {
                              @RequestParam(name = "namePlayground") String namePlayground,
                              @RequestParam(name = "templateId", required = false, defaultValue = "0") String templateId,
                              @RequestParam(name = "eventId", required = false, defaultValue = "null") String eventId,
-                             @RequestParam(value = "userId") String userId) throws IOException {
-        User user = userService.getUser(userId);
+                             @RequestParam(value = "userId") String userId) throws Exception {
+        User user = getUser(userId);
         Event game;
         logger.info("Description Event " + descr);
         game = new Event();
@@ -478,7 +502,7 @@ public class StartController {
         } else {
             eventsService.publishEvent(game);
         }
-
+        cacheService.putToCache(playgroundId, userId);
         model.addAttribute("userId", userId);
         model.addAttribute("user", user);
         return "redirect:/home";
@@ -491,8 +515,8 @@ public class StartController {
                                          @RequestParam(value = "userId") String userId,
                                          @RequestParam(value = "playgroundId") String playgroundId,
                                          @RequestParam(name = "sport", required = false, defaultValue = "Футбол") String sport,
-                                         @RequestParam(name = "namePlayground") String namePlayground) throws IOException {
-        User user = userService.getUser(userId);
+                                         @RequestParam(name = "namePlayground") String namePlayground) throws Exception {
+        User user = getUser(userId);
         Event game = eventsService.createEventByTemplate(templateId, userId);
         if (Objects.nonNull(game)) {
             List<User> list = new ArrayList<>();
@@ -505,7 +529,7 @@ public class StartController {
             game.setUserIdCreator(userId);
             eventsService.publishEvent(game);
         }
-
+        cacheService.putToCache(playgroundId, userId);
         model.addAttribute("userId", userId);
         model.addAttribute("user", user);
         return "redirect:/home";
@@ -656,6 +680,7 @@ public class StartController {
         }
         return mapArrayList;
     }
+
 
 
     private String errorSendMessage(String userID, String idPlay, Exception e) {
