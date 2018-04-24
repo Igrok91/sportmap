@@ -10,6 +10,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.realsport.model.dao.Persistence.getDatastore;
@@ -113,7 +115,9 @@ public class Events {
             event.setSport(entity.getString("sport"));
             event.setPlaygroundId(entity.getString("playgroundId"));
             event.setPlaygroundName(entity.getString("playgroundName"));
-            event.setDateCreation(entity.getTimestamp("dateCreation"));
+            Timestamp timestamp = entity.getTimestamp("dateCreation");
+            event.setDateCreation(timestamp);
+            event.setDate(getDateFormat(timestamp));
             logger.info(entity.getString("description"));
             try{
                 List<EntityValue> entityValues = entity.getList("userList");
@@ -246,15 +250,17 @@ public class Events {
         event.setSport(entity.getString("sport"));
         event.setPlaygroundId(entity.getString("playgroundId"));
         event.setPlaygroundName(entity.getString("playgroundName"));
-        event.setDateCreation(entity.getTimestamp("dateCreation"));
-        try{
+        Timestamp timestamp = entity.getTimestamp("dateCreation");
+        event.setDateCreation(timestamp);
+        event.setDate(getDateFormat(timestamp));
+        try {
             List<EntityValue> entityValues = entity.getList("userList");
             event.setUserList(getUserListFromEntity(entityValues));
 
         } catch (DatastoreException ex) {
             logger.warn(ex.getMessage());
         }
-        try{
+        try {
             List<EntityValue> entityComment = entity.getList("commentsList");
             if (entityComment.size() != 0) {
                 event.setCommentsList(getCommentListFromEntity(entityComment));
@@ -264,6 +270,15 @@ public class Events {
         }
         event.setPlaygroundName(entity.getString("playgroundName"));
         return event;
+    }
+
+    private String getDateFormat(Timestamp timestamp) {
+        Date date = new Date(timestamp.getSeconds());
+        logger.info("getDateFormat " + date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm", myDateFormatSymbols );
+        String d = dateFormat.format(date);
+        logger.info("dateFormat " + d);
+        return d;
     }
 
     public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
@@ -316,4 +331,14 @@ public class Events {
             }
         }
     }
+
+    private static DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols(){
+
+        @Override
+        public String[] getMonths() {
+            return new String[]{"янв", "фев", "мар", "апр", "мая", "июня",
+                    "июля", "авг", "сен", "окт", "ноя", "дек"};
+        }
+
+    };
 }

@@ -18,7 +18,7 @@
     <style>
 
         /* Set black background color, white text and some padding */
-        disabled {
+        a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
         }
@@ -166,7 +166,7 @@
                                                 style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.playgroundName}</h4>
 
 
-                                            <span style="color: gray">${event.date} сегодня в 13:34</span>
+                                            <span style="color: gray">${event.date}</span>
 
                                         </div>
 
@@ -193,12 +193,15 @@
                                     <span style="color: black" id="descrEvent_${event.idEvent}"></span>
                                 </div>
                                     <%--<hr class="hrDescription">--%>
-
+                                    <div class="alert alert-danger fade in hide" role="alert" id="alertMax_${event.idEvent}">
+                                        <button type="button" class="close" onclick="hideButton(${event.idEvent})" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <strong>Warning!</strong> Превышен лимит игроков
+                                    </div>
 
                                     <div class="list-group" style="margin-bottom: 5px">
                                         <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent})" id="answerButton_${event.idEvent}">
                                             <c:choose>
-                                                <c:when test="${event.maxCountAnswer == 0}">
+                                                <c:when test="${event.maxCountAnswer == 1000}">
                                                     <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
                                                 </c:when>
                                                 <c:otherwise>
@@ -236,11 +239,8 @@
                                                     </c:choose>
 
                                                 </c:forEach>
-                                                <div id="watch_${event.idEvent}" class="hide">
-                                                    <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}"  class="btn "> <span
+                                                    <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}" id="watch_${event.idEvent}" class="btn hide"> <span
                                                             class="glyphicon glyphicon-eye-open" style="margin-right: 5px"></span></a>
-                                                </div>
-
 
                                             </div>
 
@@ -392,12 +392,12 @@
                 $('#descrEvent_' + id).append('<br>');
             });
 
-            if (usersList.length > 1) {
+            if (usersList.length > 2) {
                 isWatch = true;
                 $('#watch_' + id).removeClass('hide');
             }
             // Определяем истинное значение игроков
-            if (maxCountAnswer == 0) {
+            if (maxCountAnswer == 1000) {
                 var count = parseInt($('#badge1_'+id).text());
                 console.log("badge1 " + $('#badge1_'+id).text())
                 if (usersList) {
@@ -408,9 +408,7 @@
                         }
                     });
                 }
-              /*  if(isFake) {
-                    --count;
-                }*/
+
                 $('#badge1_'+ id).text(count);
             } else {
                 var count = parseInt($('#badge2_'+id).text().split(' / ')[0]);
@@ -423,10 +421,14 @@
                         }
                     });
                 }
-             /*   if(isFake) {
-                    --count;
-                }*/
+
                 $('#badge2_'+ id).text(count + ' / ' + maxCountAnswer );
+
+                if (count >= event.maxCountAnswer) {
+                    $('#answerButton_' + id).addClass('disabled')
+                } else {
+                    $('#answerButton_' + id).removeClass('disabled');
+                }
             }
 
 
@@ -471,72 +473,83 @@
         $.ajax({
             url: 'addIgrok?eventId=' + eventId + '&count=' + addIgr + '&userId=' + ${userId}
         }).then(function (value) {
-            if (maxCountAnswer == 0) {
-                var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
-                if (clone) {
-                    var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
-                    var count = $('#badge1_'+ eventId).text();
-                    $('#badge1_' + eventId).text(count - countRemove);
-                    // var userList = document.getElementById('imgUserList_' + eventId);
-                    // userList.removeChild(clone);
-                    $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
-                }
-                var count = parseInt($('#badge1_'+ eventId).text());
-                count = count + parseInt(addIgr);
-                $('#badge1_' + eventId).text(count);
-                if (!isWatch) {
-                    $('#templateUserList2').removeClass('hide');
-                    $('#imageUser').addClass('hide');
-                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                    userImg.id = userId + '_imgUser_' + eventId + '_fake';
-                    userImg.href = "user?userId=" + userId;
-                    var span = document.createElement('span');
-                    span.id = userId + '_add_' + eventId;
-                    span.setAttribute('count', addIgr);
-                    span.appendChild(document.createTextNode("+" + addIgr));
-                    userImg.appendChild(span);
-                    $('#imgUserList_' + eventId).append(userImg);
-                    $('#templateUserList2').addClass('hide');
-                    $('#imageUser').removeClass('hide');
-                }
-                $('#addIgrok_'+ eventId).modal('hide');
+            switch (value) {
+                case 'true':
+                    if (maxCountAnswer == 1000) {
+                        var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
+                        if (clone) {
+                            var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
+                            var count = $('#badge1_'+ eventId).text();
+                            $('#badge1_' + eventId).text(count - countRemove);
+                            // var userList = document.getElementById('imgUserList_' + eventId);
+                            // userList.removeChild(clone);
+                            $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
+                        }
+                        var count = parseInt($('#badge1_'+ eventId).text());
+                        count = count + parseInt(addIgr);
+                        $('#badge1_' + eventId).text(count);
+                        if (!isWatch) {
+                            $('#templateUserList2').removeClass('hide');
+                            $('#imageUser').addClass('hide');
+                            var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                            userImg.id = userId + '_imgUser_' + eventId + '_fake';
+                            userImg.href = "user?userId=" + userId;
+                            var span = document.createElement('span');
+                            span.id = userId + '_add_' + eventId;
+                            span.setAttribute('count', addIgr);
+                            span.appendChild(document.createTextNode("+" + addIgr));
+                            userImg.appendChild(span);
+                            $('#imgUserList_' + eventId).append(userImg);
+                            $('#templateUserList2').addClass('hide');
+                            $('#imageUser').removeClass('hide');
+                        }
+                        $('#addIgrok_'+ eventId).modal('hide');
 
-            } else {
-                var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                console.log(count[0]);
-                if (count[0] == maxCountAnswer) {
-                    console.log(count[0]);
-                    $('#addIgrok_'+ eventId).modal('hide');
-                } else {
-                    var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
-                    if (clone) {
-                        var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
+                    } else {
                         var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                        count = count - countRemove;
-                        $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
-                        $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
+                        console.log(count[0]);
+                        if (count[0] == maxCountAnswer) {
+                            console.log(count[0]);
+                            $('#addIgrok_'+ eventId).modal('hide');
+                        } else {
+                            var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
+                            if (clone) {
+                                var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
+                                var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
+                                count = count - countRemove;
+                                $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
+                                $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
+                            }
+                            count = count + parseInt(addIgr);
+                            $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
+                            if (!isWatch) {
+                                $('#templateUserList2').removeClass('hide');
+                                $('#imageUser').addClass('hide');
+                                var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                userImg.id = userId + '_imgUser_' + eventId + '_fake';
+                                ;
+                                userImg.href = "user?userId=" + userId;
+                                var span = document.createElement('span');
+                                span.id = userId + '_add_' + eventId;
+                                span.setAttribute('count', addIgr);
+                                span.appendChild(document.createTextNode("+" + addIgr));
+                                userImg.appendChild(span);
+                                $('#imgUserList_' + eventId).append(userImg)
+                                $('#templateUserList2').addClass('hide');
+                                $('#imageUser').removeClass('hide');
+                            }
+                            $('#addIgrok_' + eventId).modal('hide');
+                        }
                     }
-                    count = count + parseInt(addIgr);
-                    $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
-                    if (!isWatch) {
-                        $('#templateUserList2').removeClass('hide');
-                        $('#imageUser').addClass('hide');
-                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                        userImg.id = userId + '_imgUser_' + eventId + '_fake';
-                        ;
-                        userImg.href = "user?userId=" + userId;
-                        var span = document.createElement('span');
-                        span.id = userId + '_add_' + eventId;
-                        span.setAttribute('count', addIgr);
-                        span.appendChild(document.createTextNode("+" + addIgr));
-                        userImg.appendChild(span);
-                        $('#imgUserList_' + eventId).append(userImg)
-                        $('#templateUserList2').addClass('hide');
-                        $('#imageUser').removeClass('hide');
-                    }
+                    break;
+                case 'max_count_answer':
+                    $('#alertMax_' + eventId).removeClass('hide');
+                    $('#alertMax_' + eventId).alert();
                     $('#addIgrok_' + eventId).modal('hide');
-                }
+                    break;
+
             }
+
         });
     }
 
@@ -546,17 +559,82 @@
             }).then(function (value) {
                 console.log('answer ' + value);
                 var userId = '${userId}';
-                if (value === 'true') {
+                switch (value) {
+                    case 'true':
+                        $('#cancelAnswer_'+ eventId).removeClass('hide');
+                        $('#doAnswer_'+ eventId).addClass('hide');
+                        $('#cancelAnswer2_'+ eventId).removeClass('hide');
+                        $('#doAnswer2_'+ eventId).addClass('hide');
+                        if (maxCountAnswer == 1000) {
+                            //$('#answerButton_'+ eventId).addClass('active');
+                            $('#answerButton_'+ eventId).removeClass('active');
+                            $('#answerButton_'+ eventId).css('background','#EAEAEC');
+                            $('#answerOk_'+ eventId).removeClass('hide');
+                            var count = parseInt($('#badge1_'+ eventId).text());
+                            ++count;
+                            $('#badge1_'+ eventId).text(count);
+                            if (!isWatch) {
+                                $('#templateUserList2').removeClass('hide');
+                                var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                userImg.id = userId + '_imgUser_' + eventId;
+                                userImg.href = "user?userId=" + userId;
+                                $('#imgUserList_' + eventId).append(userImg);
+                                $('#templateUserList2').addClass('hide');
+                            }
+                        } else {
+                            var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
+                            console.log(count[0]);
+                            if (count[0] == maxCountAnswer) {
+                                console.log(count[0]);
+
+                            } else {
+                                //$('#answerButton_'+ eventId).addClass('active');
+                                $('#answerButton_'+ eventId).removeClass('active');
+                                $('#answerButton_'+ eventId).css('background','#EAEAEC');
+                                $('#answerOk_'+ eventId).removeClass('hide');
+                                ++count;
+                                $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
+                                if (!isWatch) {
+                                    $('#templateUserList2').removeClass('hide');
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    userImg.id = userId + '_imgUser_' + eventId;
+                                    userImg.href = "user?userId=" + userId;
+                                    $('#imgUserList_' + eventId).append(userImg)
+                                    $('#templateUserList2').addClass('hide');
+                                }
+                            }
+                        }
+                        break;
+                    case 'false':
+                        $('#addIgrok_' + eventId).modal('show');
+                        break;
+                    case 'max_count_answer':
+                        $('#alertMax_' + eventId).removeClass('hide');
+                        $('#alertMax_' + eventId).alert();
+                        break;
+                }
+
+            });
+    }
+
+    function handleAnswerMain(maxCountAnswer, eventId) {
+        $.ajax({
+            url: 'handleAnswerMain?eventId=' + eventId + '&userId=' + ${userId}
+        }).then(function (value) {
+            console.log('answer ' + value);
+            var userId = '${userId}';
+            switch (value) {
+                case 'true':
                     $('#cancelAnswer_'+ eventId).removeClass('hide');
                     $('#doAnswer_'+ eventId).addClass('hide');
                     $('#cancelAnswer2_'+ eventId).removeClass('hide');
                     $('#doAnswer2_'+ eventId).addClass('hide');
-                    if (maxCountAnswer == 0) {
-                        //$('#answerButton_'+ eventId).addClass('active');
+                    if (maxCountAnswer == 1000) {
+                        //  $('#answerButton_'+ eventId).addClass('active');
                         $('#answerButton_'+ eventId).removeClass('active');
                         $('#answerButton_'+ eventId).css('background','#EAEAEC');
                         $('#answerOk_'+ eventId).removeClass('hide');
-                        var count = parseInt($('#badge1_'+ eventId).text());
+                        var count = $('#badge1_'+ eventId).text();
                         ++count;
                         $('#badge1_'+ eventId).text(count);
                         if (!isWatch) {
@@ -590,101 +668,50 @@
                             }
                         }
                     }
-                } else {
-                    $('#addIgrok_' + eventId).modal('show');
-                }
+                    break;
+                case 'false':
+                    $('#cancelAnswer_'+ eventId).addClass('hide');
+                    $('#doAnswer_'+ eventId).removeClass('hide');
+                    $('#cancelAnswer2_'+ eventId).addClass('hide');
+                    $('#doAnswer2_'+ eventId).removeClass('hide');
+                    //$('#answerButton_'+ eventId).removeClass('active');
+                    $('#answerButton_'+ eventId).addClass('active');
+                    $('#answerButton_'+ eventId).css('background','');
+                    $('#answerOk_'+ eventId).addClass('hide');
+                    if (maxCountAnswer == 1000) {
 
-            });
-    }
-
-    function handleAnswerMain(maxCountAnswer, eventId) {
-        $.ajax({
-            url: 'handleAnswerMain?eventId=' + eventId + '&userId=' + ${userId}
-        }).then(function (value) {
-            console.log('answer ' + value);
-            var userId = '${userId}';
-            if (value === 'true') {
-                $('#cancelAnswer_'+ eventId).removeClass('hide');
-                $('#doAnswer_'+ eventId).addClass('hide');
-                $('#cancelAnswer2_'+ eventId).removeClass('hide');
-                $('#doAnswer2_'+ eventId).addClass('hide');
-                if (maxCountAnswer == 0) {
-                  //  $('#answerButton_'+ eventId).addClass('active');
-                    $('#answerButton_'+ eventId).removeClass('active');
-                    $('#answerButton_'+ eventId).css('background','#EAEAEC');
-                    $('#answerOk_'+ eventId).removeClass('hide');
-                    var count = $('#badge1_'+ eventId).text();
-                    ++count;
-                    $('#badge1_'+ eventId).text(count);
-                    if (!isWatch) {
-                        $('#templateUserList2').removeClass('hide');
-                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                        userImg.id = userId + '_imgUser_' + eventId;
-                        userImg.href = "user?userId=" + userId;
-                        $('#imgUserList_' + eventId).append(userImg);
-                        $('#templateUserList2').addClass('hide');
-                    }
-                } else {
-                    var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                    console.log(count[0]);
-                    if (count[0] == maxCountAnswer) {
-                        console.log(count[0]);
-
-                    } else {
-                        //$('#answerButton_'+ eventId).addClass('active');
-                        $('#answerButton_'+ eventId).removeClass('active');
-                        $('#answerButton_'+ eventId).css('background','#EAEAEC');
-                        $('#answerOk_'+ eventId).removeClass('hide');
-                        ++count;
-                        $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                        if (!isWatch) {
-                            $('#templateUserList2').removeClass('hide');
-                            var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                            userImg.id = userId + '_imgUser_' + eventId;
-                            userImg.href = "user?userId=" + userId;
-                            $('#imgUserList_' + eventId).append(userImg)
-                            $('#templateUserList2').addClass('hide');
-                        }
-                    }
-                }
-
-            } else {
-                $('#cancelAnswer_'+ eventId).addClass('hide');
-                $('#doAnswer_'+ eventId).removeClass('hide');
-                $('#cancelAnswer2_'+ eventId).addClass('hide');
-                $('#doAnswer2_'+ eventId).removeClass('hide');
-                //$('#answerButton_'+ eventId).removeClass('active');
-                $('#answerButton_'+ eventId).addClass('active');
-                $('#answerButton_'+ eventId).css('background','');
-                $('#answerOk_'+ eventId).addClass('hide');
-                if (maxCountAnswer == 0) {
-
-                    var count = $('#badge1_'+ eventId).text();
-                    $('#badge1_'+ eventId).text(count - 1);
-                } else {
-                    var count = parseInt($('#badge2_'+ eventId).text().split(' / '));
-                    --count;
-                    $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                }
-                $('#' + userId + '_imgUser_'+ eventId).remove();
-
-
-                var userAdd = document.getElementById(userId + '_imgUser_'+ eventId + '_fake');
-                if(userAdd) {
-                    var countRemove = parseInt(document.getElementById(userId + '_add_' + eventId).getAttribute('count'));
-                    if (maxCountAnswer == 0) {
                         var count = $('#badge1_'+ eventId).text();
-                        $('#badge1_'+ eventId).text(count - countRemove);
+                        $('#badge1_'+ eventId).text(count - 1);
                     } else {
                         var count = parseInt($('#badge2_'+ eventId).text().split(' / '));
-                        console.log(count[0]);
-                        count = count - countRemove;
+                        --count;
                         $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
                     }
-                    $('#' + userId + '_imgUser_'+ eventId + '_fake' ).remove();
-                }
+                    $('#' + userId + '_imgUser_'+ eventId).remove();
 
+
+                    var userAdd = document.getElementById(userId + '_imgUser_'+ eventId + '_fake');
+                    if(userAdd) {
+                        var countRemove = parseInt(document.getElementById(userId + '_add_' + eventId).getAttribute('count'));
+                        if (maxCountAnswer == 1000) {
+                            var count = $('#badge1_'+ eventId).text();
+                            $('#badge1_'+ eventId).text(count - countRemove);
+                        } else {
+                            var count = parseInt($('#badge2_'+ eventId).text().split(' / '));
+                            console.log(count[0]);
+                            count = count - countRemove;
+                            $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
+                        }
+                        $('#' + userId + '_imgUser_'+ eventId + '_fake' ).remove();
+                    }
+                    $('#answerButton_' + eventId).removeClass('disabled');
+                    break;
+                case 'max_count_answer':
+                    $('#alertMax_' + eventId).removeClass('hide');
+                    $('#alertMax_' + eventId).alert();
+                    break;
             }
+
         });
     }
     var dateNow = new Date().getTime();
@@ -711,12 +738,12 @@
                     if (commentList.length > 0 ) {
                         $('#countComment').text(commentList.length);
                     }
-                    if (usersList > 1) {
+                    if (usersList.length > 2) {
                         isWatch = true;
                         $('#watch_' + eventId).removeClass('hide');
                     }
 
-                    if(event.maxCountAnswer == 0) {
+                    if(event.maxCountAnswer == 1000) {
                             var count = usersList.length;
                             $('#imgUserList_'+ eventId).empty();
                             $('#templateUserList2').removeClass('hide');
@@ -752,6 +779,7 @@
                         $('#badge1_' + eventId).text(count);
                     } else {
                             var count = usersList.length;
+
                             $('#imgUserList_'+ eventId).empty();
                             $('#templateUserList2').removeClass('hide');
                             usersList.forEach(function (user, i) {
@@ -781,6 +809,12 @@
                                 }
                             });
                             $('#templateUserList2').addClass('hide');
+
+                        if (count >= event.maxCountAnswer) {
+                            $('#answerButton_' + eventId).addClass('disabled')
+                        } else {
+                            $('#answerButton_' + eventId).removeClass('disabled');
+                        }
                         $('#badge2_' + eventId).text(count + ' / ' + event.maxCountAnswer);
                     }
                 });
@@ -788,6 +822,10 @@
         });
     }
 
+    function hideButton(eventId) {
+        $('#alertMax_' + eventId).addClass('hide');
+
+    }
     setInterval(updateData, 5000);
 
 </script>

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.google.gson.Gson;
 import com.realsport.model.entity.LastEditData;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.*;
@@ -15,24 +14,16 @@ import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.UserService;
 
 
-import com.realsport.model.utils.Observer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.cache.Cache;
-import javax.servlet.http.HttpSession;
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +37,10 @@ public class RestController {
     public static final String FOOTBALL = "Футбол";
     public static final String BASKETBALL = "Баскетбол";
     public static final String VOLEYBALL = "Волейбол";
-    public static final String SESSION_NULL = "sessionNull";
+    public static final String ERROR = "error";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+    public static final String MAX_COUNT_ANSWER = "max_count_answer";
 
     @Autowired
     private UserService userService;
@@ -111,26 +105,33 @@ public class RestController {
 
         Event event = eventsService.getEventById(eventId);
         if (user != null && event != null) {
+            int countUser = getCountUserFromEvent(event.getUserList());
+
                 Boolean b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
                     @Override
                     public boolean apply(User user) {
                          return user.getUserId().equals(userId);
                     }
                 }).isPresent();
-                    cacheService.putToCache(event.getPlaygroundId(), userId);
+
                     if (b == null || b.equals(Boolean.FALSE)) {
+                        if (countUser>= event.getMaxCountAnswer()) {
+                            return MAX_COUNT_ANSWER;
+                        }
+                        cacheService.putToCache(event.getPlaygroundId(), userId);
                         eventsService.addUserToEvent(eventId, user, false);
                         logger.info("Пользователь " + user + " поставил плюс");
-                        return "true";
+                        return TRUE;
                     } else {
                         eventsService.deleteUserFromEvent(eventId, userId);
+                        cacheService.putToCache(event.getPlaygroundId(), userId);
                         logger.info("Пользователь " + user + " поставил минус");
-                        return "false";
+                        return FALSE;
                     }
 
 
         }
-        return SESSION_NULL;
+        return ERROR;
     }
 
 
@@ -141,8 +142,12 @@ public class RestController {
                                @RequestParam(value = "userId") String userId) throws Exception {
         User user = getUser(userId);
         Event event = eventsService.getEventById(eventId);
+
         if (user != null && event != null) {
-            logger.info("getCacheObserver" + getCacheObserver().get(eventId));
+            int countUser = getCountUserFromEvent(event.getUserList());
+            if (countUser >= event.getMaxCountAnswer()) {
+                return MAX_COUNT_ANSWER;
+            }
             Boolean b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
                 @Override
                 public boolean apply(User user) {
@@ -153,14 +158,27 @@ public class RestController {
                     eventsService.addUserToEvent(eventId, user, false);
                     cacheService.putToCache(event.getPlaygroundId(), userId);
                     logger.info("Boolean.TRUE.toString() " + Boolean.TRUE.toString());
-                    return "true";
+                    return TRUE;
                 } else {
-                    return "false";
+                    return FALSE;
+
                 }
             }
 
 
-        return SESSION_NULL;
+        return ERROR;
+    }
+
+    private int getCountUserFromEvent(List<User> userList) {
+        int count = 0;
+        for (User user : userList) {
+            if (user.isFake()) {
+                count = count + user.getCountFake();
+            } else {
+                count++;
+            }
+        }
+        return count;
     }
 
     @RequestMapping("/handleGroup")
@@ -219,18 +237,26 @@ public class RestController {
     }
 
     @RequestMapping("/addIgrok")
-    public void addIgrok(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
+    @ResponseBody
+    public String addIgrok(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
                          @RequestParam(value="count", required=false, defaultValue="1") String count,
                          @RequestParam(value = "userId") String userId) throws Exception {
         User user = getUser(userId);
         logger.info("Добавляем " + count + " игроков от пользователя" );
         Event event = eventsService.getEventById(eventId);
         if (Objects.nonNull(user) && Objects.nonNull(event)) {
+            int countUser = getCountUserFromEvent(event.getUserList());
+            if ((countUser >= event.getMaxCountAnswer()) ||
+                    ((Integer.parseInt(count) + countUser ) > event.getMaxCountAnswer())) {
+                return MAX_COUNT_ANSWER;
+            }
             user.setFake(true);
             user.setCountFake(Integer.parseInt(count));
             eventsService.addUserToEvent(eventId, user, true);
             cacheService.putToCache(event.getPlaygroundId(), userId);
+            return TRUE;
         }
+        return ERROR;
     }
 
     @RequestMapping("/getNewDataEvent")
@@ -273,7 +299,7 @@ public class RestController {
                                @RequestParam(value = "userId") String userId) throws IOException {
         TemplateGame game = new TemplateGame();
         game.setDescription(descr);
-        game.setCountAnswer(sel2.equals("infinity") ? 0 : Integer.valueOf(sel2));
+        game.setCountAnswer(sel2.equals("infinity") ? 1000 : Integer.valueOf(sel2));
         game.setDuration(sel1.substring(0, 1));
         User user = getUser(userId);
         user.addTemplateGames(game);

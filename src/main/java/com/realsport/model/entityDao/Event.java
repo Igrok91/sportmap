@@ -22,7 +22,7 @@ public class Event implements Serializable{
     private String playgroundName;
     private boolean active = true;
     private Timestamp dateCreation;
-    private Timestamp date;
+    private String date;
     private List<User> userList = new ArrayList<>();
     private List<Comment> commentsList = new ArrayList<>();
     private List<HistoryEvent> historyEvent = new ArrayList<>();
@@ -138,11 +138,11 @@ public class Event implements Serializable{
         this.answer = answer;
     }
 
-    public Timestamp getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -189,7 +189,7 @@
                             <div class="list-group" style="margin-bottom: 5px">
                                 <a href="#" class="list-group-item " onclick="handleAnswer()" id="answerButton">
                                     <c:choose>
-                                        <c:when test="${event.maxCountAnswer == 0}">
+                                        <c:when test="${event.maxCountAnswer == 1000}">
                                             <span class="badge" id="badge1">${event.userList.size()}</span>
                                         </c:when>
                                         <c:otherwise>

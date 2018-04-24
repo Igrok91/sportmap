@@ -52,10 +52,10 @@
 
 
         <div class="row content">
-            <div class="col-md-2">
+            <div class="col-sm-2">
 
             </div>
-            <div class="col-md-8">
+            <div class="col-sm-8">
                 <div class="panel panel-default">
                     <div class="panel-heading ">
                         <div>
@@ -139,7 +139,7 @@
                 </div>
 
 
-                <div class="col-md-2">
+                <div class="col-sm-2">
 
                 </div>
 

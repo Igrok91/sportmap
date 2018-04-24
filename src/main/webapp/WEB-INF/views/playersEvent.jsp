@@ -44,6 +44,7 @@
         <div class="pull-left">
             <a class="navbar-brand btn" id="returnBack"><span class="glyphicon glyphicon-menu-left"
                                                               aria-hidden=""></span></a>
+            <a class="navbar-brand" href="#">Участники</a>
         </div>
     </div>
 </nav>
@@ -59,24 +60,24 @@
 
             </div>
             <div class="col-sm-8">
-                <div class="list-group" id="listGroupsUser" style="padding-top: 7px">
+                <div class="list-group" id="listGroupsUser" >
                     <c:forEach var="user" items="${userList}">
                         <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}&userId=${userId}" class="list-group-item borderless">
                             <div class="media">
                                 <div class="pull-left">
-                                        <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
+                                        <img class="media-object" src="resources/image/foot2.png" alt="Футбол" width="40"
                                              height="40"/>
                                 </div>
-                                <div class="pull-right">
-                                   <span class="glyphicon glyphicon-chevron-right"></span>
+                                <div class="pull-right" style="padding-top: 10px;">
+                                    <c:if test="${user.countFake > 0}">
+                                        +${user.countFake}
+                                    </c:if>
                                 </div>
-                                <div class="media-body " style="padding-top: 10px; padding-left: 3px">
+                                <div class="media-body " style="padding-top: 10px;padding-left: 10px">
                                         <%--       <h4 class="media-heading"
                                                    style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
-                                    <span >${user.firstName} ${user.lastName} <span style="padding-left: 10px">
-                                        <c:if test="${user.countFake > 0}">
-                                            +${user.countFake}
-                                        </c:if>
+                                    <span style="font-size: medium" >${user.firstName} ${user.lastName} <span style="padding-left: 10px">
+
                                     </span></span>
                                 </div>
                             </div>

@@ -292,7 +292,7 @@
                                    onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent})"
                                    id="answerButton_${event.idEvent}">
                                     <c:choose>
-                                        <c:when test="${event.maxCountAnswer == 0}">
+                                        <c:when test="${event.maxCountAnswer == 1000}">
                                                         <span class="badge"
                                                               id="badge1_${event.idEvent}">${event.userList.size()}</span>
                                         </c:when>

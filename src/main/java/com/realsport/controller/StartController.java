@@ -498,7 +498,7 @@ public class StartController {
         game = new Event();
         game.setDescription(descr);
         game.setAnswer(answer);
-        game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 0 : Integer.valueOf(sel2));
+        game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 1000 : Integer.valueOf(sel2));
         game.setDuration(sel1.substring(0, 1));
         game.setUserIdCreator(userId);
         game.setPlaygroundId(playgroundId);
@@ -537,7 +537,7 @@ public class StartController {
             List<User> list = new ArrayList<>();
             list.add(user);
             game.setUserList(list);
-            game.setDateCreation(Timestamp.now());
+            game.setDateCreation(Timestamp.of(new Date()));
             game.setPlaygroundId(playgroundId);
             game.setSport(sport);
             game.setPlaygroundName(namePlayground);
