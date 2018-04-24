@@ -273,9 +273,9 @@ public class Events {
     }
 
     private String getDateFormat(Timestamp timestamp) {
-        Date date = new Date(timestamp.getSeconds());
+        Date date = new Date(timestamp.toSqlTimestamp().getTime());
         logger.info("getDateFormat " + date);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm", myDateFormatSymbols );
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm GMT +3", myDateFormatSymbols );
         String d = dateFormat.format(date);
         logger.info("dateFormat " + d);
         return d;

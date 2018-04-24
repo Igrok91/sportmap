@@ -503,7 +503,7 @@ public class StartController {
         game.setUserIdCreator(userId);
         game.setPlaygroundId(playgroundId);
         game.setSport(sport);
-        game.setDateCreation(Timestamp.now());
+        game.setDateCreation(Timestamp.of(new Date()));
         game.setPlaygroundName(namePlayground);
         List<User> list = new ArrayList<>();
         list.add(user);
