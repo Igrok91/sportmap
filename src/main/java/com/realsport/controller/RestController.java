@@ -3,6 +3,7 @@ package com.realsport.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.appengine.api.memcache.MemcacheService;
+import com.google.cloud.Timestamp;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.entity.LastEditData;
@@ -22,10 +23,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.cache.Cache;
 import java.io.IOException;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import static com.realsport.model.cache.CacheObserver.getCacheObserver;
 import static com.realsport.model.cache.CacheUser.getCacheUser;
@@ -62,7 +66,7 @@ public class RestController {
 
     @RequestMapping(value = "sendCommentUser", method = RequestMethod.POST)
     @ResponseBody
-    public List<Comment> sendCommentUser( @RequestParam(value="message", required=false, defaultValue="World") String message,
+    public Comment sendCommentUser( @RequestParam(value="message", required=false, defaultValue="World") String message,
                                           @RequestParam(value="eventId", required=false, defaultValue="5") String eventId
                                         , @RequestParam(value = "userId") String userId) {
         User user = getUser(userId);
@@ -71,13 +75,11 @@ public class RestController {
         comment.setMessage(message);
         comment.setFirstName(user.getFirstName());
         comment.setLastName(user.getLastName());
-        comment.setDate(new Date().toString());
-        int commentId =  eventsService.addCommentToEvent(eventId, comment);
+        comment.setDateCreation(Timestamp.of(new Date()));
+        comment.setDate(getDateFormat());
+        long commentId =  eventsService.addCommentToEvent(eventId, comment);
         comment.setCommentId(String.valueOf(commentId));
-        List<Comment> list = eventsService.getCommentFromEventById(eventId);
-        list.add(comment);
-
-        return list;
+        return comment;
     }
 
 
@@ -332,6 +334,35 @@ public class RestController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols(){
+
+        @Override
+        public String[] getMonths() {
+            return new String[]{"янв", "фев", "мар", "апр", "мая", "июня",
+                    "июля", "авг", "сен", "окт", "ноя", "дек"};
+        }
+
+    };
+
+    private String getDateFormat() {
+        Date date = new Date();
+        logger.info("getDateFormat for Comment " + date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm ", myDateFormatSymbols );
+        SimpleDateFormat dateFormatNow = new SimpleDateFormat("dd MMMM", myDateFormatSymbols );
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        String d = dateFormat.format(date);
+        String dateNow = dateFormatNow.format(new Date());
+        logger.info("dateNow " + dateNow);
+        if (d.contains(dateNow.trim())) {
+            logger.info("replace " + dateNow);
+            String d2 = "сегодня в " + d.split("в")[1].trim();
+            logger.info("date new " + d2);
+            return d2;
+        }
+        logger.info("dateFormat " + d);
+        return d;
     }
 
 }

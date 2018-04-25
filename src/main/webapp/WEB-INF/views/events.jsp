@@ -13,7 +13,7 @@
     <title>Поиск спортивной площадки</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <script src="resources/js/events.js"></script>
 
     <style>
 
@@ -34,21 +34,6 @@
 </head>
 <body >
 
-<a href="" class="list-group-item borderless hide" id="listPlayersTemplate">
-    <div class="media">
-        <div class="pull-left">
-            <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
-                 height="40"/>
-        </div>
-
-
-        <div class="media-body " style="padding-top: 10px; padding-left: 3px">
-            <%--       <h4 class="media-heading"
-                       style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
-            <span id="fio"></span>
-        </div>
-    </div>
-</a>
 
 <a href="" class="btn hide" style="padding: 0px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
@@ -105,10 +90,10 @@
                                                     <c:when test="${event.userIdCreator == userId}">
                                                         <c:set var="playgroundId" value="${event.playgroundId}" />
                                                         <c:set var="sport" value="${event.sport}" />
-                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
                                                                                                                                                                                         style="margin-right: 20px"></span>Отменить голос</a>
                                                         </li>
-                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                                     style="margin-right: 20px"></span>Проголосовать</a>
                                                         </li>
                                                         <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
@@ -140,10 +125,10 @@
                                                     <c:otherwise>
                                                         <c:set var="playgroundId" value="${event.playgroundId}" />
                                                         <c:set var="sport" value="${event.sport}" />
-                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
                                                                                                                                                                                          style="margin-right: 20px"></span>Отменить голос</a>
                                                         </li>
-                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                                      style="margin-right: 20px"></span>Проголосовать</a>
                                                         </li>
                                                         <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
@@ -199,7 +184,7 @@
                                     </div>
 
                                     <div class="list-group" style="margin-bottom: 5px">
-                                        <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent})" id="answerButton_${event.idEvent}">
+                                        <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="answerButton_${event.idEvent}">
                                             <c:choose>
                                                 <c:when test="${event.maxCountAnswer == 1000}">
                                                     <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
@@ -251,7 +236,7 @@
 
                                 </div>
 
-                                <a href="event?eventId=${event.idEvent}&userId=${userId}" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
+                                <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
                                         class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
                                         style="color: #77A5C5;margin-right: 5px"></span>
                                     <div id="countComment">
@@ -294,7 +279,7 @@
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                                            <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent})" class="btn btn-primary">Добавить</a>
+                                            <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" class="btn btn-primary">Добавить</a>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal-dialog -->
@@ -368,7 +353,6 @@
         listEvents.forEach(function (event, i) {
             var maxCountAnswer = event.maxCountAnswer;
             var usersList = event.userList;
-            var isFake = false;
             var sp = event.sport;
             var id = event.idEvent;
             console.log("idEvent " + id);
@@ -432,288 +416,38 @@
             }
 
 
-                var eventId = event.idEvent;
-                console.log("eventId " + eventId);
-                var listUser = event.userList;
+
                 var isActive = false;
-                listUser.forEach(function (user, i) {
+                usersList.forEach(function (user, i) {
                     if (user.userId === userId ) {
                         isActive = true;
                     }
                 });
 
-                if (isActive) {
-                   // $('#answerButton_'+ eventId).addClass('active');
-                    $('#answerButton_'+ eventId).removeClass('active');
-                    $('#answerButton_'+ eventId).css('background','#EAEAEC');
+            if (isActive) {
+                $('#answerButton_'+ id).removeClass('active');
+                $('#answerButton_'+ id).css('background','#EAEAEC');
 
-                    $('#answerOk_'+ eventId).removeClass('hide');
-                    $('#cancelAnswer_'+ eventId).removeClass('hide');
-                    $('#doAnswer_'+ eventId).addClass('hide');
-                    $('#cancelAnswer2_'+ eventId).removeClass('hide');
-                    $('#doAnswer2_'+ eventId).addClass('hide');
-                } else {
-                    //$('#answerButton_'+ eventId).removeClass('active');
-                    $('#answerButton_'+ eventId).addClass('active');
-                    $('#answerButton_'+ eventId).css('background','');
-                    $('#answerOk_'+ eventId).addClass('hide');
-                    $('#cancelAnswer_'+ eventId).addClass('hide');
-                    $('#doAnswer_'+ eventId).removeClass('hide');
-                    $('#cancelAnswer2_'+ eventId).addClass('hide');
-                    $('#doAnswer2_'+ eventId).removeClass('hide');
-                }
-
-        });
-
-    }
-
-    function addIgrok(maxCountAnswer, eventId) {
-        var addIgr = $('#countIgrok_' + eventId).val();
-        var userId = ${userId};
-        $.ajax({
-            url: 'addIgrok?eventId=' + eventId + '&count=' + addIgr + '&userId=' + ${userId}
-        }).then(function (value) {
-            switch (value) {
-                case 'true':
-                    if (maxCountAnswer == 1000) {
-                        var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
-                        if (clone) {
-                            var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
-                            var count = $('#badge1_'+ eventId).text();
-                            $('#badge1_' + eventId).text(count - countRemove);
-                            // var userList = document.getElementById('imgUserList_' + eventId);
-                            // userList.removeChild(clone);
-                            $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
-                        }
-                        var count = parseInt($('#badge1_'+ eventId).text());
-                        count = count + parseInt(addIgr);
-                        $('#badge1_' + eventId).text(count);
-                        if (!isWatch) {
-                            $('#templateUserList2').removeClass('hide');
-                            $('#imageUser').addClass('hide');
-                            var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                            userImg.id = userId + '_imgUser_' + eventId + '_fake';
-                            userImg.href = "user?userId=" + userId;
-                            var span = document.createElement('span');
-                            span.id = userId + '_add_' + eventId;
-                            span.setAttribute('count', addIgr);
-                            span.appendChild(document.createTextNode("+" + addIgr));
-                            userImg.appendChild(span);
-                            $('#imgUserList_' + eventId).append(userImg);
-                            $('#templateUserList2').addClass('hide');
-                            $('#imageUser').removeClass('hide');
-                        }
-                        $('#addIgrok_'+ eventId).modal('hide');
-
-                    } else {
-                        var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                        console.log(count[0]);
-                        if (count[0] == maxCountAnswer) {
-                            console.log(count[0]);
-                            $('#addIgrok_'+ eventId).modal('hide');
-                        } else {
-                            var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
-                            if (clone) {
-                                var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
-                                var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                                count = count - countRemove;
-                                $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
-                                $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
-                            }
-                            count = count + parseInt(addIgr);
-                            $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
-                            if (!isWatch) {
-                                $('#templateUserList2').removeClass('hide');
-                                $('#imageUser').addClass('hide');
-                                var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                userImg.id = userId + '_imgUser_' + eventId + '_fake';
-                                ;
-                                userImg.href = "user?userId=" + userId;
-                                var span = document.createElement('span');
-                                span.id = userId + '_add_' + eventId;
-                                span.setAttribute('count', addIgr);
-                                span.appendChild(document.createTextNode("+" + addIgr));
-                                userImg.appendChild(span);
-                                $('#imgUserList_' + eventId).append(userImg)
-                                $('#templateUserList2').addClass('hide');
-                                $('#imageUser').removeClass('hide');
-                            }
-                            $('#addIgrok_' + eventId).modal('hide');
-                        }
-                    }
-                    break;
-                case 'max_count_answer':
-                    $('#alertMax_' + eventId).removeClass('hide');
-                    $('#alertMax_' + eventId).alert();
-                    $('#addIgrok_' + eventId).modal('hide');
-                    break;
-
+                $('#answerOk_'+ id).removeClass('hide');
+                $('#cancelAnswer_'+ id).removeClass('hide');
+                $('#doAnswer_'+ id).addClass('hide');
+                $('#cancelAnswer2_'+ id).removeClass('hide');
+                $('#doAnswer2_'+ id).addClass('hide');
+            } else {
+                $('#answerButton_'+ id).addClass('active');
+                $('#answerButton_'+ id).css('background','');
+                $('#answerOk_'+ id).addClass('hide');
+                $('#cancelAnswer_'+ id).addClass('hide');
+                $('#doAnswer_'+ id).removeClass('hide');
+                $('#cancelAnswer2_'+ id).addClass('hide');
+                $('#doAnswer2_'+ id).removeClass('hide');
             }
 
         });
+
     }
 
-    function handleAnswer(maxCountAnswer, eventId) {
-            $.ajax({
-                url: 'handleAnswer?eventId=' + eventId + '&userId=' + ${userId}
-            }).then(function (value) {
-                console.log('answer ' + value);
-                var userId = '${userId}';
-                switch (value) {
-                    case 'true':
-                        $('#cancelAnswer_'+ eventId).removeClass('hide');
-                        $('#doAnswer_'+ eventId).addClass('hide');
-                        $('#cancelAnswer2_'+ eventId).removeClass('hide');
-                        $('#doAnswer2_'+ eventId).addClass('hide');
-                        if (maxCountAnswer == 1000) {
-                            //$('#answerButton_'+ eventId).addClass('active');
-                            $('#answerButton_'+ eventId).removeClass('active');
-                            $('#answerButton_'+ eventId).css('background','#EAEAEC');
-                            $('#answerOk_'+ eventId).removeClass('hide');
-                            var count = parseInt($('#badge1_'+ eventId).text());
-                            ++count;
-                            $('#badge1_'+ eventId).text(count);
-                            if (!isWatch) {
-                                $('#templateUserList2').removeClass('hide');
-                                var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                userImg.id = userId + '_imgUser_' + eventId;
-                                userImg.href = "user?userId=" + userId;
-                                $('#imgUserList_' + eventId).append(userImg);
-                                $('#templateUserList2').addClass('hide');
-                            }
-                        } else {
-                            var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                            console.log(count[0]);
-                            if (count[0] == maxCountAnswer) {
-                                console.log(count[0]);
 
-                            } else {
-                                //$('#answerButton_'+ eventId).addClass('active');
-                                $('#answerButton_'+ eventId).removeClass('active');
-                                $('#answerButton_'+ eventId).css('background','#EAEAEC');
-                                $('#answerOk_'+ eventId).removeClass('hide');
-                                ++count;
-                                $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                                if (!isWatch) {
-                                    $('#templateUserList2').removeClass('hide');
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    userImg.id = userId + '_imgUser_' + eventId;
-                                    userImg.href = "user?userId=" + userId;
-                                    $('#imgUserList_' + eventId).append(userImg)
-                                    $('#templateUserList2').addClass('hide');
-                                }
-                            }
-                        }
-                        break;
-                    case 'false':
-                        $('#addIgrok_' + eventId).modal('show');
-                        break;
-                    case 'max_count_answer':
-                        $('#alertMax_' + eventId).removeClass('hide');
-                        $('#alertMax_' + eventId).alert();
-                        break;
-                }
-
-            });
-    }
-
-    function handleAnswerMain(maxCountAnswer, eventId) {
-        $.ajax({
-            url: 'handleAnswerMain?eventId=' + eventId + '&userId=' + ${userId}
-        }).then(function (value) {
-            console.log('answer ' + value);
-            var userId = '${userId}';
-            switch (value) {
-                case 'true':
-                    $('#cancelAnswer_'+ eventId).removeClass('hide');
-                    $('#doAnswer_'+ eventId).addClass('hide');
-                    $('#cancelAnswer2_'+ eventId).removeClass('hide');
-                    $('#doAnswer2_'+ eventId).addClass('hide');
-                    if (maxCountAnswer == 1000) {
-                        //  $('#answerButton_'+ eventId).addClass('active');
-                        $('#answerButton_'+ eventId).removeClass('active');
-                        $('#answerButton_'+ eventId).css('background','#EAEAEC');
-                        $('#answerOk_'+ eventId).removeClass('hide');
-                        var count = $('#badge1_'+ eventId).text();
-                        ++count;
-                        $('#badge1_'+ eventId).text(count);
-                        if (!isWatch) {
-                            $('#templateUserList2').removeClass('hide');
-                            var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                            userImg.id = userId + '_imgUser_' + eventId;
-                            userImg.href = "user?userId=" + userId;
-                            $('#imgUserList_' + eventId).append(userImg);
-                            $('#templateUserList2').addClass('hide');
-                        }
-                    } else {
-                        var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                        console.log(count[0]);
-                        if (count[0] == maxCountAnswer) {
-                            console.log(count[0]);
-
-                        } else {
-                            //$('#answerButton_'+ eventId).addClass('active');
-                            $('#answerButton_'+ eventId).removeClass('active');
-                            $('#answerButton_'+ eventId).css('background','#EAEAEC');
-                            $('#answerOk_'+ eventId).removeClass('hide');
-                            ++count;
-                            $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                            if (!isWatch) {
-                                $('#templateUserList2').removeClass('hide');
-                                var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                userImg.id = userId + '_imgUser_' + eventId;
-                                userImg.href = "user?userId=" + userId;
-                                $('#imgUserList_' + eventId).append(userImg)
-                                $('#templateUserList2').addClass('hide');
-                            }
-                        }
-                    }
-                    break;
-                case 'false':
-                    $('#cancelAnswer_'+ eventId).addClass('hide');
-                    $('#doAnswer_'+ eventId).removeClass('hide');
-                    $('#cancelAnswer2_'+ eventId).addClass('hide');
-                    $('#doAnswer2_'+ eventId).removeClass('hide');
-                    //$('#answerButton_'+ eventId).removeClass('active');
-                    $('#answerButton_'+ eventId).addClass('active');
-                    $('#answerButton_'+ eventId).css('background','');
-                    $('#answerOk_'+ eventId).addClass('hide');
-                    if (maxCountAnswer == 1000) {
-
-                        var count = $('#badge1_'+ eventId).text();
-                        $('#badge1_'+ eventId).text(count - 1);
-                    } else {
-                        var count = parseInt($('#badge2_'+ eventId).text().split(' / '));
-                        --count;
-                        $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                    }
-                    $('#' + userId + '_imgUser_'+ eventId).remove();
-
-
-                    var userAdd = document.getElementById(userId + '_imgUser_'+ eventId + '_fake');
-                    if(userAdd) {
-                        var countRemove = parseInt(document.getElementById(userId + '_add_' + eventId).getAttribute('count'));
-                        if (maxCountAnswer == 1000) {
-                            var count = $('#badge1_'+ eventId).text();
-                            $('#badge1_'+ eventId).text(count - countRemove);
-                        } else {
-                            var count = parseInt($('#badge2_'+ eventId).text().split(' / '));
-                            console.log(count[0]);
-                            count = count - countRemove;
-                            $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                        }
-                        $('#' + userId + '_imgUser_'+ eventId + '_fake' ).remove();
-                    }
-                    $('#answerButton_' + eventId).removeClass('disabled');
-                    break;
-                case 'max_count_answer':
-                    $('#alertMax_' + eventId).removeClass('hide');
-                    $('#alertMax_' + eventId).alert();
-                    break;
-            }
-
-        });
-    }
     var dateNow = new Date().getTime();
     function updateData() {
         console.log("observer");
@@ -826,6 +560,7 @@
         $('#alertMax_' + eventId).addClass('hide');
 
     }
+
     setInterval(updateData, 5000);
 
 </script>

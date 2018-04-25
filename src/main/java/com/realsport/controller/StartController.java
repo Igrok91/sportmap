@@ -460,22 +460,17 @@ public class StartController {
 
     @RequestMapping(value = "/event")
     public String event(Model model, @RequestParam(name = "eventId") String eventId,
-                        @RequestParam(value = "userId") String userId) {
+                        @RequestParam(value = "userId") String userId,
+                        @RequestParam(value = "where", required = false, defaultValue = "home") String where) {
         Gson gson = new Gson();
         User user = getUser(userId);
-        List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
-        Event event = FluentIterable.from(listEvents).firstMatch(new Predicate<Event>() {
-            @Override
-            public boolean apply(Event event) {
-                return event.getIdEvent().equalsIgnoreCase(eventId);
-            }
-        }).get();
+        Event event = eventsService.getEventById(eventId);
         model.addAttribute("event", event);
         model.addAttribute("eventJson", gson.toJson(event));
 
         model.addAttribute("userId", userId);
         model.addAttribute("user", user);
-        model.addAttribute("eventUserActive", getEventUserActive(listEvents, userId));
+        model.addAttribute("where", where);
         return "event";
     }
 

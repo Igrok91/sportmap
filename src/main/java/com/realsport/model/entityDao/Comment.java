@@ -1,5 +1,7 @@
 package com.realsport.model.entityDao;
 
+import com.google.cloud.Timestamp;
+
 import java.io.Serializable;
 
 public class Comment implements Serializable{
@@ -9,6 +11,7 @@ public class Comment implements Serializable{
     private String lastName;
     private String message;
     private String date;
+    private Timestamp dateCreation;
 
     public String getCommentId() {
         return commentId;
@@ -56,5 +59,13 @@ public class Comment implements Serializable{
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Timestamp getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Timestamp dateCreation) {
+        this.dateCreation = dateCreation;
     }
 }

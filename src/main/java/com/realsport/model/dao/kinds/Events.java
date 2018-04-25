@@ -151,7 +151,9 @@ public class Events {
             comment.setFirstName(fullEntity.getString("firstName"));
             comment.setLastName(fullEntity.getString("lastName"));
             comment.setMessage(fullEntity.getString("message"));
-            comment.setDate(fullEntity.getString("date"));
+            Timestamp timestamp = fullEntity.getTimestamp("dateCreation");
+            comment.setDateCreation(timestamp);
+            comment.setDate(getDateFormat(timestamp));
             listComment.add(comment);
         }
         return listComment;
@@ -275,8 +277,18 @@ public class Events {
     private String getDateFormat(Timestamp timestamp) {
         Date date = new Date(timestamp.toSqlTimestamp().getTime());
         logger.info("getDateFormat " + date);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm GMT +3", myDateFormatSymbols );
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm ", myDateFormatSymbols );
+        SimpleDateFormat dateFormatNow = new SimpleDateFormat("dd MMMM", myDateFormatSymbols );
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
         String d = dateFormat.format(date);
+        String dateNow = dateFormatNow.format(new Date());
+        logger.info("dateNow " + dateNow);
+        if (d.contains(dateNow.trim())) {
+            logger.info("replace " + dateNow);
+            String d2 = "сегодня в " + d.split("в")[1].trim();
+            logger.info("date new " + d2);
+            return d2;
+        }
         logger.info("dateFormat " + d);
         return d;
     }
@@ -341,4 +353,51 @@ public class Events {
         }
 
     };
+
+    public long addCommentToEvent(String eventId, Comment message) {
+        Transaction transaction = getDatastore().newTransaction();
+        Entity entity = null;
+        try {
+            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            if (Objects.nonNull(event)) {
+                List<EntityValue> list = null;
+                try {
+                   list = event.getList("commentsList");
+                } catch (Exception e) {
+                    logger.warn("Нет поля commentsList");
+                }
+                List<EntityValue> listComment = new ArrayList<>();
+                if (Objects.nonNull(list)) {
+                    listComment.addAll(list);
+
+                }
+                listComment.add(getEntityComment(message));
+                entity = transaction.put(Entity.newBuilder(event).
+                        set("commentsList", ListValue.of(listComment)).
+                        build());
+                logger.info("Отправлен комментарий в событии " + eventId + " от пользователя " + message.getUserId());
+
+                transaction.commit();
+            }
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+        return entity == null ? 0 : entity.getKey().getId();
+    }
+
+    private EntityValue getEntityComment(Comment message) {
+        FullEntity userEntity = FullEntity.newBuilder(keyFactory.newKey(message.getUserId()))
+                .set("commentId", message.getUserId())
+                .set("userId", message.getUserId())
+                .set("firstName", message.getFirstName())
+                .set("lastName", message.getLastName())
+                .set("dateCreation", TimestampValue.of(message.getDateCreation()))
+                .set("message", message.getMessage())
+                .build();
+        return EntityValue.of(userEntity);
+    }
+
+
 }

@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -60,9 +61,57 @@ public class EventsService {
                     }
                 }
             }
+            Comparator<Event> comparator = new Comparator<Event>() {
+                @Override
+                public int compare(Event o1, Event o2) {
+                    Timestamp t1 = o1.getDateCreation().toSqlTimestamp();
+                    Timestamp t2 = o2.getDateCreation().toSqlTimestamp();
+                    return t2.compareTo(t1);
+                }
+            };
+            for (Event e : eventOfGroupUser) {
+                List<User> userList = e.getUserList();
+                e.setUserList(sortUserList(userList));
+            }
+            Collections.sort(eventOfGroupUser, comparator);
+
+
         }
+
+
         return eventOfGroupUser;
     }
+
+    private List<User> sortUserList(List<User> userList) {
+        List<User> list = new ArrayList<>();
+        List<User> listWithFake = FluentIterable.from(userList).filter(new Predicate<User>() {
+            @Override
+            public boolean apply(User u) {
+                return u.isFake();
+            }
+        }).toList();
+
+        List<User> listWithOutFake = FluentIterable.from(userList).filter(new Predicate<User>() {
+            @Override
+            public boolean apply(User u) {
+                return !u.isFake();
+            }
+        }).toList();
+        for (User us : listWithOutFake) {
+            list.add(us);
+            User fake = FluentIterable.from(listWithFake).firstMatch(new Predicate<User>() {
+                @Override
+                public boolean apply(User user) {
+                    return user.getUserId().equals(us.getUserId());
+                }
+            }).orNull();
+            if (Objects.nonNull(fake)) {
+                list.add(fake);
+            }
+        }
+        return list;
+    }
+
 
     private List<Event> getAllVoleyEventsSpb(List<String> playgroundFoottUser) {
         Event event2 = new Event();
@@ -171,9 +220,8 @@ public class EventsService {
         databaseService.deleteUserFromEvent(eventId, userId);
     }
 
-    public int addCommentToEvent(String eventId, Comment message) {
-
-        return 1;
+    public long addCommentToEvent(String eventId, Comment message) {
+        return databaseService.addCommentToEvent(eventId, message);
     }
 
     public void deleteCommentFromEvent(String commentId, String eventId) {

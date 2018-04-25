@@ -167,4 +167,8 @@ public class DatastoreService {
     public void endGame(String eventId) {
         events.endGame(eventId);
     }
+
+    public long addCommentToEvent(String eventId, Comment message) {
+        return events.addCommentToEvent(eventId, message);
+    }
 }
