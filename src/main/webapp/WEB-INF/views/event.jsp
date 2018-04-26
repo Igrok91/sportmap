@@ -520,7 +520,7 @@
                     switch (comment.success) {
                         case true:
                             console.log('comment send');
-                            addCommentToListComments(comment);
+                            addCommentToListComments(comment, eventId);
                             break;
                         case false:
                             console.log('comment not send');
@@ -635,7 +635,7 @@
                     if (commentList.length > 0 ) {
                         $('#listComment').empty();
                         commentList.forEach(function (comment, i) {
-                            addCommentToListComments(comment);
+                            addCommentToListComments(comment, eventId);
                         })
                     }
                     if (usersList.length > 2) {
@@ -723,7 +723,7 @@
         });
     }
 
-    function addCommentToListComments(comment) {
+    function addCommentToListComments(comment, eventId) {
         var userId = '${userId}';
         $('#hrComment').addClass('hide');
         $('#templateCommentLink').attr('href', 'user?userId=' + comment.userId);

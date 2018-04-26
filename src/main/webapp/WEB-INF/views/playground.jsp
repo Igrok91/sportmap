@@ -26,6 +26,7 @@
             margin-top: 9px;
             margin-bottom: 9px;
         }
+
         a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
@@ -70,12 +71,12 @@
     <div class="container " style="margin-top: 15px">
 
 
-        <div class="row content" >
+        <div class="row content">
             <div class="col-sm-2">
 
             </div>
             <div class="col-sm-8">
-                <div class="panel " id="panelGroup" >
+                <div class="panel " id="panelGroup">
                     <div class="panel-heading ">
                         <div>
                             <a class="pull-left" href="#">
@@ -117,7 +118,8 @@
                                         </c:otherwise>
                                     </c:choose>
 
-                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" class="btn btn-primary" id="goGame"
+                                    <a href="create?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"
+                                       class="btn btn-primary" id="goGame"
                                        style="margin:3px">Позвать на игру</a>
                                 </div>
 
@@ -135,19 +137,22 @@
                         </div>
 
                     </div>
-                    <div class="list-group" >
+                    <div class="list-group">
                         <c:choose>
                             <c:when test="${players.size() == 0}">
                                 <a class="list-group-item ">
-                                     <span class="badge" style="background: #ffffff"><span style="color: gray" id="players"><c:out
+                                     <span class="badge" style="background: #ffffff"><span style="color: gray"
+                                                                                           id="players"><c:out
                                              value="${players.size()}"/></span> </span>
                                     Участники
                                 </a>
                             </c:when>
                             <c:otherwise>
-                                <a class="list-group-item " data-toggle="modal" data-target="#playersModal">
-                                     <span class="badge" style="background: #ffffff"><span style="color: gray" id="players"><c:out
-                                             value="${players.size()}"/></span> <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
+                                <a class="list-group-item " href="toPlayers?eventId=${event.idEvent}&userId=${userId}">
+                                     <span class="badge" style="background: #ffffff"><span style="color: gray"
+                                                                                           id="players"><c:out
+                                             value="${players.size()}"/></span> <span
+                                             class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                                     Участники
                                 </a>
                             </c:otherwise>
@@ -163,195 +168,235 @@
                                    </div>--%>
                 </div>
                 <c:choose>
-                <c:when test="${listEvents.size() == 0}">
-                    <div class="panel  panel-default">
-                        <div class="panel-heading ">Нет записей</div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                <c:forEach var="event" items="${listEvents}" varStatus="status">
+                    <c:when test="${listEvents.size() == 0}">
+                        <div class="panel  panel-default">
+                            <div class="panel-heading ">Нет записей</div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach var="event" items="${listEvents}" varStatus="status">
 
-                <div class="panel panel-default">
-                    <c:if test="${status.first}">
-                        <div class="panel-heading" style="background: #EAEAEC">
+                            <div class="panel panel-default">
+                                <c:if test="${status.first}">
+                                    <div class="panel-heading" style="background: #EAEAEC">
                             <span class=" badge pull-right" style="background: #EAEAEC"><span style="color: gray"><c:out
                                     value="${listEvents.size()}"/></span> <span class="glyphicon glyphicon-menu-down"
                                                                                 style="color: gray"></span></span>
-                            События
+                                        События
 
-                        </div>
-                        <hr style="padding-top: 0px; margin-top: 0px; padding-bottom: 0px;margin-bottom: 0px">
-                    </c:if>
-                        <div class="" style="background: white;padding-left: 15px; padding-bottom: 15px;padding-top: 15px">
+                                    </div>
+                                    <hr style="padding-top: 0px; margin-top: 0px; padding-bottom: 0px;margin-bottom: 0px">
+                                </c:if>
+                                <div style="background: white;padding-left: 15px; padding-bottom: 15px;padding-top: 15px">
+                                    <a class="pull-left" href="#">
+                                        <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
+                                        <img id="${event.idEvent}_imgPlayground" class="media-object"
+                                             src="resources/image/foot2.png"
+                                             alt="Баскетбол" width="30" height="30">
+                                    </a>
+                                    <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
+                                        <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"> <span
+                                                class="glyphicon glyphicon-option-vertical"></span></a>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
+                                            <c:choose>
+                                                <c:when test="${event.userIdCreator == userId}">
+                                                    <c:set var="playgroundId" value="${event.playgroundId}"/>
+                                                    <c:set var="sport" value="${event.sport}"/>
+                                                    <li>
+                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})"
+                                                           id="cancelAnswer_${event.idEvent}"> <span
+                                                                class="glyphicon glyphicon-minus"
+                                                                style="margin-right: 20px"></span>Отменить голос</a>
+                                                    </li>
+                                                    <li>
+                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})"
+                                                           id="doAnswer_${event.idEvent}"> <span
+                                                                class="glyphicon glyphicon-plus"
+                                                                style="margin-right: 20px"></span>Проголосовать</a>
+                                                    </li>
+                                                    <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
+                                                                 class="glyphicon glyphicon-time"
+                                                                 style="margin-right: 20px"></span>История
+                                                             изменений</a></li>--%>
+                                                    <li>
+                                                        <a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span
+                                                                class="glyphicon glyphicon-home"
+                                                                style="margin-right: 20px"></span>К площадке</a>
+                                                    </li>
 
-                            <a class="pull-left" href="#">
-                                <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                <img id="${event.idEvent}_imgPlayground" class="media-object"
-                                     src="resources/image/foot2.png"
-                                     alt="Баскетбол" width="30" height="30">
-                            </a>
-                            <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
-                                <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"> <span
-                                        class="glyphicon glyphicon-option-vertical"></span></a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
-                                    <c:choose>
-                                        <c:when test="${event.userIdCreator == userId}">
-                                            <c:set var="playgroundId" value="${event.playgroundId}" />
-                                            <c:set var="sport" value="${event.sport}" />
-                                            <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
-                                                                                                                                                                               style="margin-right: 20px"></span>Отменить голос</a>
-                                            </li>
-                                            <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
-                                                                                                                                                                           style="margin-right: 20px"></span>Проголосовать</a>
-                                            </li>
-                                            <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
-                                                         class="glyphicon glyphicon-time"
-                                                         style="margin-right: 20px"></span>История
-                                                     изменений</a></li>--%>
-                                            <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
-                                                                                                                                         style="margin-right: 20px"></span>К площадке</a>
-                                            </li>
 
-
-                                            <li><a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}">
+                                                    <li>
+                                                        <a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}">
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
-                                            </a></li>
-                                            <li><a href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span class="glyphicon glyphicon-off"
-                                                                                                                                               style="margin-right: 20px"></span>Завершить
-                                                опрос</a></li>
-                                            <li><a href="deleteGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span class="glyphicon glyphicon-trash"
-                                                                                                                                                  style="margin-right: 20px"></span>Удалить
-                                                опрос</a></li>
+                                                        </a></li>
+                                                    <li>
+                                                        <a href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span
+                                                                class="glyphicon glyphicon-off"
+                                                                style="margin-right: 20px"></span>Завершить
+                                                            опрос</a></li>
+                                                    <li>
+                                                        <a href="deleteGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span
+                                                                class="glyphicon glyphicon-trash"
+                                                                style="margin-right: 20px"></span>Удалить
+                                                            опрос</a></li>
 
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:set var="playgroundId" value="${event.playgroundId}" />
-                                            <c:set var="sport" value="${event.sport}" />
-                                            <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
-                                                                                                                                                                                style="margin-right: 20px"></span>Отменить голос</a>
-                                            </li>
-                                            <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
-                                                                                                                                                                            style="margin-right: 20px"></span>Проголосовать</a>
-                                            </li>
-                                            <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
-                                                                                                                        style="margin-right: 20px"></span>История
-                                                    изменений</a></li>--%>
-                                            <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
-                                                                                                                                         style="margin-right: 20px"></span>К площадке</a>
-                                            </li>
-                                        </c:otherwise>
-                                    </c:choose>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="playgroundId" value="${event.playgroundId}"/>
+                                                    <c:set var="sport" value="${event.sport}"/>
+                                                    <li>
+                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})"
+                                                           id="cancelAnswer2_${event.idEvent}"> <span
+                                                                class="glyphicon glyphicon-minus"
+                                                                style="margin-right: 20px"></span>Отменить голос</a>
+                                                    </li>
+                                                    <li>
+                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})"
+                                                           id="doAnswer2_${event.idEvent}"> <span
+                                                                class="glyphicon glyphicon-plus"
+                                                                style="margin-right: 20px"></span>Проголосовать</a>
+                                                    </li>
+                                                    <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
+                                                                                                                                style="margin-right: 20px"></span>История
+                                                            изменений</a></li>--%>
+                                                    <li>
+                                                        <a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span
+                                                                class="glyphicon glyphicon-home"
+                                                                style="margin-right: 20px"></span>К площадке</a>
+                                                    </li>
+                                                </c:otherwise>
+                                            </c:choose>
 
-                                </ul>
-                            </div>
-                            <div class="media-body" style="padding-left: 10px">
+                                        </ul>
+                                    </div>
+                                    <div class="media-body" style="padding-left: 10px">
 
-                                <h5 class="media-heading"
-                                    style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.userFirtsNameCreator} ${event.userLastNameCreator}</h5>
+                                        <h5 class="media-heading"
+                                            style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.userFirtsNameCreator} ${event.userLastNameCreator}</h5>
 
 
-                                <span style="color: gray">${event.date}</span>
+                                        <span style="color: gray">${event.date}</span>
 
-                            </div>
-                        </div>
-
-                        <div>
-                            <span style="color: black; padding-left: 17px; padding-right: 17px">${event.description}</span>
-                        </div>
-
-                        <div class="panel-body" style="padding-bottom: 0px">
-                            <div class="alert alert-danger fade in hide" role="alert" id="alertMax_${event.idEvent}">
-                                <button type="button" class="close" onclick="hideButton(${event.idEvent})" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <strong>Warning!</strong> Превышен лимит игроков
-                            </div>
-
-                            <div class="alert alert-danger fade in hide" role="alert" id="alertFail_${event.idEvent}">
-                                <button type="button" class="close" onclick="hideButton(${event.idEvent})" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <strong>Warning!</strong> Произошла ошибка
-                            </div>
-                            div class="list-group" style="margin-bottom: 5px">
-                            <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="answerButton_${event.idEvent}">
-                                <c:choose>
-                                    <c:when test="${event.maxCountAnswer == 1000}">
-                                        <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="badge" id="badge2_${event.idEvent}">${event.userList.size()} / ${event.maxCountAnswer} </span>
-                                    </c:otherwise>
-                                </c:choose>
-
-                                <div class="pull-left hide" id="answerOk_${event.idEvent}">
-                                    <span class="glyphicon glyphicon-ok "></span>
+                                    </div>
                                 </div>
-                                <div class="text-center">
-                                    +
+
+                                <div>
+                                    <span style="color: black; padding-left: 17px; padding-right: 17px">${event.description}</span>
                                 </div>
-                            </a>
-                        </div>
 
-                    <div class="btn-group " style="margin-top: 5px">
-                        <div class="container-fluid">
-                            <div class="row" id="imgUserList_${event.idEvent}">
-                                <c:forEach var="user" items="${event.userList}">
-                                    <c:choose>
-                                        <c:when test="${user.isFake() == true}">
-                                            <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
-                                                <span id="${user.userId}_add_${event.idEvent}" count="${user.countFake}">+${user.countFake}</span>
+                                <div class="panel-body" style="padding-bottom: 0px">
+                                    <div class="alert alert-danger fade in hide" role="alert"
+                                         id="alertMax_${event.idEvent}">
+                                        <button type="button" class="close" onclick="hideButton(${event.idEvent})"
+                                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <strong>Warning!</strong> Превышен лимит игроков
+                                    </div>
 
-                                            </a>
+                                    <div class="alert alert-danger fade in hide" role="alert"
+                                         id="alertFail_${event.idEvent}">
+                                        <button type="button" class="close" onclick="hideButton(${event.idEvent})"
+                                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <strong>Warning!</strong> Произошла ошибка
+                                    </div>
+                                    <div class="list-group" style="margin-bottom: 5px">
+                                        <a class="list-group-item "
+                                           onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId})"
+                                           id="answerButton_${event.idEvent}">
+                                            <c:choose>
+                                                <c:when test="${event.maxCountAnswer == 1000}">
+                                                    <span class="badge"
+                                                          id="badge1_${event.idEvent}">${event.userList.size()}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                        <span class="badge"
+                                              id="badge2_${event.idEvent}">${event.userList.size()} / ${event.maxCountAnswer} </span>
+                                                </c:otherwise>
+                                            </c:choose>
 
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
-                                                <img src="resources/image/foot.png" alt="Баскетбол" width="30"
-                                                     height="30" id="${user.userId}_img_${event.idEvent}">
-                                            </a>
-                                        </c:otherwise>
-                                    </c:choose>
+                                            <div class="pull-left hide" id="answerOk_${event.idEvent}">
+                                                <span class="glyphicon glyphicon-ok "></span>
+                                            </div>
+                                            <div class="text-center">
+                                                +
+                                            </div>
+                                        </a>
+                                    </div>
 
-                                </c:forEach>
-                                <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}" id="watch_${event.idEvent}" class="btn hide"> <span
-                                        class="glyphicon glyphicon-eye-open" style="margin-right: 5px"></span></a>
+                                    <div class="btn-group " style="margin-top: 5px">
+                                        <div class="container-fluid">
+                                            <div class="row" id="imgUserList_${event.idEvent}">
+                                                <c:forEach var="user" items="${event.userList}">
+                                                    <c:choose>
+                                                        <c:when test="${user.isFake() == true}">
+                                                            <a href="user?userId=${user.userId}" class="btn"
+                                                               style="padding: 0px"
+                                                               id="${user.userId}_imgUser_${event.idEvent}_fake">
+                                                    <span id="${user.userId}_add_${event.idEvent}"
+                                                          count="${user.countFake}">+${user.countFake}</span>
 
-                            </div>
+                                                            </a>
 
-                        </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="user?userId=${user.userId}" class="btn"
+                                                               style="padding: 0px"
+                                                               id="${user.userId}_imgUser_${event.idEvent}">
+                                                                <img src="resources/image/foot.png" alt="Баскетбол"
+                                                                     width="30"
+                                                                     height="30"
+                                                                     id="${user.userId}_img_${event.idEvent}">
+                                                            </a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+
+                                                </c:forEach>
+                                                <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}"
+                                                   id="watch_${event.idEvent}" class="btn hide"> <span
+                                                        class="glyphicon glyphicon-eye-open"
+                                                        style="margin-right: 5px"></span></a>
+
+                                            </div>
+
+                                        </div>
 
 
-                    </div>
+                                    </div>
 
 
-                    <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
-                            class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
-                            style="color: #77A5C5;margin-right: 5px"></span>
-                        <span id="countComment" style="font-size: medium">
+                                    <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn"
+                                       style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
+                                            class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
+                                            style="color: #77A5C5;margin-right: 5px"></span>
+                                        <span id="countComment" style="font-size: medium">
                                         <c:if test="${event.commentsList.size() > 0}">
                                             ${event.commentsList.size()}
                                         </c:if>
                                     </span>
-                    </a>
-                    <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px;margin-bottom: 4px"><span
-                            class="glyphicon glyphicon-bullhorn " aria-hidden="Комментировать"
-                            style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
+                                    </a>
+                                    <a href="#" class="btn"
+                                       style=" margin-left: 5px; margin-top: 4px;margin-bottom: 4px"><span
+                                            class="glyphicon glyphicon-bullhorn " aria-hidden="Комментировать"
+                                            style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
+                                </div>
+                            </div>
 
-
-                    </div>
-                    </c:forEach>
+                        </c:forEach>
                     </c:otherwise>
-                    </c:choose>
+                </c:choose>
 
 
-                    <div class="col-sm-2">
-
-                    </div>
+                <div class="col-sm-2">
 
                 </div>
+
             </div>
         </div>
+    </div>
 </main>
 <!-- Modal -->
-<div class="modal fade" id="playersModal" tabindex="-1" role="dialog" aria-labelledby="playersModalLabel" aria-hidden="true">
+<div class="modal fade" id="playersModal" tabindex="-1" role="dialog" aria-labelledby="playersModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -362,38 +407,127 @@
                 <h5 class="modal-title" id="playersModalLabel">Участники группы</h5>
             </div>
             <div class="modal-body">
-     
-                        <div class="list-group" id="listGroupsUser">
-                            <c:forEach var="user" items="${players}">
-                                <a href="toUser?userId=${user.userId}" class="list-group-item borderless" id="list_${user.userId}">
-                                    <div class="media">
-                                        <div class="pull-left">
-                                            <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
-                                                 height="40"/>
-                                        </div>
+
+                <div class="list-group" id="listGroupsUser">
+                    <c:forEach var="user" items="${players}">
+                        <a href="toUser?userId=${user.userId}" class="list-group-item borderless"
+                           id="list_${user.userId}">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
+                                         height="40"/>
+                                </div>
 
 
-                                        <div class="media-body " style="padding-top: 10px; padding-left: 3px">
-                                                <%--       <h4 class="media-heading"
-                                                           style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
-                                            <span >${user.firstName} ${user.lastName}</span>
-                                                <%--<hr>--%>
-                                        </div>
-                                    </div>
-                                </a>
-                            </c:forEach>
+                                <div class="media-body " style="padding-top: 10px; padding-left: 3px">
+                                        <%--       <h4 class="media-heading"
+                                                   style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
+                                    <span>${user.firstName} ${user.lastName}</span>
+                                        <%--<hr>--%>
+                                </div>
+                            </div>
+                        </a>
+                    </c:forEach>
 
-                        </div>
+                </div>
 
             </div>
         </div>
     </div>
 </div>
-<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 <script>
+    var listEvents = ${listEventsJson};
+    var isWatch = false;
+    console.log(listEvents.length);
+    if (listEvents) {
+        var userId = "${userId}";
+        listEvents.forEach(function (event, i) {
+            var maxCountAnswer = event.maxCountAnswer;
+            var usersList = event.userList;
+            var sp = event.sport;
+            var id = event.idEvent;
+            console.log("idEvent " + id);
+            var element = document.getElementById(id);
+            var imgPlayground = document.getElementById(id+'_imgPlayground');
+            var description = event.description.split('\n');
+            $('#descrEvent_' + id).html('');
+            description.forEach(function (message, i) {
+
+                $('#descrEvent_' + id).append(message);
+                $('#descrEvent_' + id).append('<br>');
+            });
+
+            if (usersList.length > 2) {
+                isWatch = true;
+                $('#watch_' + id).removeClass('hide');
+            }
+            // Определяем истинное значение игроков
+            if (maxCountAnswer == 1000) {
+                var count = parseInt($('#badge1_'+id).text());
+                console.log("badge1 " + $('#badge1_'+id).text())
+                if (usersList) {
+                    usersList.forEach(function (user, i) {
+                        if (user.countFake != 0) {
+                            count = (count - 1) + user.countFake;
+                            // isFake = true;
+                        }
+                    });
+                }
+
+                $('#badge1_'+ id).text(count);
+            } else {
+                var count = parseInt($('#badge2_'+id).text().split(' / ')[0]);
+                console.log("badge2 " + $('#badge2_'+id).text());
+                if (usersList) {
+                    usersList.forEach(function (user, i) {
+                        if (user.countFake != 0) {
+                            count = (count - 1) + user.countFake;
+                            // isFake = true;
+                        }
+                    });
+                }
+
+                $('#badge2_'+ id).text(count + ' / ' + maxCountAnswer );
+
+                if (count >= event.maxCountAnswer) {
+                    $('#answerButton_' + id).addClass('disabled')
+                } else {
+                    $('#answerButton_' + id).removeClass('disabled');
+                }
+            }
 
 
 
+            var isActive = false;
+            usersList.forEach(function (user, i) {
+                if (user.userId === userId ) {
+                    isActive = true;
+                }
+            });
+
+            if (isActive) {
+                $('#answerButton_'+ id).removeClass('active');
+                $('#answerButton_'+ id).css('background','#EAEAEC');
+
+                $('#answerOk_'+ id).removeClass('hide');
+                $('#cancelAnswer_'+ id).removeClass('hide');
+                $('#doAnswer_'+ id).addClass('hide');
+                $('#cancelAnswer2_'+ id).removeClass('hide');
+                $('#doAnswer2_'+ id).addClass('hide');
+            } else {
+                $('#answerButton_'+ id).addClass('active');
+                $('#answerButton_'+ id).css('background','');
+                $('#answerOk_'+ id).addClass('hide');
+                $('#cancelAnswer_'+ id).addClass('hide');
+                $('#doAnswer_'+ id).removeClass('hide');
+                $('#cancelAnswer2_'+ id).addClass('hide');
+                $('#doAnswer2_'+ id).removeClass('hide');
+            }
+
+        });
+
+    }
 
     var sp = '${sport}';
     if (sp == 'Футбол') {
@@ -424,12 +558,13 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 + 1;
                 $('#players').text(count2);
+              /*
                 $('#list_template').removeClass('hide');
 
                 var userData = document.getElementById("list_template").cloneNode(true);
                 userData.id = "list_" + userId;
                 $('#list_template').addClass('hide');
-                $('#listGroupsUser').append(userData)
+                $('#listGroupsUser').append(userData)*/
             } else {
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');
@@ -438,13 +573,15 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 - 1;
                 $('#players').text(count2);
-                $('#list_' + userId).remove();
+            //    $('#list_' + userId).remove();
             }
         });
     }
+
     setTimeout('resizePlayground()', 500);
+
     function resizePlayground() {
-        var  height =  $('#mainPlayground').height();
+        var height = $('#mainPlayground').height();
         if (height < 650) {
             VK.callMethod('resizeWindow', 900, 650);
         } else {
@@ -456,6 +593,124 @@
     if (isParticipant === false) {
         $('#goGame').addClass("disabled");
     }
+
+
+    var dateNow = new Date().getTime();
+
+    function updateData() {
+        console.log("observer");
+        $.ajax({
+            url: 'getNewDataEvents?date=' + dateNow + '&userId=' + ${userId}
+        }).then(function (value) {
+            console.log("success");
+
+            if (value) {
+                console.log("data edit");
+                dateNow = new Date().getTime();
+                console.log("value.length " + value.length)
+                console.log("listEvents.length " + listEvents.length)
+                if (value.length != listEvents.length || usersList.length > 1 ) {
+                    location.reload();
+                }
+
+                value.forEach(function (event, i) {
+                    var eventId = event.idEvent;
+                    var usersList = event.userList;
+                    var commentList = event.commentsList;
+                    if (commentList.length > 0 ) {
+                        $('#countComment').text(commentList.length);
+                    }
+                    if (usersList.length > 2) {
+                        isWatch = true;
+                        $('#watch_' + eventId).removeClass('hide');
+                    }
+
+                    if(event.maxCountAnswer == 1000) {
+                        var count = usersList.length;
+                        $('#imgUserList_'+ eventId).empty();
+                        $('#templateUserList2').removeClass('hide');
+                        usersList.forEach(function (user, i) {
+                            // Если фейк
+                            if (user.countFake != 0) {
+                                count = (count - 1) + user.countFake;
+                                if (!isWatch) {
+                                    $('#imageUser').addClass('hide');
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    var addIgr = user.countFake;
+                                    userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
+                                    userImg.href = "user?userId=" + user.userId;
+                                    var span = document.createElement('span');
+                                    span.id = user.userId + '_add_' + eventId;
+                                    span.setAttribute('count', addIgr);
+                                    span.appendChild(document.createTextNode("+" + addIgr));
+                                    userImg.appendChild(span);
+                                    $('#imgUserList_' + eventId).append(userImg);
+                                    $('#imageUser').removeClass('hide');
+                                }
+                            } else {
+                                if (!isWatch) {
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    userImg.id = user.userId + '_imgUser_' + eventId;
+                                    userImg.href = "user?userId=" + user.userId;
+                                    $('#imgUserList_' + eventId).append(userImg);
+                                }
+                            }
+
+                        });
+                        $('#templateUserList2').addClass('hide');
+                        $('#badge1_' + eventId).text(count);
+                    } else {
+                        var count = usersList.length;
+
+                        $('#imgUserList_'+ eventId).empty();
+                        $('#templateUserList2').removeClass('hide');
+                        usersList.forEach(function (user, i) {
+                            if (user.countFake != 0) {
+                                count = (count - 1) + user.countFake;
+                                if (!isWatch) {
+                                    $('#imageUser').addClass('hide');
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    var addIgr = user.countFake;
+                                    userImg.id = user.userId + '_imgUser_' + eventId;
+                                    userImg.href = "user?userId=" + user.userId;
+                                    var span = document.createElement('span');
+                                    span.id = user.userId + '_add_' + eventId;
+                                    span.setAttribute('count', addIgr);
+                                    span.appendChild(document.createTextNode("+" + addIgr));
+                                    userImg.appendChild(span);
+                                    $('#imgUserList_' + eventId).append(userImg);
+                                    $('#imageUser').removeClass('hide');
+                                }
+                            } else {
+                                if (!isWatch) {
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    userImg.id = user.userId + '_imgUser_' + eventId;
+                                    userImg.href = "user?userId=" + user.userId;
+                                    $('#imgUserList_' + eventId).append(userImg);
+                                }
+                            }
+                        });
+                        $('#templateUserList2').addClass('hide');
+
+                        if (count >= event.maxCountAnswer) {
+                            $('#answerButton_' + eventId).addClass('disabled')
+                        } else {
+                            $('#answerButton_' + eventId).removeClass('disabled');
+                        }
+                        $('#badge2_' + eventId).text(count + ' / ' + event.maxCountAnswer);
+                    }
+                });
+            }
+        });
+    }
+
+    function hideButton(eventId) {
+        $('#alertMax_' + eventId).addClass('hide');
+        $('#alertFail_' + eventId).addClass('hide');
+
+    }
+
+    setInterval(updateData, 5000);
 </script>
 </body>
 </html>

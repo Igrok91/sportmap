@@ -294,8 +294,10 @@ public class StartController {
         model.addAttribute("house", playground.getHouse());
         model.addAttribute("sport", playground.getSport());
         model.addAttribute("players", playground.getPlayers());
-        model.addAttribute("listEvents", eventsService.getEventsByIdGroup(idGroup));
-
+        Gson gson = new Gson();
+        List<Event> list = eventsService.getEventsByIdGroup(idGroup);
+        model.addAttribute("listEvents", list);
+        model.addAttribute("listEventsJson", gson.toJson(list));
     }
 
     @RequestMapping("/group")
