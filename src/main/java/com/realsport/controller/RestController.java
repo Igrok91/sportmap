@@ -67,8 +67,9 @@ public class RestController {
     @RequestMapping(value = "sendCommentUser", method = RequestMethod.POST)
     @ResponseBody
     public Comment sendCommentUser( @RequestParam(value="message", required=false, defaultValue="World") String message,
-                                          @RequestParam(value="eventId", required=false, defaultValue="5") String eventId
-                                        , @RequestParam(value = "userId") String userId) {
+                                         @RequestParam(value="eventId", required=false, defaultValue="5") String eventId,
+                                         @RequestParam(value = "userId") String userId,
+                                         @RequestParam(value="playgroundId") String playgroundId) throws Exception {
         User user = getUser(userId);
         Comment comment = new Comment();
         comment.setUserId(userId);
@@ -77,8 +78,14 @@ public class RestController {
         comment.setLastName(user.getLastName());
         comment.setDateCreation(Timestamp.of(new Date()));
         comment.setDate(getDateFormat());
-        long commentId =  eventsService.addCommentToEvent(eventId, comment);
-        comment.setCommentId(String.valueOf(commentId));
+        String commentId =  eventsService.addCommentToEvent(eventId, comment);
+        if (commentId != null) {
+            comment.setCommentId(commentId);
+            cacheService.putToCache(playgroundId, userId);
+            comment.setSuccess(true);
+            return comment;
+        }
+        comment.setSuccess(false);
         return comment;
     }
 
@@ -261,9 +268,9 @@ public class RestController {
         return ERROR;
     }
 
-    @RequestMapping("/getNewDataEvent")
+    @RequestMapping("/getNewDataEvents")
     @ResponseBody
-    public List<Event> getNewDataEvent(Model model, @RequestParam(value = "date") long date,
+    public List<Event> getNewDataEvents(Model model, @RequestParam(value = "date") long date,
                                   @RequestParam(value = "userId") String userId) throws ParseException {
 
         Date now = new Date(date);
@@ -288,6 +295,36 @@ public class RestController {
         if (isEditData) {
             List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
             return listEvents;
+        }
+        return null;
+    }
+    @RequestMapping("/getNewDataEvent")
+    @ResponseBody
+    public Event getNewDataEvent(Model model, @RequestParam(value = "date") long date,
+                                       @RequestParam(value = "userId") String userId,
+                                       @RequestParam(value="playgroundId") String playgroundId,
+                                       @RequestParam(value="eventId") String eventId) throws ParseException {
+
+        Date now = new Date(date);
+        logger.info("Date " + now);
+        boolean isEditData = false;
+        MemcacheService memcacheService = getCacheObserver();
+            MemcacheService.IdentifiableValue value =  memcacheService.getIdentifiable(playgroundId);
+            if (Objects.nonNull(value)) {
+                LastEditData last = (LastEditData) value.getValue();
+                logger.info("Last Date Update " + last.getDate());
+                if (!Objects.equals(last.getIdUserEdit(), userId)) {
+                    if (now.before(last.getDate())) {
+                        logger.info("Данные изменились ");
+                        isEditData = true;
+                    }
+                }
+
+            }
+
+        if (isEditData) {
+            Event event = eventsService.getEventById(eventId);
+            return event;
         }
         return null;
     }

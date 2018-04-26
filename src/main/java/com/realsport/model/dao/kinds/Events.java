@@ -354,9 +354,10 @@ public class Events {
 
     };
 
-    public long addCommentToEvent(String eventId, Comment message) {
+    public String addCommentToEvent(String eventId, Comment message) {
         Transaction transaction = getDatastore().newTransaction();
         Entity entity = null;
+        String idComment = null;
         try {
             Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
             if (Objects.nonNull(event)) {
@@ -371,7 +372,8 @@ public class Events {
                     listComment.addAll(list);
 
                 }
-                listComment.add(getEntityComment(message));
+                idComment = message.getUserId() + "_" + message.getDateCreation().toSqlTimestamp().getTime();
+                listComment.add(getEntityComment(message, idComment));
                 entity = transaction.put(Entity.newBuilder(event).
                         set("commentsList", ListValue.of(listComment)).
                         build());
@@ -384,12 +386,13 @@ public class Events {
                 transaction.rollback();
             }
         }
-        return entity == null ? 0 : entity.getKey().getId();
+        logger.info("key comment " + idComment);
+        return entity == null ? null : idComment;
     }
 
-    private EntityValue getEntityComment(Comment message) {
-        FullEntity userEntity = FullEntity.newBuilder(keyFactory.newKey(message.getUserId()))
-                .set("commentId", message.getUserId())
+    private EntityValue getEntityComment(Comment message, String idComment) {
+        FullEntity userEntity = FullEntity.newBuilder(keyFactory.newKey())
+                .set("commentId", idComment)
                 .set("userId", message.getUserId())
                 .set("firstName", message.getFirstName())
                 .set("lastName", message.getLastName())
@@ -400,4 +403,61 @@ public class Events {
     }
 
 
+    public void deleteCommentFromEvent(String commentId, String eventId) {
+        Transaction transaction = getDatastore().newTransaction();
+        Entity entity = null;
+        try {
+            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            if (Objects.nonNull(event)) {
+                List<EntityValue> list = null;
+                try {
+                    list = event.getList("commentsList");
+                } catch (Exception e) {
+                    logger.warn("Нет поля commentsList");
+                }
+                List<EntityValue> listComment = new ArrayList<>();
+                if (Objects.nonNull(list)) {
+                    List<EntityValue> valueList = FluentIterable.from(list).filter(new Predicate<EntityValue>() {
+                        @Override
+                        public boolean apply(EntityValue entityValue) {
+                            return !entityValue.get().getString("commentId").equals(commentId);
+                        }
+                    }).toList();
+                    listComment.addAll(valueList);
+                    entity = transaction.put(Entity.newBuilder(event).
+                            set("commentsList", ListValue.of(listComment)).
+                            build());
+                    logger.info("Удален комментарий в событии " + eventId );
+
+                    transaction.commit();
+                }
+
+            }
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+    }
+
+    public List<Event> getEventsByIdGroup(String playgroundId) {
+        try {
+            Datastore datastore = getDatastore();
+            List<Entity>  listEntity = new ArrayList<>();
+            Query<Entity> entityQuery = Query.newEntityQueryBuilder()
+                    .setKind(EVENTS)
+                    .setFilter(StructuredQuery.PropertyFilter.eq("playgroundId", playgroundId))
+                    .build();
+            QueryResults<Entity>  queryResults = datastore.run(entityQuery);
+            for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
+                listEntity.add(it.next());
+            }
+            List<Event> eventPlaygrounds = getEventsFromEntity(listEntity);
+            return eventPlaygrounds;
+        } catch (Exception e) {
+            logger.error(e);
+            logger.warn("Событий еще нет");
+        }
+        return null;
+    }
 }

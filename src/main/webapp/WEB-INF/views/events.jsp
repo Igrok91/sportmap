@@ -239,11 +239,11 @@
                                 <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
                                         class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
                                         style="color: #77A5C5;margin-right: 5px"></span>
-                                    <div id="countComment">
+                                    <span id="countComment" style="font-size: medium">
                                         <c:if test="${event.commentsList.size() > 0}">
                                             ${event.commentsList.size()}
                                         </c:if>
-                                    </div>
+                                    </span>
                                    </a>
                                 <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px;margin-bottom: 4px"><span
                                         class="glyphicon glyphicon-bullhorn " aria-hidden="Комментировать"
@@ -449,10 +449,11 @@
 
 
     var dateNow = new Date().getTime();
+
     function updateData() {
         console.log("observer");
         $.ajax({
-            url: 'getNewDataEvent?date=' + dateNow + '&userId=' + ${userId}
+            url: 'getNewDataEvents?date=' + dateNow + '&userId=' + ${userId}
         }).then(function (value) {
             console.log("success");
 

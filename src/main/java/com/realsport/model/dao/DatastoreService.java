@@ -168,7 +168,15 @@ public class DatastoreService {
         events.endGame(eventId);
     }
 
-    public long addCommentToEvent(String eventId, Comment message) {
+    public String addCommentToEvent(String eventId, Comment message) {
         return events.addCommentToEvent(eventId, message);
+    }
+
+    public void deleteCommentFromEvent(String commentId, String eventId) {
+        events.deleteCommentFromEvent(commentId, eventId);
+    }
+
+    public List<Event> getEventsByIdGroup(String id) {
+        return events.getEventsByIdGroup(id);
     }
 }

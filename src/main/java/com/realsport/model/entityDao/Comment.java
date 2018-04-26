@@ -11,6 +11,7 @@ public class Comment implements Serializable{
     private String lastName;
     private String message;
     private String date;
+    private boolean success;
     private Timestamp dateCreation;
 
     public String getCommentId() {
@@ -67,5 +68,13 @@ public class Comment implements Serializable{
 
     public void setDateCreation(Timestamp dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }

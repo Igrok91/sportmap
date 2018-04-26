@@ -420,7 +420,8 @@
     var isDisabled = true;
     function handleText() {
         if (isDisabled) {
-            var text = $('#desc').val().split('');
+            var t = $('#textComment').val().trim();
+            var text = t.split('');
             console.log("description " + text.length);
             var createGame = document.getElementById('createGame');
             var editGame = document.getElementById('editGame');

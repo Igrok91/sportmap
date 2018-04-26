@@ -43,7 +43,7 @@
         }
     </style>
 </head>
-<body>
+<body id="eventMain">
 
 <a href="" class="btn hide" style="padding: 0px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
@@ -79,7 +79,7 @@
 
     </div>
 </nav>
-<main>
+<main >
     <div class="container-fluid " style="margin-top: 15px">
 
         <div class="row content">
@@ -191,6 +191,11 @@
                                 <strong>Warning!</strong> Превышен лимит игроков
                             </div>
 
+                            <div class="alert alert-danger fade in hide" role="alert" id="alertFail_${event.idEvent}">
+                                <button type="button" class="close" onclick="hideButton(${event.idEvent})" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <strong>Warning!</strong> Произошла ошибка
+                            </div>
+
                             <div class="list-group" style="margin-bottom: 5px">
                                 <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="answerButton_${event.idEvent}">
                                     <c:choose>
@@ -262,7 +267,7 @@
                                                  width="35" height="35">
                                         </a>
                                         <c:if test="${comment.userId == userId}">
-                                            <a href="#" id="${comment.commentId}_del" onclick="deleteComment(${comment.commentId}, ${eventid})" class="btn pull-right hide"  style="padding: 0px;background: white">  <span class="glyphicon glyphicon-remove "></span></a>
+                                            <a href="#" id="${comment.commentId}_del" onclick="deleteComment('${comment.commentId}', '${eventid}')" class="btn pull-right hide"  style="padding: 0px;background: white">  <span class="glyphicon glyphicon-remove "></span></a>
                                         </c:if>
                                         <div class="media-body ">
                                             <h5 class="media-heading"
@@ -392,7 +397,7 @@
     </div>
     </div>
 </main>
-
+<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 
 <script>
     $(document).ready(function () {
@@ -502,57 +507,46 @@
         var text = $('#textComment').val().trim();
         var eventId = '${event.idEvent}';
         var userId = '${userId}';
+        var playgroundId = '${event.playgroundId}';
+
 
         if (text.length != 0) {
+            $('#textComment').val('');
             $.ajax({
                 url: 'sendCommentUser',
                 method: 'POST',
-                data: ({message: text, eventId: eventId , userId: userId})
+                data: ({message: text, eventId: eventId , userId: userId, playgroundId: playgroundId})
             }).then(function (comment) {
-                    $('#hrComment').addClass('hide');
-                    $('#templateCommentLink').attr('href', 'user?userId=' + userId);
-                    $('#templateCommentName').text(comment.firstName + " " + comment.lastName);
-                    var message = comment.message.split('\n');
-                    $('#templateCommentMessage').html('');
-                    message.map(function (message, i) {
-
-                        $('#templateCommentMessage').append(message);
-                        $('#templateCommentMessage').append('<br>');
-                    });
-                    //$('#templateCommentMessage').text(comment.message);
-                    $('#templateCommentDate').text(comment.date);
-                    $('#templateComment').removeClass('hide');
-                    var templ = document.getElementById("templateComment").cloneNode(true);
-                    templ.id = comment.commentId;
-
-                    var idDel = comment.commentId + '_del';
-                    templ.childNodes[1].childNodes[3].id = idDel;
-
-
-
-                    if (comment.userId === userId) {
-                        templ.onmouseenter = handler;
-                        templ.onmouseleave = handler;
-                        templ.childNodes[1].childNodes[3].onclick = function () {
-                            deleteComment(comment.commentId, eventId);
-                        };
+                    switch (comment.success) {
+                        case true:
+                            console.log('comment send');
+                            addCommentToListComments(comment);
+                            break;
+                        case false:
+                            console.log('comment not send');
+                            $('#alertFail_' + eventId).removeClass('hide');
+                            $('#alertFail_' + eventId).alert();
+                            break;
                     }
 
-                    $('#templateComment').addClass('hide');
-                    $('#listComment').append(templ);
-
-                    $('#textComment').val('');
-                    $('#templateCommentMessage').empty();
                 });
 
         }
 
     }
+    function hideButton(eventId) {
+        $('#alertMax_' + eventId).addClass('hide');
+        $('#alertFail_' + eventId).addClass('hide');
+
+    }
+
 
     function deleteComment(commentId, eventId) {
+        var userId = '${userId}';
+        var playgroundId = '${event.playgroundId}';
 
         $.ajax({
-            url: 'deleteComment?commentId=' + commentId + '&eventId=' + eventId
+            url: 'deleteComment?commentId=' + commentId + '&eventId=' + eventId + '&playgroundId=' + playgroundId + '&userId=' + userId
         }).then(function () {
             var comment = document.getElementById(commentId);
             var listComment = document.getElementById('listComment');
@@ -592,20 +586,180 @@
         }
     }
 
-    var isDisabled = true;
     function handleText() {
-        if (isDisabled) {
-            var text = $('#textComment').val().split('');
+            var t = $('#textComment').val().trim();
+            var text = t.split('');
             console.log("description " + text.length);
             if (text.length > 0) {
                 $('#send').removeClass('disabled');
             } else {
                 $('#send').addClass('disabled');
-            }
+
         }
 
     }
-    setInterval(handleText, 1000);
+    setInterval(handleText, 500);
+
+    setTimeout('resizeEvent()', 300);
+
+    function resizeEvent() {
+        //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
+
+        var  height =  $('#eventMain').height();
+        if (height < 650) {
+            VK.callMethod('resizeWindow', 900, 650);
+        } else {
+            VK.callMethod('resizeWindow', 900, height + 10);
+        }
+
+    }
+
+    var dateNow = new Date().getTime();
+
+    function updateData() {
+        console.log("observer");
+        var userId = '${userId}';
+        var playgroundId = '${event.playgroundId}';
+        var eventId = '${event.idEvent}';
+        $.ajax({
+            url: 'getNewDataEvent?date=' + dateNow + '&userId=' + userId + '&playgroundId=' + playgroundId + '&eventId=' + eventId
+        }).then(function (value) {
+            console.log("success");
+
+            if (value) {
+                console.log("data edit");
+                dateNow = new Date().getTime();
+                    var event = value;
+                    var usersList = event.userList;
+                    var commentList = event.commentsList;
+                    if (commentList.length > 0 ) {
+                        $('#listComment').empty();
+                        commentList.forEach(function (comment, i) {
+                            addCommentToListComments(comment);
+                        })
+                    }
+                    if (usersList.length > 2) {
+                        isWatch = true;
+                        $('#watch_' + eventId).removeClass('hide');
+                    }
+
+                     resizeEvent();
+
+                    if(event.maxCountAnswer == 1000) {
+                        var count = usersList.length;
+                        $('#imgUserList_'+ eventId).empty();
+                        $('#templateUserList2').removeClass('hide');
+                        usersList.forEach(function (user, i) {
+                            // Если фейк
+                            if (user.countFake != 0) {
+                                count = (count - 1) + user.countFake;
+                                if (!isWatch) {
+                                    $('#imageUser').addClass('hide');
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    var addIgr = user.countFake;
+                                    userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
+                                    userImg.href = "user?userId=" + user.userId;
+                                    var span = document.createElement('span');
+                                    span.id = user.userId + '_add_' + eventId;
+                                    span.setAttribute('count', addIgr);
+                                    span.appendChild(document.createTextNode("+" + addIgr));
+                                    userImg.appendChild(span);
+                                    $('#imgUserList_' + eventId).append(userImg);
+                                    $('#imageUser').removeClass('hide');
+                                }
+                            } else {
+                                if (!isWatch) {
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    userImg.id = user.userId + '_imgUser_' + eventId;
+                                    userImg.href = "user?userId=" + user.userId;
+                                    $('#imgUserList_' + eventId).append(userImg);
+                                }
+                            }
+
+                        });
+                        $('#templateUserList2').addClass('hide');
+                        $('#badge1_' + eventId).text(count);
+                    } else {
+                        var count = usersList.length;
+
+                        $('#imgUserList_'+ eventId).empty();
+                        $('#templateUserList2').removeClass('hide');
+                        usersList.forEach(function (user, i) {
+                            if (user.countFake != 0) {
+                                count = (count - 1) + user.countFake;
+                                if (!isWatch) {
+                                    $('#imageUser').addClass('hide');
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    var addIgr = user.countFake;
+                                    userImg.id = user.userId + '_imgUser_' + eventId;
+                                    userImg.href = "user?userId=" + user.userId;
+                                    var span = document.createElement('span');
+                                    span.id = user.userId + '_add_' + eventId;
+                                    span.setAttribute('count', addIgr);
+                                    span.appendChild(document.createTextNode("+" + addIgr));
+                                    userImg.appendChild(span);
+                                    $('#imgUserList_' + eventId).append(userImg);
+                                    $('#imageUser').removeClass('hide');
+                                }
+                            } else {
+                                if (!isWatch) {
+                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                    userImg.id = user.userId + '_imgUser_' + eventId;
+                                    userImg.href = "user?userId=" + user.userId;
+                                    $('#imgUserList_' + eventId).append(userImg);
+                                }
+                            }
+                        });
+                        $('#templateUserList2').addClass('hide');
+
+                        if (count >= event.maxCountAnswer) {
+                            $('#answerButton_' + eventId).addClass('disabled')
+                        } else {
+                            $('#answerButton_' + eventId).removeClass('disabled');
+                        }
+                        $('#badge2_' + eventId).text(count + ' / ' + event.maxCountAnswer);
+                    }
+            }
+        });
+    }
+
+    function addCommentToListComments(comment) {
+        var userId = '${userId}';
+        $('#hrComment').addClass('hide');
+        $('#templateCommentLink').attr('href', 'user?userId=' + comment.userId);
+        $('#templateCommentName').text(comment.firstName + " " + comment.lastName);
+        var message = comment.message.split('\n');
+        $('#templateCommentMessage').html('');
+        message.map(function (message, i) {
+
+            $('#templateCommentMessage').append(message);
+            $('#templateCommentMessage').append('<br>');
+        });
+        //$('#templateCommentMessage').text(comment.message);
+        $('#templateCommentDate').text(comment.date);
+        $('#templateComment').removeClass('hide');
+        var templ = document.getElementById("templateComment").cloneNode(true);
+        templ.id = comment.commentId;
+
+        var idDel = comment.commentId + '_del';
+        templ.childNodes[1].childNodes[3].id = idDel;
+
+        if (comment.userId === userId) {
+            templ.onmouseenter = handler;
+            templ.onmouseleave = handler;
+            templ.childNodes[1].childNodes[3].onclick = function () {
+                deleteComment(comment.commentId, eventId);
+            };
+        }
+
+        $('#templateComment').addClass('hide');
+        $('#listComment').append(templ);
+
+
+        $('#templateCommentMessage').empty();
+    }
+
+    setInterval(updateData, 5000);
 </script>
 
 </body>
