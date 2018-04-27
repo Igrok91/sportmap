@@ -121,11 +121,11 @@
                                                 </li>
 
 
-                                                <li><a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}">
+                                                <li><a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}" id="editEvent_${event.idEvent}">
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
                                                 </a></li>
-                                                <li><a href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span class="glyphicon glyphicon-off"
+                                                <li><a href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}" id="endEvent_${event.idEvent}"><span class="glyphicon glyphicon-off"
                                                                                                                                                    style="margin-right: 20px"></span>Завершить
                                                     опрос</a></li>
                                                 <li><a href="deleteGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span class="glyphicon glyphicon-trash"
@@ -250,9 +250,12 @@
                         </div>
 
                         <hr style="margin-bottom: 0px">
-                        <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px; margin-bottom: 4px"><span
-                                class="glyphicon glyphicon-bullhorn " style="margin-right: 5px"></span> Поделиться</a>
+                        <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px; margin-bottom: 4px" id="share_${event.idEvent}"><span
+                                class="glyphicon glyphicon-bullhorn " style="margin-right: 5px" ></span> Поделиться</a>
                         <%--   <c:if test="${event.commentsList.size() != 0}">--%>
+                        <div class="text-center hide" style="color: gray; padding: 15px;" id="past_${event.idEvent}">
+                            <span>Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
+                        </div>
 
                         <ul class="list-group" id="listComment" >
                             <c:forEach var="comment" items="${event.commentsList}">
@@ -282,7 +285,7 @@
                         </ul>
                         <%--</c:if>--%>
 
-                        <div style="margin-bottom: 15px; margin-top: 15px;">
+                        <div style="margin-bottom: 15px; margin-top: 15px;" id="commentArea">
                             <c:if test="${event.commentsList.size() == 0}">
                                 <hr id="hrComment"  style="margin-top: 0px; padding-top: 0px; margin-bottom: 7px;padding-bottom: 7px">
                             </c:if>
@@ -303,7 +306,7 @@
                                                           placeholder="Ваше сообщение" aria-label=""></textarea>
                                                 <hr style="padding: 0px; margin:0px">
                                             </div>
-                                            <div class="col-xs-3 col-md-1 col-sm-1 pull-righ ">
+                                            <div class="col-xs-3 col-md-1 col-sm-1 pull-right " style="padding-left: 3px">
                                                 <a href="#" onclick="sendCommentUser()" class="btn  pull-right" id="send"><span
                                                         style="padding-bottom: 10px"> <img
                                                         src="resources/image/send.png" width="25"
@@ -409,6 +412,7 @@
     }
 
     var event = ${eventJson};
+    var activeEvent = event.active;
     var isWatch = false;
     var userId = "${userId}";
     var maxCountAnswer = event.maxCountAnswer;
@@ -502,6 +506,12 @@
                 $('#doAnswer2_'+ id).removeClass('hide');
             }
 
+    if (activeEvent === false) {
+        disabledEventPast(id);
+    } else {
+        handleLengthText();
+    }
+
 
     function sendCommentUser() {
         var text = $('#textComment').val().trim();
@@ -529,6 +539,7 @@
                             break;
                     }
 
+                    resizeEvent();
                 });
 
         }
@@ -598,7 +609,10 @@
         }
 
     }
-    setInterval(handleText, 500);
+    function handleLengthText() {
+        setInterval(handleText, 500);
+    }
+
 
     setTimeout('resizeEvent()', 300);
 
@@ -757,6 +771,22 @@
 
 
         $('#templateCommentMessage').empty();
+    }
+
+    function disabledEventPast(id) {
+        $('#past_' + id).removeClass('hide');
+        $('#doAnswer2_' + id).addClass('hide');
+        $('#doAnswer_' + id).addClass('hide');
+        $('#cancelAnswer2_' + id).addClass('hide');
+        $('#cancelAnswer_' + id).addClass('hide');
+        $('#editEvent_' + id).addClass('hide');
+        $('#endEvent_' + id).addClass('hide');
+        $('#share_' + id).addClass('hide');
+        $('#commentArea').addClass('hide');
+        $('#textComment').attr('disabled', 'disabled');
+
+        $('#answerButton_' + id).addClass('disabled');
+
     }
 
     setInterval(updateData, 5000);

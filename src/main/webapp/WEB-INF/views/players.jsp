@@ -21,14 +21,6 @@
 
         /* Set black background color, white text and some padding */
 
-        .hrDescription {
-            margin-top: 9px;
-            margin-bottom: 9px;
-        }
-        a.disabled {
-            pointer-events: none; /* делаем элемент неактивным для взаимодействия */
-            cursor: default; /*  курсор в виде стрелки */
-        }
 
         .borderless {
             border: 0 none;
@@ -52,7 +44,7 @@
 
 <main >
 
-    <div class="container " style="margin-top: 15px">
+    <div class="container " style="margin-top: 5px">
 
 
         <div class="row content" >
@@ -73,7 +65,7 @@
                                         +${user.countFake}
                                     </c:if>
                                 </div>
-                                <div class="media-body " style="padding-top: 10px;padding-left: 10px">
+                                <div class="media-body " style="padding-top: 8px;padding-left: 10px">
                                         <%--       <h4 class="media-heading"
                                                    style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
                                     <span style="font-size: medium" >${user.firstName} ${user.lastName} <span style="padding-left: 10px">
@@ -94,8 +86,13 @@
 </main>
 <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
-
-    var returnBack = 'home?where=' + '${returnBack}' + '&userId=' + ${userId};
+    var back = '${returnBack}';
+    var returnBack;
+    if (back === 'playground') {
+        returnBack = 'playground?playgroundId=' + '${playgroundId}' + '&userId=' + ${userId};
+    } else {
+        returnBack = 'home?where=' + '${returnBack}'  + '&userId=' + ${userId};
+    }
     $('#returnBack').attr('href', returnBack);
 
 

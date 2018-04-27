@@ -1,15 +1,13 @@
 package com.realsport.controller;
 
-import com.google.appengine.api.memcache.MemcacheService;
+
 import com.google.cloud.Timestamp;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
-import com.realsport.model.entity.LastEditData;
-import com.realsport.model.entity.Template;
+
 import com.realsport.model.entityDao.*;
 import com.realsport.model.service.*;
-
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,10 +23,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.cache.Cache;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.*;
 
-import static com.realsport.model.cache.CacheObserver.getCacheObserver;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+
 import static com.realsport.model.cache.CacheUser.getCacheUser;
 
 /**
@@ -252,7 +253,7 @@ public class StartController {
         addGroupToModel(model, id, user);
         model.addAttribute("returnBack", "map");
         model.addAttribute("userId", userId);
-
+        model.addAttribute("endList", 2);
         return "playground";
     }
 
@@ -312,20 +313,29 @@ public class StartController {
 
         model.addAttribute("returnBack", "group");
         model.addAttribute("userId", userId);
+        model.addAttribute("endList", 2);
         return "playground";
     }
 
     @RequestMapping("/playground")
-    public String toGroupFromEvent(Model model, @RequestParam(value = "playgroundId") String id
-            , @RequestParam(value = "sport") String sport
-            , @RequestParam(value = "userId") String userId) {
+    public String toGroupFromEvent(Model model, @RequestParam(value = "playgroundId") String id,
+                                @RequestParam(value = "userId") String userId,
+                                   @RequestParam(value = "endList", required = false) String endList) {
         User user = getUser(userId);
         if (user == null) {
             return "error";
         }
-
+        int size;
+        if (Objects.nonNull(endList) && !endList.isEmpty()) {
+            int end = Integer.parseInt(endList);
+            size = end * 2 ;
+        } else {
+            size = 2;
+        }
+        logger.info("size list event " + size);
         addGroupToModel(model, id, user);
         model.addAttribute("returnBack", "home");
+        model.addAttribute("endList", size);
         model.addAttribute("userId", userId);
         return "playground";
     }
@@ -423,17 +433,22 @@ public class StartController {
     @RequestMapping(value = "/deleteGame")
     public String deleteGame(Model model, @RequestParam(name = "eventId", required = false) String eventId,
                              @RequestParam(value = "userId") String userId,
-                             @RequestParam(value = "playgroundId", required = false) String id) throws Exception {
+                             @RequestParam(value = "playgroundId", required = false) String id,
+                             @RequestParam(value = "where", required = false, defaultValue = "empty") String where) throws Exception {
         if (eventId != null) {
             eventsService.deleteGame(eventId);
         }
-        model.addAttribute("userId", userId);
+
         cacheService.putToCache(id, userId);
+        if (where.equals("playground")) {
+            return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
+        }
+        model.addAttribute("userId", userId);
         return "redirect:/home";
     }
 
     @RequestMapping(value = "/toPlayers")
-    public String toPlayers(Model model, @RequestParam(name = "eventId", required = false) String eventId,
+    public String toPlayers(Model model, @RequestParam(name = "eventId") String eventId,
                              @RequestParam(value = "userId") String userId) throws Exception {
         if (eventId != null) {
             Event event = eventsService.getEventById(eventId);
@@ -443,19 +458,40 @@ public class StartController {
             model.addAttribute("userList", list);
             model.addAttribute("returnBack", "home");
         }
-        return "playersEvent";
+        return "players";
+    }
+
+    @RequestMapping(value = "/toPlayersGroups")
+    public String toPlayersGroups(Model model, @RequestParam(name = "playgroundId") String playgroundId,
+                            @RequestParam(value = "userId") String userId) throws Exception {
+        if (playgroundId != null) {
+            Playground playground = playgroundService.getPlaygroundById(playgroundId);
+            List<MinUser> list = playground.getPlayers();
+
+            model.addAttribute("userId", userId);
+            model.addAttribute("playgroundId", playgroundId);
+            model.addAttribute("userList", list);
+            model.addAttribute("returnBack", "playground");
+        }
+        return "players";
     }
 
 
     @RequestMapping(value = "/endGame")
     public String endGame(Model model, @RequestParam(name = "eventId", required = false) String eventId,
                           @RequestParam(value = "userId") String userId,
-                          @RequestParam(value = "playgroundId", required = false) String id) throws Exception {
+                          @RequestParam(value = "playgroundId", required = false) String id,
+                          @RequestParam(value = "where", required = false, defaultValue = "empty") String where) throws Exception {
         if (eventId != null) {
             eventsService.endGame(eventId);
+
+        }
+
+        cacheService.putToCache(id, userId);
+        if (where.equals("playground")) {
+            return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
         }
         model.addAttribute("userId", userId);
-        cacheService.putToCache(id, userId);
         return "redirect:/home";
     }
 

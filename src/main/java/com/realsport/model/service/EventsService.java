@@ -61,23 +61,8 @@ public class EventsService {
                     }
                 }
             }
-            Comparator<Event> comparator = new Comparator<Event>() {
-                @Override
-                public int compare(Event o1, Event o2) {
-                    Timestamp t1 = o1.getDateCreation().toSqlTimestamp();
-                    Timestamp t2 = o2.getDateCreation().toSqlTimestamp();
-                    return t2.compareTo(t1);
-                }
-            };
-            for (Event e : eventOfGroupUser) {
-                List<User> userList = e.getUserList();
-                e.setUserList(sortUserList(userList));
-            }
-            Collections.sort(eventOfGroupUser, comparator);
-
-
+            sortEvent(eventOfGroupUser);
         }
-
 
         return eventOfGroupUser;
     }
@@ -163,8 +148,27 @@ public class EventsService {
     }
 
     public List<Event> getEventsByIdGroup(String id) {
-        return databaseService.getEventsByIdGroup(id);
+        List<Event> list = databaseService.getEventsByIdGroup(id);
 
+        sortEvent(list);
+        return list;
+
+    }
+
+    private void sortEvent(List<Event> list) {
+        Comparator<Event> comparator = new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                Timestamp t1 = o1.getDateCreation().toSqlTimestamp();
+                Timestamp t2 = o2.getDateCreation().toSqlTimestamp();
+                return t2.compareTo(t1);
+            }
+        };
+        for (Event e : list) {
+            List<User> userList = e.getUserList();
+            e.setUserList(sortUserList(userList));
+        }
+        Collections.sort(list, comparator);
     }
 
     public void addUserToEvent(String eventId, User user, boolean isFake) {

@@ -48,7 +48,7 @@
 </nav>
 <main>
 
-    <div class="container " style="margin-top: 15px">
+    <div class="container-fluid " style="margin-top: 15px">
 
 
         <div class="row content">

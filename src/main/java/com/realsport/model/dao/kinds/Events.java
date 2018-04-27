@@ -45,7 +45,7 @@ public class Events {
                     .set("maxCountAnswer", StringValue.of(String.valueOf(game.getMaxCountAnswer())))
                     .set("duration", game.getDuration())
                     .set("sport", game.getSport())
-                    .set("active", game.isActive())
+                    .set("active", BooleanValue.of(game.isActive()))
                     .set("dateCreation", TimestampValue.of(game.getDateCreation()))
                     .set("userList", ListValue.of(entityList))
                     .build();
@@ -112,6 +112,7 @@ public class Events {
             event.setAnswer("+");
             event.setMaxCountAnswer(Integer.parseInt((entity.getString("maxCountAnswer"))));
             event.setDuration(entity.getString("duration"));
+            event.setActive(entity.getBoolean("active"));
             event.setSport(entity.getString("sport"));
             event.setPlaygroundId(entity.getString("playgroundId"));
             event.setPlaygroundName(entity.getString("playgroundName"));
@@ -249,6 +250,7 @@ public class Events {
         event.setAnswer("+");
         event.setMaxCountAnswer(Integer.parseInt(entity.getString("maxCountAnswer")));
         event.setDuration(entity.getString("duration"));
+        event.setActive(entity.getBoolean("active"));
         event.setSport(entity.getString("sport"));
         event.setPlaygroundId(entity.getString("playgroundId"));
         event.setPlaygroundName(entity.getString("playgroundName"));
