@@ -46,8 +46,14 @@ public class Users {
         user.setUserId(entity.getString("userId"));
         user.setFirstName(entity.getString("firstName"));
         user.setLastName(entity.getString("lastName"));
+        user.setInfo(entity.getString("info"));
         try {
             user.setPlaygroundIdlList(convertListValuePlaygroundIdToList(entity.getList("playgroundIdList")));
+        } catch (Exception e) {
+            logger.warn(e);
+        }
+        try {
+            user.setTemplateGames(getTemplatesFromEntity(entity.getList("templates")));
         } catch (Exception e) {
             logger.warn(e);
         }
@@ -105,9 +111,9 @@ public class Users {
                     List<StringValue> list = new ArrayList<>();
                     list.addAll(listValue);
                     list.add(StringValue.of(playgroundId));
-                    transaction.put(Entity.newBuilder(task).set("playgroundIdList", list).build());
+                    transaction.update(Entity.newBuilder(task).set("playgroundIdList", list).build());
                 } else {
-                    transaction.put(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
+                    transaction.update(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
                 }
                 logger.info("Добавили в список групп пользователя " + userId + " группу " + playgroundId);
 
@@ -139,9 +145,9 @@ public class Users {
                             return !stringValue.get().equals(playgroundId);
                         }
                     }).toList();
-                    transaction.put(Entity.newBuilder(task).set("playgroundIdList", list).build());
+                    transaction.update(Entity.newBuilder(task).set("playgroundIdList", list).build());
                 } else {
-                    transaction.put(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
+                    transaction.update(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
                 }
                 logger.info("Удалили из списка групп пользователя " + userId + " группу " + playgroundId);
 
@@ -170,9 +176,9 @@ public class Users {
                     List<StringValue> list = new ArrayList<>();
                     list.addAll(listValue);
                     list.add(StringValue.of(playgroundId));
-                    transaction.put(Entity.newBuilder(user).set("eventListActive", list).build());
+                    transaction.update(Entity.newBuilder(user).set("eventListActive", list).build());
                 } else {
-                    transaction.put(Entity.newBuilder(user).set("eventListActive", ListValue.of(playgroundId)).build());
+                    transaction.update(Entity.newBuilder(user).set("eventListActive", ListValue.of(playgroundId)).build());
                 }
                 logger.info("Добавили в список групп пользователя " + userId + " группу " + playgroundId);
 
@@ -241,10 +247,10 @@ public class Users {
                     list.addAll(listValue);
                     id = String.valueOf(list.size() + 1);
                     list.add(getEntityFromTemplates(template, id));
-                    transaction.put(Entity.newBuilder(user).set("templates", list).build());
+                    transaction.update(Entity.newBuilder(user).set("templates", list).build());
                 } else {
                     id = "1";
-                    transaction.put(Entity.newBuilder(user).set("templates", ListValue.of(getEntityFromTemplates(template, id))).build());
+                    transaction.update(Entity.newBuilder(user).set("templates", ListValue.of(getEntityFromTemplates(template, id))).build());
                 }
                 logger.info("Добавили в список шаблонов пользователя " + userId + " шаблон " + template);
 
@@ -283,7 +289,7 @@ public class Users {
                 }
                 if (Objects.nonNull(listValue)) {
                     List<EntityValue> entityValues = new ArrayList<>();
-                    transaction.put(Entity.newBuilder(user).set("templates", entityValues).build());
+                    transaction.update(Entity.newBuilder(user).set("templates", entityValues).build());
                 }
                 logger.info("Удалили  из списка шаблонов пользователя " + userId + " шаблон " + templateId);
 
@@ -339,5 +345,16 @@ public class Users {
         game.setMaxCountAnswer((int) fullEntity.getLong("countAnswer"));
         game.setDuration(fullEntity.getString("duration"));
         return game;
+    }
+
+    public void editUserInfo(String userInfo, String userId) {
+        Entity entity = getDatastore().get(keyFactory.newKey(userId));
+        try {
+            if (Objects.nonNull(entity)) {
+                getDatastore().update(Entity.newBuilder(entity).set("info", userInfo).build());
+            }
+        } catch (Exception e) {
+            logger.warn(e);
+        }
     }
 }

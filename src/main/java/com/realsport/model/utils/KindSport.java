@@ -1,4 +1,4 @@
-package com.realsport.model.dao.kinds;
+package com.realsport.model.utils;
 
 public enum KindSport {
     FOOTBALL("Футбол"), BASKETBALL("Баскетбол"), VOLEYBALL("Волейбол");

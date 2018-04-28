@@ -100,9 +100,13 @@ public class RestController {
         cacheService.putToCache(playgroundId, userId);
     }
 
-    @RequestMapping("/editUserInfo")
-    public void editUserInfo(@RequestParam(value="userInfo", required=false, defaultValue="World") String userInfo) {
-        userService.editUserInfo(userInfo);
+    @RequestMapping(value = "/editUserInfo", method = RequestMethod.POST)
+    public void editUserInfo(@RequestParam(value="userInfo", required=false, defaultValue="World") String userInfo,
+                             @RequestParam(value = "userId") String userId) {
+        User user = getUser(userId);
+        user.setInfo(userInfo);
+        putToCacheUser(user);
+        userService.editUserInfo(userInfo, userId);
     }
 
     @RequestMapping("/handleAnswerMain")
@@ -298,6 +302,39 @@ public class RestController {
         }
         return null;
     }
+
+    @RequestMapping("/getNewDataEventsPlayground")
+    @ResponseBody
+    public List<Event> getNewDataEventsPlayground(Model model, @RequestParam(value = "date") long date,
+                                        @RequestParam(value = "userId") String userId,
+                                                  @RequestParam(value="playgroundId") String playgroundId) throws ParseException {
+
+        Date now = new Date(date);
+        logger.info("Date " + now);
+        User user = getUser(userId);
+        boolean isEditData = false;
+        MemcacheService memcacheService = getCacheObserver();
+        for (String id : user.getPlaygroundIdlList()) {
+            MemcacheService.IdentifiableValue value =  memcacheService.getIdentifiable(playgroundId);
+            if (Objects.nonNull(value)) {
+                LastEditData last = (LastEditData) value.getValue();
+                logger.info("Last Date Update " + last.getDate());
+                if (!Objects.equals(last.getIdUserEdit(), userId)) {
+                    if (now.before(last.getDate())) {
+                        logger.info("Данные изменились ");
+                        isEditData = true;
+                    }
+                }
+
+            }
+        }
+        if (isEditData) {
+            List<Event> listEvents = eventsService.getActiveEventsByIdGroup(playgroundId);
+            return listEvents;
+        }
+        return null;
+    }
+
     @RequestMapping("/getNewDataEvent")
     @ResponseBody
     public Event getNewDataEvent(Model model, @RequestParam(value = "date") long date,

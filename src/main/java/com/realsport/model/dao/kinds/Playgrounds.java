@@ -4,6 +4,7 @@ import com.google.cloud.datastore.*;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.*;
+import com.realsport.model.utils.KindSport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
@@ -150,9 +151,9 @@ public class Playgrounds {
                     List<EntityValue> list = new ArrayList<>();
                     list.addAll(listValue);
                     list.add(getEntityValueFromMinUser(minUser));
-                    transaction.put(Entity.newBuilder(task).set("players", list).build());
+                    transaction.update(Entity.newBuilder(task).set("players", list).build());
                 } else {
-                    transaction.put(Entity.newBuilder(task).set("players", ListValue.of(getEntityValueFromMinUser(minUser))).build());
+                    transaction.update(Entity.newBuilder(task).set("players", ListValue.of(getEntityValueFromMinUser(minUser))).build());
                 }
                 logger.info("Добавили  пользователя " + minUser + " в группу " + playgroundId);
 
@@ -193,7 +194,7 @@ public class Playgrounds {
                             return !entityValue.get().getString("userId").equals(userId);
                         }
                     }).toList();
-                    transaction.put(Entity.newBuilder(task).set("players", list).build());
+                    transaction.update(Entity.newBuilder(task).set("players", list).build());
                 }
                 logger.info("Удалили из списка Участников группы пользователя " + userId);
 

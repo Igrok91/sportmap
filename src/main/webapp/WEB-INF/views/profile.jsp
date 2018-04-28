@@ -71,10 +71,11 @@
                                     <li><a onclick="editInfoUser()">
                                         <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
                                     </a></li>
+                                    <li><a href="#"> <span class="glyphicon glyphicon-bell" style="margin-right: 20px"></span>Включить </a></li>
                                 </ul>
                             </div>
                             <div class="media-body " style="padding-left: 10px">
-                                <h4>Рябцев Игорь</h4>
+                                <h4>${user.lastName} ${user.firstName} </h4>
                                 <!--    <span  class="glyphicon glyphicon-star-empty" ></span><span style="color: gray; margin-right: 15px" > 105 </span>
                                    <span style="color: gray"> 3 место</span> -->
                             </div>
@@ -82,16 +83,16 @@
                     </div>
                     <div class="panel-body">
                         <div>
-                            <h5 style="color: gray"><span class="glyphicon glyphicon-info-sign"></span>
-                                    <span id="informationUser" style="color: #1b1b1b; padding-left: 10px" >
+                            <h5><span class="glyphicon glyphicon-info-sign"></span>
+                                <span id="informationUser" style="color: gray; padding-left: 10px" >
                                      <c:choose>
-                                           <c:when test="${user.info == null}">
-                                               нет информации
-                                           </c:when>
-                                           <c:otherwise>
-                                               ${user.info}
-                                           </c:otherwise>
-                                       </c:choose>
+                                         <c:when test="${user.info == null}">
+                                             нет информации
+                                         </c:when>
+                                         <c:otherwise>
+                                             ${user.info}
+                                         </c:otherwise>
+                                     </c:choose>
                                     </span>
 
                                 </h5>
@@ -116,19 +117,19 @@
 
                     </div>
                     <div class="list-group">
-                        <a href="#" class="list-group-item " data-toggle="modal" data-target="#groupModal">
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">14</span> <span
+                        <a href="#" class="list-group-item ">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out value="${user.playgroundIdlList.size()}"/></span> <span
                                     class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                             Группы
                         </a>
 
 
-                        <%-- <a href="#" class="list-group-item">
-                             <span class="badge">25 <span class="glyphicon glyphicon-menu-right"></span></span>
-                             Участие в играх</a>
-                         <a href="#" class="list-group-item">
-                             <span class="badge">4 <span class="glyphicon glyphicon-menu-right"></span></span>
-                             Организация игр</a>--%>
+                        <a href="#" class="list-group-item">
+                            <span class="badge"  style="background: #ffffff"><span style="color: gray"><c:out value="${user.playgroundIdlList.size()}"/> <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                            Участие в играх</a>
+                        <a href="#" class="list-group-item">
+                            <span class="badge"  style="background: #ffffff"><span style="color: gray"><c:out value="${user.playgroundIdlList.size()}"/> <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                            Организация игр</a>
                     </div>
 
                     <div style="padding: 20px">
@@ -146,55 +147,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="groupModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5 class="modal-title">Группы</h5>
-                </div>
-                <div class="modal-body">
-
-                    <div class="list-group">
-                        <c:forEach var="group" items="${allPlaygroundUser}">
-                       <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}" class="list-group-item borderless">
-                            <div class="media">
-                                <div class="pull-left">
-                                  <c:if test="${group.getSport() == 'Футбол'}">
-                                        <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
-                                             height="40"/>
-                                    </c:if>
-                                    <c:if test="${group.getSport() == 'Баскетбол'}">
-                                        <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
-                                             height="40"/>
-                                    </c:if>
-                                    <c:if test="${group.getSport() == 'Волейбол'}">
-                                        <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="40"
-                                             height="40"/>
-                                    </c:if>
-
-                                </div>
-
-
-                               <div class="media-body ">
-                                    <h4 class="media-heading"
-                                        style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.name}</h4>
-                                    <span style="color: gray">${group.getSport()}</span>
-                                    <hr>
-                                </div>
-                            </div>
-                        </a>
-                        </c:forEach>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
 <script>
     function editInfoUser() {
@@ -205,9 +157,12 @@
     function saveInfoUser() {
 
         var text = $('#userInfo').val();
+        var userId = '${userId}';
 
         $.ajax({
-            url: 'editUserInfo?userInfo=' + text
+            url: 'editUserInfo',
+            method: "POST",
+            data: ({userInfo: text, userId: userId})
         }).then(function () {
             $('#informationUser').text(text);
             $('#divUserInfo').addClass('hide');

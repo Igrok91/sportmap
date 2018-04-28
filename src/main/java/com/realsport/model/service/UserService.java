@@ -73,9 +73,8 @@ public class UserService {
 
     }
 
-    public void editUserInfo(String userInfo) {
-
-
+    public void editUserInfo(String userInfo, String userId) {
+            databaseService.editUserInfo(userInfo, userId);
     }
 
     public void addPlaygroundToUser(String userId, String playgroundId) {

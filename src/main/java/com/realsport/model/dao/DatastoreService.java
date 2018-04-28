@@ -179,4 +179,12 @@ public class DatastoreService {
     public List<Event> getEventsByIdGroup(String id) {
         return events.getEventsByIdGroup(id);
     }
+
+    public List<Event> getActiveEventsByIdGroup(String playgroundId) {
+        return events.getActiveEventsByIdGroup(playgroundId);
+    }
+
+    public void editUserInfo(String userInfo, String userId) {
+        users.editUserInfo(userInfo, userId);
+    }
 }

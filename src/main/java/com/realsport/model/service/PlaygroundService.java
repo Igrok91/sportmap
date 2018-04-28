@@ -5,10 +5,9 @@ import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.dao.PlaygroundDao;
 import com.realsport.model.dao.daoException.DataBaseException;
-import com.realsport.model.dao.kinds.KindSport;
+import com.realsport.model.utils.KindSport;
 import com.realsport.model.entityDao.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 

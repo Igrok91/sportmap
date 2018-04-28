@@ -194,7 +194,7 @@ public class Events {
                     }).toList();
                     listValue.addAll(listFilter);
                     listValue.addAll(getEntityListFromUserList(Collections.singletonList(user)));
-                    transaction.put(Entity.newBuilder(event).set("userList", listValue).build());
+                    transaction.update(Entity.newBuilder(event).set("userList", listValue).build());
                     logger.info("Добавили  пользователя " + user + " в событие " + eventId);
                 }
             }
@@ -219,7 +219,7 @@ public class Events {
                             return !entityValue.get().getString("userId").equals(userId);
                         }
                     }).toList();
-                    transaction.put(Entity.newBuilder(event).set("userList", listValue).build());
+                    transaction.update(Entity.newBuilder(event).set("userList", listValue).build());
                     logger.info("Удалили пользователя " + userId + " из события " + eventId);
                 }
             }
@@ -407,7 +407,6 @@ public class Events {
 
     public void deleteCommentFromEvent(String commentId, String eventId) {
         Transaction transaction = getDatastore().newTransaction();
-        Entity entity = null;
         try {
             Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
             if (Objects.nonNull(event)) {
@@ -426,7 +425,7 @@ public class Events {
                         }
                     }).toList();
                     listComment.addAll(valueList);
-                    entity = transaction.put(Entity.newBuilder(event).
+                     transaction.update(Entity.newBuilder(event).
                             set("commentsList", ListValue.of(listComment)).
                             build());
                     logger.info("Удален комментарий в событии " + eventId );
@@ -449,6 +448,27 @@ public class Events {
             Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                     .setKind(EVENTS)
                     .setFilter(StructuredQuery.PropertyFilter.eq("playgroundId", playgroundId))
+                    .build();
+            QueryResults<Entity>  queryResults = datastore.run(entityQuery);
+            for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
+                listEntity.add(it.next());
+            }
+            List<Event> eventPlaygrounds = getEventsFromEntity(listEntity);
+            return eventPlaygrounds;
+        } catch (Exception e) {
+            logger.error(e);
+            logger.warn("Событий еще нет");
+        }
+        return null;
+    }
+
+    public List<Event> getActiveEventsByIdGroup(String playgroundId) {
+        try {
+            Datastore datastore = getDatastore();
+            List<Entity>  listEntity = new ArrayList<>();
+            Query<Entity> entityQuery = Query.newEntityQueryBuilder()
+                    .setKind(EVENTS)
+                    .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("playgroundId", playgroundId), StructuredQuery.PropertyFilter.eq("active", true)))
                     .build();
             QueryResults<Entity>  queryResults = datastore.run(entityQuery);
             for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {

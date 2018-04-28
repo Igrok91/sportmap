@@ -174,8 +174,8 @@
 
                                 </div>
                                     <%--<hr style="margin-bottom: 9px; margin-top: 0px">--%>
-                                <div style="padding-bottom: 12px">
-                                    <span style="color: black" id="descrEvent_${event.idEvent}"></span>
+                                <div style="padding-bottom: 12px;">
+                                    <span style="color: black;" id="descrEvent_${event.idEvent}"></span>
                                 </div>
                                     <%--<hr class="hrDescription">--%>
                                     <div class="alert alert-danger fade in hide" role="alert" id="alertMax_${event.idEvent}">
@@ -371,7 +371,6 @@
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
             description.forEach(function (message, i) {
-
                 $('#descrEvent_' + id).append(message);
                 $('#descrEvent_' + id).append('<br>');
             });

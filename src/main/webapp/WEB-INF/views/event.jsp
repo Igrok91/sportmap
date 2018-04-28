@@ -106,10 +106,10 @@
                                             <c:when test="${event.userIdCreator == userId}">
                                                 <c:set var="playgroundId" value="${event.playgroundId}" />
                                                 <c:set var="sport" value="${event.sport}" />
-                                                <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}')" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
                                                                                                                                                                                    style="margin-right: 20px"></span>Отменить голос</a>
                                                 </li>
-                                                <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}')" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                                style="margin-right: 20px"></span>Проголосовать</a>
                                                 </li>
                                                 <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
@@ -136,10 +136,10 @@
                                             <c:otherwise>
                                                 <c:set var="playgroundId" value="${event.playgroundId}" />
                                                 <c:set var="sport" value="${event.sport}" />
-                                                <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}')" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
                                                                                                                                                                                     style="margin-right: 20px"></span>Отменить голос</a>
                                                 </li>
-                                                <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}')" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                                 style="margin-right: 20px"></span>Проголосовать</a>
                                                 </li>
                                                 <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
@@ -197,7 +197,7 @@
                             </div>
 
                             <div class="list-group" style="margin-bottom: 5px">
-                                <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="answerButton_${event.idEvent}">
+                                <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}')" id="answerButton_${event.idEvent}">
                                     <c:choose>
                                         <c:when test="${event.maxCountAnswer == 1000}">
                                             <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
@@ -222,14 +222,14 @@
                                         <c:forEach var="user" items="${event.userList}">
                                             <c:choose>
                                                 <c:when test="${user.isFake() == true}">
-                                                    <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
+                                                    <a href="user?userId=${user.userId}&eventId=${event.idEvent}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
                                                         <span id="${user.userId}_add_${event.idEvent}" count="${user.countFake}">+${user.countFake}</span>
 
                                                     </a>
 
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
+                                                    <a href="user?userId=${user.userId}&eventId=${event.idEvent}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
                                                         <img src="resources/image/foot.png" alt="Баскетбол" width="30"
                                                              height="30" id="${user.userId}_img_${event.idEvent}">
                                                     </a>
@@ -347,7 +347,7 @@
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                                    <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" class="btn btn-primary">Добавить</a>
+                                    <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}')" class="btn btn-primary">Добавить</a>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->

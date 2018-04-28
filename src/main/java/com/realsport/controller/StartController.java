@@ -58,7 +58,9 @@ public class StartController {
     public static final String FOOTBALL = "football";
     public static final String BASKETBALL = "basketball";
     public static final String VOLEYBALL = "voleyball";
-    public static final int INACTIVE_INTERVAL = 3600;
+    public static final String EVENTS = "events";
+    public static final String EVENT = "event";
+    public static final String PLAYGROUND = "playground";
 
     private static final Integer ADMIN = 172924708;
 
@@ -268,6 +270,12 @@ public class StartController {
         return user;
     }
 
+    private User getPlayers(String userId) {
+        logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
+        return userService.getUser(userId);
+    }
+
+
     private void addGroupToModel(Model model, String idGroup, User user) {
         Playground playground = playgroundService.getPlaygroundById(idGroup);
         if (playground != null) {
@@ -366,7 +374,8 @@ public class StartController {
             model.addAttribute("templates", new ArrayList<>());
             model.addAttribute("template", new ArrayList<>());
         } else {
-            List<TemplateGame> list = userService.getTemplatesUserById(userId);
+            User user = getUser(userId);
+            List<TemplateGame> list = user.getTemplateGames();
             ArrayList<String> userTemplates = new ArrayList<>();
             if (list != null) {
                 userTemplates = getUserTemplates(list);
@@ -510,6 +519,30 @@ public class StartController {
         model.addAttribute("user", user);
         model.addAttribute("where", where);
         return "event";
+    }
+
+    @RequestMapping(value = "/user")
+    public String toUser(Model model,
+                        @RequestParam(value = "userId") String userId,
+                        @RequestParam(name = "eventId", required = false) String eventId,
+                        @RequestParam(value = "playgroundId", required = false) String playgroundId) {
+        User user = getPlayers(userId);
+        model.addAttribute("userlastName", user.getLastName());
+        model.addAttribute("userfirstName", user.getFirstName());
+        model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("userInfo", user.getInfo());
+        String where = EVENTS;
+        if (eventId != null) {
+            where = EVENT;
+        } else if (playgroundId != null) {
+            where = PLAYGROUND;
+        }
+        model.addAttribute("where", where);
+        model.addAttribute("eventId", eventId);
+        model.addAttribute("playgroundId", playgroundId);
+        return "user";
     }
 
 

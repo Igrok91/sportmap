@@ -210,4 +210,8 @@ public class EventsService {
         }
         return minUserList;
     }
+
+    public List<Event> getActiveEventsByIdGroup(String playgroundId) {
+        return databaseService.getActiveEventsByIdGroup(playgroundId);
+    }
 }
