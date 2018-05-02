@@ -214,4 +214,8 @@ public class EventsService {
     public List<Event> getActiveEventsByIdGroup(String playgroundId) {
         return databaseService.getActiveEventsByIdGroup(playgroundId);
     }
+
+    public List<Event> getEventUserParticipantOrOrganize(List<EventUser> listParticipant) {
+        return databaseService.getEventUserParticipantorOrganize(listParticipant);
+    }
 }

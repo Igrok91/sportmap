@@ -62,6 +62,14 @@ public class RestController {
     public void removeTemplate(@RequestParam(value="templateId", required=false, defaultValue="World") String templateId
                                 , @RequestParam(value = "userId") String userId) {
         userService.removeTemplateUser(templateId, userId);
+        User user = getUser(userId);
+        user.getTemplateGames().removeIf(new Predicate<TemplateGame>() {
+            @Override
+            public boolean apply(TemplateGame templateGame) {
+                return templateGame.getTemplateId().equals(templateId);
+            }
+        });
+        putToCacheUser(user);
     }
 
     @RequestMapping(value = "sendCommentUser", method = RequestMethod.POST)
@@ -101,7 +109,7 @@ public class RestController {
     }
 
     @RequestMapping(value = "/editUserInfo", method = RequestMethod.POST)
-    public void editUserInfo(@RequestParam(value="userInfo", required=false, defaultValue="World") String userInfo,
+    public void editUserInfo(@RequestParam(value="userInfo", required=false) String userInfo,
                              @RequestParam(value = "userId") String userId) {
         User user = getUser(userId);
         user.setInfo(userInfo);

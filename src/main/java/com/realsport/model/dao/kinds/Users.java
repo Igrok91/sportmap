@@ -4,6 +4,7 @@ import com.google.cloud.datastore.*;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.Event;
+import com.realsport.model.entityDao.EventUser;
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 import org.apache.commons.logging.Log;
@@ -53,6 +54,11 @@ public class Users {
             logger.warn(e);
         }
         try {
+            user.setListParticipant(convertListValueEventUserToList(entity.getList("listParticipant")));
+        } catch (Exception e) {
+            logger.warn(e);
+        }
+        try {
             user.setTemplateGames(getTemplatesFromEntity(entity.getList("templates")));
         } catch (Exception e) {
             logger.warn(e);
@@ -60,6 +66,17 @@ public class Users {
 
         logger.info("Данные пользователя " + user);
         return user;
+    }
+
+    private List<EventUser> convertListValueEventUserToList(List<EntityValue> listParticipant) {
+        List<EventUser> eventUsers = new ArrayList<>();
+        for (EntityValue entityValue : listParticipant) {
+            EventUser eventUser = new EventUser();
+            eventUser.setEventId(entityValue.get().getLong("eventId"));
+            eventUser.setOrganize(entityValue.get().getBoolean("isOrganize"));
+            eventUsers.add(eventUser);
+        }
+        return eventUsers;
     }
 
     public User getUser(String id) {
@@ -146,8 +163,6 @@ public class Users {
                         }
                     }).toList();
                     transaction.update(Entity.newBuilder(task).set("playgroundIdList", list).build());
-                } else {
-                    transaction.update(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
                 }
                 logger.info("Удалили из списка групп пользователя " + userId + " группу " + playgroundId);
 
@@ -356,5 +371,49 @@ public class Users {
         } catch (Exception e) {
             logger.warn(e);
         }
+    }
+
+
+    public void addEventToUserParticipant(List<User> userList, Long eventId, String userId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+            for (User u: userList) {
+            Entity userEntity = transaction.get(keyFactory.newKey(u.getUserId()));
+            boolean isOrganize =  u.getUserId().equals(userId);
+            logger.info("user " + userEntity);
+            if (Objects.nonNull(userEntity)) {
+                List<EntityValue> list1 = new ArrayList<>();
+                List<EntityValue> listParticipant = null;
+                try {
+                    listParticipant = userEntity.getList("listParticipant");
+                } catch (Exception e) {
+                    logger.warn(e);
+                }
+
+                if (Objects.nonNull(listParticipant)) {
+                    list1.addAll(listParticipant);
+                    list1.add(EntityValue.of(getEntityEventUser(eventId, isOrganize)));
+                    transaction.update(Entity.newBuilder(userEntity).set("listParticipant", ListValue.of(list1)).build());
+                } else  {
+                    list1.add(EntityValue.of(getEntityEventUser(eventId, isOrganize)));
+                    transaction.update(Entity.newBuilder(userEntity).set("listParticipant", ListValue.of(list1)).build());
+                }
+            }
+            }
+            logger.info("Изменение списка пользователя, в которых учавствовал ");
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+        }
+    }
+
+    private FullEntity getEntityEventUser(Long eventId, boolean userIdCreator) {
+        FullEntity entity = FullEntity.newBuilder()
+                .set("eventId", LongValue.of(eventId))
+                .set("isOrganize", BooleanValue.of(userIdCreator))
+                .build();
+        return entity;
     }
 }

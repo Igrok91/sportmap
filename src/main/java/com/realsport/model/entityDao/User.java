@@ -14,6 +14,8 @@ public class User implements Serializable {
     private boolean isAdmin = false;
     private boolean isFake = false;
     private int countFake;
+    // Список id  событий, в которых учавствовал
+    private List<EventUser> listParticipant = new ArrayList<>();
     // Список id площадок
     private List<String> playgroundIdlList =  new ArrayList<>();
     // Список шаблонов пользователя
@@ -95,6 +97,16 @@ public class User implements Serializable {
     public void addTemplateGames(TemplateGame templateGames) {
         this.templateGames.add(templateGames);
     }
+
+    public List<EventUser> getListParticipant() {
+        return listParticipant;
+    }
+
+    public void setListParticipant(List<EventUser> listParticipant) {
+        this.listParticipant = listParticipant;
+    }
+
+
 
     @Override
     public String toString() {

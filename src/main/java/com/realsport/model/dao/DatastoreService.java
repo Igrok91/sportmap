@@ -187,4 +187,14 @@ public class DatastoreService {
     public void editUserInfo(String userInfo, String userId) {
         users.editUserInfo(userInfo, userId);
     }
+
+    public List<Event> getEventUserParticipantorOrganize(List<EventUser> listParticipant) {
+        return events.getEventUserParticipantorOrganize(listParticipant);
+    }
+
+
+
+    public void addEventToUserParticipant(List<User> userList, Long eventId, String userId) {
+        users.addEventToUserParticipant(userList, eventId, userId);
+    }
 }

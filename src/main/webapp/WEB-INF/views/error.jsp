@@ -13,7 +13,6 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <meta http-equiv="refresh" content="3; URL='start?viewer_id=${userId}'" />
     <style>
         .load {
             background: no-repeat center;
@@ -26,11 +25,17 @@
 <main>
     <div class="container-fluid text-center">
         <div class="row content">
-            <div  class="load" id ="loader" >
-                <img src="resources/images/errorgif.gif">
+            <div class="text-center">
+                <p style="color: gray"> Произошла ошибка</p>
+                <a href="#" onclick="reboot()" >Перезагрузить приложение</a>
             </div>
         </div>
     </div>
 </main>
+<script>
+    function reboot() {
+        location.reload();
+    }
+</script>
 </body>
 </html>

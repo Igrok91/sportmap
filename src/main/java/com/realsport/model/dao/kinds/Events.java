@@ -35,7 +35,8 @@ public class Events {
         try {
             List<User> list = game.getUserList();
             List<EntityValue> entityList = getEntityListFromUserList(list);
-            FullEntity task = FullEntity.newBuilder(keyFactory.newKey())
+            IncompleteKey incompleteKey = keyFactory.newKey();
+            FullEntity task = FullEntity.newBuilder(incompleteKey)
                     .set("description", StringValue.newBuilder(game.getDescription()).setExcludeFromIndexes(true).build())
                     .set("userIdCreator", game.getUserIdCreator())
                     .set("playgroundName", game.getPlaygroundName())
@@ -459,7 +460,7 @@ public class Events {
             logger.error(e);
             logger.warn("Событий еще нет");
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public List<Event> getActiveEventsByIdGroup(String playgroundId) {
@@ -480,6 +481,33 @@ public class Events {
             logger.error(e);
             logger.warn("Событий еще нет");
         }
-        return null;
+        return new ArrayList<>();
+    }
+
+    public List<Event> getEventUserParticipantorOrganize(List<EventUser> listParticipant) {
+        try {
+            if (listParticipant.size() > 0) {
+                Datastore datastore = getDatastore();
+                List<Entity> listEntity = new ArrayList<>();
+
+                for (EventUser eventUser : listParticipant) {
+                    Long eventId = eventUser.getEventId();
+                    try {
+                        Entity event = datastore.get(keyFactory.newKey(eventId));
+                        listEntity.add(event);
+                    } catch (Exception e) {
+                        logger.warn(e);
+                    }
+                }
+
+                List<Event> eventPlaygrounds = getEventsFromEntity(listEntity);
+                return eventPlaygrounds;
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            logger.warn("Событий еще нет");
+        }
+
+        return new ArrayList<>();
     }
 }

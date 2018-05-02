@@ -157,11 +157,11 @@
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "hide";
         document.getElementById("search").className = "";
-        $('#li2').attr('class', 'active');
+        $('#li2').attr('class', '');
         $('#li1').attr('class', '');
         $('#li3').attr('class', '');
         $('#li4').attr('class', '');
-        $('#li5').attr('class', '');
+        $('#li5').attr('class', 'active');
         setTimeout('resizeMain()', 300);
         initMap();
         isMapInit = true;
@@ -179,7 +179,7 @@
         $('#li5').attr('class', '');
         setTimeout('resizeGroups()', 300);
     }  else if (returnBack == 'home') {
-        console.log("group");
+        console.log("home");
         document.getElementById("event").className = "";
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "hide";
@@ -190,10 +190,22 @@
         $('#li4').attr('class', '');
         $('#li5').attr('class', '');
         setTimeout('resizeEvent()', 300);
+    } else if (returnBack == 'profileMain') {
+            console.log("profileMain");
+            document.getElementById("event").className = "hide";
+            document.getElementById("prof").className = "";
+            document.getElementById("group").className = "hide";
+            document.getElementById("search").className = "hide";
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', 'active');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', '');
+            setTimeout('resizeEvent()', 300);
     } else {
         setTimeout('resizeEvent()', 300);
     }
-    var sessUser =  ${sessionUser};
+    var sessUser =  ${jsonUser};
     var allPlayUser = sessUser.allPlaygroundUser;
 
     if (allPlayUser.length != 0) {

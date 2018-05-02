@@ -5,4 +5,9 @@
         <description>Clean up sessions</description>
         <schedule>every day 04:00</schedule>
     </cron>-->
+    <cron>
+        <url>/updateEvent</url>
+        <description>daily summary job</description>
+        <schedule>every 24 hours</schedule>
+    </cron>
 </cronentries>

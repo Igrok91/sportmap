@@ -91,7 +91,7 @@
                         <div class="panel-heading" style="padding-bottom: 3px; padding-top: 6px">
 
                             <div>
-                                <a class="pull-left" href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" >
+                                <a class="pull-left" href="playground?playgroundId=${event.playgroundId}&sport=${event.sport}&userId=${userId}" >
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                     <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/playbasket.png"
                                          alt="Баскетбол" width="40" height="40">
@@ -169,14 +169,14 @@
                         </div>
                         <div class="panel-body" style="padding-bottom: 0px">
                             <div style="padding-bottom: 12px">
-                                <a class="pull-left" href="#" >
+                                <a class="pull-left" href="user?userId=${event.userIdCreator}" >
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                     <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
                                          alt="Баскетбол" width="35" height="35">
 
                                 </a>
                                 <div class="media-body" >
-                                    <a href="#" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                                    <a href="user?userId=${event.userIdCreator}" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
                                     </a>
                                 </div>
 

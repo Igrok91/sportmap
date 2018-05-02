@@ -195,7 +195,7 @@
                                     <div class="text-center hide" style="color: gray; padding-bottom: 10px;" id="past_${event.idEvent}">
                                         <span >Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
                                     </div>
-                                    <a class="pull-left" href="#">
+                                    <a class="pull-left" href="user?userId=${event.userIdCreator}">
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object"
                                              src="resources/image/foot2.png"

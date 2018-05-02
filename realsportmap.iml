@@ -124,5 +124,6 @@
     <orderEntry type="library" name="Maven: io.grpc:grpc-context:1.9.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.instrumentation:instrumentation-api:0.4.3" level="project" />
     <orderEntry type="library" name="Maven: io.opencensus:opencensus-contrib-grpc-metrics:0.10.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:javax.servlet-api:3.0.1" level="project" />
   </component>
 </module>

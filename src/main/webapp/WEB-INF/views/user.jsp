@@ -72,14 +72,10 @@
                         <div>
                             <h5><span class="glyphicon glyphicon-info-sign"></span>
                                     <span id="informationUser" style="color: gray; padding-left: 10px; padding-right: 12px" >
-                                     <c:choose>
-                                           <c:when test="${userInfo == null}">
+                                           <c:if test="${userInfo == null || userInfo.length() == 0}">
                                                нет информации
-                                           </c:when>
-                                           <c:otherwise>
-                                               ${userInfo}
-                                           </c:otherwise>
-                                       </c:choose>
+                                           </c:if>
+
                                     </span>
 
                                 </h5>
@@ -88,19 +84,64 @@
 
                     </div>
                     <div class="list-group">
-                        <a href="#" class="list-group-item ">
-                            <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out value="${countGroup}"/></span> <span
-                                    class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
-                            Группы
-                        </a>
+                        <c:choose>
+                            <c:when test="${countGroup == 0}">
+                                <a href="#"  class="list-group-item ">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                <c:out value="нет"/>
+                            </span>
+                               </span>
+                                    Группы
+                                </a>
+                                <c:out value="нет"/>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="groupsUser?userId=${userId}&where=profile"  class="list-group-item ">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                <c:out value="${countGroup}"/>
+                            </span>
+                                <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
+                                    Группы
+                                </a>
 
+                            </c:otherwise>
+                        </c:choose>
 
-                        <a href="#" class="list-group-item">
-                            <span class="badge"  style="background: #ffffff"><span style="color: gray"><c:out value="${countGroup}"/> <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                             Участие в играх</a>
-                         <a href="#" class="list-group-item">
-                             <span class="badge"  style="background: #ffffff"><span style="color: gray"><c:out value="${countGroup}"/> <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                             Организация игр</a>
+                        <c:choose>
+                            <c:when test="${countParticipant == 0}">
+                                <a href="#" class="list-group-item">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                <c:out value="нет"/>
+                               </span></span>
+                                    Участие в играх</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="userParticipant?userId=${userId}&where=profile" class="list-group-item">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                  <c:out value="${countParticipant}"/>
+                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                                    Участие в играх</a>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <c:choose>
+                            <c:when test="${countOrganize == 0}">
+                                <a href="#" class="list-group-item">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                 <c:out value="нет"/>
+                            </span></span>
+                                    Организация игр</a>
+
+                            </c:when>
+                            <c:otherwise>
+                                <a href="userOrganize?userId=${userId}&where=profile" class="list-group-item">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                <c:out value="${countOrganize}"/>
+                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                                    Организация игр</a>
+
+                            </c:otherwise>
+                        </c:choose>
                     </div>
 
                     <div style="padding: 20px">
@@ -182,6 +223,16 @@
     }
 
     $('#returnBack').attr('href', returnBack);
+
+    var userInfo = ${userInfoJson};
+    if (userInfo.length > 0) {
+        var description = userInfo.split('\n');
+        $('#informationUser').html('');
+        description.forEach(function (message, i) {
+            $('#informationUser').append(message);
+            $('#informationUser').append('<br>');
+        });
+    }
 
 
     function resizeUser() {

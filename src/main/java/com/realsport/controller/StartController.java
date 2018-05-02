@@ -105,6 +105,7 @@ public class StartController {
                     model.addAttribute("eventUserActive", getEventUserActive(listEvents, id));
                 } else {
                     user = userService.registerUser(id);
+                    putToCacheUser(user);
                     isFirst = true;
                 }
                 model.addAttribute("user", user);
@@ -125,7 +126,7 @@ public class StartController {
             return "error";
         }
 
-        return !isFirst ? "main" : "begin";
+        return "main";
     }
 
     private List<String> getEventUserActive(List<Event> listEvents, String id) {
@@ -156,13 +157,21 @@ public class StartController {
         Gson gson = new Gson();
         map.put("isAdmin", user.isAdmin());
         map.put("playgroundUser", user.getPlaygroundIdlList());
+        map.put("info", user.getInfo());
 
         map.put("allPlaygroundUser", getAllPlaygroundUser(user));
         String jsonUser = gson.toJson(map);
-        model.addAttribute("sessionUser", jsonUser);
+        model.addAttribute("jsonUser", jsonUser);
+        int countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
+            @Override
+            public boolean apply(EventUser eventUser) {
+                return eventUser.isOrganize();
+            }
+        }).size();
 
 
         model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
+        model.addAttribute("countOrganize", countOrganize);
     }
 
     private List<Playground> getAllPlaygroundUser(User user) {
@@ -327,7 +336,7 @@ public class StartController {
 
     @RequestMapping("/playground")
     public String toGroupFromEvent(Model model, @RequestParam(value = "playgroundId") String id,
-                                @RequestParam(value = "userId") String userId,
+                                   @RequestParam(value = "userId") String userId,
                                    @RequestParam(value = "endList", required = false) String endList) {
         User user = getUser(userId);
         if (user == null) {
@@ -336,7 +345,7 @@ public class StartController {
         int size;
         if (Objects.nonNull(endList) && !endList.isEmpty()) {
             int end = Integer.parseInt(endList);
-            size = end * 2 ;
+            size = end * 2;
         } else {
             size = 2;
         }
@@ -397,12 +406,12 @@ public class StartController {
             , @RequestParam(value = "playgroundId", required = false) String id, @RequestParam(value = "sport", required = false) String sport
             , @RequestParam(value = "userId") String userId) {
         if (where.equals("group")) {
-            addPlaygroundDataToModel(model);
+
             model.addAttribute("returnBack", where);
             model.addAttribute("sport", sport);
             model.addAttribute("playgroundCoordinate", "empty");
         } else if (where.equals("map")) {
-            addPlaygroundDataToModel(model);
+
             String json = null;
             HashMap<String, Double> map = new HashMap<>();
             Gson gson = new Gson();
@@ -418,11 +427,14 @@ public class StartController {
             model.addAttribute("returnBack", where);
             model.addAttribute("sport", sport);
             model.addAttribute("playgroundCoordinate", json == null ? "empty" : json);
+        } else if (where.equals("profileMain")) {
+            model.addAttribute("returnBack", "profileMain");
+            model.addAttribute("playgroundCoordinate", "empty");
         } else {
-            addPlaygroundDataToModel(model);
             model.addAttribute("returnBack", "home");
             model.addAttribute("playgroundCoordinate", "empty");
         }
+        addPlaygroundDataToModel(model);
         User user = getUser(userId);
         setUserDataToModel(user, model);
         Gson gson = new Gson();
@@ -446,9 +458,8 @@ public class StartController {
                              @RequestParam(value = "where", required = false, defaultValue = "empty") String where) throws Exception {
         if (eventId != null) {
             eventsService.deleteGame(eventId);
+            cacheService.putToCache(id, userId);
         }
-
-        cacheService.putToCache(id, userId);
         if (where.equals("playground")) {
             return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
         }
@@ -458,7 +469,7 @@ public class StartController {
 
     @RequestMapping(value = "/toPlayers")
     public String toPlayers(Model model, @RequestParam(name = "eventId") String eventId,
-                             @RequestParam(value = "userId") String userId) throws Exception {
+                            @RequestParam(value = "userId") String userId) throws Exception {
         if (eventId != null) {
             Event event = eventsService.getEventById(eventId);
             List<MinUser> list = eventsService.getUserListEvent(event.getUserList());
@@ -472,7 +483,7 @@ public class StartController {
 
     @RequestMapping(value = "/toPlayersGroups")
     public String toPlayersGroups(Model model, @RequestParam(name = "playgroundId") String playgroundId,
-                            @RequestParam(value = "userId") String userId) throws Exception {
+                                  @RequestParam(value = "userId") String userId) throws Exception {
         if (playgroundId != null) {
             Playground playground = playgroundService.getPlaygroundById(playgroundId);
             List<MinUser> list = playground.getPlayers();
@@ -492,8 +503,15 @@ public class StartController {
                           @RequestParam(value = "playgroundId", required = false) String id,
                           @RequestParam(value = "where", required = false, defaultValue = "empty") String where) throws Exception {
         if (eventId != null) {
+            Event event = eventsService.getEventById(eventId);
             eventsService.endGame(eventId);
-
+            if (event.getUserList().size() > 0) {
+                Long evId = Long.valueOf(eventId);
+                User user = getUser(userId);
+                user.getListParticipant().add(new EventUser(evId, true));
+                putToCacheUser(user);
+                userService.addEventToUserParticipant(event.getUserList(), evId, userId);
+            }
         }
 
         cacheService.putToCache(id, userId);
@@ -523,15 +541,25 @@ public class StartController {
 
     @RequestMapping(value = "/user")
     public String toUser(Model model,
-                        @RequestParam(value = "userId") String userId,
-                        @RequestParam(name = "eventId", required = false) String eventId,
-                        @RequestParam(value = "playgroundId", required = false) String playgroundId) {
+                         @RequestParam(value = "userId") String userId,
+                         @RequestParam(name = "eventId", required = false) String eventId,
+                         @RequestParam(value = "playgroundId", required = false) String playgroundId) {
         User user = getPlayers(userId);
+        Gson gson = new Gson();
+        int countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
+            @Override
+            public boolean apply(EventUser eventUser) {
+                return eventUser.isOrganize();
+            }
+        }).size();
         model.addAttribute("userlastName", user.getLastName());
         model.addAttribute("userfirstName", user.getFirstName());
         model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
+        model.addAttribute("countOrganize", countOrganize);
+        model.addAttribute("countParticipant", user.getListParticipant().size());
 
         model.addAttribute("userId", userId);
+        model.addAttribute("userInfoJson", gson.toJson(user.getInfo()));
         model.addAttribute("userInfo", user.getInfo());
         String where = EVENTS;
         if (eventId != null) {
@@ -543,6 +571,78 @@ public class StartController {
         model.addAttribute("eventId", eventId);
         model.addAttribute("playgroundId", playgroundId);
         return "user";
+    }
+
+    @RequestMapping(value = "/userParticipant")
+    public String userParticipant(Model model,
+                                  @RequestParam(value = "userId") String userId,
+                                  @RequestParam(value = "where", required = false, defaultValue = "profileMain") String where) {
+
+        User user;
+        if (where.equals("profile")) {
+            where = "profile";
+            user = getPlayers(userId);
+        } else {
+            user = getUser(userId);
+        }
+        Gson gson = new Gson();
+         List<Event> list = eventsService.getEventUserParticipantOrOrganize(user.getListParticipant());
+       // List<Event> list = eventsService.getEvents(user.getPlaygroundIdlList());
+
+        model.addAttribute("listEvents", list);
+        model.addAttribute("listEventsJson", gson.toJson(list));
+        model.addAttribute("userId", userId);
+        model.addAttribute("where", where);
+
+        return "userParticipation";
+    }
+
+    @RequestMapping(value = "/groupsUser")
+    public String groupsUser(Model model,
+                             @RequestParam(value = "userId") String userId,
+                             @RequestParam(value = "where", required = false, defaultValue = "profileMain") String where) {
+        User user;
+        if (where.equals("profile")) {
+            where = "profile";
+            user = getPlayers(userId);
+        } else {
+            user = getUser(userId);
+        }
+
+        model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
+        model.addAttribute("userId", userId);
+        model.addAttribute("where", where);
+
+        return "groupsUser";
+    }
+
+    @RequestMapping(value = "/userOrganize")
+    public String userOrganize(Model model,
+                               @RequestParam(value = "userId") String userId,
+                               @RequestParam(value = "where", required = false, defaultValue = "profileMain") String where) {
+        User user;
+        if (where.equals("profile")) {
+            where = "profile";
+            user = getPlayers(userId);
+        } else {
+            user = getUser(userId);
+        }
+        Gson gson = new Gson();
+        List<Event> list = eventsService.getEventUserParticipantOrOrganize(user.getListParticipant());
+
+//        List<Event> list = eventsService.getEvents(user.getPlaygroundIdlList());
+        List<Event> listOrganize = FluentIterable.from(list).filter(new Predicate<Event>() {
+            @Override
+            public boolean apply(Event event) {
+                return event.getUserIdCreator().equals(userId);
+            }
+        }).toList();
+        model.addAttribute("listEvents", listOrganize);
+        model.addAttribute("listEventsJson", gson.toJson(listOrganize));
+        model.addAttribute("userId", userId);
+        model.addAttribute("where", where);
+
+        return "userParticipation";
     }
 
 
@@ -565,7 +665,7 @@ public class StartController {
         game.setDescription(descr);
         game.setAnswer(answer);
         game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 1000 : Integer.valueOf(sel2));
-        game.setDuration(sel1.substring(0, 1));
+        game.setDuration(sel1.substring(0, 1).trim());
         game.setUserIdCreator(userId);
         game.setPlaygroundId(playgroundId);
         game.setSport(sport);
@@ -763,7 +863,6 @@ public class StartController {
     }
 
 
-
     private String errorSendMessage(String userID, String idPlay, Exception e) {
         String error = "Произошла ошибка при отправки сообщения пользователю с Id " + userID + ", id площадки " + idPlay + ". Error: " + e.getMessage();
         return error;
@@ -786,8 +885,8 @@ public class StartController {
         return voleyballInfoList;
     }
 
-    public static HttpSession session() {
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        return attr.getRequest().getSession(true); // true == allow create
+
+    private void putToCacheUser(User user) {
+        getCacheUser().put(user.getUserId(), user);
     }
 }

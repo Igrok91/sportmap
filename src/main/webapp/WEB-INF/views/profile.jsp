@@ -71,7 +71,8 @@
                                     <li><a onclick="editInfoUser()">
                                         <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
                                     </a></li>
-                                    <li><a href="#"> <span class="glyphicon glyphicon-bell" style="margin-right: 20px"></span>Включить </a></li>
+                                    <li><a href="#"> <span class="glyphicon glyphicon-bell"
+                                                           style="margin-right: 20px"></span>Включить </a></li>
                                 </ul>
                             </div>
                             <div class="media-body " style="padding-left: 10px">
@@ -84,18 +85,13 @@
                     <div class="panel-body">
                         <div>
                             <h5><span class="glyphicon glyphicon-info-sign"></span>
-                                <span id="informationUser" style="color: gray; padding-left: 10px" >
-                                     <c:choose>
-                                         <c:when test="${user.info == null}">
+                                <span id="informationUser" style="color: gray; padding-left: 10px">
+                                         <c:if test="${user.info == null || user.info.length() == 0}">
                                              нет информации
-                                         </c:when>
-                                         <c:otherwise>
-                                             ${user.info}
-                                         </c:otherwise>
-                                     </c:choose>
+                                         </c:if>
                                     </span>
 
-                                </h5>
+                            </h5>
                             <div class="container-fluid hide" id="divUserInfo">
                                 <div class="row ">
                                     <div>
@@ -117,19 +113,64 @@
 
                     </div>
                     <div class="list-group">
-                        <a href="#" class="list-group-item ">
-                            <span class="badge" style="background: #ffffff"><span style="color: gray"><c:out value="${user.playgroundIdlList.size()}"/></span> <span
-                                    class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
-                            Группы
-                        </a>
+                        <c:choose>
+                            <c:when test="${user.playgroundIdlList.size() == 0}">
+                                <a href="#"  class="list-group-item ">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                <c:out value="нет"/>
+                            </span>
+                               </span>
+                                    Группы
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="#" id="toGroupsUser" class="list-group-item ">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                <c:out value="${user.playgroundIdlList.size()}"/>
+                            </span>
+                                <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
+                                    Группы
+                                </a>
+
+                            </c:otherwise>
+                        </c:choose>
 
 
-                        <a href="#" class="list-group-item">
-                            <span class="badge"  style="background: #ffffff"><span style="color: gray"><c:out value="${user.playgroundIdlList.size()}"/> <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                            Участие в играх</a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge"  style="background: #ffffff"><span style="color: gray"><c:out value="${user.playgroundIdlList.size()}"/> <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                            Организация игр</a>
+                        <c:choose>
+                            <c:when test="${user.listParticipant.size() == 0}">
+                                <a href="#" class="list-group-item">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                <c:out value="нет"/>
+                               </span></span>
+                                    Участие в играх</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="userParticipant?userId=${userId}" class="list-group-item">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                  <c:out value="${user.listParticipant.size()}"/>
+                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                                    Участие в играх</a>
+                            </c:otherwise>
+                        </c:choose>
+                        <c:choose>
+                            <c:when test="${countOrganize == 0}">
+                                <a href="#" class="list-group-item">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                 <c:out value="нет"/>
+                            </span></span>
+                                    Организация игр</a>
+
+                            </c:when>
+                            <c:otherwise>
+                                <a href="userOrganize?userId=${userId}" class="list-group-item">
+                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                <c:out value="${countOrganize}"/>
+                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                                    Организация игр</a>
+
+                            </c:otherwise>
+                        </c:choose>
+
                     </div>
 
                     <div style="padding: 20px">
@@ -149,25 +190,64 @@
     </div>
 </main>
 <script>
+    var jsonUser = ${jsonUser};
+    var userInfo = jsonUser.info;
+    if (userInfo.length > 0) {
+        var description = userInfo.split('\n');
+        $('#informationUser').html('');
+        description.forEach(function (message, i) {
+            $('#informationUser').append(message);
+            $('#informationUser').append('<br>');
+        });
+    }
+
     function editInfoUser() {
         $('#divUserInfo').removeClass('hide');
         $('#userInfo').focus();
+        if (userInfo.length > 0) {
+            var info = $('#informationUser').val();
+            $('#userInfo').append(info);
+        }
     }
 
     function saveInfoUser() {
 
-        var text = $('#userInfo').val();
+        var text = $('#userInfo').val().trim();
+
         var userId = '${userId}';
+        console.log("saveInfoUser " + text);
+        if (!text) {
+            text = '';
+            $('#informationUser').text("нет информации");
+        } else {
+            $('#informationUser').text(text);
+        }
 
         $.ajax({
             url: 'editUserInfo',
             method: "POST",
             data: ({userInfo: text, userId: userId})
         }).then(function () {
-            $('#informationUser').text(text);
+
             $('#divUserInfo').addClass('hide');
         });
     }
+
+    $(function () {
+        $('#toGroupsUser').click(function (event) {
+            document.getElementById("event").className = "hide";
+            document.getElementById("prof").className = "hide";
+            document.getElementById("group").className = "";
+            document.getElementById("search").className = "hide";
+
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', 'active');
+            $('#li5').attr('class', '');
+            resizeGroups();
+        });
+    });
 </script>
 </body>
 </html>
