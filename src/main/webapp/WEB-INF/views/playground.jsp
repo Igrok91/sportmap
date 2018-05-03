@@ -153,8 +153,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a class="list-group-item " href="toPlayersGroups?playgroundId=${playgroundId}&userId=${userId}">
-                                     <span class="badge" style="background: #ffffff"><span style="color: gray"
-                                                                                           id="players"><c:out
+                                     <span class="badge" style="background: #ffffff"><span style="color: gray" id="players"><c:out
                                              value="${players.size()}"/></span> <span
                                              class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                                     Участники
@@ -604,7 +603,7 @@
     function updateData() {
         console.log("observer");
         $.ajax({
-            url: 'getNewDataEventsPlayground?date=' + dateNow + '&userId=' + ${userId} + '&playgroundId=' + playgroundId
+            url: 'getNewDataEventsPlayground?date=' + dateNow + '&userId=' + ${userId} + '&playgroundId=' + ${playgroundId}
         }).then(function (value) {
             console.log("success");
 

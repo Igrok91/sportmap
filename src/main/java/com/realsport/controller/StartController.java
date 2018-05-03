@@ -87,9 +87,12 @@ public class StartController {
     }
 
     @RequestMapping(value = "/start")
-    public String onStart(Model model, @RequestParam(value = "viewer_id", required = false) String id, @RequestParam(value = "access_token", required = false) String access_token) {
+    public String onStart(Model model, @RequestParam(value = "viewer_id", required = false) String id,
+                          @RequestParam(value = "access_token", required = false) String access_token,
+                          @RequestParam(value = "auth_key", required = false) String auth_key) throws Exception {
         User user = null;
         boolean isFirst = false;
+        logger.info("Зашел пользователь с id " + id + ", access_token: " + access_token);
         if (id != null) {
             try {
                 user = getUser(id);
@@ -104,7 +107,7 @@ public class StartController {
                     // События в которых пользователь поставил плюс
                     model.addAttribute("eventUserActive", getEventUserActive(listEvents, id));
                 } else {
-                    user = userService.registerUser(id);
+                    user = userService.registerUser(id, access_token);
                     putToCacheUser(user);
                     isFirst = true;
                 }
@@ -126,6 +129,7 @@ public class StartController {
             return "error";
         }
 
+     //   messageService.getDataUserById(id, auth_key );
         return "main";
     }
 
@@ -162,12 +166,16 @@ public class StartController {
         map.put("allPlaygroundUser", getAllPlaygroundUser(user));
         String jsonUser = gson.toJson(map);
         model.addAttribute("jsonUser", jsonUser);
-        int countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
-            @Override
-            public boolean apply(EventUser eventUser) {
-                return eventUser.isOrganize();
-            }
-        }).size();
+        int countOrganize = 0;
+        if (user.getListParticipant().size() > 0) {
+             countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
+                @Override
+                public boolean apply(EventUser eventUser) {
+                    return eventUser.isOrganize();
+                }
+            }).size();
+        }
+
 
 
         model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
@@ -477,6 +485,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             model.addAttribute("userList", list);
             model.addAttribute("returnBack", "home");
+
         }
         return "players";
     }

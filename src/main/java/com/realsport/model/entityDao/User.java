@@ -10,7 +10,8 @@ public class User implements Serializable {
     private String userId;
     private String firstName;
     private String lastName;
-    private String info;
+    private String photoLink;
+    private String info = "";
     private boolean isAdmin = false;
     private boolean isFake = false;
     private int countFake;
@@ -106,7 +107,13 @@ public class User implements Serializable {
         this.listParticipant = listParticipant;
     }
 
+    public String getPhotoLink() {
+        return photoLink;
+    }
 
+    public void setPhotoLink(String photoLink) {
+        this.photoLink = photoLink;
+    }
 
     @Override
     public String toString() {

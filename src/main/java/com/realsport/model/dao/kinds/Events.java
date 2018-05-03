@@ -494,7 +494,9 @@ public class Events {
                     Long eventId = eventUser.getEventId();
                     try {
                         Entity event = datastore.get(keyFactory.newKey(eventId));
-                        listEntity.add(event);
+                        if (Objects.nonNull(event)) {
+                            listEntity.add(event);
+                        }
                     } catch (Exception e) {
                         logger.warn(e);
                     }

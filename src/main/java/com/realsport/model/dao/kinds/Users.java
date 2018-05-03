@@ -47,7 +47,11 @@ public class Users {
         user.setUserId(entity.getString("userId"));
         user.setFirstName(entity.getString("firstName"));
         user.setLastName(entity.getString("lastName"));
-        user.setInfo(entity.getString("info"));
+        try {
+            user.setInfo(entity.getString("info"));
+        } catch (Exception e) {
+            logger.warn(e);
+        }
         try {
             user.setPlaygroundIdlList(convertListValuePlaygroundIdToList(entity.getList("playgroundIdList")));
         } catch (Exception e) {

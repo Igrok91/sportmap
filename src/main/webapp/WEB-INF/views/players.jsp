@@ -54,7 +54,7 @@
             <div class="col-sm-8">
                 <div class="list-group" id="listGroupsUser" >
                     <c:forEach var="user" items="${userList}">
-                        <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}&userId=${userId}" class="list-group-item borderless">
+                        <a href="user?userId=${user.userId}" class="list-group-item borderless">
                             <div class="media">
                                 <div class="pull-left">
                                         <img class="media-object" src="resources/image/foot2.png" alt="Футбол" width="40"

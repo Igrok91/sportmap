@@ -36,6 +36,7 @@ public class EventsServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        logger.info("Обновление событий ");
         List<Entity> listEntity = new ArrayList<>();
         Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                 .setKind(EVENTS)
@@ -45,14 +46,16 @@ public class EventsServlet extends HttpServlet {
         for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
             listEntity.add(it.next());
         }
-        for (Entity entity : listEntity) {
-            Timestamp timestampValue = entity.getTimestamp("dateCreation").toSqlTimestamp();
-            Long duration = Integer.parseInt(entity.getString("duration")) * DURATION;
-            Date now = new Date();
-            Date expires = new Date(timestampValue.getTime() + duration);
-            if (now.after(expires)) {
-                updateEvent(entity);
-                updateUser(entity);
+        if (listEntity.size() > 0) {
+            for (Entity entity : listEntity) {
+                Timestamp timestampValue = entity.getTimestamp("dateCreation").toSqlTimestamp();
+                Long duration = Integer.parseInt(entity.getString("duration")) * DURATION;
+                Date now = new Date();
+                Date expires = new Date(timestampValue.getTime() + duration);
+                if (now.after(expires)) {
+                    updateEvent(entity);
+                    updateUser(entity);
+                }
             }
         }
         logger.info("Обновление событий прошло успешно");

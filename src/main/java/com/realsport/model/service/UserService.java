@@ -26,7 +26,8 @@ public class UserService {
     }
 
     public User getUser(String id) {
-        return databaseService.getUser(id);
+        User user = databaseService.getUser(id);
+        return user;
     }
 
     private User getUserStub(String id) {
@@ -54,8 +55,8 @@ public class UserService {
 
     }
 
-    public User registerUser(String id) {
-        User user = vkService.getDataUserById(id);
+    public User registerUser(String id,  String access_token) {
+        User user = vkService.getDataUserById(id, access_token );
         databaseService.registerUser(user);
         return user;
     }

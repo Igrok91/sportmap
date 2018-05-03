@@ -132,7 +132,24 @@
 </div>
 <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
-    var el = document.querySelector('.checkbox-switch');
+
+/*    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://api.vk.com/method/users.get?user_ids=\' +  + \'&fields=photo_max_orig&v=5.74', false);
+// 2. Конфигурируем его: GET-запрос на URL 'phones.json'
+    xhr.setRequestHeader('Access-Control-Allow-Origin', "*");
+    xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST');
+// 3. Отсылаем запрос
+    xhr.send();*/
+    VK.init(function() {
+    VK.api("users.get", {"user_ids": "${userId}", "v":"5.74"}, function (data) {
+        alert("first_name :" + data.response[0].first_name);
+    });
+    }, function() {
+    // API initialization failed
+    // Can reload page here
+    }, '5.74');
+
+var el = document.querySelector('.checkbox-switch');
     var el2 = document.querySelector('.checkbox-switch2');
     var mySwitch = new Switch(el, {
         showText: true,
@@ -234,11 +251,7 @@
         });
     });
 
-    VK.init(function() {
-    }, function() {
-        // API initialization failed
-        // Can reload page here
-    }, '5.74');
+
 
     function resizeEvent() {
        //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
@@ -271,7 +284,6 @@
 
 
 </script>
-
 
 </body>
 </html>
