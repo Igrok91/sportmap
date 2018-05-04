@@ -1,4 +1,4 @@
-function addIgrok(maxCountAnswer, eventId, userId, parameter) {
+function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList) {
     var addIgr = $('#countIgrok_' + eventId).val();
     $.ajax({
         url: 'addIgrok?eventId=' + eventId + '&count=' + addIgr + '&userId=' + userId
@@ -18,7 +18,7 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter) {
                     var count = parseInt($('#badge1_'+ eventId).text());
                     count = count + parseInt(addIgr);
                     $('#badge1_' + eventId).text(count);
-                    if (!isWatch) {
+                    if (!(userList > 2)) {
                         addFakeIgrokToUserList(eventId, addIgr, userId, parameter);
                     }
                     $('#addIgrok_'+ eventId).modal('hide');
@@ -36,7 +36,7 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter) {
                     }
                     count = count + parseInt(addIgr);
                     $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
-                    if (!isWatch) {
+                    if (!(userList > 2)) {
                         addFakeIgrokToUserList(eventId, addIgr, userId, parameter);
                     }
                     $('#addIgrok_' + eventId).modal('hide');
@@ -53,7 +53,7 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter) {
     });
 }
 
-function handleAnswer(maxCountAnswer, eventId, userId, parameter) {
+function handleAnswer(maxCountAnswer, eventId, userId, parameter, userList) {
     $.ajax({
         url: 'handleAnswer?eventId=' + eventId + '&userId=' + userId
     }).then(function (value) {
@@ -73,14 +73,14 @@ function handleAnswer(maxCountAnswer, eventId, userId, parameter) {
                     var count = parseInt($('#badge1_'+ eventId).text());
                     ++count;
                     $('#badge1_'+ eventId).text(count);
-                    if (!isWatch) {
+                    if (!(userList > 2)) {
                         addIgrokToUserList(eventId, userId, parameter);
                     }
                 } else {
                     var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
                     ++count;
                     $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                    if (!isWatch) {
+                    if (!(userList > 2)) {
                         addIgrokToUserList(eventId, userId, parameter);
                     }
                 }
@@ -97,7 +97,7 @@ function handleAnswer(maxCountAnswer, eventId, userId, parameter) {
     });
 }
 
-function handleAnswerMain(maxCountAnswer, eventId, userId, parameter) {
+function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList) {
     $.ajax({
         url: 'handleAnswerMain?eventId=' + eventId + '&userId=' + userId
     }).then(function (value) {
@@ -118,7 +118,7 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter) {
                     var count = $('#badge1_'+ eventId).text();
                     ++count;
                     $('#badge1_'+ eventId).text(count);
-                    if (!isWatch) {
+                    if (!(userList > 2)) {
                         addIgrokToUserList(eventId, userId, parameter);
                     }
                 } else {
@@ -128,7 +128,7 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter) {
                     $('#answerOk_'+ eventId).removeClass('hide');
                     ++count;
                     $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                    if (!isWatch) {
+                    if (!(userList > 2)) {
                         addIgrokToUserList(eventId, userId, parameter);
                     }
                 }

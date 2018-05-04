@@ -69,7 +69,7 @@ public class EventsServlet extends HttpServlet {
             Long eventId = event.getKey().getId();
             for (EntityValue entityValue : listUser) {
                 FullEntity user = entityValue.get();
-                String userId = user.getString("usrId");
+                String userId = user.getString("userId");
                 boolean isOrganize =  event.getString("userIdCreator").equals(userId);
                 Entity userEntity = transaction.get(keyFactory.newKey(userId));
                 List<EntityValue> list1 = new ArrayList<>();

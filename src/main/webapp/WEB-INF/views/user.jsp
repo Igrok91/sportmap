@@ -96,7 +96,7 @@
                                 <c:out value="нет"/>
                             </c:when>
                             <c:otherwise>
-                                <a href="groupsUser?userId=${userId}&where=profile"  class="list-group-item ">
+                                <a href="groupsUser?userId=${userId}&where=profile&playerId=${playerId}"  class="list-group-item ">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countGroup}"/>
                             </span>
@@ -116,7 +116,7 @@
                                     Участие в играх</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="userParticipant?userId=${userId}&where=profile" class="list-group-item">
+                                <a href="userParticipant?userId=${userId}&where=profile&playerId=${playerId}" class="list-group-item">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                   <c:out value="${countParticipant}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -134,7 +134,7 @@
 
                             </c:when>
                             <c:otherwise>
-                                <a href="userOrganize?userId=${userId}&where=profile" class="list-group-item">
+                                <a href="userOrganize?userId=${userId}&where=profile&playerId=${playerId}" class="list-group-item">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>

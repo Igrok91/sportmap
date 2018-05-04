@@ -26,6 +26,7 @@
 <main>
     <div class="container-fluid text-center">
         <div class="row content">
+            <p style="color: gray">Регистрация пользователя</p>
             <div  class="load" id ="loader" >
                 <img src="resources/images/errorgif.gif">
             </div>

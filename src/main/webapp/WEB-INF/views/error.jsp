@@ -14,7 +14,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <style>
-        .load {
+        .error {
             background: no-repeat center;
             margin-top: 200px;
         }
@@ -25,17 +25,26 @@
 <main>
     <div class="container-fluid text-center">
         <div class="row content">
-            <div class="text-center">
-                <p style="color: gray"> Произошла ошибка</p>
-                <a href="#" onclick="reboot()" >Перезагрузить приложение</a>
+            <div class="text-center error">
+                <p style="color: gray" id="smallError"> Произошла ошибка</p>
+                <div id="bigError" class="hide">
+                    <p class="hide">Произошла критическая ошибка</p>
+                    <p style="color: gray"  class="hide">Мы уже исправляем ошибку</p>
+                </div>
+
+                <a href="start?viewer_id=${userId}" class="btn" id="reboot">Перезагрузить приложение</a>
             </div>
         </div>
     </div>
 </main>
 <script>
-    function reboot() {
-        location.reload();
-    }
+var userId = '${userId}';
+if (userId.length == 0) {
+    $('#reboot').addClass('hide');
+    $('#smallError').addClass('hide');
+    $('#reboot').removeClass('hide');
+
+}
 </script>
 </body>
 </html>

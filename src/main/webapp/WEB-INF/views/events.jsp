@@ -90,10 +90,10 @@
                                                     <c:when test="${event.userIdCreator == userId}">
                                                         <c:set var="playgroundId" value="${event.playgroundId}" />
                                                         <c:set var="sport" value="${event.sport}" />
-                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}'), ${event.userList.size()}" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
                                                                                                                                                                                         style="margin-right: 20px"></span>Отменить голос</a>
                                                         </li>
-                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()})" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                                     style="margin-right: 20px"></span>Проголосовать</a>
                                                         </li>
                                                         <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
@@ -125,10 +125,10 @@
                                                     <c:otherwise>
                                                         <c:set var="playgroundId" value="${event.playgroundId}" />
                                                         <c:set var="sport" value="${event.sport}" />
-                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()})" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
                                                                                                                                                                                          style="margin-right: 20px"></span>Отменить голос</a>
                                                         </li>
-                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                        <li><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()})" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                                      style="margin-right: 20px"></span>Проголосовать</a>
                                                         </li>
                                                         <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
@@ -161,14 +161,14 @@
                                 </div>
                                 <div class="panel-body" style="padding-bottom: 0px">
                                 <div style="padding-bottom: 12px">
-                                    <a class="pull-left" href="user?userId=${event.userIdCreator}" >
+                                    <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}" >
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
                                              alt="Баскетбол" width="35" height="35">
 
                                     </a>
                                     <div class="media-body" >
-                                        <a href="user?userId=${event.userIdCreator}" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                                        <a href="user?playerId=${event.userIdCreator}&userId=${userId}" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
                                         </a>
                                     </div>
 
@@ -184,7 +184,7 @@
                                     </div>
 
                                     <div class="list-group" style="margin-bottom: 5px">
-                                        <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="answerButton_${event.idEvent}">
+                                        <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()})" id="answerButton_${event.idEvent}">
                                             <c:choose>
                                                 <c:when test="${event.maxCountAnswer == 1000}">
                                                     <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
@@ -206,17 +206,15 @@
                                     <div class="btn-group " style="margin-top: 5px">
                                         <div class="container-fluid">
                                             <div class="row" id="imgUserList_${event.idEvent}">
-                                                <c:forEach var="user" items="${event.userList}">
+                                                <c:forEach var="user" items="${event.userList}" end="3">
                                                     <c:choose>
                                                         <c:when test="${user.isFake() == true}">
-                                                            <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
+                                                            <a href="user?playerId=${user.userId}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
                                                                 <span id="${user.userId}_add_${event.idEvent}" count="${user.countFake}">+${user.countFake}</span>
-
                                                             </a>
-
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
+                                                            <a href="user?playerId=${user.userId}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
                                                                 <img src="resources/image/foot.png" alt="Баскетбол" width="30"
                                                                      height="30" id="${user.userId}_img_${event.idEvent}">
                                                             </a>
@@ -279,7 +277,7 @@
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                                            <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" class="btn btn-primary">Добавить</a>
+                                            <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()})" class="btn btn-primary">Добавить</a>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal-dialog -->
@@ -301,7 +299,7 @@
 
                                             <div class="list-group">
                                                 <c:forEach var="history" items="${event.historyEvent}">
-                                                    <a href="user?userId=${history.userId}" class="list-group-item borderless">
+                                                    <a href="user?playerId=${history.userId}&userId=${userId}" class="list-group-item borderless">
                                                         <div class="media">
                                                             <div class="pull-left">
                                                                 <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="40"
@@ -346,10 +344,10 @@
 
 <script>
     var listEvents = ${listEventsJson};
-    var isWatch = false;
+
     console.log(listEvents.length);
+    var userId = "${userId}";
     if (listEvents) {
-        var userId = "${userId}";
         listEvents.forEach(function (event, i) {
             var maxCountAnswer = event.maxCountAnswer;
             var usersList = event.userList;
@@ -376,7 +374,6 @@
             });
 
             if (usersList.length > 2) {
-                isWatch = true;
                 $('#watch_' + id).removeClass('hide');
             }
             // Определяем истинное значение игроков
@@ -450,6 +447,7 @@
     var dateNow = new Date().getTime();
 
     function updateData() {
+
         console.log("observer");
         $.ajax({
             url: 'getNewDataEvents?date=' + dateNow + '&userId=' + ${userId}
@@ -466,15 +464,16 @@
                 }
 
                 value.forEach(function (event, i) {
+                    var isWatch = false;
                     var eventId = event.idEvent;
                     var usersList = event.userList;
                     var commentList = event.commentsList;
                     if (commentList.length > 0 ) {
                         $('#countComment').text(commentList.length);
                     }
-                    if (usersList.length > 2) {
+                   if (usersList.length > 2) {
                         isWatch = true;
-                        $('#watch_' + eventId).removeClass('hide');
+                        //$('#watch_' + eventId).removeClass('hide');
                     }
 
                     if(event.maxCountAnswer == 1000) {
@@ -490,7 +489,7 @@
                                         var userImg = document.getElementById("templateUserList2").cloneNode(true);
                                         var addIgr = user.countFake;
                                         userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
-                                        userImg.href = "user?userId=" + user.userId;
+                                        userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
                                         var span = document.createElement('span');
                                         span.id = user.userId + '_add_' + eventId;
                                         span.setAttribute('count', addIgr);
@@ -503,7 +502,7 @@
                                     if (!isWatch) {
                                         var userImg = document.getElementById("templateUserList2").cloneNode(true);
                                         userImg.id = user.userId + '_imgUser_' + eventId;
-                                        userImg.href = "user?userId=" + user.userId;
+                                        userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
                                         $('#imgUserList_' + eventId).append(userImg);
                                     }
                                 }
@@ -524,7 +523,7 @@
                                         var userImg = document.getElementById("templateUserList2").cloneNode(true);
                                         var addIgr = user.countFake;
                                         userImg.id = user.userId + '_imgUser_' + eventId;
-                                        userImg.href = "user?userId=" + user.userId;
+                                        userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
                                         var span = document.createElement('span');
                                         span.id = user.userId + '_add_' + eventId;
                                         span.setAttribute('count', addIgr);
@@ -537,7 +536,7 @@
                                     if (!isWatch) {
                                         var userImg = document.getElementById("templateUserList2").cloneNode(true);
                                         userImg.id = user.userId + '_imgUser_' + eventId;
-                                        userImg.href = "user?userId=" + user.userId;
+                                        userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
                                         $('#imgUserList_' + eventId).append(userImg);
                                     }
                                 }

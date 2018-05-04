@@ -126,7 +126,7 @@
 
                                     </a>
                                     <div class="media-body" >
-                                        <a href="user?userId=${event.userIdCreator}" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                                        <a href="user?playerId=${event.userIdCreator}&userId=${userId}" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
                                         </a>
                                     </div>
 
@@ -162,14 +162,14 @@
                                             <c:forEach var="user" items="${event.userList}">
                                                 <c:choose>
                                                     <c:when test="${user.isFake() == true}">
-                                                        <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
+                                                        <a href="user?playerId=${user.userId}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
                                                             <span id="${user.userId}_add_${event.idEvent}" count="${user.countFake}">+${user.countFake}</span>
 
                                                         </a>
 
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <a href="user?userId=${user.userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
+                                                        <a href="user?playerId=${user.userId}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
                                                             <img src="resources/image/foot.png" alt="Баскетбол" width="30"
                                                                  height="30" id="${user.userId}_img_${event.idEvent}">
                                                         </a>
@@ -221,9 +221,9 @@
     var back = '${where}';
     var returnBack;
     if (back === 'profile') {
-        returnBack = 'user?userId=' + ${userId};
+        returnBack = 'user?userId=${userId}&playerId=${playerId}';
     } else if (back === 'profileMain') {
-        returnBack = 'home?&userId=' + ${userId} + '&where=profileMain';
+        returnBack = 'home?&userId=${userId}&where=profileMain';
     }
 
     $('#returnBack').attr('href', returnBack);

@@ -112,7 +112,7 @@
     var back = '${where}';
     var returnBack;
     if (back === 'profile') {
-        returnBack = 'user?userId=' + ${userId};
+        returnBack = 'user?userId=${userId}&playerId=${playerId}';
     } else if (back === 'profileMain') {
         returnBack = 'home?&userId=' + ${userId} + '&where=profileMain';
     }

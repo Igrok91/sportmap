@@ -61,6 +61,7 @@ public class StartController {
     public static final String EVENTS = "events";
     public static final String EVENT = "event";
     public static final String PLAYGROUND = "playground";
+    public static final String EVENT_ID = "eventId";
 
     private static final Integer ADMIN = 172924708;
 
@@ -87,17 +88,17 @@ public class StartController {
     }
 
     @RequestMapping(value = "/start")
-    public String onStart(Model model, @RequestParam(value = "viewer_id", required = false) String id,
+    public String onStart(Model model, @RequestParam(value = "viewer_id") String userId,
                           @RequestParam(value = "access_token", required = false) String access_token,
-                          @RequestParam(value = "auth_key", required = false) String auth_key) throws Exception {
+                          @RequestParam(value = "hash", required = false) String hash) throws Exception {
         User user = null;
         boolean isFirst = false;
-        logger.info("Зашел пользователь с id " + id + ", access_token: " + access_token);
-        if (id != null) {
+        logger.info("Зашел пользователь с id " + userId + ", access_token: " + access_token);
+        if (userId != null) {
             try {
-                user = getUser(id);
+                user = getUser(userId);
                 if (user != null) {
-                    setPlaygroundDataToModel(model, id);
+                    setPlaygroundDataToModel(model, userId);
                     setUserDataToModel(user, model);
                     Gson gson = new Gson();
                     List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
@@ -105,18 +106,34 @@ public class StartController {
                     model.addAttribute("listEvents", listEvents);
                     model.addAttribute("playgroundCoordinate", "empty");
                     // События в которых пользователь поставил плюс
-                    model.addAttribute("eventUserActive", getEventUserActive(listEvents, id));
+                    model.addAttribute("eventUserActive", getEventUserActive(listEvents, userId));
                 } else {
-                    user = userService.registerUser(id, access_token);
-                    putToCacheUser(user);
-                    isFirst = true;
+                    return "begin";
                 }
+                if (Objects.nonNull(hash) && !hash.isEmpty()) {
+                    logger.info("hash " + hash);
+                    String[] s = hash.split("=");
+                    String value;
+                    if (s.length > 1) {
+                         value = s[1];
+                    } else {
+                        logger.error("Нет значения id для event");
+                        model.addAttribute("userId", userId);
+                        return "error";
+                    }
+
+                    switch (s[0]) {
+                        case EVENT_ID:
+                            return "redirect:/event?eventId=" + value + "&userId=" + userId;
+                    }
+                }
+
                 model.addAttribute("user", user);
                 MinUser minUser = new MinUser();
-                minUser.setUserId(id);
+                minUser.setUserId(userId);
                 minUser.setFirstName(user.getFirstName());
                 minUser.setLastName(user.getLastName());
-                model.addAttribute("userId", id);
+                model.addAttribute("userId", userId);
                 model.addAttribute("firstName", user.getFirstName());
                 model.addAttribute("lastName", user.getLastName());
                 model.addAttribute("minUser", minUser);
@@ -125,7 +142,7 @@ public class StartController {
                 e.printStackTrace();
             }
         } else {
-            model.addAttribute("userId", id);
+            model.addAttribute("userId", userId);
             return "error";
         }
 
@@ -266,6 +283,7 @@ public class StartController {
         User user = getUser(userId);
 
         if (user == null) {
+            model.addAttribute("userId", userId);
             return "error";
         }
         logger.info("Переход в группу " + id);
@@ -332,6 +350,7 @@ public class StartController {
             , @RequestParam(value = "userId") String userId) {
         User user = getUser(userId);
         if (user == null) {
+            model.addAttribute("userId", userId);
             return "error";
         }
         addGroupToModel(model, id, user);
@@ -348,6 +367,7 @@ public class StartController {
                                    @RequestParam(value = "endList", required = false) String endList) {
         User user = getUser(userId);
         if (user == null) {
+            model.addAttribute("userId", userId);
             return "error";
         }
         int size;
@@ -539,6 +559,10 @@ public class StartController {
         Gson gson = new Gson();
         User user = getUser(userId);
         Event event = eventsService.getEventById(eventId);
+        if (Objects.isNull(event)) {
+            model.addAttribute("userId", userId);
+            return "error";
+        }
         model.addAttribute("event", event);
         model.addAttribute("eventJson", gson.toJson(event));
 
@@ -551,9 +575,10 @@ public class StartController {
     @RequestMapping(value = "/user")
     public String toUser(Model model,
                          @RequestParam(value = "userId") String userId,
+                         @RequestParam(value = "playerId") String playerId,
                          @RequestParam(name = "eventId", required = false) String eventId,
                          @RequestParam(value = "playgroundId", required = false) String playgroundId) {
-        User user = getPlayers(userId);
+        User user = getPlayers(playerId);
         Gson gson = new Gson();
         int countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
             @Override
@@ -568,6 +593,7 @@ public class StartController {
         model.addAttribute("countParticipant", user.getListParticipant().size());
 
         model.addAttribute("userId", userId);
+        model.addAttribute("playerId", playerId);
         model.addAttribute("userInfoJson", gson.toJson(user.getInfo()));
         model.addAttribute("userInfo", user.getInfo());
         String where = EVENTS;
@@ -585,12 +611,13 @@ public class StartController {
     @RequestMapping(value = "/userParticipant")
     public String userParticipant(Model model,
                                   @RequestParam(value = "userId") String userId,
+                                  @RequestParam(value = "playerId") String playerId,
                                   @RequestParam(value = "where", required = false, defaultValue = "profileMain") String where) {
 
         User user;
         if (where.equals("profile")) {
             where = "profile";
-            user = getPlayers(userId);
+            user = getPlayers(playerId);
         } else {
             user = getUser(userId);
         }
@@ -601,6 +628,7 @@ public class StartController {
         model.addAttribute("listEvents", list);
         model.addAttribute("listEventsJson", gson.toJson(list));
         model.addAttribute("userId", userId);
+        model.addAttribute("playerId", playerId);
         model.addAttribute("where", where);
 
         return "userParticipation";
@@ -609,17 +637,19 @@ public class StartController {
     @RequestMapping(value = "/groupsUser")
     public String groupsUser(Model model,
                              @RequestParam(value = "userId") String userId,
+                             @RequestParam(value = "playerId") String playerId,
                              @RequestParam(value = "where", required = false, defaultValue = "profileMain") String where) {
         User user;
         if (where.equals("profile")) {
             where = "profile";
-            user = getPlayers(userId);
+            user = getPlayers(playerId);
         } else {
             user = getUser(userId);
         }
 
         model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
         model.addAttribute("userId", userId);
+        model.addAttribute("playerId", playerId);
         model.addAttribute("where", where);
 
         return "groupsUser";
@@ -628,11 +658,12 @@ public class StartController {
     @RequestMapping(value = "/userOrganize")
     public String userOrganize(Model model,
                                @RequestParam(value = "userId") String userId,
+                               @RequestParam(value = "playerId") String playerId,
                                @RequestParam(value = "where", required = false, defaultValue = "profileMain") String where) {
         User user;
         if (where.equals("profile")) {
             where = "profile";
-            user = getPlayers(userId);
+            user = getPlayers(playerId);
         } else {
             user = getUser(userId);
         }
@@ -649,6 +680,7 @@ public class StartController {
         model.addAttribute("listEvents", listOrganize);
         model.addAttribute("listEventsJson", gson.toJson(listOrganize));
         model.addAttribute("userId", userId);
+        model.addAttribute("playerId", playerId);
         model.addAttribute("where", where);
 
         return "userParticipation";

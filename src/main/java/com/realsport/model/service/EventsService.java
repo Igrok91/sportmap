@@ -201,7 +201,7 @@ public class EventsService {
           User user = FluentIterable.from(userList).firstMatch(new Predicate<User>() {
               @Override
               public boolean apply(User user) {
-                  return user.isFake();
+                  return user.getUserId().equals(u.getUserId()) && user.isFake();
               }
           }).orNull();
           if (Objects.nonNull(user)) {

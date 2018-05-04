@@ -145,7 +145,7 @@
                                     Участие в играх</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="userParticipant?userId=${userId}" class="list-group-item">
+                                <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                   <c:out value="${user.listParticipant.size()}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -162,7 +162,7 @@
 
                             </c:when>
                             <c:otherwise>
-                                <a href="userOrganize?userId=${userId}" class="list-group-item">
+                                <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
