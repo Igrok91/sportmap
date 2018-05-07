@@ -152,8 +152,10 @@
                                 </a>
                             </c:when>
                             <c:otherwise>
-                                <a class="list-group-item " href="toPlayersGroups?playgroundId=${playgroundId}&userId=${userId}">
-                                     <span class="badge" style="background: #ffffff"><span style="color: gray" id="players"><c:out
+                                <a class="list-group-item "
+                                   href="toPlayersGroups?playgroundId=${playgroundId}&userId=${userId}">
+                                     <span class="badge" style="background: #ffffff"><span style="color: gray"
+                                                                                           id="players"><c:out
                                              value="${players.size()}"/></span> <span
                                              class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
                                     Участники
@@ -171,19 +173,19 @@
                                    </div>--%>
                 </div>
                 <c:choose>
-                    <c:when test="${listEvents.size() == 0}">
+                    <c:when test="${listSize == 0}">
                         <div class="panel  panel-default">
                             <div class="panel-heading ">Нет записей</div>
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <c:forEach var="event" items="${listEvents}" varStatus="status" end="${endList}">
+                        <c:forEach var="event" items="${listEvents}" varStatus="status">
 
                             <div class="panel panel-default">
                                 <c:if test="${status.first}">
                                     <div class="panel-heading" style="background: #EAEAEC">
                             <span class=" badge pull-right" style="background: #EAEAEC"><span style="color: gray"><c:out
-                                    value="${listEvents.size()}"/></span> <span class="glyphicon glyphicon-menu-down"
+                                    value="${listSize}"/></span> <span class="glyphicon glyphicon-menu-down"
                                                                                 style="color: gray"></span></span>
                                         События
 
@@ -191,8 +193,9 @@
                                     <hr style="padding-top: 0px; margin-top: 0px; padding-bottom: 0px;margin-bottom: 0px">
                                 </c:if>
                                 <div style="background: white;padding-left: 15px;padding-top: 15px">
-                                    <div class="text-center hide" style="color: gray; padding-bottom: 10px;" id="past_${event.idEvent}">
-                                        <span >Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
+                                    <div class="text-center hide" style="color: gray; padding-bottom: 10px;"
+                                         id="past_${event.idEvent}">
+                                        <span>Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
                                     </div>
                                     <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}">
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
@@ -200,7 +203,8 @@
                                              src="resources/image/foot2.png"
                                              alt="Баскетбол" width="35" height="35">
                                     </a>
-                                    <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; padding-right: 10px">
+                                    <div class="pull-right dropdown"
+                                         style=" margin-top: 4px;margin-bottom: 4px; padding-right: 10px">
                                         <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"> <span
                                                 class="glyphicon glyphicon-option-vertical"></span></a>
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
@@ -225,18 +229,21 @@
                                                                  style="margin-right: 20px"></span>История
                                                              изменений</a></li>--%>
                                                     <li>
-                                                        <a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt"
-                                                                                                                         style="margin-right: 20px"></span>К записи</a>
+                                                        <a href="event?eventId=${event.idEvent}&userId=${userId}"> <span
+                                                                class="glyphicon glyphicon-share-alt"
+                                                                style="margin-right: 20px"></span>К записи</a>
                                                     </li>
 
 
                                                     <li>
-                                                        <a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}" id="editEvent_${event.idEvent}">
+                                                        <a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}"
+                                                           id="editEvent_${event.idEvent}">
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
                                                         </a></li>
                                                     <li>
-                                                        <a href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}&where=playground" id="endEvent_${event.idEvent}"><span
+                                                        <a href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}&where=playground"
+                                                           id="endEvent_${event.idEvent}"><span
                                                                 class="glyphicon glyphicon-off"
                                                                 style="margin-right: 20px"></span>Завершить
                                                             опрос</a></li>
@@ -266,8 +273,9 @@
                                                                                                                                 style="margin-right: 20px"></span>История
                                                             изменений</a></li>--%>
                                                     <li>
-                                                        <a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt"
-                                                                                                                         style="margin-right: 20px"></span>К записи</a>
+                                                        <a href="event?eventId=${event.idEvent}&userId=${userId}"> <span
+                                                                class="glyphicon glyphicon-share-alt"
+                                                                style="margin-right: 20px"></span>К записи</a>
                                                     </li>
                                                 </c:otherwise>
                                             </c:choose>
@@ -280,7 +288,7 @@
                                             style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.userFirtsNameCreator} ${event.userLastNameCreator} </h5>
 
 
-                                        <span style="color: gray">${event.date}  </span>
+                                        <span style="color: gray">${event.date} </span>
 
                                     </div>
                                 </div>
@@ -333,7 +341,8 @@
                                                 <c:forEach var="user" items="${event.userList}">
                                                     <c:choose>
                                                         <c:when test="${user.isFake() == true}">
-                                                            <a href="user?playerId=${user.userId}&playgroundId=${playgroundId}&userId=${userId}" class="btn"
+                                                            <a href="user?playerId=${user.userId}&playgroundId=${playgroundId}&userId=${userId}"
+                                                               class="btn"
                                                                style="padding: 0px"
                                                                id="${user.userId}_imgUser_${event.idEvent}_fake">
                                                     <span id="${user.userId}_add_${event.idEvent}"
@@ -343,7 +352,8 @@
 
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <a href="user?playerId=${user.userId}&playgroundId=${playgroundId}&userId=${userId}" class="btn"
+                                                            <a href="user?playerId=${user.userId}&playgroundId=${playgroundId}&userId=${userId}"
+                                                               class="btn"
                                                                style="padding: 0px"
                                                                id="${user.userId}_imgUser_${event.idEvent}">
                                                                 <img src="resources/image/foot.png" alt="Баскетбол"
@@ -369,17 +379,19 @@
 
                                 </div>
                                 <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn"
-                                   style="margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents_${event.idEvent}"><span
+                                   style="margin-left: 5px;margin-top: 4px; margin-bottom: 4px"
+                                   id="commentEvents_${event.idEvent}"><span
                                         class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
                                         style="color: #77A5C5;margin-right: 5px"></span>
-                                    <span id="countComment" style="font-size: medium">
+                                    <span id="countComment_${event.idEvent}" style="font-size: medium">
                                         <c:if test="${event.commentsList.size() > 0}">
                                             ${event.commentsList.size()}
                                         </c:if>
                                     </span>
                                 </a>
                                 <a href="#" class="btn"
-                                   style=" margin-left: 5px; margin-left: 5px; margin-top: 4px;margin-bottom: 4px" id="share_${event.idEvent}"><span
+                                   style=" margin-left: 5px; margin-left: 5px; margin-top: 4px;margin-bottom: 4px"
+                                   id="share_${event.idEvent}"><span
                                         class="glyphicon glyphicon-bullhorn " aria-hidden="Комментировать"
                                         style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
 
@@ -390,11 +402,14 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
                                             <h4 class="modal-title">Добавить еще от меня</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <select class="form-control borderless" id="countIgrok_${event.idEvent}" name="sel1">
+                                            <select class="form-control borderless" id="countIgrok_${event.idEvent}"
+                                                    name="sel1">
                                                 <option>1</option>
                                                 <option>2</option>
                                                 <option>3</option>
@@ -404,20 +419,24 @@
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                                            <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()})" class="btn btn-primary">Добавить</a>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть
+                                            </button>
+                                            <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()})"
+                                               class="btn btn-primary">Добавить</a>
                                         </div>
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal-dialog -->
-                            </div><!-- /.modal -->
+                            </div>
+                            <!-- /.modal -->
 
                         </c:forEach>
                     </c:otherwise>
                 </c:choose>
-                <c:if test="${listEvents.size() >=  2}">
-                    <c:if test="${listEvents.size() >  endList}">
+                <c:if test="${listSize >=  2}">
+                    <c:if test="${listSize >  endList}">
                         <div class="text-center" style="padding-bottom: 10px">
-                            <a href="playground?playgroundId=${playgroundId}&userId=${userId}&endList=${endList}" class="btn">Загрузить еще</a>
+                            <a href="playground?playgroundId=${playgroundId}&userId=${userId}&endList=${endList}"
+                               class="btn">Загрузить еще</a>
                         </div>
                     </c:if>
                 </c:if>
@@ -444,8 +463,7 @@
             var id = event.idEvent;
             var activeEvent = event.active;
             console.log("idEvent " + id);
-            var element = document.getElementById(id);
-            var imgPlayground = document.getElementById(id+'_imgPlayground');
+
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
             description.forEach(function (message, i) {
@@ -459,11 +477,10 @@
             }
 
 
-
             // Определяем истинное значение игроков
             if (maxCountAnswer == 1000) {
-                var count = parseInt($('#badge1_'+id).text());
-                console.log("badge1 " + $('#badge1_'+id).text())
+                var count = parseInt($('#badge1_' + id).text());
+                console.log("badge1 " + $('#badge1_' + id).text())
                 if (usersList) {
                     usersList.forEach(function (user, i) {
                         if (user.countFake != 0) {
@@ -473,10 +490,10 @@
                     });
                 }
 
-                $('#badge1_'+ id).text(count);
+                $('#badge1_' + id).text(count);
             } else {
-                var count = parseInt($('#badge2_'+id).text().split(' / ')[0]);
-                console.log("badge2 " + $('#badge2_'+id).text());
+                var count = parseInt($('#badge2_' + id).text().split(' / ')[0]);
+                console.log("badge2 " + $('#badge2_' + id).text());
                 if (usersList) {
                     usersList.forEach(function (user, i) {
                         if (user.countFake != 0) {
@@ -486,7 +503,7 @@
                     });
                 }
 
-                $('#badge2_'+ id).text(count + ' / ' + maxCountAnswer );
+                $('#badge2_' + id).text(count + ' / ' + maxCountAnswer);
 
                 if (count >= event.maxCountAnswer) {
                     $('#answerButton_' + id).addClass('disabled')
@@ -496,31 +513,30 @@
             }
 
 
-
             var isActive = false;
             usersList.forEach(function (user, i) {
-                if (user.userId === userId ) {
+                if (user.userId === userId) {
                     isActive = true;
                 }
             });
 
             if (isActive) {
-                $('#answerButton_'+ id).removeClass('active');
-                $('#answerButton_'+ id).css('background','#EAEAEC');
+                $('#answerButton_' + id).removeClass('active');
+                $('#answerButton_' + id).css('background', '#EAEAEC');
 
-                $('#answerOk_'+ id).removeClass('hide');
-                $('#cancelAnswer_'+ id).removeClass('hide');
-                $('#doAnswer_'+ id).addClass('hide');
-                $('#cancelAnswer2_'+ id).removeClass('hide');
-                $('#doAnswer2_'+ id).addClass('hide');
+                $('#answerOk_' + id).removeClass('hide');
+                $('#cancelAnswer_' + id).removeClass('hide');
+                $('#doAnswer_' + id).addClass('hide');
+                $('#cancelAnswer2_' + id).removeClass('hide');
+                $('#doAnswer2_' + id).addClass('hide');
             } else {
-                $('#answerButton_'+ id).addClass('active');
-                $('#answerButton_'+ id).css('background','');
-                $('#answerOk_'+ id).addClass('hide');
-                $('#cancelAnswer_'+ id).addClass('hide');
-                $('#doAnswer_'+ id).removeClass('hide');
-                $('#cancelAnswer2_'+ id).addClass('hide');
-                $('#doAnswer2_'+ id).removeClass('hide');
+                $('#answerButton_' + id).addClass('active');
+                $('#answerButton_' + id).css('background', '');
+                $('#answerOk_' + id).addClass('hide');
+                $('#cancelAnswer_' + id).addClass('hide');
+                $('#doAnswer_' + id).removeClass('hide');
+                $('#cancelAnswer2_' + id).addClass('hide');
+                $('#doAnswer2_' + id).removeClass('hide');
             }
 
             if (activeEvent === false) {
@@ -560,13 +576,13 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 + 1;
                 $('#players').text(count2);
-              /*
-                $('#list_template').removeClass('hide');
+                /*
+                  $('#list_template').removeClass('hide');
 
-                var userData = document.getElementById("list_template").cloneNode(true);
-                userData.id = "list_" + userId;
-                $('#list_template').addClass('hide');
-                $('#listGroupsUser').append(userData)*/
+                  var userData = document.getElementById("list_template").cloneNode(true);
+                  userData.id = "list_" + userId;
+                  $('#list_template').addClass('hide');
+                  $('#listGroupsUser').append(userData)*/
             } else {
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');
@@ -575,7 +591,7 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 - 1;
                 $('#players').text(count2);
-            //    $('#list_' + userId).remove();
+                //    $('#list_' + userId).remove();
             }
         });
     }
@@ -602,7 +618,7 @@
     function updateData() {
         console.log("observer");
         $.ajax({
-            url: 'getNewDataEventsPlayground?date=' + dateNow + '&userId=' + ${userId} + '&playgroundId=' + ${playgroundId}
+            url: 'getNewDataEventsPlayground?date=' + dateNow + '&userId=' + ${userId} +'&playgroundId=' + ${playgroundId}
         }).then(function (value) {
             console.log("success");
 
@@ -618,90 +634,94 @@
                     var eventId = event.idEvent;
                     var usersList = event.userList;
                     var commentList = event.commentsList;
-                    if (commentList.length > 0 ) {
-                        $('#countComment').text(commentList.length);
-                    }
-                    if (usersList.length > 2) {
-                        isWatch = true;
-                       // $('#watch_' + eventId).removeClass('hide');
-                    }
-
-                    if(event.maxCountAnswer == 1000) {
-                        var count = usersList.length;
-                        $('#imgUserList_'+ eventId).empty();
-                        $('#templateUserList2').removeClass('hide');
-                        usersList.forEach(function (user, i) {
-                            // Если фейк
-                            if (user.countFake != 0) {
-                                count = (count - 1) + user.countFake;
-                                if (!isWatch) {
-                                    $('#imageUser').addClass('hide');
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    var addIgr = user.countFake;
-                                    userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
-                                    userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
-                                    var span = document.createElement('span');
-                                    span.id = user.userId + '_add_' + eventId;
-                                    span.setAttribute('count', addIgr);
-                                    span.appendChild(document.createTextNode("+" + addIgr));
-                                    userImg.appendChild(span);
-                                    $('#imgUserList_' + eventId).append(userImg);
-                                    $('#imageUser').removeClass('hide');
-                                }
-                            } else {
-                                if (!isWatch) {
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    userImg.id = user.userId + '_imgUser_' + eventId;
-                                    userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
-                                    $('#imgUserList_' + eventId).append(userImg);
-                                }
-                            }
-
-                        });
-                        $('#templateUserList2').addClass('hide');
-                        $('#badge1_' + eventId).text(count);
-                    } else {
-                        var count = usersList.length;
-
-                        $('#imgUserList_'+ eventId).empty();
-                        $('#templateUserList2').removeClass('hide');
-                        usersList.forEach(function (user, i) {
-                            if (user.countFake != 0) {
-                                count = (count - 1) + user.countFake;
-                                if (!isWatch) {
-                                    $('#imageUser').addClass('hide');
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    var addIgr = user.countFake;
-                                    userImg.id = user.userId + '_imgUser_' + eventId;
-                                    userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
-                                    var span = document.createElement('span');
-                                    span.id = user.userId + '_add_' + eventId;
-                                    span.setAttribute('count', addIgr);
-                                    span.appendChild(document.createTextNode("+" + addIgr));
-                                    userImg.appendChild(span);
-                                    $('#imgUserList_' + eventId).append(userImg);
-                                    $('#imageUser').removeClass('hide');
-                                }
-                            } else {
-                                if (!isWatch) {
-                                    var userImg = document.getElementById("templateUserList2").cloneNode(true);
-                                    userImg.id = user.userId + '_imgUser_' + eventId;
-                                    userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
-                                    $('#imgUserList_' + eventId).append(userImg);
-                                }
-                            }
-                        });
-                        $('#templateUserList2').addClass('hide');
-
-                        if (count >= event.maxCountAnswer) {
-                            $('#answerButton_' + eventId).addClass('disabled')
-                        } else {
-                            $('#answerButton_' + eventId).removeClass('disabled');
+                    var element = document.getElementById(eventId);
+                    if (element) {
+                        if (commentList.length > 0) {
+                            $('#countComment_' + eventId).text(commentList.length);
                         }
-                        $('#badge2_' + eventId).text(count + ' / ' + event.maxCountAnswer);
+                        if (usersList.length > 2) {
+                            isWatch = true;
+                            // $('#watch_' + eventId).removeClass('hide');
+                        }
+
+                        if (event.maxCountAnswer == 1000) {
+                            var count = usersList.length;
+                            $('#imgUserList_' + eventId).empty();
+                            $('#templateUserList2').removeClass('hide');
+                            usersList.forEach(function (user, i) {
+                                // Если фейк
+                                if (user.countFake != 0) {
+                                    count = (count - 1) + user.countFake;
+                                    if (!isWatch) {
+                                        $('#imageUser').addClass('hide');
+                                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                        var addIgr = user.countFake;
+                                        userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
+                                        userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
+                                        var span = document.createElement('span');
+                                        span.id = user.userId + '_add_' + eventId;
+                                        span.setAttribute('count', addIgr);
+                                        span.appendChild(document.createTextNode("+" + addIgr));
+                                        userImg.appendChild(span);
+                                        $('#imgUserList_' + eventId).append(userImg);
+                                        $('#imageUser').removeClass('hide');
+                                    }
+                                } else {
+                                    if (!isWatch) {
+                                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                        userImg.id = user.userId + '_imgUser_' + eventId;
+                                        userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
+                                        $('#imgUserList_' + eventId).append(userImg);
+                                    }
+                                }
+
+                            });
+                            $('#templateUserList2').addClass('hide');
+                            $('#badge1_' + eventId).text(count);
+                        } else {
+                            var count = usersList.length;
+
+                            $('#imgUserList_' + eventId).empty();
+                            $('#templateUserList2').removeClass('hide');
+                            usersList.forEach(function (user, i) {
+                                if (user.countFake != 0) {
+                                    count = (count - 1) + user.countFake;
+                                    if (!isWatch) {
+                                        $('#imageUser').addClass('hide');
+                                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                        var addIgr = user.countFake;
+                                        userImg.id = user.userId + '_imgUser_' + eventId;
+                                        userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
+                                        var span = document.createElement('span');
+                                        span.id = user.userId + '_add_' + eventId;
+                                        span.setAttribute('count', addIgr);
+                                        span.appendChild(document.createTextNode("+" + addIgr));
+                                        userImg.appendChild(span);
+                                        $('#imgUserList_' + eventId).append(userImg);
+                                        $('#imageUser').removeClass('hide');
+                                    }
+                                } else {
+                                    if (!isWatch) {
+                                        var userImg = document.getElementById("templateUserList2").cloneNode(true);
+                                        userImg.id = user.userId + '_imgUser_' + eventId;
+                                        userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
+                                        $('#imgUserList_' + eventId).append(userImg);
+                                    }
+                                }
+                            });
+                            $('#templateUserList2').addClass('hide');
+
+                            if (count >= event.maxCountAnswer) {
+                                $('#answerButton_' + eventId).addClass('disabled')
+                            } else {
+                                $('#answerButton_' + eventId).removeClass('disabled');
+                            }
+                            $('#badge2_' + eventId).text(count + ' / ' + event.maxCountAnswer);
+                        }
                     }
                 });
             }
+
         });
     }
 
@@ -712,17 +732,17 @@
     }
 
     function disabledEventPast(id) {
-            $('#past_' + id).removeClass('hide');
-            $('#doAnswer2_' + id).addClass('hide');
-            $('#doAnswer_' + id).addClass('hide');
-            $('#cancelAnswer2_' + id).addClass('hide');
-            $('#cancelAnswer_' + id).addClass('hide');
-            $('#editEvent_' + id).addClass('hide');
-            $('#endEvent_' + id).addClass('hide');
-            $('#share_' + id).addClass('hide');
+        $('#past_' + id).removeClass('hide');
+        $('#doAnswer2_' + id).addClass('hide');
+        $('#doAnswer_' + id).addClass('hide');
+        $('#cancelAnswer2_' + id).addClass('hide');
+        $('#cancelAnswer_' + id).addClass('hide');
+        $('#editEvent_' + id).addClass('hide');
+        $('#endEvent_' + id).addClass('hide');
+        $('#share_' + id).addClass('hide');
 
-            $('#answerButton_' + id).addClass('disabled');
-            $('#commentEvents_' + id).addClass('disabled');
+        $('#answerButton_' + id).addClass('disabled');
+        $('#commentEvents_' + id).addClass('disabled');
     }
 
 

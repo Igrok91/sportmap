@@ -24,29 +24,13 @@ public class Users {
     private static final KeyFactory keyFactory = getKeyFactory(Users.class);
 
 
-    public void registerUser(User user) {
-        Transaction tx = getDatastore().newTransaction();
-        try {
-            FullEntity task = FullEntity.newBuilder(keyFactory.newKey(user.getUserId()))
-                    .set("firstName", user.getFirstName())
-                    .set("userId", user.getUserId())
-                    .set("lastName", user.getLastName())
-                    .build();
-            tx.add(task);
-            tx.commit();
-
-        } finally {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-        }
-    }
 
     private User getUserFromEntity(Entity entity) {
         User user = new User();
         user.setUserId(entity.getString("userId"));
         user.setFirstName(entity.getString("firstName"));
         user.setLastName(entity.getString("lastName"));
+        user.setPhoto_50(entity.getString("photo_50"));
         try {
             user.setInfo(entity.getString("info"));
         } catch (Exception e) {
@@ -293,7 +277,7 @@ public class Users {
         return EntityValue.of(entity);
     }
 
-    public void removeTemplateUser(String templateId, String userId) {
+    public void removeTemplateUser( String userId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
             Entity user = transaction.get(keyFactory.newKey(userId));
@@ -310,7 +294,7 @@ public class Users {
                     List<EntityValue> entityValues = new ArrayList<>();
                     transaction.update(Entity.newBuilder(user).set("templates", entityValues).build());
                 }
-                logger.info("Удалили  из списка шаблонов пользователя " + userId + " шаблон " + templateId);
+                logger.info("Удалили  из списка шаблонов пользователя " + userId);
 
             }
             transaction.commit();
@@ -419,5 +403,24 @@ public class Users {
                 .set("isOrganize", BooleanValue.of(userIdCreator))
                 .build();
         return entity;
+    }
+
+    public void registerUser(String userId, String first_name, String last_name, String photo_50) {
+        Transaction tx = getDatastore().newTransaction();
+        try {
+            FullEntity task = FullEntity.newBuilder(keyFactory.newKey(userId))
+                    .set("firstName", first_name)
+                    .set("userId", userId)
+                    .set("lastName", last_name)
+                    .set("photo_50", photo_50)
+                    .build();
+            tx.add(task);
+            tx.commit();
+
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+        }
     }
 }

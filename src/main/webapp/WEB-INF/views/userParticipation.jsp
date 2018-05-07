@@ -59,7 +59,7 @@
             </div>
             <div class="col-sm-8">
                 <div class="list-group">
-                    <c:forEach var="event" items="${listEvents}">
+                    <c:forEach var="event" items="${listEvents}"  >
 
 
                         <div class="panel " id="${event.idEvent}">
@@ -119,7 +119,7 @@
                             </div>
                             <div class="panel-body" style="padding-bottom: 0px">
                                 <div style="padding-bottom: 12px">
-                                    <a class="pull-left" href="user?userId=${event.userIdCreator}" >
+                                    <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}" >
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
                                              alt="Баскетбол" width="35" height="35">
@@ -192,7 +192,7 @@
                             <a href="#" class="btn disabled" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
                                     class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
                                     style="color: #77A5C5;margin-right: 5px"></span>
-                                <span id="countComment" style="font-size: medium">
+                                <span id="countComment_${event.idEvent}" style="font-size: medium">
                                         <c:if test="${event.commentsList.size() > 0}">
                                             ${event.commentsList.size()}
                                         </c:if>
@@ -203,6 +203,22 @@
                     </c:forEach>
 
                 </div>
+                <c:if test="${listSize >=  2}">
+                    <c:if test="${listSize >  endList}">
+                        <c:choose>
+                            <c:when test="${parameter == 'userParticipant'}">
+                                <div class="text-center" style="padding-bottom: 10px">
+                                    <a href="userParticipant?playerId=${playerId}&userId=${userId}&endList=${endList}" class="btn">Загрузить еще</a>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="text-center" style="padding-bottom: 10px">
+                                    <a href="userOrganize?playerId=${playerId}&userId=${userId}&endList=${endList}" class="btn">Загрузить еще</a>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+                </c:if>
                 </div>
 
 
@@ -241,16 +257,16 @@
             console.log("idEvent " + id);
             var element = document.getElementById(id);
             var imgPlayground = document.getElementById(id+'_imgPlayground');
-            if (sp == 'Футбол') {
-                element.className = 'panel panel-success';
-                imgPlayground.src = "resources/image/стадион.png";
-            } else if (sp == 'Баскетбол') {
-                element.className = 'panel panel-warning';
-                imgPlayground.src = "resources/image/playbasket.png";
-            } else if (sp == 'Волейбол') {
-                element.className = 'panel panel-info';
-                imgPlayground.src = "resources/image/сетка.png";
-            }
+                if (sp == 'Футбол') {
+                    element.className = 'panel panel-success';
+                    imgPlayground.src = "resources/image/стадион.png";
+                } else if (sp == 'Баскетбол') {
+                    element.className = 'panel panel-warning';
+                    imgPlayground.src = "resources/image/playbasket.png";
+                } else if (sp == 'Волейбол') {
+                    element.className = 'panel panel-info';
+                    imgPlayground.src = "resources/image/сетка.png";
+                }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
             description.forEach(function (message, i) {

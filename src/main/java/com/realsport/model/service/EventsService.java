@@ -61,47 +61,49 @@ public class EventsService {
                     }
                 }
             }
-            sortEvent(eventOfGroupUser);
+            sortEvents(eventOfGroupUser);
         }
 
         return eventOfGroupUser;
     }
 
-    private List<User> sortUserList(List<User> userList) {
+    private List<User> sortUserListEvents(List<User> userList) {
         List<User> list = new ArrayList<>();
-        List<User> listWithFake = FluentIterable.from(userList).filter(new Predicate<User>() {
-            @Override
-            public boolean apply(User u) {
-                return u.isFake();
-            }
-        }).toList();
-
-        List<User> listWithOutFake = FluentIterable.from(userList).filter(new Predicate<User>() {
-            @Override
-            public boolean apply(User u) {
-                return !u.isFake();
-            }
-        }).toList();
-        for (User us : listWithOutFake) {
-            list.add(us);
-            User fake = FluentIterable.from(listWithFake).firstMatch(new Predicate<User>() {
+        if (userList.size() > 0) {
+            List<User> listWithFake = FluentIterable.from(userList).filter(new Predicate<User>() {
                 @Override
-                public boolean apply(User user) {
-                    return user.getUserId().equals(us.getUserId());
+                public boolean apply(User u) {
+                    return u.isFake();
                 }
-            }).orNull();
-            if (Objects.nonNull(fake)) {
-                list.add(fake);
+            }).toList();
+
+            List<User> listWithOutFake = FluentIterable.from(userList).filter(new Predicate<User>() {
+                @Override
+                public boolean apply(User u) {
+                    return !u.isFake();
+                }
+            }).toList();
+            for (User us : listWithOutFake) {
+                list.add(us);
+                User fake = FluentIterable.from(listWithFake).firstMatch(new Predicate<User>() {
+                    @Override
+                    public boolean apply(User user) {
+                        return user.getUserId().equals(us.getUserId());
+                    }
+                }).orNull();
+                if (Objects.nonNull(fake)) {
+                    list.add(fake);
+                }
             }
         }
         return list;
     }
 
-
-
-
     public Event getEventById(String eventId) {
-        return databaseService.getEventById(eventId);
+        Event event = databaseService.getEventById(eventId);
+        List<User> userList = event.getUserList();
+        event.setUserList(sortUserListEvents(userList));
+        return event;
     }
 
     public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
@@ -149,13 +151,12 @@ public class EventsService {
 
     public List<Event> getEventsByIdGroup(String id) {
         List<Event> list = databaseService.getEventsByIdGroup(id);
-
-        sortEvent(list);
+        sortEvents(list);
         return list;
 
     }
 
-    private void sortEvent(List<Event> list) {
+    private void sortEvents(List<Event> list) {
         Comparator<Event> comparator = new Comparator<Event>() {
             @Override
             public int compare(Event o1, Event o2) {
@@ -166,7 +167,7 @@ public class EventsService {
         };
         for (Event e : list) {
             List<User> userList = e.getUserList();
-            e.setUserList(sortUserList(userList));
+            e.setUserList(sortUserListEvents(userList));
         }
         Collections.sort(list, comparator);
     }
@@ -216,6 +217,9 @@ public class EventsService {
     }
 
     public List<Event> getEventUserParticipantOrOrganize(List<EventUser> listParticipant) {
-        return databaseService.getEventUserParticipantorOrganize(listParticipant);
+        List<Event> events = databaseService.getEventUserParticipantorOrganize(listParticipant);
+        sortEvents(events);
+
+        return events;
     }
 }

@@ -58,17 +58,21 @@ public class RestController {
     @Autowired
     private CacheService cacheService;
 
+    @RequestMapping(value = "registerUser", method = RequestMethod.POST)
+    public void registerUser(@RequestParam(value = "userId") String userId,
+                             @RequestParam(value = "first_name") String first_name,
+                             @RequestParam(value = "last_name") String last_name,
+                             @RequestParam(value = "photo_50") String photo_50) {
+    logger.info("Регистрируем пользователя с id " + userId + ", first_name " +
+                first_name + ", last_name " + last_name + ", photo_50 " + photo_50);
+    userService.registerUser(userId, first_name, last_name, photo_50);
+    }
+
     @RequestMapping("removeTemplate")
-    public void removeTemplate(@RequestParam(value="templateId", required=false, defaultValue="World") String templateId
-                                , @RequestParam(value = "userId") String userId) {
-        userService.removeTemplateUser(templateId, userId);
+    public void removeTemplate(@RequestParam(value = "userId") String userId) {
+        userService.removeTemplateUser(userId);
         User user = getUser(userId);
-        user.getTemplateGames().removeIf(new Predicate<TemplateGame>() {
-            @Override
-            public boolean apply(TemplateGame templateGame) {
-                return templateGame.getTemplateId().equals(templateId);
-            }
-        });
+        user.getTemplateGames().clear();
         putToCacheUser(user);
     }
 
@@ -385,14 +389,17 @@ public class RestController {
         game.setDescription(descr);
         game.setCountAnswer(sel2.equals("infinity") ? 1000 : Integer.valueOf(sel2));
         game.setDuration(sel1.substring(0, 1));
-        User user = getUser(userId);
-        user.addTemplateGames(game);
+
         logger.info("user Id " + userId);
+        logger.info("user descr " + descr);
         String minText = getMinText(descr);
         String id = userService.saveTemplateUser(game, userId);
         Template resp = new Template();
         resp.setDescription(minText);
         resp.setTemplateId(id);
+        User user = getUser(userId);
+        game.setTemplateId(id);
+        user.addTemplateGames(game);
         putToCacheUser(user);
         return toJson(resp);
     }

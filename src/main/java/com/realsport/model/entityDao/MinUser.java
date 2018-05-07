@@ -9,6 +9,7 @@ import java.util.Map;
 public class MinUser implements Serializable {
     private String userId;
     private String firstName;
+    private String photo_50;
     private String lastName;
     private int countFake;
 
@@ -35,6 +36,14 @@ public class MinUser implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPhoto_50() {
+        return photo_50;
+    }
+
+    public void setPhoto_50(String photo_50) {
+        this.photo_50 = photo_50;
     }
 
     @Override

@@ -237,7 +237,7 @@
                                 <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
                                         class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
                                         style="color: #77A5C5;margin-right: 5px"></span>
-                                    <span id="countComment" style="font-size: medium">
+                                    <span id="countComment_${event.idEvent}" style="font-size: medium">
                                         <c:if test="${event.commentsList.size() > 0}">
                                             ${event.commentsList.size()}
                                         </c:if>
@@ -412,7 +412,6 @@
             }
 
 
-
                 var isActive = false;
                 usersList.forEach(function (user, i) {
                     if (user.userId === userId ) {
@@ -469,7 +468,7 @@
                     var usersList = event.userList;
                     var commentList = event.commentsList;
                     if (commentList.length > 0 ) {
-                        $('#countComment').text(commentList.length);
+                        $('#countComment_' + eventId).text(commentList.length);
                     }
                    if (usersList.length > 2) {
                         isWatch = true;

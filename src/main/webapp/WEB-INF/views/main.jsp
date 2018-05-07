@@ -142,7 +142,6 @@
     xhr.send();*/
     VK.init(function() {
     VK.api("users.get", {"user_ids": "${userId}", "v":"5.74"}, function (data) {
-        alert("first_name :" + data.response[0].first_name);
     });
     }, function() {
     // API initialization failed

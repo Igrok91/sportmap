@@ -1,6 +1,7 @@
 package com.realsport.model.service;
 
 import com.realsport.model.dao.DatastoreService;
+import com.realsport.model.entityDao.MinUser;
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 
@@ -55,18 +56,17 @@ public class UserService {
 
     }
 
-    public User registerUser(String id,  String access_token) {
-        User user = vkService.getDataUserById(id, access_token );
-        databaseService.registerUser(user);
-        return user;
+    public void registerUser(String userId, String first_name, String last_name, String photo_50) {
+
+        databaseService.registerUser(userId, first_name, last_name, photo_50);
     }
 
     public List<TemplateGame> getTemplatesUserById(String userId) { ;
         return databaseService.getTemplatesUserById(userId);
     }
 
-    public void removeTemplateUser(String templateId, String id) {
-         databaseService.removeTemplateUser(templateId, id);
+    public void removeTemplateUser(String id) {
+         databaseService.removeTemplateUser(id);
     }
 
     public String saveTemplateUser(TemplateGame template, String userId) {

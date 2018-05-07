@@ -78,9 +78,6 @@ public class DatastoreService {
         events.publishEvent(game);
     }
 
-    public void registerUser(User user) {
-         users.registerUser(user);
-    }
 
     public User getUser(String id) {
         return users.getUser(id);
@@ -148,8 +145,8 @@ public class DatastoreService {
         return users.saveTemplateUser(template, userId);
     }
 
-    public void removeTemplateUser(String templateId, String id) {
-        users.removeTemplateUser(templateId, id);
+    public void removeTemplateUser(String id) {
+        users.removeTemplateUser(id);
     }
 
     public Event createEventByTemplate(String templateId, String id) {
@@ -196,5 +193,9 @@ public class DatastoreService {
 
     public void addEventToUserParticipant(List<User> userList, Long eventId, String userId) {
         users.addEventToUserParticipant(userList, eventId, userId);
+    }
+
+    public void registerUser(String userId, String first_name, String last_name, String photo_50) {
+        users.registerUser(userId, first_name, last_name, photo_50);
     }
 }
