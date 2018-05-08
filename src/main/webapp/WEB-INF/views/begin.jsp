@@ -65,7 +65,7 @@
             method: "POST",
             data: ({first_name: first_name, last_name: last_name, photo_50: photo_50, userId: userId}),
         }).then(function () {
-            setTimeout('replace', 3000);
+            setTimeout('replace()', 3000);
         });
     }
 

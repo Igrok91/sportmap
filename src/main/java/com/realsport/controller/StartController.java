@@ -143,8 +143,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             return "error";
         }
-
-     //   messageService.getDataUserById(id, auth_key );
+        //messageService.sendMessage(Integer.valueOf(userId), "edwedwedw");
         return "main";
     }
 
@@ -288,6 +287,7 @@ public class StartController {
         addGroupToModel(model, id, user, 2);
         model.addAttribute("returnBack", "map");
         model.addAttribute("userId", userId);
+        model.addAttribute("userPhoto", user.getPhoto_50());
         model.addAttribute("endList", 2);
         return "playground";
     }
@@ -360,6 +360,7 @@ public class StartController {
 
         model.addAttribute("returnBack", "group");
         model.addAttribute("userId", userId);
+        model.addAttribute("userPhoto", user.getPhoto_50());
         model.addAttribute("endList", 2);
         return "playground";
     }
@@ -383,6 +384,7 @@ public class StartController {
         logger.info("size list event " + size);
         addGroupToModel(model, id, user, size);
         model.addAttribute("returnBack", "home");
+        model.addAttribute("userPhoto", user.getPhoto_50());
         model.addAttribute("endList", size);
         model.addAttribute("userId", userId);
         return "playground";
@@ -591,6 +593,7 @@ public class StartController {
         }).size();
         model.addAttribute("userlastName", user.getLastName());
         model.addAttribute("userfirstName", user.getFirstName());
+        model.addAttribute("userPhoto", user.getPhoto_50());
         model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
         model.addAttribute("countOrganize", countOrganize);
         model.addAttribute("countParticipant", user.getListParticipant().size());
@@ -751,6 +754,9 @@ public class StartController {
         game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 1000 : Integer.valueOf(sel2));
         game.setDuration(sel1.substring(0, 1).trim());
         game.setUserIdCreator(userId);
+        game.setUserFirtsNameCreator(user.getFirstName());
+        game.setUserLastNameCreator(user.getLastName());
+        game.setUserCreatorPhoto(user.getPhoto_50());
         game.setPlaygroundId(playgroundId);
         game.setSport(sport);
         game.setDateCreation(Timestamp.of(new Date()));
@@ -792,6 +798,9 @@ public class StartController {
             game.setSport(sport);
             game.setPlaygroundName(namePlayground);
             game.setUserIdCreator(userId);
+            game.setUserFirtsNameCreator(user.getFirstName());
+            game.setUserLastNameCreator(user.getLastName());
+            game.setUserCreatorPhoto(user.getPhoto_50());
             eventsService.publishEvent(game);
         }
         cacheService.putToCache(playgroundId, userId);

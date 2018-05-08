@@ -88,6 +88,7 @@ public class RestController {
         comment.setMessage(message);
         comment.setFirstName(user.getFirstName());
         comment.setLastName(user.getLastName());
+        comment.setUserPhoto(user.getPhoto_50());
         comment.setDateCreation(Timestamp.of(new Date()));
         comment.setDate(getDateFormat());
         String commentId =  eventsService.addCommentToEvent(eventId, comment);
@@ -247,6 +248,7 @@ public class RestController {
         userMin.setUserId(user.getUserId());
         userMin.setFirstName(user.getFirstName());
         userMin.setLastName(user.getLastName());
+        userMin.setPhoto_50(user.getPhoto_50());
         return userMin;
     }
 

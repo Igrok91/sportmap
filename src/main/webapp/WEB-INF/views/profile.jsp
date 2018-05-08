@@ -42,6 +42,8 @@
                     class="glyphicon glyphicon-bell"></span></a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                 <li><a href="#">Включить уведомления</a></li>
+                <li class="hide"><a href="#" > <span class="glyphicon glyphicon-bell "
+                                       style="margin-right: 20px"></span>Выключить уведомления </a></li>
             </ul>
         </div>
     </div>
@@ -58,25 +60,30 @@
             <div class="col-sm-8">
                 <div class="panel panel-default">
                     <div class="panel-heading ">
-                        <div>
-                            <a class="pull-left" href="#">
-                                <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
-                                <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="40"
-                                     height="40">
-                            </a>
-                            <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
+                        <div style="margin-bottom: 10px">
+                            <div class="pull-left" >
+                                <a  href="https://vk.com/id${userId}" target="_blank" >
+                                    <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
+                                    <img class="round" src="${user.photo_50}" alt="Футбол" width="50"
+                                         height="50">
+                                </a>
+                            </div>
+
+                            <div class="pull-right dropdown" style=" margin-top: 5px;margin-bottom: 5px; ">
                                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3"> <span
                                         class="glyphicon glyphicon-option-vertical"></span></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
                                     <li><a onclick="editInfoUser()">
                                         <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
                                     </a></li>
-                                    <li><a href="#"> <span class="glyphicon glyphicon-bell"
+                                    <li><a href="#" onclick="getPermissionSendMessages()"> <span class="glyphicon glyphicon-bell"
                                                            style="margin-right: 20px"></span>Включить </a></li>
+                                    <li class="hide"><a href="#"> <span class="glyphicon glyphicon-bell"
+                                                           style="margin-right: 20px"></span>Выключить </a></li>
                                 </ul>
                             </div>
-                            <div class="media-body " style="padding-left: 10px">
-                                <h4>${user.lastName} ${user.firstName} </h4>
+                            <div class="media-body " style="padding-left: 15px;padding-top: 5px">
+                                <h4>${user.firstName} ${user.lastName}</h4>
                                 <!--    <span  class="glyphicon glyphicon-star-empty" ></span><span style="color: gray; margin-right: 15px" > 105 </span>
                                    <span style="color: gray"> 3 место</span> -->
                             </div>
@@ -248,6 +255,11 @@
             resizeGroups();
         });
     });
+    function getPermissionSendMessages() {
+        VK.callMethod("showAllowMessagesFromCommunityBox");
+    }
+
+
 </script>
 </body>
 </html>

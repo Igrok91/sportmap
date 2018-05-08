@@ -30,9 +30,18 @@
             resize: none;
         }
 
+        .liOptions {
+            margin-bottom: 2px;
+            margin-top: 2px;
+        }
+
         a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
+        }
+
+        .round {
+            border-radius: 50%;
         }
 
 
@@ -81,10 +90,10 @@
                                                 <c:when test="${event.userIdCreator == userId}">
                                                     <c:set var="playgroundId" value="${event.playgroundId}" />
                                                     <c:set var="sport" value="${event.sport}" />
-                                                    <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
+                                                    <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
                                                                                                                                                  style="margin-right: 20px"></span>К площадке</a>
                                                     </li>
-                                                    <li><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt"
+                                                    <li class="liOptions"><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt"
                                                                                                                          style="margin-right: 20px"></span>К записи</a>
                                                     </li>
 
@@ -94,9 +103,9 @@
                                                     <c:set var="playgroundId" value="${event.playgroundId}" />
                                                     <c:set var="sport" value="${event.sport}" />
 
-                                                    <li><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home" style="margin-right: 20px"></span>К площадке</a>
+                                                    <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home" style="margin-right: 20px"></span>К площадке</a>
                                                     </li>
-                                                    <li><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt" style="margin-right: 20px"></span>К записи</a>
+                                                    <li class="liOptions"><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt" style="margin-right: 20px"></span>К записи</a>
                                                     </li>
                                                 </c:otherwise>
                                             </c:choose>
@@ -121,12 +130,12 @@
                                 <div style="padding-bottom: 12px">
                                     <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}" >
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                        <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/foot2.png"
-                                             alt="Баскетбол" width="35" height="35">
+                                        <img id="${event.idEvent}_imgPlayground" class="media-object round" src="${event.userCreatorPhoto}"
+                                             alt="Баскетбол" width="40" height="40">
 
                                     </a>
                                     <div class="media-body" >
-                                        <a href="user?playerId=${event.userIdCreator}&userId=${userId}" style="margin-left: 3px;padding-left: 3px" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                                        <a href="user?playerId=${event.userIdCreator}&userId=${userId}" style="margin-left: 3px;" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
                                         </a>
                                     </div>
 
@@ -170,8 +179,8 @@
                                                     </c:when>
                                                     <c:otherwise>
                                                         <a href="user?playerId=${user.userId}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
-                                                            <img src="resources/image/foot.png" alt="Баскетбол" width="30"
-                                                                 height="30" id="${user.userId}_img_${event.idEvent}">
+                                                            <img src="${user.photo_50}" alt="Баскетбол" width="35" class="round"
+                                                                 height="35" id="${user.userId}_img_${event.idEvent}">
                                                         </a>
                                                     </c:otherwise>
                                                 </c:choose>

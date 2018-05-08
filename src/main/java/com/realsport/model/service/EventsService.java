@@ -194,6 +194,7 @@ public class EventsService {
                 minUser.setUserId(user.getUserId());
                 minUser.setFirstName(user.getFirstName());
                 minUser.setLastName(user.getLastName());
+                minUser.setPhoto_50(user.getPhoto_50());
                 return minUser;
             }
         }).toList();

@@ -12,6 +12,7 @@ public class Event implements Serializable{
     private String userIdCreator;
     private String userFirtsNameCreator;
     private String userLastNameCreator;
+    private String userCreatorPhoto;
     private String description;
 
     private String answer;
@@ -168,5 +169,13 @@ public class Event implements Serializable{
 
     public void setHistoryEvent(List<HistoryEvent> historyEvent) {
         this.historyEvent = historyEvent;
+    }
+
+    public String getUserCreatorPhoto() {
+        return userCreatorPhoto;
+    }
+
+    public void setUserCreatorPhoto(String userCreatorPhoto) {
+        this.userCreatorPhoto = userCreatorPhoto;
     }
 }

@@ -10,6 +10,7 @@ public class Comment implements Serializable{
     private String firstName;
     private String lastName;
     private String message;
+    private String userPhoto;
     private String date;
     private boolean success;
     private Timestamp dateCreation;
@@ -76,5 +77,13 @@ public class Comment implements Serializable{
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
     }
 }

@@ -32,11 +32,20 @@
             cursor: default; /*  курсор в виде стрелки */
         }
 
+        .liOptions {
+            margin-bottom: 2px;
+            margin-top: 2px;
+        }
+
         .borderless {
             border: 0 none;
 
             box-shadow: none;
 
+        }
+
+        .round {
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -51,8 +60,8 @@
 </nav>
 <a href="" class="btn hide" style="padding: 0px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
-    <img src="resources/image/foot.png" alt="Баскетбол" width="30"
-         height="30" id="imageUser">
+    <img src="" alt="Баскетбол" width="35" class="round"
+         height="35" id="imageUser">
 </a>
 <a href="toUser?userId=${userId}" class="list-group-item borderless hide" id="list_template">
     <div class="media">
@@ -199,9 +208,9 @@
                                     </div>
                                     <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}">
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                        <img id="${event.idEvent}_imgPlayground" class="media-object"
-                                             src="resources/image/foot2.png"
-                                             alt="Баскетбол" width="35" height="35">
+                                        <img id="${event.idEvent}_imgPlayground" class="media-object round"
+                                             src="${event.userCreatorPhoto}"
+                                             alt="Баскетбол" width="40" height="40">
                                     </a>
                                     <div class="pull-right dropdown"
                                          style=" margin-top: 4px;margin-bottom: 4px; padding-right: 10px">
@@ -212,14 +221,14 @@
                                                 <c:when test="${event.userIdCreator == userId}">
                                                     <c:set var="playgroundId" value="${event.playgroundId}"/>
                                                     <c:set var="sport" value="${event.sport}"/>
-                                                    <li>
-                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()})"
+                                                    <li class="liOptions">
+                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()}, '${userPhoto}')"
                                                            id="cancelAnswer_${event.idEvent}"> <span
                                                                 class="glyphicon glyphicon-minus"
                                                                 style="margin-right: 20px"></span>Отменить голос</a>
                                                     </li>
-                                                    <li>
-                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()})"
+                                                    <li class="liOptions">
+                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()}, '${userPhoto}')"
                                                            id="doAnswer_${event.idEvent}"> <span
                                                                 class="glyphicon glyphicon-plus"
                                                                 style="margin-right: 20px"></span>Проголосовать</a>
@@ -228,26 +237,26 @@
                                                                  class="glyphicon glyphicon-time"
                                                                  style="margin-right: 20px"></span>История
                                                              изменений</a></li>--%>
-                                                    <li>
+                                                    <li class="liOptions">
                                                         <a href="event?eventId=${event.idEvent}&userId=${userId}"> <span
                                                                 class="glyphicon glyphicon-share-alt"
                                                                 style="margin-right: 20px"></span>К записи</a>
                                                     </li>
 
 
-                                                    <li>
+                                                    <li class="liOptions">
                                                         <a href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}"
                                                            id="editEvent_${event.idEvent}">
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
                                                         </a></li>
-                                                    <li>
+                                                    <li class="liOptions">
                                                         <a href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}&where=playground"
                                                            id="endEvent_${event.idEvent}"><span
                                                                 class="glyphicon glyphicon-off"
                                                                 style="margin-right: 20px"></span>Завершить
                                                             опрос</a></li>
-                                                    <li>
+                                                    <li class="liOptions">
                                                         <a href="deleteGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}&where=playground"><span
                                                                 class="glyphicon glyphicon-trash"
                                                                 style="margin-right: 20px"></span>Удалить
@@ -257,14 +266,14 @@
                                                 <c:otherwise>
                                                     <c:set var="playgroundId" value="${event.playgroundId}"/>
                                                     <c:set var="sport" value="${event.sport}"/>
-                                                    <li>
-                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()})"
+                                                    <li class="liOptions">
+                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()}, '${userPhoto}')"
                                                            id="cancelAnswer2_${event.idEvent}"> <span
                                                                 class="glyphicon glyphicon-minus"
                                                                 style="margin-right: 20px"></span>Отменить голос</a>
                                                     </li>
-                                                    <li>
-                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()})"
+                                                    <li class="liOptions">
+                                                        <a onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()}, '${userPhoto}')"
                                                            id="doAnswer2_${event.idEvent}"> <span
                                                                 class="glyphicon glyphicon-plus"
                                                                 style="margin-right: 20px"></span>Проголосовать</a>
@@ -272,7 +281,7 @@
                                                     <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
                                                                                                                                 style="margin-right: 20px"></span>История
                                                             изменений</a></li>--%>
-                                                    <li>
+                                                    <li class="liOptions">
                                                         <a href="event?eventId=${event.idEvent}&userId=${userId}"> <span
                                                                 class="glyphicon glyphicon-share-alt"
                                                                 style="margin-right: 20px"></span>К записи</a>
@@ -312,8 +321,8 @@
                                         <strong>Warning!</strong> Произошла ошибка
                                     </div>
                                     <div class="list-group" style="margin-bottom: 5px">
-                                        <a class="list-group-item "
-                                           onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()})"
+                                        <button class="list-group-item "
+                                           onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()}, '${userPhoto}', 'answerButton_${event.idEvent}')"
                                            id="answerButton_${event.idEvent}">
                                             <c:choose>
                                                 <c:when test="${event.maxCountAnswer == 1000}">
@@ -332,7 +341,7 @@
                                             <div class="text-center">
                                                 +
                                             </div>
-                                        </a>
+                                        </button>
                                     </div>
 
                                     <div class="btn-group " style="margin-top: 5px">
@@ -356,10 +365,10 @@
                                                                class="btn"
                                                                style="padding: 0px"
                                                                id="${user.userId}_imgUser_${event.idEvent}">
-                                                                <img src="resources/image/foot.png" alt="Баскетбол"
-                                                                     width="30"
-                                                                     height="30"
-                                                                     id="${user.userId}_img_${event.idEvent}">
+                                                                <img src="${user.photo_50}" alt="Баскетбол"
+                                                                     width="35"
+                                                                     height="35"
+                                                                     id="${user.userId}_img_${event.idEvent}" class="round">
                                                             </a>
                                                         </c:otherwise>
                                                     </c:choose>
@@ -564,6 +573,8 @@
     function handleGroup() {
         var playgroundId = '${playgroundId}';
         var sport = '${sport}';
+        $('#exitFromGroup').addClass('disabled');
+        $('#enterToGroup').addClass('disabled');
         $.ajax({
             url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport + '&userId=' + ${userId}
         }).then(function (value) {
@@ -593,6 +604,8 @@
                 $('#players').text(count2);
                 //    $('#list_' + userId).remove();
             }
+            $('#exitFromGroup').removeClass('disabled');
+            $('#enterToGroup').removeClass('disabled');
         });
     }
 

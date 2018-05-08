@@ -28,6 +28,9 @@
             box-shadow: none;
 
         }
+        .round {
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -57,15 +60,15 @@
                         <a href="user?playerId=${user.userId}&userId=${userId}" class="list-group-item borderless">
                             <div class="media">
                                 <div class="pull-left">
-                                        <img class="media-object" src="resources/image/foot2.png" alt="Футбол" width="40"
-                                             height="40"/>
+                                        <img class="media-object round" src="${user.photo_50}" alt="Футбол" width="50"
+                                             height="50"/>
                                 </div>
-                                <div class="pull-right" style="padding-top: 10px;">
+                                <div class="pull-right" style="padding-top: 12px;">
                                     <c:if test="${user.countFake > 0}">
                                         +${user.countFake}
                                     </c:if>
                                 </div>
-                                <div class="media-body " style="padding-top: 8px;padding-left: 10px">
+                                <div class="media-body " style="padding-top: 12px;padding-left: 10px">
                                         <%--       <h4 class="media-heading"
                                                    style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
                                     <span style="font-size: medium" >${user.firstName} ${user.lastName} <span style="padding-left: 10px">

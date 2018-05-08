@@ -19,6 +19,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="resources\switch\switch.css" />
     <script src="resources\switch\switch.js"></script>
+    <script src="resources\js\device.js"></script>
 
 
     <style>
@@ -27,6 +28,14 @@
 
             box-shadow: none;
 
+        }
+        .liOptions {
+            margin-bottom: 2px;
+            margin-top: 2px;
+        }
+
+        .round {
+            border-radius: 50%;
         }
         body
         {
@@ -143,6 +152,12 @@
     VK.init(function() {
     VK.api("users.get", {"user_ids": "${userId}", "v":"5.74"}, function (data) {
     });
+        VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+            console.log("location: " + location);
+        });
+        VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
+            console.log("location: " + location);
+        });
     }, function() {
     // API initialization failed
     // Can reload page here

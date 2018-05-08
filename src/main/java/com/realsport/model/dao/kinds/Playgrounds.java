@@ -80,6 +80,7 @@ public class Playgrounds {
                 minUser.setUserId(value.get().getString("userId"));
                 minUser.setFirstName(value.get().getString("firstName"));
                 minUser.setLastName(value.get().getString("lastName"));
+                minUser.setPhoto_50(value.get().getString("photo_50"));
                 list.add(minUser);
             }
         }
@@ -171,6 +172,7 @@ public class Playgrounds {
                 .set("userId", minUser.getUserId())
                 .set("firstName", minUser.getFirstName())
                 .set("lastName", minUser.getLastName())
+                .set("photo_50", minUser.getPhoto_50())
                 .build();
         return EntityValue.of(entity);
     }

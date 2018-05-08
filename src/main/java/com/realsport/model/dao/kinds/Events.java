@@ -41,8 +41,9 @@ public class Events {
                     .set("userIdCreator", game.getUserIdCreator())
                     .set("playgroundName", game.getPlaygroundName())
                     .set("playgroundId", game.getPlaygroundId())
-                    .set("userFirtsNameCreator", "firstName")
-                    .set("userLastNameCreator", "firstName")
+                    .set("userFirtsNameCreator", game.getUserFirtsNameCreator())
+                    .set("userLastNameCreator", game.getUserLastNameCreator())
+                    .set("userCreatorPhoto", game.getUserCreatorPhoto())
                     .set("maxCountAnswer", StringValue.of(String.valueOf(game.getMaxCountAnswer())))
                     .set("duration", game.getDuration())
                     .set("sport", game.getSport())
@@ -71,6 +72,7 @@ public class Events {
                         .set("lastName", user.getLastName())
                         .set("isFake", BooleanValue.of(user.isFake()))
                         .set("countFake", LongValue.of(user.getCountFake()))
+                        .set("photo_50", user.getPhoto_50())
                         .build();
                 EntityValue value = EntityValue.of(userEntity);
                 list.add(value);
@@ -109,6 +111,7 @@ public class Events {
             event.setUserIdCreator(entity.getString("userIdCreator"));
             event.setUserFirtsNameCreator(entity.getString("userFirtsNameCreator"));
             event.setUserLastNameCreator(entity.getString("userLastNameCreator"));
+            event.setUserCreatorPhoto(entity.getString("userCreatorPhoto"));
             event.setDescription(entity.getString("description"));
             event.setAnswer("+");
             event.setMaxCountAnswer(Integer.parseInt((entity.getString("maxCountAnswer"))));
@@ -153,6 +156,7 @@ public class Events {
             comment.setFirstName(fullEntity.getString("firstName"));
             comment.setLastName(fullEntity.getString("lastName"));
             comment.setMessage(fullEntity.getString("message"));
+            comment.setUserPhoto(fullEntity.getString("userPhoto"));
             Timestamp timestamp = fullEntity.getTimestamp("dateCreation");
             comment.setDateCreation(timestamp);
             comment.setDate(getDateFormat(timestamp));
@@ -169,6 +173,7 @@ public class Events {
             user.setUserId(fullEntity.getString("userId"));
             user.setFirstName(fullEntity.getString("firstName"));
             user.setLastName(fullEntity.getString("lastName"));
+            user.setPhoto_50(fullEntity.getString("photo_50"));
             user.setFake(fullEntity.getBoolean("isFake"));
 
             user.setCountFake((int) fullEntity.getLong("countFake"));
@@ -247,6 +252,7 @@ public class Events {
         event.setUserIdCreator(entity.getString("userIdCreator"));
         event.setUserFirtsNameCreator(entity.getString("userFirtsNameCreator"));
         event.setUserLastNameCreator(entity.getString("userLastNameCreator"));
+        event.setUserCreatorPhoto(entity.getString("userCreatorPhoto"));
         event.setDescription(entity.getString("description"));
         event.setAnswer("+");
         event.setMaxCountAnswer(Integer.parseInt(entity.getString("maxCountAnswer")));
@@ -401,6 +407,7 @@ public class Events {
                 .set("lastName", message.getLastName())
                 .set("dateCreation", TimestampValue.of(message.getDateCreation()))
                 .set("message", message.getMessage())
+                .set("userPhoto", message.getUserPhoto())
                 .build();
         return EntityValue.of(userEntity);
     }

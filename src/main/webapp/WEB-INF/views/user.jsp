@@ -30,6 +30,11 @@
             resize: none;
         }
 
+        .round {
+            border-radius: 50%;
+        }
+
+
 
     </style>
 </head>
@@ -39,6 +44,9 @@
         <div class="pull-left">
             <a class="navbar-brand btn" id="returnBack"><span class="glyphicon glyphicon-menu-left"
                                                               aria-hidden=""></span></a>
+            <div class="navbar-brand ">
+                 Профиль
+            </div>
         </div>
 
     </div>
@@ -55,14 +63,17 @@
             <div class="col-sm-8">
                 <div class="panel panel-default">
                     <div class="panel-heading ">
-                        <div>
-                            <a class="pull-left" href="#">
-                                <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
-                                <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="40"
-                                     height="40">
-                            </a>
-                            <div class="media-body " style="padding-left: 10px">
-                                <h4>${userlastName} ${userfirstName} </h4>
+                        <div style="margin-bottom: 10px">
+                            <div class="pull-left">
+                                <a  href="https://vk.com/id${playerId}" target="_blank">
+                                    <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
+                                    <img class="round" src="${userPhoto}" alt="Футбол" width="50"
+                                         height="50">
+                                </a>
+                            </div>
+
+                            <div class="media-body " style="padding-left: 15px; padding-top: 5px">
+                                <h4>${userfirstName} ${userlastName}  </h4>
                                 <!--    <span  class="glyphicon glyphicon-star-empty" ></span><span style="color: gray; margin-right: 15px" > 105 </span>
                                    <span style="color: gray"> 3 место</span> -->
                             </div>

@@ -53,7 +53,9 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList) {
     });
 }
 
-function handleAnswer(maxCountAnswer, eventId, userId, parameter, userList) {
+function handleAnswer(maxCountAnswer, eventId, userId, parameter, userList, photoLink, answerButton) {
+    var answer= document.getElementById(answerButton);
+    answer.setAttribute('disabled', 'disabled');
     $.ajax({
         url: 'handleAnswer?eventId=' + eventId + '&userId=' + userId
     }).then(function (value) {
@@ -74,14 +76,14 @@ function handleAnswer(maxCountAnswer, eventId, userId, parameter, userList) {
                     ++count;
                     $('#badge1_'+ eventId).text(count);
                     if (!(userList > 2)) {
-                        addIgrokToUserList(eventId, userId, parameter);
+                        addIgrokToUserList(eventId, userId, parameter, photoLink);
                     }
                 } else {
                     var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
                     ++count;
                     $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
                     if (!(userList > 2)) {
-                        addIgrokToUserList(eventId, userId, parameter);
+                        addIgrokToUserList(eventId, userId, parameter, photoLink);
                     }
                 }
                 break;
@@ -93,11 +95,11 @@ function handleAnswer(maxCountAnswer, eventId, userId, parameter, userList) {
                 $('#alertMax_' + eventId).alert();
                 break;
         }
-
+        answer.removeAttribute('disabled');
     });
 }
 
-function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList) {
+function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList, photoLink) {
     $.ajax({
         url: 'handleAnswerMain?eventId=' + eventId + '&userId=' + userId
     }).then(function (value) {
@@ -119,7 +121,7 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList) 
                     ++count;
                     $('#badge1_'+ eventId).text(count);
                     if (!(userList > 2)) {
-                        addIgrokToUserList(eventId, userId, parameter);
+                        addIgrokToUserList(eventId, userId, parameter, photoLink);
                     }
                 } else {
                     var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
@@ -129,7 +131,7 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList) 
                     ++count;
                     $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
                     if (!(userList > 2)) {
-                        addIgrokToUserList(eventId, userId, parameter);
+                        addIgrokToUserList(eventId, userId, parameter, photoLink);
                     }
                 }
                 break;
@@ -201,8 +203,10 @@ function addFakeIgrokToUserList(eventId, addIgr, userId, parameter) {
 
 }
 
-function addIgrokToUserList(eventId, userId, parameter) {
+function addIgrokToUserList(eventId, userId, parameter, photoLink) {
     $('#templateUserList2').removeClass('hide');
+    var img = document.getElementById('imageUser');
+    img.src = photoLink;
     var userImg = document.getElementById("templateUserList2").cloneNode(true);
     userImg.id = userId + '_imgUser_' + eventId;
     if (parameter) {
