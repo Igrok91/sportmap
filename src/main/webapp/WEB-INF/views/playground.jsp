@@ -430,7 +430,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть
                                             </button>
-                                            <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()})"
+                                            <a id="addIgrok_${event.idEvent}" onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playgroundId=${playgroundId}&playerId=${userId}', ${event.userList.size()}, 'addIgrok_${event.idEvent}')"
                                                class="btn btn-primary">Добавить</a>
                                         </div>
                                     </div><!-- /.modal-content -->
@@ -462,6 +462,13 @@
 <script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 <script>
     var listEvents = ${listEventsJson};
+
+    VK.init(function() {
+
+    }, function() {
+        // API initialization failed
+        // Can reload page here
+    }, '5.74');
 
     console.log(listEvents.length);
     if (listEvents) {
@@ -587,13 +594,7 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 + 1;
                 $('#players').text(count2);
-                /*
-                  $('#list_template').removeClass('hide');
-
-                  var userData = document.getElementById("list_template").cloneNode(true);
-                  userData.id = "list_" + userId;
-                  $('#list_template').addClass('hide');
-                  $('#listGroupsUser').append(userData)*/
+                VK.callMethod("showAllowMessagesFromCommunityBox");
             } else {
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');

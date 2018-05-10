@@ -221,7 +221,7 @@
         initAutocomplete(map);
         infoWindow = new google.maps.InfoWindow({map: map});
         infoWindow.setPosition(map.getCenter());
-        infoWindow.setContent('Нажмите на маркер для перехода к площадке');
+        infoWindow.setContent('Нажмите на маркер для перехода к группе');
         initMarkers(map, infoWindow);
         var returnBack = '${returnBack}';
         if (returnBack == 'map') {
@@ -233,7 +233,7 @@
                     lng: position.coords.longitude
                 };
                 infoWindow.setPosition(pos);
-                infoWindow.setContent('Нажмите на маркер для перехода к площадке');
+                infoWindow.setContent('Нажмите на маркер для перехода к группе');
                 map.setCenter(pos);
                 //initMarkers(map, infoWindow);
                 setTimeout(updateInfoWindow, 4000, infoWindow);

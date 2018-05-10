@@ -91,7 +91,7 @@
                                                     <c:set var="playgroundId" value="${event.playgroundId}" />
                                                     <c:set var="sport" value="${event.sport}" />
                                                     <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
-                                                                                                                                                 style="margin-right: 20px"></span>К площадке</a>
+                                                                                                                                                 style="margin-right: 20px"></span>К группе</a>
                                                     </li>
                                                     <li class="liOptions"><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt"
                                                                                                                          style="margin-right: 20px"></span>К записи</a>
@@ -103,7 +103,7 @@
                                                     <c:set var="playgroundId" value="${event.playgroundId}" />
                                                     <c:set var="sport" value="${event.sport}" />
 
-                                                    <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home" style="margin-right: 20px"></span>К площадке</a>
+                                                    <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home" style="margin-right: 20px"></span>К группе</a>
                                                     </li>
                                                     <li class="liOptions"><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt" style="margin-right: 20px"></span>К записи</a>
                                                     </li>

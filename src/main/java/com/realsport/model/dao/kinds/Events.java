@@ -55,6 +55,8 @@ public class Events {
             game.setIdEvent(entity.getKey().getId().toString());
             logger.info(" Создание события с Id" + game.getIdEvent());
             tx.commit();
+        } catch (Exception e) {
+            logger.error("publishEvent " + e);
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
@@ -85,12 +87,12 @@ public class Events {
     public List<Event> getAllActiveEvents() {
         try {
             Datastore datastore = getDatastore();
-            List<Entity>  listEntity = new ArrayList<>();
+            List<Entity> listEntity = new ArrayList<>();
             Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                     .setKind(EVENTS)
                     .setFilter(StructuredQuery.PropertyFilter.eq("active", true))
                     .build();
-            QueryResults<Entity>  queryResults = datastore.run(entityQuery);
+            QueryResults<Entity> queryResults = datastore.run(entityQuery);
             for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
                 listEntity.add(it.next());
             }
@@ -99,7 +101,7 @@ public class Events {
             logger.error(e);
             logger.warn("Событий еще нет");
         }
-        return  allActiveEventList;
+        return allActiveEventList;
 
     }
 
@@ -124,14 +126,14 @@ public class Events {
             event.setDateCreation(timestamp);
             event.setDate(getDateFormat(timestamp));
             logger.info(entity.getString("description"));
-            try{
+            try {
                 List<EntityValue> entityValues = entity.getList("userList");
                 event.setUserList(getUserListFromEntity(entityValues));
 
             } catch (DatastoreException ex) {
                 logger.warn(ex.getMessage());
             }
-            try{
+            try {
                 List<EntityValue> entityComment = entity.getList("commentsList");
                 if (entityComment.size() != 0) {
                     event.setCommentsList(getCommentListFromEntity(entityComment));
@@ -148,7 +150,7 @@ public class Events {
 
     private List<Comment> getCommentListFromEntity(List<EntityValue> entityComment) {
         List<Comment> listComment = new ArrayList<>();
-        for(EntityValue entityValue : entityComment) {
+        for (EntityValue entityValue : entityComment) {
             Comment comment = new Comment();
             FullEntity fullEntity = entityValue.get();
             comment.setCommentId(fullEntity.getString("commentId"));
@@ -167,7 +169,7 @@ public class Events {
 
     private List<User> getUserListFromEntity(List<EntityValue> entityValues) {
         List<User> userList = new ArrayList<>();
-        for(EntityValue entityValue : entityValues) {
+        for (EntityValue entityValue : entityValues) {
             User user = new User();
             FullEntity fullEntity = entityValue.get();
             user.setUserId(fullEntity.getString("userId"));
@@ -189,7 +191,7 @@ public class Events {
             Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
             if (Objects.nonNull(event)) {
                 List<EntityValue> list = event.getList("userList");
-                if (Objects.nonNull(list) ) {
+                if (Objects.nonNull(list)) {
                     List<EntityValue> listValue = new ArrayList<>();
                     List<EntityValue> listFilter = FluentIterable.from(list).filter(new Predicate<EntityValue>() {
                         @Override
@@ -205,6 +207,8 @@ public class Events {
                 }
             }
             transaction.commit();
+        } catch (Exception e) {
+            logger.error("addUserToEvent " + e);
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -230,6 +234,8 @@ public class Events {
                 }
             }
             transaction.commit();
+        } catch (Exception e) {
+            logger.error("deleteUserFromEvent " + e);
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -238,12 +244,12 @@ public class Events {
     }
 
     public Event getEventById(String eventId) {
-            Entity event = getDatastore().get(keyFactory.newKey(Long.valueOf(eventId)));
-            if (Objects.nonNull(event)) {
-                logger.info("Получаем событие " + eventId);
-                return getEventFromEntity(event);
-            }
-            return null;
+        Entity event = getDatastore().get(keyFactory.newKey(Long.valueOf(eventId)));
+        if (Objects.nonNull(event)) {
+            logger.info("Получаем событие " + eventId);
+            return getEventFromEntity(event);
+        }
+        return null;
     }
 
     private Event getEventFromEntity(Entity entity) {
@@ -286,8 +292,8 @@ public class Events {
     private String getDateFormat(Timestamp timestamp) {
         Date date = new Date(timestamp.toSqlTimestamp().getTime());
         logger.info("getDateFormat " + date);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm ", myDateFormatSymbols );
-        SimpleDateFormat dateFormatNow = new SimpleDateFormat("dd MMMM", myDateFormatSymbols );
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm ", myDateFormatSymbols);
+        SimpleDateFormat dateFormatNow = new SimpleDateFormat("dd MMMM", myDateFormatSymbols);
         dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
         String d = dateFormat.format(date);
         String dateNow = dateFormatNow.format(new Date());
@@ -307,14 +313,16 @@ public class Events {
         try {
             Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
             if (Objects.nonNull(event)) {
-                    transaction.put(Entity.newBuilder(event).
-                            set("description", StringValue.of(description)).
-                            set("duration", StringValue.of(duration)).
-                            set("maxCountAnswer", StringValue.of(String.valueOf(maxCountAnswer))).
-                            build());
-                    logger.info("Изменили событие c id " + eventId);
-                }
+                transaction.put(Entity.newBuilder(event).
+                        set("description", StringValue.of(description)).
+                        set("duration", StringValue.of(duration)).
+                        set("maxCountAnswer", StringValue.of(String.valueOf(maxCountAnswer))).
+                        build());
+                logger.info("Изменили событие c id " + eventId);
+            }
             transaction.commit();
+        } catch (Exception e) {
+            logger.error("editEventById " + e);
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -328,6 +336,8 @@ public class Events {
             transaction.delete(keyFactory.newKey(Long.valueOf(eventId)));
             logger.info("Удаляем игру с id " + eventId);
             transaction.commit();
+        } catch (Exception e) {
+            logger.error("deleteGame " + e);
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -346,6 +356,8 @@ public class Events {
                 logger.info("Завершаем событие c id " + eventId);
             }
             transaction.commit();
+        } catch (Exception e) {
+            logger.error("endGame " + e);
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -353,7 +365,7 @@ public class Events {
         }
     }
 
-    private static DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols(){
+    private static DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols() {
 
         @Override
         public String[] getMonths() {
@@ -372,7 +384,7 @@ public class Events {
             if (Objects.nonNull(event)) {
                 List<EntityValue> list = null;
                 try {
-                   list = event.getList("commentsList");
+                    list = event.getList("commentsList");
                 } catch (Exception e) {
                     logger.warn("Нет поля commentsList");
                 }
@@ -390,6 +402,8 @@ public class Events {
 
                 transaction.commit();
             }
+        } catch (Exception e) {
+            logger.error("addCommentToEvent " + e);
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -433,15 +447,17 @@ public class Events {
                         }
                     }).toList();
                     listComment.addAll(valueList);
-                     transaction.update(Entity.newBuilder(event).
+                    transaction.update(Entity.newBuilder(event).
                             set("commentsList", ListValue.of(listComment)).
                             build());
-                    logger.info("Удален комментарий в событии " + eventId );
+                    logger.info("Удален комментарий в событии " + eventId);
 
                     transaction.commit();
                 }
 
             }
+        } catch (Exception e) {
+            logger.error("deleteCommentFromEvent " + e);
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -452,12 +468,12 @@ public class Events {
     public List<Event> getEventsByIdGroup(String playgroundId) {
         try {
             Datastore datastore = getDatastore();
-            List<Entity>  listEntity = new ArrayList<>();
+            List<Entity> listEntity = new ArrayList<>();
             Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                     .setKind(EVENTS)
                     .setFilter(StructuredQuery.PropertyFilter.eq("playgroundId", playgroundId))
                     .build();
-            QueryResults<Entity>  queryResults = datastore.run(entityQuery);
+            QueryResults<Entity> queryResults = datastore.run(entityQuery);
             for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
                 listEntity.add(it.next());
             }
@@ -473,12 +489,12 @@ public class Events {
     public List<Event> getActiveEventsByIdGroup(String playgroundId) {
         try {
             Datastore datastore = getDatastore();
-            List<Entity>  listEntity = new ArrayList<>();
+            List<Entity> listEntity = new ArrayList<>();
             Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                     .setKind(EVENTS)
                     .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("playgroundId", playgroundId), StructuredQuery.PropertyFilter.eq("active", true)))
                     .build();
-            QueryResults<Entity>  queryResults = datastore.run(entityQuery);
+            QueryResults<Entity> queryResults = datastore.run(entityQuery);
             for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
                 listEntity.add(it.next());
             }

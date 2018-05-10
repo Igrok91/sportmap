@@ -63,9 +63,9 @@ public class RestController {
                              @RequestParam(value = "first_name") String first_name,
                              @RequestParam(value = "last_name") String last_name,
                              @RequestParam(value = "photo_50") String photo_50) {
-    logger.info("Регистрируем пользователя с id " + userId + ", first_name " +
+        logger.info("Регистрируем пользователя с id " + userId + ", first_name " +
                 first_name + ", last_name " + last_name + ", photo_50 " + photo_50);
-    userService.registerUser(userId, first_name, last_name, photo_50);
+        userService.registerUser(userId, first_name, last_name, photo_50);
     }
 
     @RequestMapping("removeTemplate")
@@ -78,10 +78,10 @@ public class RestController {
 
     @RequestMapping(value = "sendCommentUser", method = RequestMethod.POST)
     @ResponseBody
-    public Comment sendCommentUser( @RequestParam(value="message", required=false, defaultValue="World") String message,
-                                         @RequestParam(value="eventId", required=false, defaultValue="5") String eventId,
-                                         @RequestParam(value = "userId") String userId,
-                                         @RequestParam(value="playgroundId") String playgroundId) throws Exception {
+    public Comment sendCommentUser(@RequestParam(value = "message", required = false, defaultValue = "World") String message,
+                                   @RequestParam(value = "eventId", required = false, defaultValue = "5") String eventId,
+                                   @RequestParam(value = "userId") String userId,
+                                   @RequestParam(value = "playgroundId") String playgroundId) throws Exception {
         User user = getUser(userId);
         Comment comment = new Comment();
         comment.setUserId(userId);
@@ -91,7 +91,7 @@ public class RestController {
         comment.setUserPhoto(user.getPhoto_50());
         comment.setDateCreation(Timestamp.of(new Date()));
         comment.setDate(getDateFormat());
-        String commentId =  eventsService.addCommentToEvent(eventId, comment);
+        String commentId = eventsService.addCommentToEvent(eventId, comment);
         if (commentId != null) {
             comment.setCommentId(commentId);
             cacheService.putToCache(playgroundId, userId);
@@ -103,18 +103,17 @@ public class RestController {
     }
 
 
-
     @RequestMapping("/deleteComment")
-    public void deleteComment(@RequestParam(value="commentId", required=false, defaultValue="World") String commentId,
-                              @RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
-                              @RequestParam(value="playgroundId") String playgroundId,
+    public void deleteComment(@RequestParam(value = "commentId", required = false, defaultValue = "World") String commentId,
+                              @RequestParam(value = "eventId", required = false, defaultValue = "World") String eventId,
+                              @RequestParam(value = "playgroundId") String playgroundId,
                               @RequestParam(value = "userId") String userId) throws Exception {
         eventsService.deleteCommentFromEvent(commentId, eventId);
         cacheService.putToCache(playgroundId, userId);
     }
 
     @RequestMapping(value = "/editUserInfo", method = RequestMethod.POST)
-    public void editUserInfo(@RequestParam(value="userInfo", required=false) String userInfo,
+    public void editUserInfo(@RequestParam(value = "userInfo", required = false) String userInfo,
                              @RequestParam(value = "userId") String userId) {
         User user = getUser(userId);
         user.setInfo(userInfo);
@@ -124,8 +123,8 @@ public class RestController {
 
     @RequestMapping("/handleAnswerMain")
     @ResponseBody
-    public String handleAnswerMain(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId
-                                , @RequestParam(value = "userId") String userId) throws Exception {
+    public String handleAnswerMain(@RequestParam(value = "eventId", required = false, defaultValue = "World") String eventId
+            , @RequestParam(value = "userId") String userId) throws Exception {
 
         User user = getUser(userId);
 
@@ -133,27 +132,27 @@ public class RestController {
         if (user != null && event != null) {
             int countUser = getCountUserFromEvent(event.getUserList());
 
-                Boolean b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
-                    @Override
-                    public boolean apply(User user) {
-                         return user.getUserId().equals(userId);
-                    }
-                }).isPresent();
+            Boolean b = FluentIterable.from(event.getUserList()).firstMatch(new Predicate<User>() {
+                @Override
+                public boolean apply(User user) {
+                    return user.getUserId().equals(userId);
+                }
+            }).isPresent();
 
-                    if (b == null || b.equals(Boolean.FALSE)) {
-                        if (countUser>= event.getMaxCountAnswer()) {
-                            return MAX_COUNT_ANSWER;
-                        }
-                        cacheService.putToCache(event.getPlaygroundId(), userId);
-                        eventsService.addUserToEvent(eventId, user, false);
-                        logger.info("Пользователь " + user + " поставил плюс");
-                        return TRUE;
-                    } else {
-                        eventsService.deleteUserFromEvent(eventId, userId);
-                        cacheService.putToCache(event.getPlaygroundId(), userId);
-                        logger.info("Пользователь " + user + " поставил минус");
-                        return FALSE;
-                    }
+            if (b == null || b.equals(Boolean.FALSE)) {
+                if (countUser >= event.getMaxCountAnswer()) {
+                    return MAX_COUNT_ANSWER;
+                }
+                cacheService.putToCache(event.getPlaygroundId(), userId);
+                eventsService.addUserToEvent(eventId, user, false);
+                logger.info("Пользователь " + user + " поставил плюс");
+                return TRUE;
+            } else {
+                eventsService.deleteUserFromEvent(eventId, userId);
+                cacheService.putToCache(event.getPlaygroundId(), userId);
+                logger.info("Пользователь " + user + " поставил минус");
+                return FALSE;
+            }
 
 
         }
@@ -161,10 +160,9 @@ public class RestController {
     }
 
 
-
     @RequestMapping("/handleAnswer")
     @ResponseBody
-    public String handleAnswer(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
+    public String handleAnswer(@RequestParam(value = "eventId", required = false, defaultValue = "World") String eventId,
                                @RequestParam(value = "userId") String userId) throws Exception {
         User user = getUser(userId);
         Event event = eventsService.getEventById(eventId);
@@ -180,16 +178,16 @@ public class RestController {
                     return user.getUserId().equals(userId);
                 }
             }).isPresent();
-                if (b == null || b.equals(Boolean.FALSE)) {
-                    eventsService.addUserToEvent(eventId, user, false);
-                    cacheService.putToCache(event.getPlaygroundId(), userId);
-                    logger.info("Boolean.TRUE.toString() " + Boolean.TRUE.toString());
-                    return TRUE;
-                } else {
-                    return FALSE;
+            if (b == null || b.equals(Boolean.FALSE)) {
+                eventsService.addUserToEvent(eventId, user, false);
+                cacheService.putToCache(event.getPlaygroundId(), userId);
+                logger.info("Boolean.TRUE.toString() " + Boolean.TRUE.toString());
+                return TRUE;
+            } else {
+                return FALSE;
 
-                }
             }
+        }
 
 
         return ERROR;
@@ -209,34 +207,34 @@ public class RestController {
 
     @RequestMapping("/handleGroup")
     @ResponseBody
-    public Boolean handleGroup(@RequestParam(value="playgroundId", required=false, defaultValue="1") String playgroundId,
-                               @RequestParam(value="sport", required=false, defaultValue=" Футбол") String sport,
+    public Boolean handleGroup(@RequestParam(value = "playgroundId", required = false, defaultValue = "1") String playgroundId,
+                               @RequestParam(value = "sport", required = false, defaultValue = " Футбол") String sport,
                                @RequestParam(value = "userId") String userId) {
 
         User user = getUser(userId);
         Boolean isParticipant = false;
-            String id = FluentIterable.from(user.getPlaygroundIdlList()).filter(new Predicate<String>() {
-                @Override
-                public boolean apply(String id) {
-                    return id.equals(playgroundId);
-                }
-            }).first().orNull();
-            System.out.println("id= " + id);
-            if (id == null) {
-                logger.info("User c id " + userId + " вступил в группу " + playgroundId);
-                user.getPlaygroundIdlList().add(playgroundId);
-                playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
-                userService.addPlaygroundToUser(userId, playgroundId);
-                isParticipant = Boolean.TRUE;
-            } else {
-                logger.info("User c id " + userId + " вышел из группы " + playgroundId);
-                user.getPlaygroundIdlList().remove(id);
-                playgroundService.deleteUserFromPlayground(userId, playgroundId);
-                userService.deletePlaygroundFromUser(userId, playgroundId);
-                isParticipant = Boolean.FALSE;
+        String id = FluentIterable.from(user.getPlaygroundIdlList()).filter(new Predicate<String>() {
+            @Override
+            public boolean apply(String id) {
+                return id.equals(playgroundId);
             }
-            putToCacheUser(user);
-     return isParticipant;
+        }).first().orNull();
+        System.out.println("id= " + id);
+        if (id == null) {
+            logger.info("User c id " + userId + " вступил в группу " + playgroundId);
+            user.getPlaygroundIdlList().add(playgroundId);
+            playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
+            userService.addPlaygroundToUser(userId, playgroundId);
+            isParticipant = Boolean.TRUE;
+        } else {
+            logger.info("User c id " + userId + " вышел из группы " + playgroundId);
+            user.getPlaygroundIdlList().remove(id);
+            playgroundService.deleteUserFromPlayground(userId, playgroundId);
+            userService.deletePlaygroundFromUser(userId, playgroundId);
+            isParticipant = Boolean.FALSE;
+        }
+        putToCacheUser(user);
+        return isParticipant;
     }
 
     private void putToCacheUser(User user) {
@@ -265,16 +263,16 @@ public class RestController {
 
     @RequestMapping("/addIgrok")
     @ResponseBody
-    public String addIgrok(@RequestParam(value="eventId", required=false, defaultValue="World") String eventId,
-                         @RequestParam(value="count", required=false, defaultValue="1") String count,
-                         @RequestParam(value = "userId") String userId) throws Exception {
+    public String addIgrok(@RequestParam(value = "eventId", required = false, defaultValue = "World") String eventId,
+                           @RequestParam(value = "count", required = false, defaultValue = "1") String count,
+                           @RequestParam(value = "userId") String userId) throws Exception {
         User user = getUser(userId);
-        logger.info("Добавляем " + count + " игроков от пользователя" );
+        logger.info("Добавляем " + count + " игроков от пользователя");
         Event event = eventsService.getEventById(eventId);
         if (Objects.nonNull(user) && Objects.nonNull(event)) {
             int countUser = getCountUserFromEvent(event.getUserList());
             if ((countUser >= event.getMaxCountAnswer()) ||
-                    ((Integer.parseInt(count) + countUser ) > event.getMaxCountAnswer())) {
+                    ((Integer.parseInt(count) + countUser) > event.getMaxCountAnswer())) {
                 return MAX_COUNT_ANSWER;
             }
             user.setFake(true);
@@ -289,7 +287,7 @@ public class RestController {
     @RequestMapping("/getNewDataEvents")
     @ResponseBody
     public List<Event> getNewDataEvents(Model model, @RequestParam(value = "date") long date,
-                                  @RequestParam(value = "userId") String userId) throws ParseException {
+                                        @RequestParam(value = "userId") String userId) throws ParseException {
 
         Date now = new Date(date);
         logger.info("Date " + now);
@@ -297,7 +295,7 @@ public class RestController {
         boolean isEditData = false;
         MemcacheService memcacheService = getCacheObserver();
         for (String id : user.getPlaygroundIdlList()) {
-            MemcacheService.IdentifiableValue value =  memcacheService.getIdentifiable(id);
+            MemcacheService.IdentifiableValue value = memcacheService.getIdentifiable(id);
             if (Objects.nonNull(value)) {
                 LastEditData last = (LastEditData) value.getValue();
                 logger.info("Last Date Update " + last.getDate());
@@ -320,8 +318,8 @@ public class RestController {
     @RequestMapping("/getNewDataEventsPlayground")
     @ResponseBody
     public List<Event> getNewDataEventsPlayground(Model model, @RequestParam(value = "date") long date,
-                                        @RequestParam(value = "userId") String userId,
-                                                  @RequestParam(value="playgroundId") String playgroundId) throws ParseException {
+                                                  @RequestParam(value = "userId") String userId,
+                                                  @RequestParam(value = "playgroundId") String playgroundId) throws ParseException {
 
         Date now = new Date(date);
         logger.info("Date " + now);
@@ -329,7 +327,7 @@ public class RestController {
         boolean isEditData = false;
         MemcacheService memcacheService = getCacheObserver();
         for (String id : user.getPlaygroundIdlList()) {
-            MemcacheService.IdentifiableValue value =  memcacheService.getIdentifiable(playgroundId);
+            MemcacheService.IdentifiableValue value = memcacheService.getIdentifiable(playgroundId);
             if (Objects.nonNull(value)) {
                 LastEditData last = (LastEditData) value.getValue();
                 logger.info("Last Date Update " + last.getDate());
@@ -352,26 +350,26 @@ public class RestController {
     @RequestMapping("/getNewDataEvent")
     @ResponseBody
     public Event getNewDataEvent(Model model, @RequestParam(value = "date") long date,
-                                       @RequestParam(value = "userId") String userId,
-                                       @RequestParam(value="playgroundId") String playgroundId,
-                                       @RequestParam(value="eventId") String eventId) throws ParseException {
+                                 @RequestParam(value = "userId") String userId,
+                                 @RequestParam(value = "playgroundId") String playgroundId,
+                                 @RequestParam(value = "eventId") String eventId) throws ParseException {
 
         Date now = new Date(date);
         logger.info("Date " + now);
         boolean isEditData = false;
         MemcacheService memcacheService = getCacheObserver();
-            MemcacheService.IdentifiableValue value =  memcacheService.getIdentifiable(playgroundId);
-            if (Objects.nonNull(value)) {
-                LastEditData last = (LastEditData) value.getValue();
-                logger.info("Last Date Update " + last.getDate());
-                if (!Objects.equals(last.getIdUserEdit(), userId)) {
-                    if (now.before(last.getDate())) {
-                        logger.info("Данные изменились ");
-                        isEditData = true;
-                    }
+        MemcacheService.IdentifiableValue value = memcacheService.getIdentifiable(playgroundId);
+        if (Objects.nonNull(value)) {
+            LastEditData last = (LastEditData) value.getValue();
+            logger.info("Last Date Update " + last.getDate());
+            if (!Objects.equals(last.getIdUserEdit(), userId)) {
+                if (now.before(last.getDate())) {
+                    logger.info("Данные изменились ");
+                    isEditData = true;
                 }
-
             }
+
+        }
 
         if (isEditData) {
             Event event = eventsService.getEventById(eventId);
@@ -383,9 +381,9 @@ public class RestController {
 
     @RequestMapping(value = "saveTemplate", method = RequestMethod.POST)
     @ResponseBody
-    public String saveTemplate(@RequestParam(name = "descr") String  descr, @RequestParam(name = "answer") String  answer,
-                               @RequestParam(name = "sel2") String  sel2,
-                               @RequestParam(name = "sel1") String  sel1,
+    public String saveTemplate(@RequestParam(name = "descr") String descr, @RequestParam(name = "answer") String answer,
+                               @RequestParam(name = "sel2") String sel2,
+                               @RequestParam(name = "sel1") String sel1,
                                @RequestParam(value = "userId") String userId) throws IOException {
         TemplateGame game = new TemplateGame();
         game.setDescription(descr);
@@ -407,7 +405,6 @@ public class RestController {
     }
 
 
-
     private String getMinText(String description) {
         String minText = description;
         if (description.length() > 35) {
@@ -427,7 +424,7 @@ public class RestController {
         }
     }
 
-    private static DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols(){
+    private static DateFormatSymbols myDateFormatSymbols = new DateFormatSymbols() {
 
         @Override
         public String[] getMonths() {
@@ -440,8 +437,8 @@ public class RestController {
     private String getDateFormat() {
         Date date = new Date();
         logger.info("getDateFormat for Comment " + date);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm ", myDateFormatSymbols );
-        SimpleDateFormat dateFormatNow = new SimpleDateFormat("dd MMMM", myDateFormatSymbols );
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm ", myDateFormatSymbols);
+        SimpleDateFormat dateFormatNow = new SimpleDateFormat("dd MMMM", myDateFormatSymbols);
         dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
         String d = dateFormat.format(date);
         String dateNow = dateFormatNow.format(new Date());

@@ -70,7 +70,7 @@ public class StartController {
     private EventsService eventsService;
 
     @Autowired
-    private VkService messageService;
+    private VkService vkService;
 
     @Autowired
     private UserService userService;
@@ -106,11 +106,16 @@ public class StartController {
                     model.addAttribute("eventUserActive", getEventUserActive(listEvents, userId));
                 } else {
                     model.addAttribute("userId", userId);
+                    if (Objects.nonNull(hash) && !hash.isEmpty()) {
+                        model.addAttribute("hash", hash);
+                    } else {
+                        model.addAttribute("hash", null);
+                    }
                     return "begin";
                 }
                 if (Objects.nonNull(hash) && !hash.isEmpty()) {
                     logger.info("hash " + hash);
-                    String[] s = hash.split("=");
+                /*    String[] s = hash.split("=");
                     String value;
                     if (s.length > 1) {
                          value = s[1];
@@ -119,11 +124,25 @@ public class StartController {
                         model.addAttribute("userId", userId);
                         return "error";
                     }
-
-                    switch (s[0]) {
+                    logger.info("value " + value);
+                    switch (s[0].trim()) {
                         case EVENT_ID:
-                            return "redirect:/event?eventId=" + value + "&userId=" + userId;
+                            logger.info("redirect:/event");
+                            return "redirect:/event?eventId=" + value.trim() + "&userId=" + userId;
+                    }*/
+                    //return "redirect:/event?eventId=" + hash.trim() + "&userId=" + userId;
+                    Gson gson = new Gson();
+                    Event event = eventsService.getEventById(hash.trim());
+                    if (Objects.isNull(event)) {
+                        model.addAttribute("userId", userId);
+                        return "error";
                     }
+                    model.addAttribute("event", event);
+                    model.addAttribute("eventJson", gson.toJson(event));
+
+                    model.addAttribute("userId", userId);
+                    model.addAttribute("user", user);
+                    return "event";
                 }
 
                 model.addAttribute("user", user);
@@ -143,7 +162,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             return "error";
         }
-        //messageService.sendMessage(Integer.valueOf(userId), "edwedwedw");
+        //vkService.sendMessage(Integer.valueOf(userId), "edwedwedw");
         return "main";
     }
 
@@ -190,9 +209,8 @@ public class StartController {
             }).size();
         }
 
-
-
         model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
+        model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("countOrganize", countOrganize);
     }
 
@@ -217,7 +235,7 @@ public class StartController {
 
     private void setPlaygroundDataToModel(Model model, String id) throws Exception {
         try {
-            //messageService.sendMessage(ADMIN, "В приложение зашел пользователь с id " + id);
+            //vkService.sendMessage(ADMIN, "В приложение зашел пользователь с id " + id);
             allPlaygroundList = playgroundService.getAllPlayground();
             logger.info("allPlaygroundList " + allPlaygroundList.size());
             // Получение данных по площадкам из базы данных
@@ -250,7 +268,7 @@ public class StartController {
             model.addAttribute("errorMaps", "success");
         } catch (Exception e) {
             model.addAttribute("errorMaps", "fail");
-            messageService.sendMessage(ADMIN, errorCreateMaps(id, e));
+            vkService.sendMessage(ADMIN, errorCreateMaps(id, e));
             e.printStackTrace();
         }
 
@@ -490,7 +508,9 @@ public class StartController {
                              @RequestParam(value = "playgroundId", required = false) String id,
                              @RequestParam(value = "where", required = false, defaultValue = "empty") String where) throws Exception {
         if (eventId != null) {
+            Event event = eventsService.getEventById(eventId);
             eventsService.deleteGame(eventId);
+            vkService.notifyDeleteUsersEvent(event, userId);
             cacheService.putToCache(id, userId);
         }
         if (where.equals("playground")) {
@@ -545,6 +565,7 @@ public class StartController {
                 user.getListParticipant().add(new EventUser(evId, true));
                 putToCacheUser(user);
                 userService.addEventToUserParticipant(event.getUserList(), evId, userId);
+                vkService.notifyEndUsersEvent(event, userId);
             }
         }
 
@@ -735,7 +756,7 @@ public class StartController {
 
     @RequestMapping(value = "/createGame", method = RequestMethod.POST)
     public String createGame(Model model,
-                             @RequestParam(name = "descr", required = false, defaultValue = "description") String descr,
+                             @RequestParam(name = "descr", required = false, defaultValue = "description") String description,
                              @RequestParam(name = "answer", required = false, defaultValue = "+") String answer,
                              @RequestParam(name = "sel2", required = false, defaultValue = "Без ограничений") String sel2,
                              @RequestParam(name = "sel1", required = false, defaultValue = "3") String sel1,
@@ -747,9 +768,9 @@ public class StartController {
                              @RequestParam(value = "userId") String userId) throws Exception {
         User user = getUser(userId);
         Event game;
-        logger.info("Description Event " + descr);
+        logger.info("Description Event " + description);
         game = new Event();
-        game.setDescription(descr);
+        game.setDescription(description);
         game.setAnswer(answer);
         game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 1000 : Integer.valueOf(sel2));
         game.setDuration(sel1.substring(0, 1).trim());
@@ -765,14 +786,18 @@ public class StartController {
         list.add(user);
         game.setUserList(list);
 
-        logger.info("event id " + eventId);
+
         if (!eventId.equals("null")) {
             logger.info("Изменяем событие с id " + eventId);
             game.setIdEvent(eventId);
             eventsService.editEventById(eventId, game.getDescription(), game.getMaxCountAnswer(), game.getDuration());
         } else {
             eventsService.publishEvent(game);
+            Playground playground = playgroundService.getPlaygroundById(playgroundId);
+            vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
+                    , user, description, game.getIdEvent(), playground.getName());
         }
+        logger.info("event id " + eventId);
         cacheService.putToCache(playgroundId, userId);
         model.addAttribute("userId", userId);
         model.addAttribute("user", user);
@@ -802,6 +827,9 @@ public class StartController {
             game.setUserLastNameCreator(user.getLastName());
             game.setUserCreatorPhoto(user.getPhoto_50());
             eventsService.publishEvent(game);
+            Playground playground = playgroundService.getPlaygroundById(playgroundId);
+            vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
+                    , user, game.getDescription(), game.getIdEvent(), playground.getName());
         }
         cacheService.putToCache(playgroundId, userId);
         model.addAttribute("userId", userId);
@@ -954,6 +982,7 @@ public class StartController {
         }
         return mapArrayList;
     }
+
 
 
     private String errorSendMessage(String userID, String idPlay, Exception e) {

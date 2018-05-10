@@ -125,7 +125,7 @@
                                                              style="margin-right: 20px"></span>История
                                                          изменений</a></li>--%>
                                                 <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
-                                                                                                                                             style="margin-right: 20px"></span>К площадке</a>
+                                                                                                                                             style="margin-right: 20px"></span>К группе</a>
                                                 </li>
 
 
@@ -154,7 +154,7 @@
                                                                                                                             style="margin-right: 20px"></span>История
                                                         изменений</a></li>--%>
                                                 <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
-                                                                                                                                             style="margin-right: 20px"></span>К площадке</a>
+                                                                                                                                             style="margin-right: 20px"></span>К группе</a>
                                                 </li>
                                             </c:otherwise>
                                         </c:choose>
@@ -205,7 +205,7 @@
                             </div>
 
                             <div class="list-group" style="margin-bottom: 5px">
-                                <a  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="answerButton_${event.idEvent}">
+                                <button  class="list-group-item "  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}', 'answerButton_${event.idEvent}')" id="answerButton_${event.idEvent}">
                                     <c:choose>
                                         <c:when test="${event.maxCountAnswer == 1000}">
                                             <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
@@ -221,7 +221,7 @@
                                     <div class="text-center">
                                         +
                                     </div>
-                                </a>
+                                </button>
                             </div>
 
                             <div class="btn-group " style="margin-top: 5px">
@@ -355,7 +355,7 @@
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                                    <a onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}', ${event.userList.size()})" class="btn btn-primary">Добавить</a>
+                                    <a id="addIgrok_${event.idEvent}" onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}', ${event.userList.size()}, 'addIgrok_${event.idEvent}')" class="btn btn-primary">Добавить</a>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->

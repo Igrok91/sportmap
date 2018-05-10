@@ -71,6 +71,10 @@
 
     function replace() {
         var replace = "start?viewer_id=" + userId;
+        var hash = '${hash}';
+        if (hash) {
+            replace = "start?viewer_id=" + userId + "&hash=" + hash;
+        }
         location.replace(replace);
     }
 </script>

@@ -38,13 +38,14 @@
             Мои профиль
         </div>
         <div class="pull-right dropdown" style="padding-top: 10px">
-            <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1"> <span
-                    class="glyphicon glyphicon-bell"></span></a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#">Включить уведомления</a></li>
-                <li class="hide"><a href="#" > <span class="glyphicon glyphicon-bell "
-                                       style="margin-right: 20px"></span>Выключить уведомления </a></li>
-            </ul>
+            <c:if test="${allowSendMessage == false}">
+                <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1"> <span
+                        class="glyphicon glyphicon-bell"></span></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#" onclick="getPermissionSendMessages()" id="notification1">>Включить уведомления</a></li>
+                </ul>
+            </c:if>
+
         </div>
     </div>
 </nav>
@@ -58,7 +59,7 @@
 
             </div>
             <div class="col-sm-8">
-                <div class="panel panel-default">
+                <div class="panel ">
                     <div class="panel-heading ">
                         <div style="margin-bottom: 10px">
                             <div class="pull-left" >
@@ -76,10 +77,10 @@
                                     <li><a onclick="editInfoUser()">
                                         <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
                                     </a></li>
-                                    <li><a href="#" onclick="getPermissionSendMessages()"> <span class="glyphicon glyphicon-bell"
+                                    <c:if test="${allowSendMessage == false}">
+                                    <li><a href="#" onclick="getPermissionSendMessages()" id="notification2"> <span class="glyphicon glyphicon-bell"
                                                            style="margin-right: 20px"></span>Включить </a></li>
-                                    <li class="hide"><a href="#"> <span class="glyphicon glyphicon-bell"
-                                                           style="margin-right: 20px"></span>Выключить </a></li>
+                                    </c:if>
                                 </ul>
                             </div>
                             <div class="media-body " style="padding-left: 15px;padding-top: 5px">
@@ -122,7 +123,7 @@
                     <div class="list-group">
                         <c:choose>
                             <c:when test="${user.playgroundIdlList.size() == 0}">
-                                <a href="#"  class="list-group-item ">
+                                <a href="#"  class="list-group-item borderless ">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
@@ -131,7 +132,7 @@
                                 </a>
                             </c:when>
                             <c:otherwise>
-                                <a href="#" id="toGroupsUser" class="list-group-item ">
+                                <a href="#" id="toGroupsUser" class="list-group-item borderless ">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${user.playgroundIdlList.size()}"/>
                             </span>
@@ -145,14 +146,14 @@
 
                         <c:choose>
                             <c:when test="${user.listParticipant.size() == 0}">
-                                <a href="#" class="list-group-item">
+                                <a href="#" class="list-group-item borderless">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                                </span></span>
                                     Участие в играх</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item">
+                                <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                   <c:out value="${user.listParticipant.size()}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -161,7 +162,7 @@
                         </c:choose>
                         <c:choose>
                             <c:when test="${countOrganize == 0}">
-                                <a href="#" class="list-group-item">
+                                <a href="#" class="list-group-item borderless">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                  <c:out value="нет"/>
                             </span></span>
@@ -169,7 +170,7 @@
 
                             </c:when>
                             <c:otherwise>
-                                <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item">
+                                <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -227,7 +228,12 @@
             text = '';
             $('#informationUser').text("нет информации");
         } else {
-            $('#informationUser').text(text);
+            var description = text.split('\n');
+            $('#informationUser').html('');
+            description.forEach(function (message, i) {
+                $('#informationUser').append(message);
+                $('#informationUser').append('<br>');
+            });
         }
 
         $.ajax({
@@ -255,7 +261,10 @@
             resizeGroups();
         });
     });
+
     function getPermissionSendMessages() {
+        $('#notification1').addClass('hide');
+        $('#notification2').addClass('hide');
         VK.callMethod("showAllowMessagesFromCommunityBox");
     }
 

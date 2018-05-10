@@ -102,13 +102,13 @@ public class Playgrounds {
     }
 
     public Playground getPlaygroundById(String idGroup) {
-        Query<Entity> entityQuery = Query.newEntityQueryBuilder()
+    /*    Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                 .setKind(PLAYGROUNDS)
                 .setFilter(StructuredQuery.PropertyFilter.eq("idPlayground", idGroup))
-                .build();
-        QueryResults<Entity>  queryResults = getDatastore().run(entityQuery);
-        if (queryResults.hasNext()) {
-            return convertEntityToPlayground(queryResults.next());
+                .build();*/
+        Entity entity = getDatastore().get(keyFactory.newKey(Long.valueOf(idGroup)));
+        if (Objects.nonNull(entity)) {
+            return convertEntityToPlayground(entity);
         }
 
         return null;

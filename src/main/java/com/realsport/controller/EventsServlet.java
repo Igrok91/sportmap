@@ -80,7 +80,7 @@ public class EventsServlet extends HttpServlet {
                     logger.warn(e);
                 }
 
-                if (Objects.nonNull(listParticipant)) {
+                if (Objects.nonNull(listParticipant) && Objects.nonNull(userEntity)) {
                     list1.addAll(listParticipant);
                     list1.add(EntityValue.of(getEntityEventUser(eventId, isOrganize)));
                     transaction.update(Entity.newBuilder(userEntity).set("listParticipant", ListValue.of(list1)).build());

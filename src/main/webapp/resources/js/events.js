@@ -1,5 +1,7 @@
-function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList) {
+function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgrokButton) {
     var addIgr = $('#countIgrok_' + eventId).val();
+    var addIgrokB = document.getElementById(addIgrokButton);
+    addIgrokB.setAttribute('disabled', 'disabled');
     $.ajax({
         url: 'addIgrok?eventId=' + eventId + '&count=' + addIgr + '&userId=' + userId
     }).then(function (value) {
@@ -49,7 +51,7 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList) {
                 break;
 
         }
-
+        addIgrokB.removeAttribute('disabled');
     });
 }
 

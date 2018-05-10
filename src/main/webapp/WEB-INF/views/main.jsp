@@ -150,14 +150,6 @@
 // 3. Отсылаем запрос
     xhr.send();*/
     VK.init(function() {
-    VK.api("users.get", {"user_ids": "${userId}", "v":"5.74"}, function (data) {
-    });
-        VK.addCallback('onAllowMessagesFromCommunity', function f(location){
-            console.log("location: " + location);
-        });
-        VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
-            console.log("location: " + location);
-        });
     }, function() {
     // API initialization failed
     // Can reload page here
