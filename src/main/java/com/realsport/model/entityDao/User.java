@@ -12,6 +12,7 @@ public class User implements Serializable {
     private String lastName;
     private String photoLink;
     private String photo_50;
+    private String photo_100;
     private String info = "";
     private boolean isAdmin = false;
     private boolean isFake = false;
@@ -122,6 +123,14 @@ public class User implements Serializable {
 
     public void setPhoto_50(String photo_50) {
         this.photo_50 = photo_50;
+    }
+
+    public String getPhoto_100() {
+        return photo_100;
+    }
+
+    public void setPhoto_100(String photo_100) {
+        this.photo_100 = photo_100;
     }
 
     @Override

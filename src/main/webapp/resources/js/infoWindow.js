@@ -114,15 +114,18 @@ function createInfoWindow(info, index, userId, sport) {
         image.appendChild(imgfootball);
     }
 
-    var mediaBody = document.createElement('div');
+    var mediaBody = document.createElement('span');
 
 
 
     var hr = document.createElement('hr');
     hr.style.marginTop = '4px';
     hr.style.marginBottom = '0px';
-
+    var span = document.createElement('span');
+    span.className = "glyphicon glyphicon-menu-right";
+    span.style.marginLeft = '4px';
     mediaBody.appendChild(document.createTextNode(info[index].namePlayground));
+    mediaBody.appendChild(span);
 
     media.appendChild(image);
     //media.appendChild(mediaBody);
@@ -134,6 +137,7 @@ function createInfoWindow(info, index, userId, sport) {
 
 
     var a = document.createElement('a');
+
 
     a.appendChild( mediaBody);
     a.id = "button";

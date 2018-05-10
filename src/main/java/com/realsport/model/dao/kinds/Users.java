@@ -31,6 +31,7 @@ public class Users {
         user.setFirstName(entity.getString("firstName"));
         user.setLastName(entity.getString("lastName"));
         user.setPhoto_50(entity.getString("photo_50"));
+        user.setPhoto_100(entity.getString("photo_100"));
         try {
             user.setInfo(entity.getString("info"));
         } catch (Exception e) {
@@ -405,7 +406,7 @@ public class Users {
         return entity;
     }
 
-    public void registerUser(String userId, String first_name, String last_name, String photo_50) {
+    public void registerUser(String userId, String first_name, String last_name, String photo_50, String photo_100) {
         Transaction tx = getDatastore().newTransaction();
         try {
             FullEntity task = FullEntity.newBuilder(keyFactory.newKey(userId))
@@ -413,6 +414,7 @@ public class Users {
                     .set("userId", userId)
                     .set("lastName", last_name)
                     .set("photo_50", photo_50)
+                    .set("photo_100", photo_100)
                     .build();
             tx.add(task);
             tx.commit();

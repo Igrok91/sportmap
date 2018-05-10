@@ -51,7 +51,7 @@
 </nav>
 <main>
 
-    <div class="container-fluid " style="margin-top: 15px">
+    <div class="container-fluid " style="margin-top: 20px">
 
 
         <div class="row content">
@@ -59,31 +59,19 @@
 
             </div>
             <div class="col-sm-8">
-                <div class="panel ">
-                    <div class="panel-heading ">
-                        <div style="margin-bottom: 10px">
-                            <div class="pull-left" >
+                <div class="panel borderless">
+                    <div class="text-center">
+                        <div style="margin-bottom: 5px">
+                            <div>
                                 <a  href="https://vk.com/id${userId}" target="_blank" >
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
-                                    <img class="round" src="${user.photo_50}" alt="Футбол" width="50"
-                                         height="50">
+                                    <img class="round" src="${user.photo_100}" alt="Футбол" width="100"
+                                         height="100">
                                 </a>
                             </div>
 
-                            <div class="pull-right dropdown" style=" margin-top: 5px;margin-bottom: 5px; ">
-                                <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3"> <span
-                                        class="glyphicon glyphicon-option-vertical"></span></a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
-                                    <li><a onclick="editInfoUser()">
-                                        <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
-                                    </a></li>
-                                    <c:if test="${allowSendMessage == false}">
-                                    <li><a href="#" onclick="getPermissionSendMessages()" id="notification2"> <span class="glyphicon glyphicon-bell"
-                                                           style="margin-right: 20px"></span>Включить </a></li>
-                                    </c:if>
-                                </ul>
-                            </div>
-                            <div class="media-body " style="padding-left: 15px;padding-top: 5px">
+
+                            <div  style="padding-top: 10px">
                                 <h4>${user.firstName} ${user.lastName}</h4>
                                 <!--    <span  class="glyphicon glyphicon-star-empty" ></span><span style="color: gray; margin-right: 15px" > 105 </span>
                                    <span style="color: gray"> 3 место</span> -->
@@ -92,14 +80,30 @@
                     </div>
                     <div class="panel-body">
                         <div>
-                            <h5><span class="glyphicon glyphicon-info-sign"></span>
-                                <span id="informationUser" style="color: gray; padding-left: 10px">
+                            <div class="pull-right dropdown">
+                                <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3"> <span
+                                        class="glyphicon glyphicon-option-vertical"></span></a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
+                                    <li><a onclick="editInfoUser()">
+                                        <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
+                                    </a></li>
+                                    <c:if test="${allowSendMessage == false}">
+                                        <li><a href="#" onclick="getPermissionSendMessages()" id="notification2"> <span class="glyphicon glyphicon-bell"
+                                                                                                                        style="margin-right: 20px"></span>Включить </a></li>
+                                    </c:if>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5><span class="glyphicon glyphicon-info-sign"></span>
+                                    <span id="informationUser" style="color: gray; padding-left: 10px">
                                          <c:if test="${user.info == null || user.info.length() == 0}">
                                              нет информации
                                          </c:if>
                                     </span>
 
-                            </h5>
+                                </h5>
+                            </div>
+
                             <div class="container-fluid hide" id="divUserInfo">
                                 <div class="row ">
                                     <div>

@@ -164,14 +164,14 @@
 
                                 </div>
                                 <div class="panel-body" style="padding-bottom: 0px">
-                                <div style="padding-bottom: 14px">
+                                <div style="padding-bottom: 19px">
                                     <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}" >
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object round" src="${event.userCreatorPhoto}"
-                                             alt="Баскетбол" width="40" height="40">
+                                             alt="Баскетбол" width="50" height="50">
 
                                     </a>
-                                    <div class="media-body" style="padding-top: 2px">
+                                    <div class="media-body" style="padding-top: 6px">
                                         <a href="user?playerId=${event.userIdCreator}&userId=${userId}" style="margin-left: 3px;" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
                                         </a>
                                     </div>
@@ -250,7 +250,7 @@
                                 <span class="btn">
 
                                     <script type="text/javascript">
-                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#eventId=${event.idEvent}"},{type: "custom", text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"}));
+                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#${event.idEvent}"},{type: "custom", text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"}));
                                   </script>
 
                                 </span>

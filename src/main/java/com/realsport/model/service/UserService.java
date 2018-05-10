@@ -56,9 +56,9 @@ public class UserService {
 
     }
 
-    public void registerUser(String userId, String first_name, String last_name, String photo_50) {
+    public void registerUser(String userId, String first_name, String last_name, String photo_50, String photo_100) {
 
-        databaseService.registerUser(userId, first_name, last_name, photo_50);
+        databaseService.registerUser(userId, first_name, last_name, photo_50, photo_100);
     }
 
     public List<TemplateGame> getTemplatesUserById(String userId) { ;

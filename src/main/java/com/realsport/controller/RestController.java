@@ -62,10 +62,11 @@ public class RestController {
     public void registerUser(@RequestParam(value = "userId") String userId,
                              @RequestParam(value = "first_name") String first_name,
                              @RequestParam(value = "last_name") String last_name,
-                             @RequestParam(value = "photo_50") String photo_50) {
+                             @RequestParam(value = "photo_50") String photo_50,
+                             @RequestParam(value = "photo_100") String photo_100) {
         logger.info("Регистрируем пользователя с id " + userId + ", first_name " +
-                first_name + ", last_name " + last_name + ", photo_50 " + photo_50);
-        userService.registerUser(userId, first_name, last_name, photo_50);
+                first_name + ", last_name " + last_name + ", photo_50 " + photo_50 + ", photo_100 " + photo_100 );
+        userService.registerUser(userId, first_name, last_name, photo_50, photo_100);
     }
 
     @RequestMapping("removeTemplate")

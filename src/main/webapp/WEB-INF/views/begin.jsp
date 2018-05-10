@@ -39,13 +39,13 @@
 <script>
     var userId = '${userId}';
     VK.init(function() {
-        VK.api("users.get", {"user_ids": "${userId}","fields": "photo_50", "v":"5.74"}, function (data) {
+        VK.api("users.get", {"user_ids": "${userId}","fields": ["photo_50", "photo_100"], "v":"5.74"}, function (data) {
 
             var user = data.response[0];
             console.log('user ' + user);
             if (user) {
                 console.log('Регистрация ' + user);
-                registerUser(user.first_name, user.last_name, user.photo_50);
+                registerUser(user.first_name, user.last_name, user.photo_50, user.photo_100);
             } else {
                 $('#error').removeClass('hide');
                 $('#loader').addClass('hide');
@@ -59,11 +59,11 @@
         $('#loader').addClass('hide');
     }, '5.74');
 
-    function registerUser(first_name, last_name, photo_50) {
+    function registerUser(first_name, last_name, photo_50, photo_100) {
         $.ajax({
             url: 'registerUser',
             method: "POST",
-            data: ({first_name: first_name, last_name: last_name, photo_50: photo_50, userId: userId}),
+            data: ({first_name: first_name, last_name: last_name, photo_50: photo_50, userId: userId, photo_100: photo_100}),
         }).then(function () {
             setTimeout('replace()', 3000);
         });

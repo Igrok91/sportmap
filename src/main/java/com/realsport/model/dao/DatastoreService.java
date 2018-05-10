@@ -195,7 +195,7 @@ public class DatastoreService {
         users.addEventToUserParticipant(userList, eventId, userId);
     }
 
-    public void registerUser(String userId, String first_name, String last_name, String photo_50) {
-        users.registerUser(userId, first_name, last_name, photo_50);
+    public void registerUser(String userId, String first_name, String last_name, String photo_50, String photo_100) {
+        users.registerUser(userId, first_name, last_name, photo_50, photo_100);
     }
 }

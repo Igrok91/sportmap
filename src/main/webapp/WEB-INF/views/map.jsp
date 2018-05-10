@@ -28,7 +28,12 @@
         /* Set black background color, white text and some padding */
 
 
+        .borderless {
+            border: 0 none;
 
+            box-shadow: none;
+
+        }
         /* On small screens, set height to 'auto' for sidenav and grid */
         @media screen and (max-width: 480px) {
            .sidenav {
@@ -176,7 +181,7 @@
     <div class="container-fluid text-center">
 
         <div class="row content">
-            <div class="sidenav"  id ="map" >
+            <div class="sidenav panel borderless"  id ="map" >
             </div>
 
         </div>

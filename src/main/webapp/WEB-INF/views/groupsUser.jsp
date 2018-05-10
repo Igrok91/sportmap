@@ -66,16 +66,16 @@
                                     <div class="media">
                                         <div class="pull-left">
                                             <c:if test="${group.getSport() == 'Футбол'}">
-                                                <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
-                                                     height="40"/>
+                                                <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="50"
+                                                     height="50"/>
                                             </c:if>
                                             <c:if test="${group.getSport() == 'Баскетбол'}">
-                                                <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
-                                                     height="40"/>
+                                                <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="50"
+                                                     height="50"/>
                                             </c:if>
                                             <c:if test="${group.getSport() == 'Волейбол'}">
-                                                <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="40"
-                                                     height="40"/>
+                                                <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="50"
+                                                     height="50"/>
                                             </c:if>
 
                                         </div>

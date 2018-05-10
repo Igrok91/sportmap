@@ -114,18 +114,13 @@ public class VkService {
                     }
                 }
                 if (isAllowSendMessages(userIdCreator)) {
-                    if (countSend == 0) {
-                        vkApiClient.messages().send(groupActor)
-                                .message("Вы успешно создали событие " + descr  + "\n" + LINK_EVENT +  idEvent)
-                                .userId(userIdCreator).randomId(random.nextInt()).execute();
-                    } else  {
                         vkApiClient.messages().send(groupActor)
                                 .message("Вы успешно создали событие в группе " + "\"" + namePlayground + "\": \n" + descr
                                         + "\n" + LINK_EVENT +  idEvent)
                                 .userId(userIdCreator).randomId(random.nextInt()).execute();
-                    }
 
                 }
+                logger.info("Уведомление отправлено " + countSend + " участникам группы " + namePlayground);
 
             }
         } catch (ApiException e) {
