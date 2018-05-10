@@ -95,7 +95,7 @@
                             </div>
                             <div>
                                 <h5><span class="glyphicon glyphicon-info-sign"></span>
-                                    <span id="informationUser" style="color: gray; padding-left: 10px">
+                                    <span id="informationUser" style="padding-left: 10px">
                                          <c:if test="${user.info == null || user.info.length() == 0}">
                                              нет информации
                                          </c:if>

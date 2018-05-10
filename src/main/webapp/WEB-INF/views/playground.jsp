@@ -201,7 +201,7 @@
                                     </div>
                                     <hr style="padding-top: 0px; margin-top: 0px; padding-bottom: 0px;margin-bottom: 0px">
                                 </c:if>
-                                <div style="background: white;padding-left: 15px;padding-top: 15px">
+                                <div style="background: white;padding-left: 15px;padding-top: 15px;padding-bottom: 10px">
                                     <div class="text-center hide" style="color: gray; padding-bottom: 10px;"
                                          id="past_${event.idEvent}">
                                         <span>Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
@@ -210,7 +210,7 @@
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object round"
                                              src="${event.userCreatorPhoto}"
-                                             alt="Баскетбол" width="40" height="40">
+                                             alt="Баскетбол" width="50" height="50">
                                     </a>
                                     <div class="pull-right dropdown"
                                          style=" margin-top: 4px;margin-bottom: 4px; padding-right: 10px">
@@ -291,7 +291,7 @@
 
                                         </ul>
                                     </div>
-                                    <div class="media-body" style="padding-left: 10px">
+                                    <div class="media-body" style="padding-left: 10px; padding-top: 6px">
 
                                         <h5 class="media-heading"
                                             style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.userFirtsNameCreator} ${event.userLastNameCreator} </h5>
@@ -755,7 +755,7 @@
         $('#endEvent_' + id).addClass('hide');
         $('#share_' + id).addClass('hide');
 
-        $('#answerButton_' + id).addClass('disabled');
+        $('#answerButton_' + id).attr('disabled', 'disabled');
         $('#commentEvents_' + id).addClass('disabled');
     }
 

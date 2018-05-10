@@ -121,10 +121,6 @@ public class DatastoreService {
     }
 
 
-    public void addPlaygroundToEventListActive(String playgroundId, String userId) {
-        users.addPlaygroundToEventListActive(playgroundId, userId);
-    }
-
     public void addUserToEvent(String eventId, User user, boolean isFake) {
         events.addUserToEvent(eventId, user, isFake);
     }

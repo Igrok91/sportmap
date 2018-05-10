@@ -115,8 +115,16 @@ public class Users {
                 }
                 if (Objects.nonNull(listValue)) {
                     List<StringValue> list = new ArrayList<>();
+                    boolean isPresent = FluentIterable.from(listValue).firstMatch(new Predicate<StringValue>() {
+                        @Override
+                        public boolean apply(StringValue stringValue) {
+                            return stringValue.get().equals(playgroundId);
+                        }
+                    }).isPresent();
                     list.addAll(listValue);
-                    list.add(StringValue.of(playgroundId));
+                    if (!isPresent) {
+                        list.add(StringValue.of(playgroundId));
+                    }
                     transaction.update(Entity.newBuilder(task).set("playgroundIdList", list).build());
                 } else {
                     transaction.update(Entity.newBuilder(task).set("playgroundIdList", ListValue.of(playgroundId)).build());
@@ -164,37 +172,6 @@ public class Users {
         }
     }
 
-    public void addPlaygroundToEventListActive(String playgroundId, String userId) {
-        Transaction transaction = getDatastore().newTransaction();
-        try {
-            Entity user = transaction.get(keyFactory.newKey(userId));
-            logger.info("user" + user);
-            if (Objects.nonNull(user)) {
-                List<StringValue> listValue = null;
-                try {
-                    listValue = user.getList("eventListActive");
-                } catch (Exception e) {
-                    logger.warn(e);
-                }
-                if (Objects.nonNull(listValue)) {
-                    List<StringValue> list = new ArrayList<>();
-                    list.addAll(listValue);
-                    list.add(StringValue.of(playgroundId));
-                    transaction.update(Entity.newBuilder(user).set("eventListActive", list).build());
-                } else {
-                    transaction.update(Entity.newBuilder(user).set("eventListActive", ListValue.of(playgroundId)).build());
-                }
-                logger.info("Добавили в список групп пользователя " + userId + " группу " + playgroundId);
-
-            }
-            transaction.commit();
-        } finally {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-        }
-
-    }
 
     public List<TemplateGame> getTemplatesUserById(String userId) {
         Entity entity = getDatastore().get(keyFactory.newKey(userId));

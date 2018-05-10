@@ -20,28 +20,11 @@ import static com.realsport.model.dao.Persistence.getKeyFactory;
 public class Playgrounds {
     private Log logger = LogFactory.getLog(Playgrounds.class);
 
-    public static final String EVENTS_FOOTBALL = "EventsFootball";
-    public static final String EVENTS_BASKETBALL = "EventsBasketball";
-    public static final String EVENTS_VOLEYBALL = "EventsVoleyball";
-
     public static final String PLAYGROUNDS = "Playgrounds";
 
     List<Playground> listPlayground = new ArrayList<>();
 
     private static final KeyFactory keyFactory = getKeyFactory(Playgrounds.class);
-
-    /**
-     * Получение всех площадок
-     */
-    public List<Playground> getFootballPlayground() {
-        List<Playground> footballPlaygrounds = FluentIterable.from(listPlayground).filter(new Predicate<Playground>() {
-            @Override
-            public boolean apply(Playground playground) {
-                return playground.getSport().equals(KindSport.FOOTBALL.getSport());
-            }
-        }).toList();
-        return footballPlaygrounds;
-    }
 
     private List<Playground> convertListEntityToPlayground(QueryResults<Entity> queryResults) {
         List<Playground> list = new ArrayList<>();
@@ -150,8 +133,16 @@ public class Playgrounds {
             }
                 if (Objects.nonNull(listValue)) {
                     List<EntityValue> list = new ArrayList<>();
+                    boolean isPresent = FluentIterable.from(listValue).firstMatch(new Predicate<EntityValue>() {
+                        @Override
+                        public boolean apply(EntityValue entityValue) {
+                            return entityValue.get().getString("userId").equals(minUser.getUserId());
+                        }
+                    }).isPresent();
                     list.addAll(listValue);
-                    list.add(getEntityValueFromMinUser(minUser));
+                    if (!isPresent) {
+                        list.add(getEntityValueFromMinUser(minUser));
+                    }
                     transaction.update(Entity.newBuilder(task).set("players", list).build());
                 } else {
                     transaction.update(Entity.newBuilder(task).set("players", ListValue.of(getEntityValueFromMinUser(minUser))).build());

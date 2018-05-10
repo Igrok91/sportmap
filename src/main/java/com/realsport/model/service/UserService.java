@@ -86,11 +86,6 @@ public class UserService {
         databaseService.deletePlaygroundFromUser(userId, playgroundId);
     }
 
-    public void addPlaygroundToEventListActive(String playgroundId, String userId) {
-        databaseService.addPlaygroundToEventListActive(playgroundId, userId);
-    }
-
-
     public void addEventToUserParticipant(List<User> userList, Long eventId, String userId) {
         databaseService.addEventToUserParticipant(userList, eventId, userId);
     }

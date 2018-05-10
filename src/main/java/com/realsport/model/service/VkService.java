@@ -105,7 +105,7 @@ public class VkService {
                 for (MinUser user : players) {
                     Integer userId = Integer.valueOf(user.getUserId());
                     if (!Objects.equals(userId, userIdCreator)) {
-                        if (isAllowSendMessages(userId)) {
+                        if (isAllowSendMessages(userId) ) {
                             vkApiClient.messages().send(groupActor).message(userCreator.getFirstName() + " " + userCreator.getLastName()
                                     + " создал(а) опрос в группе " + "\"" + namePlayground + "\": \n"
                                     + descr + "\n" + LINK_EVENT + idEvent).userId(userId).randomId(random.nextInt()).execute();
@@ -141,7 +141,7 @@ public class VkService {
                 for (User user : userList) {
                     Integer userId = Integer.valueOf(user.getUserId());
                     if (!Objects.equals(userId, userIdCreator)) {
-                        if (isAllowSendMessages(userId)) {
+                        if (isAllowSendMessages(userId) && !user.isFake()) {
                             vkApiClient.messages().send(groupActor).message(event.getUserFirtsNameCreator() + " " + event.getUserLastNameCreator()
                                     + " удалил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
                                     + event.getDescription()).userId(userId).randomId(random.nextInt()).execute();
@@ -168,7 +168,7 @@ public class VkService {
                 for (User user : userList) {
                     Integer userId = Integer.valueOf(user.getUserId());
                     if (!Objects.equals(userId, userIdCreator)) {
-                        if (isAllowSendMessages(userId)) {
+                        if (isAllowSendMessages(userId) && !user.isFake()) {
                             vkApiClient.messages().send(groupActor).message(event.getUserFirtsNameCreator() + " " + event.getUserLastNameCreator()
                                     + " завершил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
                                     + event.getDescription()  + "\n" + LINK_EVENT + event.getIdEvent()).userId(userId).randomId(random.nextInt()).execute();

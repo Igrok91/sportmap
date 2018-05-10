@@ -792,8 +792,7 @@
         $('#share_' + id).addClass('hide');
         $('#commentArea').addClass('hide');
         $('#textComment').attr('disabled', 'disabled');
-
-        $('#answerButton_' + id).addClass('disabled');
+        $('#answerButton_' + id).attr('disabled', 'disabled');
 
     }
 
