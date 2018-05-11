@@ -106,8 +106,8 @@ public class VkService {
                     Integer userId = Integer.valueOf(user.getUserId());
                     if (!Objects.equals(userId, userIdCreator)) {
                         if (isAllowSendMessages(userId) ) {
-                            vkApiClient.messages().send(groupActor).message(userCreator.getFirstName() + " " + userCreator.getLastName()
-                                    + " создал(а) опрос в группе " + "\"" + namePlayground + "\": \n"
+                            vkApiClient.messages().send(groupActor).message(" Открыт опрос в группе " + "\""
+                                    + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
                                     + descr + "\n" + LINK_EVENT + idEvent).userId(userId).randomId(random.nextInt()).execute();
                             countSend++;
                         }
@@ -115,8 +115,8 @@ public class VkService {
                 }
                 if (isAllowSendMessages(userIdCreator)) {
                         vkApiClient.messages().send(groupActor)
-                                .message("Вы успешно создали событие в группе " + "\"" + namePlayground + "\": \n" + descr
-                                        + "\n" + LINK_EVENT +  idEvent)
+                                .message("Вы успешно создали событие в группе " + "\"" + namePlayground + "\": \n"
+                                        + LINK_EVENT +  idEvent)
                                 .userId(userIdCreator).randomId(random.nextInt()).execute();
 
                 }

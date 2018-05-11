@@ -564,6 +564,7 @@
     }
 
     var sp = '${sport}';
+    var allowSendMessage = ${allowSendMessage};
     if (sp == 'Футбол') {
         $('#panelGroup').addClass('panel-success');
         $('#imageGroup').attr("src", "resources/image/стадион.png")
@@ -594,7 +595,9 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 + 1;
                 $('#players').text(count2);
-                VK.callMethod("showAllowMessagesFromCommunityBox");
+                if (!allowSendMessage) {
+                    VK.callMethod("showAllowMessagesFromCommunityBox");
+                }
             } else {
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');

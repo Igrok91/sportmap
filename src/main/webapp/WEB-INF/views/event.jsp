@@ -298,13 +298,7 @@
                                 <hr id="hrComment"  style="margin-top: 0px; padding-top: 0px; margin-bottom: 7px;padding-bottom: 7px">
                             </c:if>
                             <div>
-                                <a class="pull-left" href="#" style="margin-left: 15px;">
-                                    <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
-                                    <img class="media-object round" src="${user.photo_50}" alt="user" width="35"
-                                         height="35">
-                                </a>
-
-                                <div class="media-body">
+                                <div>
 
                                     <div class="container-fluid">
                                         <div class="row ">

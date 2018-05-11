@@ -334,6 +334,7 @@ public class StartController {
         }
         model.addAttribute("firstName", user.getFirstName());
         model.addAttribute("lastName", user.getLastName());
+        model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
 
         model.addAttribute("isParticipant", isParticipant(user.getPlaygroundIdlList(), idGroup));
     }
