@@ -4,7 +4,6 @@ package com.realsport.model.service;
 import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.MinUser;
 import com.realsport.model.entityDao.User;
-import com.realsport.vk.InitVk;
 import com.realsport.vk.InitVkMain;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -35,7 +34,7 @@ public class VkService {
     private static final String LINK_EVENT = "https://vk.com/app6437488_-148660655#";
 
 
-    public  void sendMessage(Integer userId, String message) throws Exception {
+    public void sendMessage(Integer userId, String message) throws Exception {
         try {
             logger.info(" Отправляем сообщение " + message + " пользователю " + userId);
             getVkApiClient().messages().send(InitVkMain.getGroupActor()).message(message).userId(userId).randomId(random.nextInt()).execute();
@@ -45,7 +44,8 @@ public class VkService {
             logger.error(e);
         }
     }
-    public  boolean isAllowSendMessages(Integer userId){
+
+    public boolean isAllowSendMessages(Integer userId) {
         BoolInt allowedQuery = null;
         try {
             allowedQuery = getVkApiClient().messages().isMessagesFromGroupAllowed(InitVkMain.getGroupActor(), userId).execute().getIsAllowed();
@@ -59,13 +59,13 @@ public class VkService {
     }
 
 
-    public  void sendMessageNew(Integer userId, String message, String access_token ) throws Exception {
+    public void sendMessageNew(Integer userId, String message, String access_token) throws Exception {
         try {
 
             List<UserXtrCounters> response = InitVkMain.getVkApiClient().users().get(new UserActor(userId, access_token)).execute();
             String firstName = response.get(0).getFirstName();
             String lastName = response.get(0).getLastName();
-            getVkApiClient().messages().send(InitVkMain.getGroupActor()).message(message + " " + firstName + " " + lastName ).userId(ADMIN).randomId(random.nextInt()).execute();
+            getVkApiClient().messages().send(InitVkMain.getGroupActor()).message(message + " " + firstName + " " + lastName).userId(ADMIN).randomId(random.nextInt()).execute();
         } catch (ApiException e) {
             throw e;
         } catch (ClientException e) {
@@ -78,7 +78,7 @@ public class VkService {
             List<UserXtrCounters> response = getVkApiClient().users().get(new UserActor(Integer.valueOf(userId), access_token)).execute();
             String firstName = response.get(0).getFirstName();
             String lastName = response.get(0).getLastName();
-            sendMessage(Integer.valueOf(userId), "firstName " + firstName + ", lastName " + lastName );
+            sendMessage(Integer.valueOf(userId), "firstName " + firstName + ", lastName " + lastName);
         } catch (ApiException e) {
             e.printStackTrace();
         } catch (ClientException e) {
@@ -105,19 +105,19 @@ public class VkService {
                 for (MinUser user : players) {
                     Integer userId = Integer.valueOf(user.getUserId());
                     if (!Objects.equals(userId, userIdCreator)) {
-                        if (isAllowSendMessages(userId) ) {
+                        if (isAllowSendMessages(userId)) {
                             vkApiClient.messages().send(groupActor).message(" Открыт опрос в группе " + "\""
                                     + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
-                                    + descr + "\n" + LINK_EVENT + idEvent).userId(userId).randomId(random.nextInt()).execute();
+                                    + getMinText(descr) + "\n" + LINK_EVENT + idEvent).userId(userId).randomId(random.nextInt()).execute();
                             countSend++;
                         }
                     }
                 }
                 if (isAllowSendMessages(userIdCreator)) {
-                        vkApiClient.messages().send(groupActor)
-                                .message("Вы успешно создали событие в группе " + "\"" + namePlayground + "\": \n"
-                                        + LINK_EVENT +  idEvent)
-                                .userId(userIdCreator).randomId(random.nextInt()).execute();
+                    vkApiClient.messages().send(groupActor)
+                            .message("Вы успешно открыли опрос в группе " + "\"" + namePlayground + "\": \n"
+                                    + LINK_EVENT + idEvent)
+                            .userId(userIdCreator).randomId(random.nextInt()).execute();
 
                 }
                 logger.info("Уведомление отправлено " + countSend + " участникам группы " + namePlayground);
@@ -144,7 +144,7 @@ public class VkService {
                         if (isAllowSendMessages(userId) && !user.isFake()) {
                             vkApiClient.messages().send(groupActor).message(event.getUserFirtsNameCreator() + " " + event.getUserLastNameCreator()
                                     + " удалил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
-                                    + event.getDescription()).userId(userId).randomId(random.nextInt()).execute();
+                                    + getMinText(event.getDescription())).userId(userId).randomId(random.nextInt()).execute();
                         }
                     }
                 }
@@ -171,7 +171,7 @@ public class VkService {
                         if (isAllowSendMessages(userId) && !user.isFake()) {
                             vkApiClient.messages().send(groupActor).message(event.getUserFirtsNameCreator() + " " + event.getUserLastNameCreator()
                                     + " завершил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
-                                    + event.getDescription()  + "\n" + LINK_EVENT + event.getIdEvent()).userId(userId).randomId(random.nextInt()).execute();
+                                    + getMinText(event.getDescription()) + "\n" + LINK_EVENT + event.getIdEvent()).userId(userId).randomId(random.nextInt()).execute();
                         }
                     }
                 }
@@ -181,5 +181,34 @@ public class VkService {
         } catch (ClientException e) {
             logger.error(e);
         }
+    }
+
+    public void notifyOrganisatorUserAnswer(String id, String idCreator, String eventId) {
+        try {
+            logger.info("Отправляем уведомление организатору игры, что пользователь отменил голос");
+            VkApiClient vkApiClient = getVkApiClient();
+            GroupActor groupActor = InitVkMain.getGroupActor();
+            Integer userIdCreator = Integer.valueOf(idCreator);
+            Integer userId = Integer.valueOf(id);
+            if (!Objects.equals(userId, userIdCreator)) {
+                if (isAllowSendMessages(userIdCreator)) {
+                    vkApiClient.messages().send(groupActor).message("Пользователь https://vk.com/id" + userId
+                            + " отменил голос: \n"
+                            + LINK_EVENT + eventId).userId(userIdCreator).randomId(random.nextInt()).execute();
+                }
+            }
+        } catch (ApiException e) {
+            logger.error(e);
+        } catch (ClientException e) {
+            logger.error(e);
+        }
+    }
+
+    private String getMinText(String description) {
+        String minText = description;
+        if (description.length() > 35) {
+            minText = description.substring(0, 30) + "...";
+        }
+        return minText;
     }
 }

@@ -49,6 +49,10 @@
         .round {
             border-radius: 50%;
         }
+
+        .cursorPointer {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body id="eventMain">
@@ -70,7 +74,7 @@
         <a href="#" onclick="" class="btn pull-right hide"  id="deleteComment" style="padding: 0px;background: white">  <span class="glyphicon glyphicon-remove "></span></a>
         <div class="media-body ">
             <h5 class="media-heading"
-                style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px;color: #77A5C5" id="templateCommentName"></h5>
+                style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px;" id="templateCommentName"></h5>
             <span style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 2px" id="templateCommentMessage"></span>
             <span style="color: gray" id="templateCommentDate"></span>
         </div>
@@ -114,10 +118,10 @@
                                             <c:when test="${event.userIdCreator == userId}">
                                                 <c:set var="playgroundId" value="${event.playgroundId}" />
                                                 <c:set var="sport" value="${event.sport}" />
-                                                <li class="liOptions"><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="cancelAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                <li class="liOptions"><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="cancelAnswer_${event.idEvent}" class="cursorPointer"> <span class="glyphicon glyphicon-minus"
                                                                                                                                                                                    style="margin-right: 20px"></span>Отменить голос</a>
                                                 </li>
-                                                <li class="liOptions"><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="doAnswer_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                <li class="liOptions"><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="doAnswer_${event.idEvent}" class="cursorPointer"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                                style="margin-right: 20px"></span>Проголосовать</a>
                                                 </li>
                                                 <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
@@ -144,10 +148,10 @@
                                             <c:otherwise>
                                                 <c:set var="playgroundId" value="${event.playgroundId}" />
                                                 <c:set var="sport" value="${event.sport}" />
-                                                <li class="liOptions"><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="cancelAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-minus"
+                                                <li class="liOptions"><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="cancelAnswer2_${event.idEvent}" class="cursorPointer"> <span class="glyphicon glyphicon-minus"
                                                                                                                                                                                     style="margin-right: 20px"></span>Отменить голос</a>
                                                 </li>
-                                                <li class="liOptions"><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="doAnswer2_${event.idEvent}"> <span class="glyphicon glyphicon-plus"
+                                                <li class="liOptions"><a  onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'eventId=${event.idEvent}&playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')" id="doAnswer2_${event.idEvent}" class="cursorPointer"> <span class="glyphicon glyphicon-plus"
                                                                                                                                                                                 style="margin-right: 20px"></span>Проголосовать</a>
                                                 </li>
                                                 <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
@@ -177,14 +181,14 @@
                         </div>
                         <div class="panel-body" style="padding-bottom: 0px">
                             <div style="padding-bottom: 12px">
-                                <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}" >
+                                <a class="pull-left" href="user?playerId=${event.userIdCreator}&eventId=${event.idEvent}&userId=${userId}" >
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                     <img id="${event.idEvent}_imgPlayground" class="media-object round" src="${event.userCreatorPhoto}"
                                          alt="Баскетбол" width="40" height="40">
 
                                 </a>
                                 <div class="media-body" >
-                                    <a href="user?playerId=${event.userIdCreator}&userId=${userId}" style="margin-left: 3px;" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                                    <a href="user?playerId=${event.userIdCreator}&userId=${userId}&eventId=${event.idEvent}" style="margin-left: 3px;" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
                                     </a>
                                 </div>
 
@@ -271,7 +275,7 @@
                                 <c:set var="userId" value="${userId}"></c:set>
                                 <li class="list-group-item" style="padding-bottom: 1px;padding-top: 5px" id="${comment.commentId}" onmouseenter="handler(event)" onmouseleave="handler(event)">
                                     <div class="media">
-                                        <a class="pull-left" href="user?playerId=${comment.userId}&userId=${userId}"
+                                        <a class="pull-left" href="user?playerId=${user.userId}&eventId=${event.idEvent}&userId=${userId}"
                                            style="margin-top: 5px">
                                             <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="35" height="35"> -->
                                             <img class="media-object round" src="${comment.userPhoto}" alt="user"
@@ -282,7 +286,7 @@
                                         </c:if>
                                         <div class="media-body ">
                                             <h5 class="media-heading"
-                                                style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px;color: #77A5C5">${comment.firstName} ${comment.lastName}</h5>
+                                                style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px;">${comment.firstName} ${comment.lastName}</h5>
                                             <span style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 2px">${comment.message}</span>
                                             <br>
                                             <span style="color: gray">${comment.date}</span>
@@ -302,13 +306,13 @@
 
                                     <div class="container-fluid">
                                         <div class="row ">
-                                            <div class="col-xs-9 col-md-11 col-sm-11  ">
+                                            <div class="col-xs-10 col-md-11 col-sm-11  ">
                                                 <textarea type="text" id="textComment" style="padding-bottom: 15px; margin-bottom: 0px; "
                                                           class="form-control borderless  media-heading" rows="1"
                                                           placeholder="Ваше сообщение" aria-label=""></textarea>
                                                 <hr style="padding: 0px; margin:0px">
                                             </div>
-                                            <div class="col-xs-3 col-md-1 col-sm-1 pull-right " style="padding-left: 3px">
+                                            <div class="col-xs-2 col-md-1 col-sm-1 pull-right " style="padding-left: 3px">
                                                 <a href="#" onclick="sendCommentUser()" class="btn  pull-right" id="send"><span
                                                         style="padding-bottom: 10px"> <img
                                                         src="resources/image/send.png" width="25"
@@ -420,7 +424,6 @@
     var usersList = event.userList;
     var sp = event.sport;
     var id = event.idEvent;
-    console.log("idEvent " + id);
 
     var element = document.getElementById(id);
     var imgPlayground = document.getElementById(id + '_imgPlayground');
@@ -448,7 +451,6 @@
             // Определяем истинное значение игроков
             if (maxCountAnswer == 1000) {
                 var count = parseInt($('#badge1_'+id).text());
-                console.log("badge1 " + $('#badge1_'+id).text())
                 if (usersList) {
                     usersList.forEach(function (user, i) {
                         if (user.countFake != 0) {
@@ -461,7 +463,6 @@
                 $('#badge1_'+ id).text(count);
             } else {
                 var count = parseInt($('#badge2_'+id).text().split(' / ')[0]);
-                console.log("badge2 " + $('#badge2_'+id).text());
                 if (usersList) {
                     usersList.forEach(function (user, i) {
                         if (user.countFake != 0) {
@@ -529,11 +530,9 @@
             }).then(function (comment) {
                     switch (comment.success) {
                         case true:
-                            console.log('comment send');
                             addCommentToListComments(comment, eventId);
                             break;
                         case false:
-                            console.log('comment not send');
                             $('#alertFail_' + eventId).removeClass('hide');
                             $('#alertFail_' + eventId).alert();
                             break;
@@ -600,7 +599,6 @@
     function handleText() {
             var t = $('#textComment').val().trim();
             var text = t.split('');
-            console.log("description " + text.length);
             if (text.length > 0) {
                 $('#send').removeClass('disabled');
             } else {
@@ -631,15 +629,13 @@
     var dateNow = new Date().getTime();
 
     function updateData() {
-        console.log("observer");
         var userId = '${userId}';
         var playgroundId = '${event.playgroundId}';
         var eventId = '${event.idEvent}';
         var isWatch = false;
         $.ajax({
-            url: 'getNewDataEvent?date=' + dateNow + '&userId=' + userId + '&playgroundId=' + playgroundId + '&eventId=' + eventId
+            url: 'getNewDataEvent?date=' + dateNow + '&userId=' + userId  + '&eventId=' + eventId
         }).then(function (value) {
-            console.log("success");
 
             if (value) {
                 console.log("data edit");
@@ -661,7 +657,9 @@
 
                     if(event.maxCountAnswer == 1000) {
                         var count = usersList.length;
-                        $('#imgUserList_'+ eventId).empty();
+                        if (!isWatch) {
+                            $('#imgUserList_'+ eventId).empty();
+                        }
                         $('#templateUserList2').removeClass('hide');
                         usersList.forEach(function (user, i) {
                             // Если фейк
@@ -683,6 +681,8 @@
                                 }
                             } else {
                                 if (!isWatch) {
+                                    var img = document.getElementById('imageUser');
+                                    img.src = user.photo_50;
                                     var userImg = document.getElementById("templateUserList2").cloneNode(true);
                                     userImg.id = user.userId + '_imgUser_' + eventId;
                                     userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
@@ -696,10 +696,13 @@
                     } else {
                         var count = usersList.length;
 
-                        $('#imgUserList_'+ eventId).empty();
+                        if (!isWatch) {
+                            $('#imgUserList_'+ eventId).empty();
+                        }
                         $('#templateUserList2').removeClass('hide');
                         usersList.forEach(function (user, i) {
                             if (user.countFake != 0) {
+
                                 count = (count - 1) + user.countFake;
                                 if (!isWatch) {
                                     $('#imageUser').addClass('hide');
@@ -717,6 +720,8 @@
                                 }
                             } else {
                                 if (!isWatch) {
+                                    var img = document.getElementById('imageUser');
+                                    img.src = user.photo_50;
                                     var userImg = document.getElementById("templateUserList2").cloneNode(true);
                                     userImg.id = user.userId + '_imgUser_' + eventId;
                                     userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";

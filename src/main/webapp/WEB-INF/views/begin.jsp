@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>SportMap</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -27,7 +27,7 @@
         <div class="row content">
             <div class="load">
                 <p style="color: gray" id="error" class="hide">Произошла ошибка</p>
-                <div   id ="loader" >
+                <div id="loader">
                     <img src="resources/images/errorgif.gif">
                 </div>
             </div>
@@ -35,14 +35,17 @@
         </div>
     </div>
 </main>
-<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 <script>
     var userId = '${userId}';
-    VK.init(function() {
-        VK.api("users.get", {"user_ids": "${userId}","fields": ["photo_50", "photo_100"], "v":"5.74"}, function (data) {
+    VK.init(function () {
+        VK.api("users.get", {
+            "user_ids": "${userId}",
+            "fields": ["photo_50", "photo_100"],
+            "v": "5.74"
+        }, function (data) {
 
             var user = data.response[0];
-            console.log('user ' + user);
             if (user) {
                 console.log('Регистрация ' + user);
                 registerUser(user.first_name, user.last_name, user.photo_50, user.photo_100);
@@ -52,7 +55,7 @@
             }
         });
 
-    }, function() {
+    }, function () {
         // API initialization failed
         // Can reload page here
         $('#error').removeClass('hide');
@@ -63,7 +66,13 @@
         $.ajax({
             url: 'registerUser',
             method: "POST",
-            data: ({first_name: first_name, last_name: last_name, photo_50: photo_50, userId: userId, photo_100: photo_100}),
+            data: ({
+                first_name: first_name,
+                last_name: last_name,
+                photo_50: photo_50,
+                userId: userId,
+                photo_100: photo_100
+            }),
         }).then(function () {
             setTimeout('replace()', 3000);
         });

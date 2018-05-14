@@ -1,11 +1,12 @@
 package com.realsport.model.entityDao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Playground {
+public class Playground implements Serializable{
     private String idplayground;
     private String name;
     private String latitude;

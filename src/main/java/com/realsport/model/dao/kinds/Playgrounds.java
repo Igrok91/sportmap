@@ -1,10 +1,18 @@
 package com.realsport.model.dao.kinds;
 
-import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.EntityValue;
+import com.google.cloud.datastore.FullEntity;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.LatLng;
+import com.google.cloud.datastore.ListValue;
+import com.google.cloud.datastore.Query;
+import com.google.cloud.datastore.QueryResults;
+import com.google.cloud.datastore.Transaction;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.realsport.model.entityDao.*;
-import com.realsport.model.utils.KindSport;
+import com.realsport.model.entityDao.MinUser;
+import com.realsport.model.entityDao.Playground;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
@@ -45,11 +53,10 @@ public class Playgrounds {
                 List<EntityValue> listValues = entity.getList("players");
                 playground.setPlayers(convertListValueToUserList(listValues));
             } catch (Exception e) {
-                logger.warn(e);
+                // logger.warn(e);
             }
 
             list.add(playground);
-            logger.info(playground.getPlayers());
         }
         return list;
     }
@@ -71,12 +78,11 @@ public class Playgrounds {
     }
 
 
-
     public List<Playground> getAllPlayground() {
         try {
             Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                     .setKind(PLAYGROUNDS).build();
-            QueryResults<Entity>  queryResults = getDatastore().run(entityQuery);
+            QueryResults<Entity> queryResults = getDatastore().run(entityQuery);
             listPlayground = convertListEntityToPlayground(queryResults);
         } catch (Exception e) {
             logger.warn("Нет площадок");
@@ -85,10 +91,6 @@ public class Playgrounds {
     }
 
     public Playground getPlaygroundById(String idGroup) {
-    /*    Query<Entity> entityQuery = Query.newEntityQueryBuilder()
-                .setKind(PLAYGROUNDS)
-                .setFilter(StructuredQuery.PropertyFilter.eq("idPlayground", idGroup))
-                .build();*/
         Entity entity = getDatastore().get(keyFactory.newKey(Long.valueOf(idGroup)));
         if (Objects.nonNull(entity)) {
             return convertEntityToPlayground(entity);
@@ -109,7 +111,7 @@ public class Playgrounds {
         playground.setHouse(entity.getString("house"));
         playground.setSport(entity.getString("sport"));
         try {
-            List<EntityValue>  listValues = entity.getList("players");
+            List<EntityValue> listValues = entity.getList("players");
             playground.setPlayers(convertListValueToUserList(listValues));
         } catch (Exception e) {
             logger.warn(e);
@@ -125,12 +127,12 @@ public class Playgrounds {
             Entity task = transaction.get(keyFactory.newKey(Long.valueOf(playgroundId)));
             logger.info("task " + task);
             if (Objects.nonNull(task)) {
-            List<EntityValue> listValue = null;
-            try {
-                listValue = task.getList("players");
-            } catch (Exception e) {
-                logger.warn(e);
-            }
+                List<EntityValue> listValue = null;
+                try {
+                    listValue = task.getList("players");
+                } catch (Exception e) {
+                    logger.warn(e);
+                }
                 if (Objects.nonNull(listValue)) {
                     List<EntityValue> list = new ArrayList<>();
                     boolean isPresent = FluentIterable.from(listValue).firstMatch(new Predicate<EntityValue>() {

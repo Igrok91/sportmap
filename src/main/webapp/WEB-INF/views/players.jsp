@@ -21,13 +21,13 @@
 
         /* Set black background color, white text and some padding */
 
-
         .borderless {
             border: 0 none;
 
             box-shadow: none;
 
         }
+
         .round {
             border-radius: 50%;
         }
@@ -45,23 +45,23 @@
 </nav>
 
 
-<main >
+<main>
 
     <div class="container " style="margin-top: 5px">
 
 
-        <div class="row content" >
+        <div class="row content">
             <div class="col-sm-2">
 
             </div>
             <div class="col-sm-8">
-                <div class="list-group" id="listGroupsUser" >
+                <div class="list-group" id="listGroupsUser">
                     <c:forEach var="user" items="${userList}">
                         <a href="user?playerId=${user.userId}&userId=${userId}" class="list-group-item borderless">
                             <div class="media">
                                 <div class="pull-left">
-                                        <img class="media-object round" src="${user.photo_50}" alt="Футбол" width="50"
-                                             height="50"/>
+                                    <img class="media-object round" src="${user.photo_50}" alt="Футбол" width="50"
+                                         height="50"/>
                                 </div>
                                 <div class="pull-right" style="padding-top: 12px;">
                                     <c:if test="${user.countFake > 0}">
@@ -71,7 +71,8 @@
                                 <div class="media-body " style="padding-top: 12px;padding-left: 10px">
                                         <%--       <h4 class="media-heading"
                                                    style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${user.firstName}</h4>--%>
-                                    <span style="font-size: medium" >${user.firstName} ${user.lastName} <span style="padding-left: 10px">
+                                    <span style="font-size: medium">${user.firstName} ${user.lastName} <span
+                                            style="padding-left: 10px">
 
                                     </span></span>
                                 </div>
@@ -84,17 +85,17 @@
             <div class="col-sm-2">
 
             </div>
+        </div>
     </div>
-</div>
 </main>
-<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 <script>
     var back = '${returnBack}';
     var returnBack;
     if (back === 'playground') {
         returnBack = 'playground?playgroundId=' + '${playgroundId}' + '&userId=' + ${userId};
     } else {
-        returnBack = 'home?where=' + '${returnBack}'  + '&userId=' + ${userId};
+        returnBack = 'home?where=' + '${returnBack}' + '&userId=' + ${userId};
     }
     $('#returnBack').attr('href', returnBack);
 

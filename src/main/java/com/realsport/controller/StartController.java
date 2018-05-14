@@ -235,7 +235,7 @@ public class StartController {
 
     private void setPlaygroundDataToModel(Model model, String id) throws Exception {
         try {
-            //vkService.sendMessage(ADMIN, "В приложение зашел пользователь с id " + id);
+            vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + id);
             allPlaygroundList = playgroundService.getAllPlayground();
             logger.info("allPlaygroundList " + allPlaygroundList.size());
             // Получение данных по площадкам из базы данных
@@ -512,7 +512,7 @@ public class StartController {
             Event event = eventsService.getEventById(eventId);
             eventsService.deleteGame(eventId);
             vkService.notifyDeleteUsersEvent(event, userId);
-            cacheService.putToCache(id, userId);
+            cacheService.putToCache(eventId, userId);
         }
         if (where.equals("playground")) {
             return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
@@ -570,7 +570,7 @@ public class StartController {
             }
         }
 
-        cacheService.putToCache(id, userId);
+        cacheService.putToCache(eventId, userId);
         if (where.equals("playground")) {
             return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
         }
@@ -615,7 +615,7 @@ public class StartController {
         }).size();
         model.addAttribute("userlastName", user.getLastName());
         model.addAttribute("userfirstName", user.getFirstName());
-        model.addAttribute("userPhoto", user.getPhoto_50());
+        model.addAttribute("userPhoto", user.getPhoto_100());
         model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
         model.addAttribute("countOrganize", countOrganize);
         model.addAttribute("countParticipant", user.getListParticipant().size());
@@ -799,7 +799,7 @@ public class StartController {
                     , user, description, game.getIdEvent(), playground.getName());
         }
         logger.info("event id " + eventId);
-        cacheService.putToCache(playgroundId, userId);
+        cacheService.putToCache(game.getIdEvent(), userId);
         model.addAttribute("userId", userId);
         model.addAttribute("user", user);
         return "redirect:/home";
@@ -832,16 +832,12 @@ public class StartController {
             vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
                     , user, game.getDescription(), game.getIdEvent(), playground.getName());
         }
-        cacheService.putToCache(playgroundId, userId);
+        cacheService.putToCache(game.getIdEvent(), userId);
         model.addAttribute("userId", userId);
         model.addAttribute("user", user);
         return "redirect:/home";
     }
 
-    private Date getDateCreation() {
-
-        return new Date();
-    }
 
 
     private ArrayList<String> getUserTemplates(List<TemplateGame> list) {

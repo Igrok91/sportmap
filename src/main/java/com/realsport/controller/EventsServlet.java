@@ -99,10 +99,10 @@ public class EventsServlet extends HttpServlet {
         }
     }
 
-    private FullEntity getEntityEventUser(Long eventId, boolean userIdCreator) {
+    private FullEntity getEntityEventUser(Long eventId, boolean userCreator) {
         FullEntity entity = FullEntity.newBuilder()
                 .set("eventId", LongValue.of(eventId))
-                .set("isOrganize", BooleanValue.of(userIdCreator))
+                .set("isOrganize", BooleanValue.of(userCreator))
                 .build();
         return entity;
     }

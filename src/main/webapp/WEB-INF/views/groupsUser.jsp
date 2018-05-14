@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -23,8 +23,8 @@
         .borderless {
             border: 0 none;
 
-
         }
+
         hr {
             margin-top: 5px;
             margin-bottom: 0px;
@@ -43,9 +43,9 @@
 
     </div>
 </nav>
-<main >
+<main>
 
-    <div class="container-fluid " >
+    <div class="container-fluid ">
 
 
         <div class="row content">
@@ -56,25 +56,30 @@
                 <c:choose>
                     <c:when test="${allPlaygroundUser.size() == 0}">
                         <div class="text-center" style="padding-top: 20px">
-                            <span style="color: gray">У вас пока нет групп <br> Чтобы вступить в группу перейдите в посик <span class="glyphicon glyphicon-search" aria-hidden=""></span></span>
+                            <span style="color: gray">У вас пока нет групп <br> Чтобы вступить в группу перейдите в посик <span
+                                    class="glyphicon glyphicon-search" aria-hidden=""></span></span>
                         </div>
                     </c:when>
                     <c:otherwise>
                         <div class="list-group" id="listGroupsUser" style="padding-top: 7px">
                             <c:forEach var="group" items="${allPlaygroundUser}">
-                                <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}&userId=${userId}" class="list-group-item borderless">
+                                <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}&userId=${userId}"
+                                   class="list-group-item borderless">
                                     <div class="media">
                                         <div class="pull-left">
                                             <c:if test="${group.getSport() == 'Футбол'}">
-                                                <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="50"
+                                                <img class="media-object" src="resources/image/стадион3.png"
+                                                     alt="Футбол" width="50"
                                                      height="50"/>
                                             </c:if>
                                             <c:if test="${group.getSport() == 'Баскетбол'}">
-                                                <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="50"
+                                                <img class="media-object" src="resources/image/площадка2.png"
+                                                     alt="Баскетбол" width="50"
                                                      height="50"/>
                                             </c:if>
                                             <c:if test="${group.getSport() == 'Волейбол'}">
-                                                <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="50"
+                                                <img class="media-object" src="resources/image/спортивная-сетка.png"
+                                                     alt="Волейбол" width="50"
                                                      height="50"/>
                                             </c:if>
 
@@ -106,7 +111,7 @@
     </div>
 
 </main>
-<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 <script>
 
     var back = '${where}';
@@ -114,12 +119,13 @@
     if (back === 'profile') {
         returnBack = 'user?userId=${userId}&playerId=${playerId}';
     } else if (back === 'profileMain') {
-        returnBack = 'home?&userId=' + ${userId} + '&where=profileMain';
+        returnBack = 'home?&userId=' + ${userId} +'&where=profileMain';
     }
 
     $('#returnBack').attr('href', returnBack);
+
     function resizeGroups() {
-        var  height =  $('#bodyGroups').height();
+        var height = $('#bodyGroups').height();
         if (height < 650) {
             VK.callMethod('resizeWindow', 900, 650);
         } else {

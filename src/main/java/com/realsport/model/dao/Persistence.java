@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Persistence {
 
-    private static final String PROJECT_ID = "testdatastore-199913";
 
     private static AtomicReference<Datastore> datastore = new AtomicReference<>();
 

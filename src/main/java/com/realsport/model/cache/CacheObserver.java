@@ -3,6 +3,8 @@ package com.realsport.model.cache;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
+import javax.cache.CacheFactory;
+import javax.cache.CacheManager;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CacheObserver {

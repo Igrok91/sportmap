@@ -1,18 +1,40 @@
 package com.realsport.model.dao.kinds;
 
 import com.google.cloud.Timestamp;
-import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.BooleanValue;
+import com.google.cloud.datastore.Datastore;
+import com.google.cloud.datastore.DatastoreException;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.EntityValue;
+import com.google.cloud.datastore.FullEntity;
+import com.google.cloud.datastore.IncompleteKey;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.ListValue;
+import com.google.cloud.datastore.LongValue;
+import com.google.cloud.datastore.Query;
+import com.google.cloud.datastore.QueryResults;
+import com.google.cloud.datastore.StringValue;
+import com.google.cloud.datastore.StructuredQuery;
+import com.google.cloud.datastore.TimestampValue;
+import com.google.cloud.datastore.Transaction;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.realsport.model.entityDao.*;
+import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.Event;
+import com.realsport.model.entityDao.EventUser;
+import com.realsport.model.entityDao.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.TimeZone;
 
 import static com.realsport.model.dao.Persistence.getDatastore;
 import static com.realsport.model.dao.Persistence.getKeyFactory;
@@ -532,7 +554,6 @@ public class Events {
             logger.error(e);
             logger.warn("Событий еще нет");
         }
-
         return new ArrayList<>();
     }
 }

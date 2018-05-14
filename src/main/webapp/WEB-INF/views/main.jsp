@@ -29,6 +29,11 @@
             box-shadow: none;
 
         }
+
+        .cursorPointer {
+            cursor: pointer;
+        }
+
         .liOptions {
             margin-bottom: 2px;
             margin-top: 2px;
@@ -175,7 +180,6 @@ var el = document.querySelector('.checkbox-switch');
     });
     var returnBack = '${returnBack}';
     if (returnBack == 'map') {
-        console.log("search");
         document.getElementById("event").className = "hide";
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "hide";
@@ -190,7 +194,6 @@ var el = document.querySelector('.checkbox-switch');
         isMapInit = true;
 
     } else if (returnBack == 'group') {
-        console.log("group");
         document.getElementById("event").className = "hide";
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "";
@@ -202,7 +205,6 @@ var el = document.querySelector('.checkbox-switch');
         $('#li5').attr('class', '');
         setTimeout('resizeGroups()', 300);
     }  else if (returnBack == 'home') {
-        console.log("home");
         document.getElementById("event").className = "";
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "hide";
@@ -214,7 +216,6 @@ var el = document.querySelector('.checkbox-switch');
         $('#li5').attr('class', '');
         setTimeout('resizeEvent()', 300);
     } else if (returnBack == 'profileMain') {
-            console.log("profileMain");
             document.getElementById("event").className = "hide";
             document.getElementById("prof").className = "";
             document.getElementById("group").className = "hide";

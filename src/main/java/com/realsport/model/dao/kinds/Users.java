@@ -1,6 +1,15 @@
 package com.realsport.model.dao.kinds;
 
-import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.BooleanValue;
+import com.google.cloud.datastore.Datastore;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.EntityValue;
+import com.google.cloud.datastore.FullEntity;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.ListValue;
+import com.google.cloud.datastore.LongValue;
+import com.google.cloud.datastore.StringValue;
+import com.google.cloud.datastore.Transaction;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.Event;
@@ -22,7 +31,6 @@ import static com.realsport.model.dao.Persistence.getKeyFactory;
 public class Users {
     private Log logger = LogFactory.getLog(Users.class);
     private static final KeyFactory keyFactory = getKeyFactory(Users.class);
-
 
 
     private User getUserFromEntity(Entity entity) {
@@ -255,7 +263,7 @@ public class Users {
         return EntityValue.of(entity);
     }
 
-    public void removeTemplateUser( String userId) {
+    public void removeTemplateUser(String userId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
             Entity user = transaction.get(keyFactory.newKey(userId));
@@ -311,10 +319,10 @@ public class Users {
                 logger.info("Создание  события по шаблону пользователем " + userId + ", шаблон " + templateId);
             }
         } finally {
-        if (transaction.isActive()) {
-            transaction.rollback();
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
         }
-    }
         return null;
     }
 
@@ -343,28 +351,28 @@ public class Users {
     public void addEventToUserParticipant(List<User> userList, Long eventId, String userId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            for (User u: userList) {
-            Entity userEntity = transaction.get(keyFactory.newKey(u.getUserId()));
-            boolean isOrganize =  u.getUserId().equals(userId);
-            logger.info("user " + userEntity);
-            if (Objects.nonNull(userEntity)) {
-                List<EntityValue> list1 = new ArrayList<>();
-                List<EntityValue> listParticipant = null;
-                try {
-                    listParticipant = userEntity.getList("listParticipant");
-                } catch (Exception e) {
-                    logger.warn(e);
-                }
+            for (User u : userList) {
+                Entity userEntity = transaction.get(keyFactory.newKey(u.getUserId()));
+                boolean isOrganize = u.getUserId().equals(userId);
+                logger.info("user " + userEntity);
+                if (Objects.nonNull(userEntity)) {
+                    List<EntityValue> list1 = new ArrayList<>();
+                    List<EntityValue> listParticipant = null;
+                    try {
+                        listParticipant = userEntity.getList("listParticipant");
+                    } catch (Exception e) {
+                        logger.warn(e);
+                    }
 
-                if (Objects.nonNull(listParticipant)) {
-                    list1.addAll(listParticipant);
-                    list1.add(EntityValue.of(getEntityEventUser(eventId, isOrganize)));
-                    transaction.update(Entity.newBuilder(userEntity).set("listParticipant", ListValue.of(list1)).build());
-                } else  {
-                    list1.add(EntityValue.of(getEntityEventUser(eventId, isOrganize)));
-                    transaction.update(Entity.newBuilder(userEntity).set("listParticipant", ListValue.of(list1)).build());
+                    if (Objects.nonNull(listParticipant)) {
+                        list1.addAll(listParticipant);
+                        list1.add(EntityValue.of(getEntityEventUser(eventId, isOrganize)));
+                        transaction.update(Entity.newBuilder(userEntity).set("listParticipant", ListValue.of(list1)).build());
+                    } else {
+                        list1.add(EntityValue.of(getEntityEventUser(eventId, isOrganize)));
+                        transaction.update(Entity.newBuilder(userEntity).set("listParticipant", ListValue.of(list1)).build());
+                    }
                 }
-            }
             }
             logger.info("Изменение списка пользователя, в которых учавствовал ");
             transaction.commit();

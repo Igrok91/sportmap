@@ -16,6 +16,10 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgro
                         // var userList = document.getElementById('imgUserList_' + eventId);
                         // userList.removeChild(clone);
                         $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
+                    } else {
+                        var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
+                        var count = $('#badge1_'+ eventId).text();
+                        $('#badge1_' + eventId).text(count - countRemove);
                     }
                     var count = parseInt($('#badge1_'+ eventId).text());
                     count = count + parseInt(addIgr);
@@ -27,7 +31,7 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgro
 
                 } else {
                     var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                    console.log(count[0]);
+
                     var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
                     if (clone) {
                         var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
@@ -48,6 +52,8 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgro
                 $('#alertMax_' + eventId).removeClass('hide');
                 $('#alertMax_' + eventId).alert();
                 $('#addIgrok_' + eventId).modal('hide');
+                break;
+            case 'false':
                 break;
 
         }

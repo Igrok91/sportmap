@@ -61,23 +61,23 @@
 
     <div class="container-fluid " style="margin-top: 15px">
 
-
         <div class="row content">
             <div class="col-sm-2">
-
             </div>
             <div class="col-sm-8">
                 <div class="list-group">
-                    <c:forEach var="event" items="${listEvents}"  >
+                    <c:forEach var="event" items="${listEvents}">
 
 
                         <div class="panel " id="${event.idEvent}">
                             <div class="panel-heading" style="padding-bottom: 3px; padding-top: 6px">
 
                                 <div>
-                                    <a class="pull-left" href="playground?playgroundId=${event.playgroundId}&sport=${event.sport}&userId=${userId}" >
+                                    <a class="pull-left"
+                                       href="playground?playgroundId=${event.playgroundId}&sport=${event.sport}&userId=${userId}">
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                        <img id="${event.idEvent}_imgPlayground" class="media-object" src="resources/image/playbasket.png"
+                                        <img id="${event.idEvent}_imgPlayground" class="media-object"
+                                             src="resources/image/playbasket.png"
                                              alt="Баскетбол" width="40" height="40">
                                     </a>
 
@@ -88,24 +88,34 @@
                                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
                                             <c:choose>
                                                 <c:when test="${event.userIdCreator == userId}">
-                                                    <c:set var="playgroundId" value="${event.playgroundId}" />
-                                                    <c:set var="sport" value="${event.sport}" />
-                                                    <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home"
-                                                                                                                                                 style="margin-right: 20px"></span>К группе</a>
+                                                    <c:set var="playgroundId" value="${event.playgroundId}"/>
+                                                    <c:set var="sport" value="${event.sport}"/>
+                                                    <li class="liOptions"><a
+                                                            href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span
+                                                            class="glyphicon glyphicon-home"
+                                                            style="margin-right: 20px"></span>К группе</a>
                                                     </li>
-                                                    <li class="liOptions"><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt"
-                                                                                                                         style="margin-right: 20px"></span>К записи</a>
+                                                    <li class="liOptions"><a
+                                                            href="event?eventId=${event.idEvent}&userId=${userId}"> <span
+                                                            class="glyphicon glyphicon-share-alt"
+                                                            style="margin-right: 20px"></span>К записи</a>
                                                     </li>
 
 
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <c:set var="playgroundId" value="${event.playgroundId}" />
-                                                    <c:set var="sport" value="${event.sport}" />
+                                                    <c:set var="playgroundId" value="${event.playgroundId}"/>
+                                                    <c:set var="sport" value="${event.sport}"/>
 
-                                                    <li class="liOptions"><a href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span class="glyphicon glyphicon-home" style="margin-right: 20px"></span>К группе</a>
+                                                    <li class="liOptions"><a
+                                                            href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}">
+                                                        <span class="glyphicon glyphicon-home"
+                                                              style="margin-right: 20px"></span>К группе</a>
                                                     </li>
-                                                    <li class="liOptions"><a href="event?eventId=${event.idEvent}&userId=${userId}"> <span class="glyphicon glyphicon-share-alt" style="margin-right: 20px"></span>К записи</a>
+                                                    <li class="liOptions"><a
+                                                            href="event?eventId=${event.idEvent}&userId=${userId}">
+                                                        <span class="glyphicon glyphicon-share-alt"
+                                                              style="margin-right: 20px"></span>К записи</a>
                                                     </li>
                                                 </c:otherwise>
                                             </c:choose>
@@ -119,23 +129,22 @@
 
 
                                         <span style="color: gray">${event.date}</span>
-
                                     </div>
-
                                 </div>
-
-
                             </div>
                             <div class="panel-body" style="padding-bottom: 0px">
                                 <div style="padding-bottom: 12px">
-                                    <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}" >
+                                    <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}">
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                        <img id="${event.idEvent}_imgPlayground" class="media-object round" src="${event.userCreatorPhoto}"
+                                        <img id="${event.idEvent}_imgPlayground" class="media-object round"
+                                             src="${event.userCreatorPhoto}"
                                              alt="Баскетбол" width="40" height="40">
 
                                     </a>
-                                    <div class="media-body" >
-                                        <a href="user?playerId=${event.userIdCreator}&userId=${userId}" style="margin-left: 3px;" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                                    <div class="media-body">
+                                        <a href="user?playerId=${event.userIdCreator}&userId=${userId}"
+                                           style="margin-left: 3px;"
+                                           class="btn"> ${event.userFirtsNameCreator} ${event.userLastNameCreator}
                                         </a>
                                     </div>
 
@@ -146,13 +155,17 @@
 
 
                                 <div class="list-group" style="margin-bottom: 5px">
-                                    <a  class="list-group-item disabled"  onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId})" id="answerButton_${event.idEvent}">
+                                    <a class="list-group-item disabled"
+                                       onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId})"
+                                       id="answerButton_${event.idEvent}">
                                         <c:choose>
                                             <c:when test="${event.maxCountAnswer == 1000}">
-                                                <span class="badge" id="badge1_${event.idEvent}">${event.userList.size()}</span>
+                                                <span class="badge"
+                                                      id="badge1_${event.idEvent}">${event.userList.size()}</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span class="badge" id="badge2_${event.idEvent}">${event.userList.size()} / ${event.maxCountAnswer} </span>
+                                                <span class="badge"
+                                                      id="badge2_${event.idEvent}">${event.userList.size()} / ${event.maxCountAnswer} </span>
                                             </c:otherwise>
                                         </c:choose>
 
@@ -171,34 +184,38 @@
                                             <c:forEach var="user" items="${event.userList}">
                                                 <c:choose>
                                                     <c:when test="${user.isFake() == true}">
-                                                        <a href="user?playerId=${user.userId}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
-                                                            <span id="${user.userId}_add_${event.idEvent}" count="${user.countFake}">+${user.countFake}</span>
+                                                        <a href="user?playerId=${user.userId}&userId=${userId}"
+                                                           class="btn" style="padding: 0px"
+                                                           id="${user.userId}_imgUser_${event.idEvent}_fake">
+                                                            <span id="${user.userId}_add_${event.idEvent}"
+                                                                  count="${user.countFake}">+${user.countFake}</span>
 
                                                         </a>
 
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <a href="user?playerId=${user.userId}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
-                                                            <img src="${user.photo_50}" alt="Баскетбол" width="35" class="round"
+                                                        <a href="user?playerId=${user.userId}&userId=${userId}"
+                                                           class="btn" style="padding: 0px"
+                                                           id="${user.userId}_imgUser_${event.idEvent}">
+                                                            <img src="${user.photo_50}" alt="Баскетбол" width="35"
+                                                                 class="round"
                                                                  height="35" id="${user.userId}_img_${event.idEvent}">
                                                         </a>
                                                     </c:otherwise>
                                                 </c:choose>
 
                                             </c:forEach>
-                                            <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}" id="watch_${event.idEvent}" class="btn hide"> <span
-                                                    class="glyphicon glyphicon-eye-open" style="margin-right: 5px"></span></a>
+                                            <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}"
+                                               id="watch_${event.idEvent}" class="btn hide"> <span
+                                                    class="glyphicon glyphicon-eye-open"
+                                                    style="margin-right: 5px"></span></a>
 
                                         </div>
-
                                     </div>
-
-
                                 </div>
-
                             </div>
-
-                            <a href="#" class="btn disabled" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
+                            <a href="#" class="btn disabled"
+                               style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px" id="commentEvents"><span
                                     class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
                                     style="color: #77A5C5;margin-right: 5px"></span>
                                 <span id="countComment_${event.idEvent}" style="font-size: medium">
@@ -217,30 +234,28 @@
                         <c:choose>
                             <c:when test="${parameter == 'userParticipant'}">
                                 <div class="text-center" style="padding-bottom: 10px">
-                                    <a href="userParticipant?playerId=${playerId}&userId=${userId}&endList=${endList}" class="btn">Загрузить еще</a>
+                                    <a href="userParticipant?where=profile&playerId=${playerId}&userId=${userId}&endList=${endList}"
+                                       class="btn">Загрузить еще</a>
                                 </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="text-center" style="padding-bottom: 10px">
-                                    <a href="userOrganize?playerId=${playerId}&userId=${userId}&endList=${endList}" class="btn">Загрузить еще</a>
+                                    <a href="userOrganize?where=profile&playerId=${playerId}&userId=${userId}&endList=${endList}"
+                                       class="btn">Загрузить еще</a>
                                 </div>
                             </c:otherwise>
                         </c:choose>
                     </c:if>
                 </c:if>
-                </div>
-
-
-                <div class="col-sm-2">
-
-                </div>
-
+            </div>
+            <div class="col-sm-2">
             </div>
         </div>
     </div>
+    </div>
 
 </main>
-<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 <script>
 
     var back = '${where}';
@@ -263,19 +278,18 @@
             var usersList = event.userList;
             var sp = event.sport;
             var id = event.idEvent;
-            console.log("idEvent " + id);
             var element = document.getElementById(id);
-            var imgPlayground = document.getElementById(id+'_imgPlayground');
-                if (sp == 'Футбол') {
-                    element.className = 'panel panel-success';
-                    imgPlayground.src = "resources/image/стадион.png";
-                } else if (sp == 'Баскетбол') {
-                    element.className = 'panel panel-warning';
-                    imgPlayground.src = "resources/image/playbasket.png";
-                } else if (sp == 'Волейбол') {
-                    element.className = 'panel panel-info';
-                    imgPlayground.src = "resources/image/сетка.png";
-                }
+            var imgPlayground = document.getElementById(id + '_imgPlayground');
+            if (sp == 'Футбол') {
+                element.className = 'panel panel-success';
+                imgPlayground.src = "resources/image/стадион.png";
+            } else if (sp == 'Баскетбол') {
+                element.className = 'panel panel-warning';
+                imgPlayground.src = "resources/image/playbasket.png";
+            } else if (sp == 'Волейбол') {
+                element.className = 'panel panel-info';
+                imgPlayground.src = "resources/image/сетка.png";
+            }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
             description.forEach(function (message, i) {
@@ -289,8 +303,7 @@
             }
             // Определяем истинное значение игроков
             if (maxCountAnswer == 1000) {
-                var count = parseInt($('#badge1_'+id).text());
-                console.log("badge1 " + $('#badge1_'+id).text())
+                var count = parseInt($('#badge1_' + id).text());
                 if (usersList) {
                     usersList.forEach(function (user, i) {
                         if (user.countFake != 0) {
@@ -300,10 +313,9 @@
                     });
                 }
 
-                $('#badge1_'+ id).text(count);
+                $('#badge1_' + id).text(count);
             } else {
-                var count = parseInt($('#badge2_'+id).text().split(' / ')[0]);
-                console.log("badge2 " + $('#badge2_'+id).text());
+                var count = parseInt($('#badge2_' + id).text().split(' / ')[0]);
                 if (usersList) {
                     usersList.forEach(function (user, i) {
                         if (user.countFake != 0) {
@@ -313,34 +325,35 @@
                     });
                 }
 
-                $('#badge2_'+ id).text(count + ' / ' + maxCountAnswer );
+                $('#badge2_' + id).text(count + ' / ' + maxCountAnswer);
 
             }
 
 
             var isActive = false;
             usersList.forEach(function (user, i) {
-                if (user.userId === userId ) {
+                if (user.userId === userId) {
                     isActive = true;
                 }
             });
 
             if (isActive) {
-                $('#answerButton_'+ id).removeClass('active');
-                $('#answerButton_'+ id).css('background','#EAEAEC');
+                $('#answerButton_' + id).removeClass('active');
+                $('#answerButton_' + id).css('background', '#EAEAEC');
 
-                $('#answerOk_'+ id).removeClass('hide');
+                $('#answerOk_' + id).removeClass('hide');
 
             } else {
-                $('#answerButton_'+ id).addClass('active');
-                $('#answerButton_'+ id).css('background','');
-                $('#answerOk_'+ id).addClass('hide');
+                $('#answerButton_' + id).addClass('active');
+                $('#answerButton_' + id).css('background', '');
+                $('#answerOk_' + id).addClass('hide');
             }
         });
 
     }
+
     function resizeEvent() {
-        var  height =  $('#eventBody').height();
+        var height = $('#eventBody').height();
         if (height < 650) {
             VK.callMethod('resizeWindow', 900, 650);
         } else {

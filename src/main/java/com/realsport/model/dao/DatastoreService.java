@@ -1,8 +1,15 @@
 package com.realsport.model.dao;
 
-import com.google.cloud.datastore.*;
-import com.realsport.model.dao.kinds.*;
-import com.realsport.model.entityDao.*;
+import com.realsport.model.dao.kinds.Events;
+import com.realsport.model.dao.kinds.Playgrounds;
+import com.realsport.model.dao.kinds.Users;
+import com.realsport.model.entityDao.Comment;
+import com.realsport.model.entityDao.Event;
+import com.realsport.model.entityDao.EventUser;
+import com.realsport.model.entityDao.MinUser;
+import com.realsport.model.entityDao.Playground;
+import com.realsport.model.entityDao.TemplateGame;
+import com.realsport.model.entityDao.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,29 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class DatastoreService {
 
     private Log logger = LogFactory.getLog(DatastoreService.class);
-
-
-    public static final String FOOTBALL = "Футбол";
-    public static final String BASKETBALL = "Баскетбол";
-    public static final String VOLEYBALL = "Волейбол";
-
-    public static final String EVENTS_FOOTBALL = "EventsFootball";
-    public static final String EVENTS_BASKETBALL = "EventsBasketball";
-    public static final String EVENTS_VOLEYBALL = "EventsVoleyball";
-
-    private static final String PROJECT_ID = "testdatastore-199913";
-    private static final String NAMESPACE = "sportMap";
-    private static final String EVENT = "Events";
-    private static final String API_KEY = "AIzaSyAsU2pmAvoBerONIfy-nvtyLpSFKOAFWI8";
-
-    private DatastoreOptions options;
-    private Datastore datastore;
-    private KeyFactory keyFactory;
 
 
     @Autowired
@@ -43,7 +31,6 @@ public class DatastoreService {
 
     @Autowired
     private Playgrounds playgrounds;
-
 
 
     {
@@ -68,12 +55,10 @@ public class DatastoreService {
 
     /**
      * Публикация события
+     *
      * @param game
      */
     public void publishEvent(Event game) {
-        //KeyFactory  keyFactory = getKeyFactory(EVENT);
-       // keyFactory.setKind(EVENT);
-        //Key key = datastore.allocateId(keyFactory.newKey());
         logger.info("Публикация события " + game.getDescription() + " Sport " + game.getSport());
         events.publishEvent(game);
     }
@@ -85,6 +70,7 @@ public class DatastoreService {
 
     /**
      * Получение футбольныйх событий по группам пользователя
+     *
      * @return
      */
     public List<Event> getAllEvents() {
@@ -94,6 +80,7 @@ public class DatastoreService {
 
     /**
      * Получение всех  площадок
+     *
      * @return
      */
     public List<Playground> getAllPlayground() {
@@ -130,7 +117,7 @@ public class DatastoreService {
     }
 
     public Event getEventById(String eventId) {
-           return events.getEventById(eventId);
+        return events.getEventById(eventId);
     }
 
     public List<TemplateGame> getTemplatesUserById(String userId) {
@@ -184,7 +171,6 @@ public class DatastoreService {
     public List<Event> getEventUserParticipantorOrganize(List<EventUser> listParticipant) {
         return events.getEventUserParticipantorOrganize(listParticipant);
     }
-
 
 
     public void addEventToUserParticipant(List<User> userList, Long eventId, String userId) {

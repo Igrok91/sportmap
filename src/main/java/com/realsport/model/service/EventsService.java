@@ -4,14 +4,22 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
-import com.realsport.model.entityDao.*;
+import com.realsport.model.entityDao.Comment;
+import com.realsport.model.entityDao.Event;
+import com.realsport.model.entityDao.EventUser;
+import com.realsport.model.entityDao.MinUser;
+import com.realsport.model.entityDao.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class EventsService {
@@ -19,23 +27,6 @@ public class EventsService {
 
     @Autowired
     private DatastoreService databaseService;
-
-    public static final String FOOTBALL = "Футбол";
-    public static final String BASKETBALL = "Баскетбол";
-    public static final String VOLEYBALL = "Волейбол";
-    private List<Event> allFootbalEvent = new ArrayList<>();
-    private List<Event> allBasketEventSpb = new ArrayList<>();
-    private List<Event> allVoleyEventSpb = new ArrayList<>();
-
-
-    public static final String FOOTBALL_PLAYGROUND = "FootballPlayground";
-    public static final String BASKETBALL_PLAYGROUND = "BasketballPlayground";
-    public static final String VOLEYBALL_PLAYGROUND = "VoleyballPlayground";
-
-
-    private List<Event> getAllEvents() {
-        return null;
-    }
 
     public void publishEvent(Event game) {
         databaseService.publishEvent(game);
@@ -114,11 +105,6 @@ public class EventsService {
         databaseService.deleteGame(eventId);
     }
 
-    public void editUserAnswer(String eventId, String userId) {
-
-    }
-
-
     public void deleteUserFromEvent(String eventId, String userId) {
         databaseService.deleteUserFromEvent(eventId, userId);
     }
@@ -131,19 +117,6 @@ public class EventsService {
         databaseService.deleteCommentFromEvent(commentId, eventId);
     }
 
-
-    public void addCountIgrokFromUser(String userId, String eventId, Integer integer) {
-
-    }
-
-    public void addIgrokToListFromUser(String eventId, String userId, String count) {
-
-    }
-
-
-    public void deletePlaygroundFromUser(String userId, String playgroundId) {
-        databaseService.deletePlaygroundFromUser(userId, playgroundId);
-    }
 
     public void endGame(String eventId) {
         databaseService.endGame(eventId);
@@ -200,21 +173,23 @@ public class EventsService {
         }).toList();
         minUserList.addAll(withoutFake);
         for (MinUser u : minUserList) {
-          User user = FluentIterable.from(userList).firstMatch(new Predicate<User>() {
-              @Override
-              public boolean apply(User user) {
-                  return user.getUserId().equals(u.getUserId()) && user.isFake();
-              }
-          }).orNull();
-          if (Objects.nonNull(user)) {
-              u.setCountFake(user.getCountFake());
-          }
+            User user = FluentIterable.from(userList).firstMatch(new Predicate<User>() {
+                @Override
+                public boolean apply(User user) {
+                    return user.getUserId().equals(u.getUserId()) && user.isFake();
+                }
+            }).orNull();
+            if (Objects.nonNull(user)) {
+                u.setCountFake(user.getCountFake());
+            }
         }
         return minUserList;
     }
 
     public List<Event> getActiveEventsByIdGroup(String playgroundId) {
-        return databaseService.getActiveEventsByIdGroup(playgroundId);
+        List<Event> list = databaseService.getActiveEventsByIdGroup(playgroundId);
+        sortEvents(list);
+        return list;
     }
 
     public List<Event> getEventUserParticipantOrOrganize(List<EventUser> listParticipant) {

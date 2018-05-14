@@ -35,7 +35,6 @@
         }
 
 
-
     </style>
 </head>
 <body id="userBody">
@@ -45,7 +44,7 @@
             <a class="navbar-brand btn" id="returnBack"><span class="glyphicon glyphicon-menu-left"
                                                               aria-hidden=""></span></a>
             <div class="navbar-brand ">
-                 Профиль
+                Профиль
             </div>
         </div>
 
@@ -61,19 +60,20 @@
 
             </div>
             <div class="col-sm-8">
-                <div class="panel panel-default">
-                    <div class="panel-heading ">
-                        <div style="margin-bottom: 10px">
-                            <div class="pull-left">
-                                <a  href="https://vk.com/id${playerId}" target="_blank">
+                <div class="panel borderless">
+                    <div class="text-center">
+                        <div style="margin-bottom: 5px">
+                            <div>
+                                <a href="https://vk.com/id${playerId}" target="_blank">
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
-                                    <img class="round" src="${userPhoto}" alt="Футбол" width="50"
-                                         height="50">
+                                    <img class="round" src="${userPhoto}" alt="Футбол" width="100"
+                                         height="100">
                                 </a>
                             </div>
 
-                            <div class="media-body " style="padding-left: 15px; padding-top: 5px">
-                                <h4>${userfirstName} ${userlastName}  </h4>
+
+                            <div style="padding-top: 10px">
+                                <h4>${userfirstName} ${userlastName}</h4>
                                 <!--    <span  class="glyphicon glyphicon-star-empty" ></span><span style="color: gray; margin-right: 15px" > 105 </span>
                                    <span style="color: gray"> 3 место</span> -->
                             </div>
@@ -82,14 +82,14 @@
                     <div class="panel-body">
                         <div>
                             <h5><span class="glyphicon glyphicon-info-sign"></span>
-                                    <span id="informationUser" style="color: gray; padding-left: 10px; padding-right: 12px" >
+                                <span id="informationUser" style="color: gray; padding-left: 10px; padding-right: 12px">
                                            <c:if test="${userInfo == null || userInfo.length() == 0}">
                                                нет информации
                                            </c:if>
 
                                     </span>
 
-                                </h5>
+                            </h5>
                         </div>
 
 
@@ -97,7 +97,7 @@
                     <div class="list-group">
                         <c:choose>
                             <c:when test="${countGroup == 0}">
-                                <a href="#"  class="list-group-item ">
+                                <a href="#" class="list-group-item borderless">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
@@ -107,7 +107,8 @@
                                 <c:out value="нет"/>
                             </c:when>
                             <c:otherwise>
-                                <a href="groupsUser?userId=${userId}&where=profile&playerId=${playerId}"  class="list-group-item ">
+                                <a href="groupsUser?userId=${userId}&where=profile&playerId=${playerId}"
+                                   class="list-group-item borderless">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countGroup}"/>
                             </span>
@@ -120,14 +121,15 @@
 
                         <c:choose>
                             <c:when test="${countParticipant == 0}">
-                                <a href="#" class="list-group-item">
+                                <a href="#" class="list-group-item borderless">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                                </span></span>
                                     Участие в играх</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="userParticipant?userId=${userId}&where=profile&playerId=${playerId}" class="list-group-item">
+                                <a href="userParticipant?userId=${userId}&where=profile&playerId=${playerId}"
+                                   class="borderless list-group-item">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                   <c:out value="${countParticipant}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -137,7 +139,7 @@
 
                         <c:choose>
                             <c:when test="${countOrganize == 0}">
-                                <a href="#" class="list-group-item">
+                                <a href="#" class="list-group-item borderless">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                  <c:out value="нет"/>
                             </span></span>
@@ -145,7 +147,8 @@
 
                             </c:when>
                             <c:otherwise>
-                                <a href="userOrganize?userId=${userId}&where=profile&playerId=${playerId}" class="list-group-item">
+                                <a href="userOrganize?userId=${userId}&where=profile&playerId=${playerId}"
+                                   class=" borderless list-group-item">
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -186,33 +189,37 @@
 
                     <div class="list-group">
                         <c:forEach var="group" items="${allPlaygroundUser}">
-                       <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}" class="list-group-item borderless">
-                            <div class="media">
-                                <div class="pull-left">
-                                  <c:if test="${group.getSport() == 'Футбол'}">
-                                        <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
-                                             height="40"/>
-                                    </c:if>
-                                    <c:if test="${group.getSport() == 'Баскетбол'}">
-                                        <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
-                                             height="40"/>
-                                    </c:if>
-                                    <c:if test="${group.getSport() == 'Волейбол'}">
-                                        <img class="media-object" src="resources/image/спортивная-сетка.png" alt="Волейбол" width="40"
-                                             height="40"/>
-                                    </c:if>
+                            <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}"
+                               class="list-group-item borderless">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <c:if test="${group.getSport() == 'Футбол'}">
+                                            <img class="media-object" src="resources/image/стадион3.png" alt="Футбол"
+                                                 width="40"
+                                                 height="40"/>
+                                        </c:if>
+                                        <c:if test="${group.getSport() == 'Баскетбол'}">
+                                            <img class="media-object" src="resources/image/площадка2.png"
+                                                 alt="Баскетбол" width="40"
+                                                 height="40"/>
+                                        </c:if>
+                                        <c:if test="${group.getSport() == 'Волейбол'}">
+                                            <img class="media-object" src="resources/image/спортивная-сетка.png"
+                                                 alt="Волейбол" width="40"
+                                                 height="40"/>
+                                        </c:if>
 
+                                    </div>
+
+
+                                    <div class="media-body ">
+                                        <h4 class="media-heading"
+                                            style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.name}</h4>
+                                        <span style="color: gray">${group.getSport()}</span>
+                                        <hr>
+                                    </div>
                                 </div>
-
-
-                               <div class="media-body ">
-                                    <h4 class="media-heading"
-                                        style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px">${group.name}</h4>
-                                    <span style="color: gray">${group.getSport()}</span>
-                                    <hr>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
                         </c:forEach>
                     </div>
                 </div>
@@ -220,17 +227,17 @@
         </div>
     </div>
 </main>
-<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 <script>
 
     var back = '${where}';
     var returnBack;
     if (back === 'events') {
-         returnBack = 'home?&userId=' + ${userId};
+        returnBack = 'home?&userId=' + ${userId};
     } else if (back === 'event') {
-        returnBack = 'event?eventId=' + ${eventId} + '&userId=' + ${userId};
+        returnBack = 'event?eventId=' + ${eventId} +'&userId=' + ${userId};
     } else if (back === 'playground') {
-        returnBack = 'playground?playgroundId=' + ${playgroundId} + '&userId=' + ${userId};
+        returnBack = 'playground?playgroundId=' + ${playgroundId} +'&userId=' + ${userId};
     }
 
     $('#returnBack').attr('href', returnBack);
@@ -247,7 +254,7 @@
 
 
     function resizeUser() {
-        var  height =  $('#userBody').height();
+        var height = $('#userBody').height();
         if (height < 650) {
             VK.callMethod('resizeWindow', 900, 650);
         } else {

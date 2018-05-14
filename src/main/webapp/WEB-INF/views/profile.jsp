@@ -227,7 +227,6 @@
         var text = $('#userInfo').val().trim();
 
         var userId = '${userId}';
-        console.log("saveInfoUser " + text);
         if (!text) {
             text = '';
             $('#informationUser').text("нет информации");
