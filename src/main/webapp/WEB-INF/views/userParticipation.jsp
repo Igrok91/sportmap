@@ -133,15 +133,15 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="padding-bottom: 0px">
-                                <div style="padding-bottom: 12px">
+                                <div style="padding-bottom: 20px">
                                     <a class="pull-left" href="user?playerId=${event.userIdCreator}&userId=${userId}">
                                         <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                         <img id="${event.idEvent}_imgPlayground" class="media-object round"
                                              src="${event.userCreatorPhoto}"
-                                             alt="Баскетбол" width="40" height="40">
+                                             alt="Баскетбол" width="50" height="50">
 
                                     </a>
-                                    <div class="media-body">
+                                    <div class="media-body" style="padding-top: 6px">
                                         <a href="user?playerId=${event.userIdCreator}&userId=${userId}"
                                            style="margin-left: 3px;"
                                            class="btn"> ${event.userFirtsNameCreator} ${event.userLastNameCreator}
@@ -178,14 +178,14 @@
                                     </a>
                                 </div>
 
-                                <div class="btn-group " style="margin-top: 5px">
+                                <div class="btn-group " style="margin-top: 7px">
                                     <div class="container-fluid">
                                         <div class="row" id="imgUserList_${event.idEvent}">
                                             <c:forEach var="user" items="${event.userList}">
                                                 <c:choose>
                                                     <c:when test="${user.isFake() == true}">
                                                         <a href="user?playerId=${user.userId}&userId=${userId}"
-                                                           class="btn" style="padding: 0px"
+                                                           class="btn" style="padding: 2px 0px"
                                                            id="${user.userId}_imgUser_${event.idEvent}_fake">
                                                             <span id="${user.userId}_add_${event.idEvent}"
                                                                   count="${user.countFake}">+${user.countFake}</span>
@@ -195,7 +195,7 @@
                                                     </c:when>
                                                     <c:otherwise>
                                                         <a href="user?playerId=${user.userId}&userId=${userId}"
-                                                           class="btn" style="padding: 0px"
+                                                           class="btn" style="padding: 2px 0px"
                                                            id="${user.userId}_imgUser_${event.idEvent}">
                                                             <img src="${user.photo_50}" alt="Баскетбол" width="35"
                                                                  class="round"

@@ -313,20 +313,16 @@ public class Events {
 
     private String getDateFormat(Timestamp timestamp) {
         Date date = new Date(timestamp.toSqlTimestamp().getTime());
-        logger.info("getDateFormat " + date);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM в HH:mm ", myDateFormatSymbols);
         SimpleDateFormat dateFormatNow = new SimpleDateFormat("dd MMMM", myDateFormatSymbols);
         dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
         String d = dateFormat.format(date);
         String dateNow = dateFormatNow.format(new Date());
-        logger.info("dateNow " + dateNow);
+
         if (d.contains(dateNow.trim())) {
-            logger.info("replace " + dateNow);
             String d2 = "сегодня в " + d.split("в")[1].trim();
-            logger.info("date new " + d2);
             return d2;
         }
-        logger.info("dateFormat " + d);
         return d;
     }
 

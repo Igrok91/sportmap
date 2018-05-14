@@ -8,19 +8,6 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgro
         switch (value) {
             case 'true':
                 if (maxCountAnswer == 1000) {
-                    var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
-                    if (clone) {
-                        var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
-                        var count = $('#badge1_'+ eventId).text();
-                        $('#badge1_' + eventId).text(count - countRemove);
-                        // var userList = document.getElementById('imgUserList_' + eventId);
-                        // userList.removeChild(clone);
-                        $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
-                    } else {
-                        var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
-                        var count = $('#badge1_'+ eventId).text();
-                        $('#badge1_' + eventId).text(count - countRemove);
-                    }
                     var count = parseInt($('#badge1_'+ eventId).text());
                     count = count + parseInt(addIgr);
                     $('#badge1_' + eventId).text(count);
@@ -30,23 +17,17 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgro
                     $('#addIgrok_'+ eventId).modal('hide');
 
                 } else {
-                    var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
+                    var count = parseInt($('#badge2_' + eventId).text().split(' / ')[0]);
 
-                    var clone = document.getElementById(userId + '_imgUser_' + eventId + '_fake');
-                    if (clone) {
-                        var countRemove = parseInt(document.getElementById(userId + "_add_" + eventId).getAttribute('count'));
-                        var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
-                        count = count - countRemove;
-                        $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
-                        $('#'+userId + '_imgUser_' + eventId + '_fake').remove();
-                    }
                     count = count + parseInt(addIgr);
-                    $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer );
+                    $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer);
                     if (!(userList > 2)) {
                         addFakeIgrokToUserList(eventId, addIgr, userId, parameter);
                     }
                     $('#addIgrok_' + eventId).modal('hide');
                 }
+                var answerButton = document.getElementById("answerButton_" + eventId);
+                answerButton.setAttribute('disabled', 'disabled');
                 break;
             case 'max_count_answer':
                 $('#alertMax_' + eventId).removeClass('hide');
@@ -179,6 +160,8 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList, 
                     $('#' + userId + '_imgUser_'+ eventId + '_fake' ).remove();
                 }
                 $('#answerButton_' + eventId).removeClass('disabled');
+                var answerButton = document.getElementById("answerButton_" + eventId);
+                answerButton.removeAttribute('disabled');
                 break;
             case 'max_count_answer':
                 $('#alertMax_' + eventId).removeClass('hide');

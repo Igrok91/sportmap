@@ -52,6 +52,7 @@
             cursor: pointer;
         }
     </style>
+    <script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
 </head>
 <body>
 <nav class="nav  navbar-static-top navbar-default">
@@ -205,7 +206,7 @@
                                     </div>
                                     <hr style="padding-top: 0px; margin-top: 0px; padding-bottom: 0px;margin-bottom: 0px">
                                 </c:if>
-                                <div style="background: white;padding-left: 15px;padding-top: 15px;padding-bottom: 10px">
+                                <div style="background: white;padding-left: 15px;padding-top: 15px;padding-bottom: 4px">
                                     <div class="text-center hide" style="color: gray; padding-bottom: 10px;"
                                          id="past_${event.idEvent}">
                                         <span>Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
@@ -353,7 +354,7 @@
                                         </button>
                                     </div>
 
-                                    <div class="btn-group " style="margin-top: 5px">
+                                    <div class="btn-group " style="margin-top: 7px">
                                         <div class="container-fluid">
                                             <div class="row" id="imgUserList_${event.idEvent}">
                                                 <c:forEach var="user" items="${event.userList}">
@@ -361,7 +362,7 @@
                                                         <c:when test="${user.isFake() == true}">
                                                             <a href="user?playerId=${user.userId}&playgroundId=${playgroundId}&userId=${userId}"
                                                                class="btn"
-                                                               style="padding: 0px"
+                                                               style="padding: 2px 0px"
                                                                id="${user.userId}_imgUser_${event.idEvent}_fake">
                                                     <span id="${user.userId}_add_${event.idEvent}"
                                                           count="${user.countFake}">+${user.countFake}</span>
@@ -372,7 +373,7 @@
                                                         <c:otherwise>
                                                             <a href="user?playerId=${user.userId}&playgroundId=${playgroundId}&userId=${userId}"
                                                                class="btn"
-                                                               style="padding: 0px"
+                                                               style="padding: 2px 0px"
                                                                id="${user.userId}_imgUser_${event.idEvent}">
                                                                 <img src="${user.photo_50}" alt="Баскетбол"
                                                                      width="35"
@@ -408,11 +409,15 @@
                                         </c:if>
                                     </span>
                                 </a>
-                                <a href="#" class="btn"
-                                   style=" margin-left: 5px; margin-left: 5px; margin-top: 4px;margin-bottom: 4px"
-                                   id="share_${event.idEvent}"><span
-                                        class="glyphicon glyphicon-bullhorn " aria-hidden="Комментировать"
-                                        style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
+                                <span class="btn">
+
+                                    <script type="text/javascript">
+                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#${event.idEvent}"}, {
+                                        type: "custom",
+                                        text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
+                                    }));
+                                  </script>
+                                </span>
 
 
                             </div>
@@ -541,12 +546,16 @@
 
 
             var isActive = false;
+            var isFakePresent = false;
             usersList.forEach(function (user, i) {
                 if (user.userId === userId) {
+                    if (user.isFake === true) {
+                        isFakePresent = true;
+                    }
                     isActive = true;
                 }
-            });
 
+            });
             if (isActive) {
                 $('#answerButton_' + id).removeClass('active');
                 $('#answerButton_' + id).css('background', '#EAEAEC');
@@ -556,6 +565,10 @@
                 $('#doAnswer_' + id).addClass('hide');
                 $('#cancelAnswer2_' + id).removeClass('hide');
                 $('#doAnswer2_' + id).addClass('hide');
+                if (isFakePresent) {
+                    var answerButton = document.getElementById("answerButton_" + id);
+                    answerButton.setAttribute('disabled', 'disabled');
+                }
             } else {
                 $('#answerButton_' + id).addClass('active');
                 $('#answerButton_' + id).css('background', '');

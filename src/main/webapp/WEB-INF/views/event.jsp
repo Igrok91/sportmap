@@ -17,6 +17,7 @@
     <script src="resources/js/events.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="resources\js\device.js"></script>
 
     <style>
 
@@ -54,6 +55,7 @@
             cursor: pointer;
         }
     </style>
+    <script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
 </head>
 <body id="eventMain">
 
@@ -180,14 +182,14 @@
 
                         </div>
                         <div class="panel-body" style="padding-bottom: 0px">
-                            <div style="padding-bottom: 12px">
+                            <div style="padding-bottom: 20px">
                                 <a class="pull-left" href="user?playerId=${event.userIdCreator}&eventId=${event.idEvent}&userId=${userId}" >
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                     <img id="${event.idEvent}_imgPlayground" class="media-object round" src="${event.userCreatorPhoto}"
-                                         alt="Баскетбол" width="40" height="40">
+                                         alt="Баскетбол" width="50" height="50">
 
                                 </a>
-                                <div class="media-body" >
+                                <div class="media-body" style="padding-top: 6px">
                                     <a href="user?playerId=${event.userIdCreator}&userId=${userId}&eventId=${event.idEvent}" style="margin-left: 3px;" class="btn" > ${event.userFirtsNameCreator} ${event.userLastNameCreator}
                                     </a>
                                 </div>
@@ -228,22 +230,22 @@
                                 </button>
                             </div>
 
-                            <div class="btn-group " style="margin-top: 5px">
+                            <div class="btn-group " style="margin-top: 7px">
                                 <div class="container-fluid">
                                     <div class="row" id="imgUserList_${event.idEvent}">
-                                        <c:forEach var="user" items="${event.userList}">
+                                        <c:forEach var="userFromList" items="${event.userList}">
                                             <c:choose>
-                                                <c:when test="${user.isFake() == true}">
-                                                    <a href="user?playerId=${user.userId}&eventId=${event.idEvent}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}_fake">
-                                                        <span id="${user.userId}_add_${event.idEvent}" count="${user.countFake}">+${user.countFake}</span>
+                                                <c:when test="${userFromList.isFake() == true}">
+                                                    <a href="user?playerId=${userFromList.userId}&eventId=${event.idEvent}&userId=${userId}" class="btn" style="padding: 0px" id="${userFromList.userId}_imgUser_${event.idEvent}_fake">
+                                                        <span id="${userFromList.userId}_add_${event.idEvent}" count="${userFromList.countFake}">+${userFromList.countFake}</span>
 
                                                     </a>
 
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <a href="user?playerId=${user.userId}&eventId=${event.idEvent}&userId=${userId}" class="btn" style="padding: 0px" id="${user.userId}_imgUser_${event.idEvent}">
-                                                        <img src="${user.photo_50}" alt="Баскетбол" width="35" class="round"
-                                                             height="35" id="${user.userId}_img_${event.idEvent}">
+                                                    <a href="user?playerId=${userFromList.userId}&eventId=${event.idEvent}&userId=${userId}" class="btn" style="padding: 0px" id="${userFromList.userId}_imgUser_${event.idEvent}">
+                                                        <img src="${userFromList.photo_50}" alt="Баскетбол" width="35" class="round"
+                                                             height="35" id="${userFromList.userId}_img_${event.idEvent}">
                                                     </a>
                                                 </c:otherwise>
                                             </c:choose>
@@ -262,8 +264,15 @@
                         </div>
 
                         <hr style="margin-bottom: 0px">
-                        <a href="#" class="btn" style=" margin-left: 5px; margin-top: 4px; margin-bottom: 4px" id="share_${event.idEvent}"><span
-                                class="glyphicon glyphicon-bullhorn " style="margin-right: 5px" ></span> Поделиться</a>
+                        <span class="btn" style="margin: 5px">
+
+                                    <script type="text/javascript">
+                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#${event.idEvent}"}, {
+                                        type: "custom",
+                                        text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
+                                    }));
+                                  </script>
+                                </span>
                         <%--   <c:if test="${event.commentsList.size() != 0}">--%>
                         <div class="text-center hide" style="color: gray; padding: 15px;" id="past_${event.idEvent}">
                             <span>Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
@@ -275,7 +284,7 @@
                                 <c:set var="userId" value="${userId}"></c:set>
                                 <li class="list-group-item" style="padding-bottom: 1px;padding-top: 5px" id="${comment.commentId}" onmouseenter="handler(event)" onmouseleave="handler(event)">
                                     <div class="media">
-                                        <a class="pull-left" href="user?playerId=${user.userId}&eventId=${event.idEvent}&userId=${userId}"
+                                        <a class="pull-left" href="user?playerId=${comment.userId}&eventId=${event.idEvent}&userId=${userId}"
                                            style="margin-top: 5px">
                                             <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="35" height="35"> -->
                                             <img class="media-object round" src="${comment.userPhoto}" alt="user"
@@ -313,7 +322,7 @@
                                                 <hr style="padding: 0px; margin:0px">
                                             </div>
                                             <div class="col-xs-2 col-md-1 col-sm-1 pull-right " style="padding-left: 3px">
-                                                <a href="#" onclick="sendCommentUser()" class="btn  pull-right" id="send"><span
+                                                <a  onclick="sendCommentUser()" class="btn  pull-right" id="send"><span
                                                         style="padding-bottom: 10px"> <img
                                                         src="resources/image/send.png" width="25"
                                                         height="25"></span></a>
@@ -406,8 +415,8 @@
     </div>
     </div>
 </main>
-<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 
+<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         $('#all').tooltip({title: "Смотреть всех", container: ".row"});
@@ -416,6 +425,8 @@
     if (where === 'comment') {
         $('#textComment').focus();
     }
+
+
 
     var event = ${eventJson};
     var activeEvent = event.active;
@@ -482,11 +493,16 @@
             }
 
             var isActive = false;
-            usersList.forEach(function (user, i) {
-                if (user.userId === userId ) {
-                    isActive = true;
-                }
-            });
+    var isFakePresent = false;
+    usersList.forEach(function (user, i) {
+        if (user.userId === userId) {
+            if (user.isFake === true) {
+                isFakePresent = true;
+            }
+            isActive = true;
+        }
+
+    });
 
             if (isActive) {
                 $('#answerButton_'+ id).removeClass('active');
@@ -497,6 +513,10 @@
                 $('#doAnswer_'+ id).addClass('hide');
                 $('#cancelAnswer2_'+ id).removeClass('hide');
                 $('#doAnswer2_'+ id).addClass('hide');
+                if (isFakePresent) {
+                    var answerButton = document.getElementById("answerButton_" + id);
+                    answerButton.setAttribute('disabled', 'disabled');
+                }
             } else {
                 $('#answerButton_'+ id).addClass('active');
                 $('#answerButton_'+ id).css('background','');
@@ -539,6 +559,9 @@
                     }
 
                     resizeEvent();
+                if (device.desktop()) {
+                    $('#textComment').focus();
+                }
                 });
 
         }
@@ -569,8 +592,10 @@
     }
 
     $("#textComment").keyup(function(event){
-        if(event.keyCode == 13 && !event.shiftKey){
-            sendCommentUser();
+        if(event.keyCode == 13 && !event.shiftKey) {
+        //    if (device.desktop()) {
+                sendCommentUser();
+          //  }
         }
     });
 

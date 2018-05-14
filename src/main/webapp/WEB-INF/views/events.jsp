@@ -194,7 +194,7 @@
 
                                 </div>
                                 <div class="panel-body" style="padding-bottom: 0px">
-                                    <div style="padding-bottom: 19px">
+                                    <div style="padding-bottom: 20px">
                                         <a class="pull-left"
                                            href="user?playerId=${event.userIdCreator}&userId=${userId}">
                                             <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
@@ -247,14 +247,14 @@
                                         </button>
                                     </div>
 
-                                    <div class="btn-group " style="margin-top: 5px">
+                                    <div class="btn-group " style="margin-top: 7px">
                                         <div class="container-fluid">
                                             <div class="row" id="imgUserList_${event.idEvent}">
-                                                <c:forEach var="user" items="${event.userList}" end="3">
+                                                <c:forEach var="user" items="${event.userList}">
                                                     <c:choose>
                                                         <c:when test="${user.isFake() == true}">
                                                             <a href="user?playerId=${user.userId}&userId=${userId}"
-                                                               class="btn" style="padding: 0px"
+                                                               class="btn" style="padding: 2px 0px;"
                                                                id="${user.userId}_imgUser_${event.idEvent}_fake">
                                                                 <span id="${user.userId}_add_${event.idEvent}"
                                                                       count="${user.countFake}">+${user.countFake}</span>
@@ -262,7 +262,7 @@
                                                         </c:when>
                                                         <c:otherwise>
                                                             <a href="user?playerId=${user.userId}&userId=${userId}"
-                                                               class="btn" style="padding: 0px"
+                                                               class="btn" style="padding: 2px 0px"
                                                                id="${user.userId}_imgUser_${event.idEvent}">
                                                                 <img src="${user.photo_50}" alt="Баскетбол" width="35"
                                                                      class="round media-object "
@@ -288,7 +288,7 @@
                                 </div>
 
                                 <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn"
-                                   style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px"
+                                   style=" margin-left: 5px;margin-top: 5px; margin-bottom: 5px"
                                    id="commentEvents"><span
                                         class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
                                         style="color: #77A5C5;margin-right: 5px"></span>
@@ -480,10 +480,24 @@
 
 
             var isActive = false;
+            var isFakePresent = false;
             usersList.forEach(function (user, i) {
                 if (user.userId === userId) {
+                    if (user.isFake === true) {
+                        isFakePresent = true;
+
+                    }
                     isActive = true;
                 }
+
+                if (i == 1) {
+                    if (user.isFake === true) {
+                        $('#' + user.userId + '_imgUser_' + id + '_fake').addClass('hide');
+                    } else {
+                        $('#' + user.userId + '_imgUser_' + id).addClass('hide');
+                    }
+                }
+
             });
 
             if (isActive) {
@@ -495,6 +509,10 @@
                 $('#doAnswer_' + id).addClass('hide');
                 $('#cancelAnswer2_' + id).removeClass('hide');
                 $('#doAnswer2_' + id).addClass('hide');
+                if (isFakePresent) {
+                    var answerButton = document.getElementById("answerButton_" + id);
+                    answerButton.setAttribute('disabled', 'disabled');
+                }
             } else {
                 $('#answerButton_' + id).addClass('active');
                 $('#answerButton_' + id).css('background', '');
