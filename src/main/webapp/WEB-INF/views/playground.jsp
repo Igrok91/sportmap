@@ -63,7 +63,7 @@
         </div>
     </div>
 </nav>
-<a href="" class="btn hide" style="padding: 2px 0px" id="templateUserList2">
+<a href="" class="btn hide" style="padding: 2px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
     <img src="" alt="Баскетбол" width="35" class="round"
          height="35" id="imageUser">
@@ -480,6 +480,7 @@
     var listEvents = ${listEventsJson};
     var playgroundId = '${playgroundId}';
     var eventsId = {};
+    var maxWatch = 10;
     VK.init(function () {
 
     }, function () {
@@ -506,7 +507,7 @@
                 $('#descrEvent_' + id).append('<br>');
             });
 
-            if (usersList.length > 2) {
+            if (usersList.length > maxWatch) {
                 $('#watch_' + id).removeClass('hide');
             }
 
@@ -554,7 +555,7 @@
                     }
                     isActive = true;
                 }
-                if (i > 2) {
+                if (i > maxWatch) {
                     if (user.isFake === true) {
                         $('#' + user.userId + '_imgUser_' + id + '_fake').addClass('hide');
                     } else {
@@ -684,7 +685,7 @@
                         if (commentList.length > 0) {
                             $('#countComment_' + eventId).text(commentList.length);
                         }
-                        if (usersList.length > 2) {
+                        if (usersList.length > maxWatch) {
                             isWatch = true;
                             // $('#watch_' + eventId).removeClass('hide');
                         }

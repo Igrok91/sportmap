@@ -156,7 +156,9 @@ public class StartController {
                 model.addAttribute("minUser", minUser);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
+                model.addAttribute("userId", userId);
+                return "error";
             }
         } else {
             model.addAttribute("userId", userId);
@@ -201,7 +203,7 @@ public class StartController {
         model.addAttribute("jsonUser", jsonUser);
         int countOrganize = 0;
         if (user.getListParticipant().size() > 0) {
-             countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
+            countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
                 @Override
                 public boolean apply(EventUser eventUser) {
                     return eventUser.isOrganize();
@@ -290,29 +292,28 @@ public class StartController {
         model.addAttribute("voleyballInfo", voleyballInfoList);
     }
 
-    @RequestMapping(value = "/begin")
-    public String onStart(Model model) {
-
-
-        return "main";
-    }
-
     @RequestMapping("/groupFromMap")
     public String toGroup(Model model, @RequestParam(value = "playgroundId") String id
             , @RequestParam(value = "sport", required = false, defaultValue = FOOTBALL) String sport
             , @RequestParam(value = "userId") String userId) {
-        User user = getUser(userId);
+        try {
+            User user = getUser(userId);
 
-        if (user == null) {
+            if (user == null) {
+                model.addAttribute("userId", userId);
+                return "error";
+            }
+            logger.info("Переход в группу " + id);
+            addGroupToModel(model, id, user, 2);
+            model.addAttribute("returnBack", "map");
+            model.addAttribute("userId", userId);
+            model.addAttribute("userPhoto", user.getPhoto_50());
+            model.addAttribute("endList", 2);
+        } catch (Exception e) {
+            logger.error(e);
             model.addAttribute("userId", userId);
             return "error";
         }
-        logger.info("Переход в группу " + id);
-        addGroupToModel(model, id, user, 2);
-        model.addAttribute("returnBack", "map");
-        model.addAttribute("userId", userId);
-        model.addAttribute("userPhoto", user.getPhoto_50());
-        model.addAttribute("endList", 2);
         return "playground";
     }
 
@@ -376,17 +377,23 @@ public class StartController {
     public String toGroupUser(Model model, @RequestParam(value = "playgroundId") String id
             , @RequestParam(value = "sport") String sport
             , @RequestParam(value = "userId") String userId) {
-        User user = getUser(userId);
-        if (user == null) {
+        try {
+            User user = getUser(userId);
+            if (user == null) {
+                model.addAttribute("userId", userId);
+                return "error";
+            }
+            addGroupToModel(model, id, user, 2);
+
+            model.addAttribute("returnBack", "group");
+            model.addAttribute("userId", userId);
+            model.addAttribute("userPhoto", user.getPhoto_50());
+            model.addAttribute("endList", 2);
+        } catch (Exception e) {
+            logger.error(e);
             model.addAttribute("userId", userId);
             return "error";
         }
-        addGroupToModel(model, id, user, 2);
-
-        model.addAttribute("returnBack", "group");
-        model.addAttribute("userId", userId);
-        model.addAttribute("userPhoto", user.getPhoto_50());
-        model.addAttribute("endList", 2);
         return "playground";
     }
 
@@ -394,24 +401,31 @@ public class StartController {
     public String toGroupFromEvent(Model model, @RequestParam(value = "playgroundId") String id,
                                    @RequestParam(value = "userId") String userId,
                                    @RequestParam(value = "endList", required = false) String endList) {
-        User user = getUser(userId);
-        if (user == null) {
+        try {
+
+            User user = getUser(userId);
+            if (user == null) {
+                model.addAttribute("userId", userId);
+                return "error";
+            }
+            int size;
+            if (Objects.nonNull(endList) && !endList.isEmpty()) {
+                int end = Integer.parseInt(endList);
+                size = end * 2;
+            } else {
+                size = 2;
+            }
+            logger.info("size list event " + size);
+            addGroupToModel(model, id, user, size);
+            model.addAttribute("returnBack", "home");
+            model.addAttribute("userPhoto", user.getPhoto_50());
+            model.addAttribute("endList", size);
+            model.addAttribute("userId", userId);
+        } catch (Exception e) {
+            logger.error(e);
             model.addAttribute("userId", userId);
             return "error";
         }
-        int size;
-        if (Objects.nonNull(endList) && !endList.isEmpty()) {
-            int end = Integer.parseInt(endList);
-            size = end * 2;
-        } else {
-            size = 2;
-        }
-        logger.info("size list event " + size);
-        addGroupToModel(model, id, user, size);
-        model.addAttribute("returnBack", "home");
-        model.addAttribute("userPhoto", user.getPhoto_50());
-        model.addAttribute("endList", size);
-        model.addAttribute("userId", userId);
         return "playground";
     }
 
@@ -419,43 +433,48 @@ public class StartController {
     public String toCreate(Model model, @RequestParam(value = "playgroundId") String id, @RequestParam(value = "sport") String sport,
                            @RequestParam(value = "eventId", required = false, defaultValue = "null") String eventId,
                            @RequestParam(value = "userId") String userId) {
-
-        for (Playground playground : playgroundService.getAllPlayground()) {
-            if (playground.getIdplayground().equals(id)) {
-                model.addAttribute("namePlayground", playground.getName());
-                model.addAttribute("playId", playground.getIdplayground());
-                model.addAttribute("street", playground.getStreet());
-                model.addAttribute("house", playground.getHouse());
-                model.addAttribute("sport", playground.getSport());
-                model.addAttribute("players", playground.getPlayers());
+        try {
+            for (Playground playground : playgroundService.getAllPlayground()) {
+                if (playground.getIdplayground().equals(id)) {
+                    model.addAttribute("namePlayground", playground.getName());
+                    model.addAttribute("playId", playground.getIdplayground());
+                    model.addAttribute("street", playground.getStreet());
+                    model.addAttribute("house", playground.getHouse());
+                    model.addAttribute("sport", playground.getSport());
+                    model.addAttribute("players", playground.getPlayers());
+                }
             }
-        }
 
 
-        Gson gson = new Gson();
-        if (!eventId.equals("null")) {
+            Gson gson = new Gson();
+            if (!eventId.equals("null")) {
 
-            Event event = eventsService.getEventById(eventId);
-            model.addAttribute("eventJson", gson.toJson(event));
-            model.addAttribute("event", event);
-            model.addAttribute("templates", new ArrayList<>());
-            model.addAttribute("template", new ArrayList<>());
-        } else {
-            User user = getUser(userId);
-            List<TemplateGame> list = user.getTemplateGames();
-            ArrayList<String> userTemplates = new ArrayList<>();
-            if (list != null) {
-                userTemplates = getUserTemplates(list);
-                logger.info("TemplateGame size " + list.size());
+                Event event = eventsService.getEventById(eventId);
+                model.addAttribute("eventJson", gson.toJson(event));
+                model.addAttribute("event", event);
+                model.addAttribute("templates", new ArrayList<>());
+                model.addAttribute("template", new ArrayList<>());
+            } else {
+                User user = getUser(userId);
+                List<TemplateGame> list = user.getTemplateGames();
+                ArrayList<String> userTemplates = new ArrayList<>();
+                if (list != null) {
+                    userTemplates = getUserTemplates(list);
+                    logger.info("TemplateGame size " + list.size());
+                }
+                model.addAttribute("eventJson", gson.toJson(new Event()));
+                model.addAttribute("event", new Event());
+                model.addAttribute("templates", userTemplates);
+                model.addAttribute("template", list);
             }
-            model.addAttribute("eventJson", gson.toJson(new Event()));
-            model.addAttribute("event", new Event());
-            model.addAttribute("templates", userTemplates);
-            model.addAttribute("template", list);
+            model.addAttribute("returnBack", "home");
+            model.addAttribute("userId", userId);
+            model.addAttribute("playgroundId", id);
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        model.addAttribute("returnBack", "home");
-        model.addAttribute("userId", userId);
-        model.addAttribute("playgroundId", id);
         return "create";
     }
 
@@ -463,48 +482,54 @@ public class StartController {
     public String toHome(Model model, @RequestParam(value = "where", required = false, defaultValue = "home") String where
             , @RequestParam(value = "playgroundId", required = false) String id, @RequestParam(value = "sport", required = false) String sport
             , @RequestParam(value = "userId") String userId) {
-        if (where.equals("group")) {
+        try {
+            if (where.equals("group")) {
 
-            model.addAttribute("returnBack", where);
-            model.addAttribute("sport", sport);
-            model.addAttribute("playgroundCoordinate", "empty");
-        } else if (where.equals("map")) {
+                model.addAttribute("returnBack", where);
+                model.addAttribute("sport", sport);
+                model.addAttribute("playgroundCoordinate", "empty");
+            } else if (where.equals("map")) {
 
-            String json = null;
-            HashMap<String, Double> map = new HashMap<>();
-            Gson gson = new Gson();
+                String json = null;
+                HashMap<String, Double> map = new HashMap<>();
+                Gson gson = new Gson();
 
-            for (Playground p : allPlaygroundList) {
-                if (p.getIdplayground().equals(id)) {
-                    map.put("lat", Double.parseDouble(p.getLatitude()));
-                    map.put("lng", Double.parseDouble(p.getLongitude()));
-                    json = gson.toJson(map);
+                for (Playground p : allPlaygroundList) {
+                    if (p.getIdplayground().equals(id)) {
+                        map.put("lat", Double.parseDouble(p.getLatitude()));
+                        map.put("lng", Double.parseDouble(p.getLongitude()));
+                        json = gson.toJson(map);
+                    }
                 }
+
+                model.addAttribute("returnBack", where);
+                model.addAttribute("sport", sport);
+                model.addAttribute("playgroundCoordinate", json == null ? "empty" : json);
+            } else if (where.equals("profileMain")) {
+                model.addAttribute("returnBack", "profileMain");
+                model.addAttribute("playgroundCoordinate", "empty");
+            } else {
+                model.addAttribute("returnBack", "home");
+                model.addAttribute("playgroundCoordinate", "empty");
             }
+            addPlaygroundDataToModel(model);
+            User user = getUser(userId);
+            setUserDataToModel(user, model);
+            Gson gson = new Gson();
+            List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
+            model.addAttribute("eventUserActive", getEventUserActive(listEvents, user.getUserId()));
+            model.addAttribute("listEventsJson", gson.toJson(listEvents));
+            model.addAttribute("listEvents", listEvents);
 
-            model.addAttribute("returnBack", where);
-            model.addAttribute("sport", sport);
-            model.addAttribute("playgroundCoordinate", json == null ? "empty" : json);
-        } else if (where.equals("profileMain")) {
-            model.addAttribute("returnBack", "profileMain");
-            model.addAttribute("playgroundCoordinate", "empty");
-        } else {
-            model.addAttribute("returnBack", "home");
-            model.addAttribute("playgroundCoordinate", "empty");
+            model.addAttribute("userId", userId);
+            model.addAttribute("user", user);
+            model.addAttribute("firstName", user.getFirstName());
+            model.addAttribute("lastName", user.getLastName());
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        addPlaygroundDataToModel(model);
-        User user = getUser(userId);
-        setUserDataToModel(user, model);
-        Gson gson = new Gson();
-        List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
-        model.addAttribute("eventUserActive", getEventUserActive(listEvents, user.getUserId()));
-        model.addAttribute("listEventsJson", gson.toJson(listEvents));
-        model.addAttribute("listEvents", listEvents);
-
-        model.addAttribute("userId", userId);
-        model.addAttribute("user", user);
-        model.addAttribute("firstName", user.getFirstName());
-        model.addAttribute("lastName", user.getLastName());
         return "main";
     }
 
@@ -514,30 +539,42 @@ public class StartController {
                              @RequestParam(value = "userId") String userId,
                              @RequestParam(value = "playgroundId", required = false) String id,
                              @RequestParam(value = "where", required = false, defaultValue = "empty") String where) throws Exception {
-        if (eventId != null) {
-            Event event = eventsService.getEventById(eventId);
-            eventsService.deleteGame(eventId);
-            vkService.notifyDeleteUsersEvent(event, userId);
-            cacheService.putToCache(eventId, userId);
+        try {
+            if (eventId != null) {
+                Event event = eventsService.getEventById(eventId);
+                eventsService.deleteGame(eventId);
+                vkService.notifyDeleteUsersEvent(event, userId);
+                cacheService.putToCache(eventId, userId);
+            }
+            if (where.equals("playground")) {
+                return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
+            }
+            model.addAttribute("userId", userId);
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        if (where.equals("playground")) {
-            return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
-        }
-        model.addAttribute("userId", userId);
         return "redirect:/home";
     }
 
     @RequestMapping(value = "/toPlayers")
     public String toPlayers(Model model, @RequestParam(name = "eventId") String eventId,
                             @RequestParam(value = "userId") String userId) throws Exception {
-        if (eventId != null) {
-            Event event = eventsService.getEventById(eventId);
-            List<MinUser> list = eventsService.getUserListEvent(event.getUserList());
+        try {
+            if (eventId != null) {
+                Event event = eventsService.getEventById(eventId);
+                List<MinUser> list = eventsService.getUserListEvent(event.getUserList());
 
+                model.addAttribute("userId", userId);
+                model.addAttribute("userList", list);
+                model.addAttribute("returnBack", "home");
+
+            }
+        } catch (Exception e) {
+            logger.error(e);
             model.addAttribute("userId", userId);
-            model.addAttribute("userList", list);
-            model.addAttribute("returnBack", "home");
-
+            return "error";
         }
         return "players";
     }
@@ -545,14 +582,20 @@ public class StartController {
     @RequestMapping(value = "/toPlayersGroups")
     public String toPlayersGroups(Model model, @RequestParam(name = "playgroundId") String playgroundId,
                                   @RequestParam(value = "userId") String userId) throws Exception {
-        if (playgroundId != null) {
-            Playground playground = playgroundService.getPlaygroundById(playgroundId);
-            List<MinUser> list = playground.getPlayers();
+        try {
+            if (playgroundId != null) {
+                Playground playground = playgroundService.getPlaygroundById(playgroundId);
+                List<MinUser> list = playground.getPlayers();
 
+                model.addAttribute("userId", userId);
+                model.addAttribute("playgroundId", playgroundId);
+                model.addAttribute("userList", list);
+                model.addAttribute("returnBack", "playground");
+            }
+        } catch (Exception e) {
+            logger.error(e);
             model.addAttribute("userId", userId);
-            model.addAttribute("playgroundId", playgroundId);
-            model.addAttribute("userList", list);
-            model.addAttribute("returnBack", "playground");
+            return "error";
         }
         return "players";
     }
@@ -563,24 +606,30 @@ public class StartController {
                           @RequestParam(value = "userId") String userId,
                           @RequestParam(value = "playgroundId", required = false) String id,
                           @RequestParam(value = "where", required = false, defaultValue = "empty") String where) throws Exception {
-        if (eventId != null) {
-            Event event = eventsService.getEventById(eventId);
-            eventsService.endGame(eventId);
-            if (event.getUserList().size() > 0) {
-                Long evId = Long.valueOf(eventId);
-                User user = getUser(userId);
-                user.getListParticipant().add(new EventUser(evId, true));
-                putToCacheUser(user);
-                userService.addEventToUserParticipant(event.getUserList(), evId, userId);
-                vkService.notifyEndUsersEvent(event, userId);
+        try {
+            if (eventId != null) {
+                Event event = eventsService.getEventById(eventId);
+                eventsService.endGame(eventId);
+                if (event.getUserList().size() > 0) {
+                    Long evId = Long.valueOf(eventId);
+                    User user = getUser(userId);
+                    user.getListParticipant().add(new EventUser(evId, true));
+                    putToCacheUser(user);
+                    userService.addEventToUserParticipant(event.getUserList(), evId, userId);
+                    vkService.notifyEndUsersEvent(event, userId);
+                }
             }
-        }
 
-        cacheService.putToCache(eventId, userId);
-        if (where.equals("playground")) {
-            return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
+            cacheService.putToCache(eventId, userId);
+            if (where.equals("playground")) {
+                return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
+            }
+            model.addAttribute("userId", userId);
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        model.addAttribute("userId", userId);
         return "redirect:/home";
     }
 
@@ -589,19 +638,25 @@ public class StartController {
     public String event(Model model, @RequestParam(name = "eventId") String eventId,
                         @RequestParam(value = "userId") String userId,
                         @RequestParam(value = "where", required = false, defaultValue = "home") String where) {
-        Gson gson = new Gson();
-        User user = getUser(userId);
-        Event event = eventsService.getEventById(eventId);
-        if (Objects.isNull(event)) {
+        try {
+            Gson gson = new Gson();
+            User user = getUser(userId);
+            Event event = eventsService.getEventById(eventId);
+            if (Objects.isNull(event)) {
+                model.addAttribute("userId", userId);
+                return "error";
+            }
+            model.addAttribute("event", event);
+            model.addAttribute("eventJson", gson.toJson(event));
+
+            model.addAttribute("userId", userId);
+            model.addAttribute("user", user);
+            model.addAttribute("where", where);
+        } catch (Exception e) {
+            logger.error(e);
             model.addAttribute("userId", userId);
             return "error";
         }
-        model.addAttribute("event", event);
-        model.addAttribute("eventJson", gson.toJson(event));
-
-        model.addAttribute("userId", userId);
-        model.addAttribute("user", user);
-        model.addAttribute("where", where);
         return "event";
     }
 
@@ -611,34 +666,40 @@ public class StartController {
                          @RequestParam(value = "playerId") String playerId,
                          @RequestParam(name = "eventId", required = false) String eventId,
                          @RequestParam(value = "playgroundId", required = false) String playgroundId) {
-        User user = getPlayers(playerId);
-        Gson gson = new Gson();
-        int countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
-            @Override
-            public boolean apply(EventUser eventUser) {
-                return eventUser.isOrganize();
-            }
-        }).size();
-        model.addAttribute("userlastName", user.getLastName());
-        model.addAttribute("userfirstName", user.getFirstName());
-        model.addAttribute("userPhoto", user.getPhoto_100());
-        model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
-        model.addAttribute("countOrganize", countOrganize);
-        model.addAttribute("countParticipant", user.getListParticipant().size());
+        try {
+            User user = getPlayers(playerId);
+            Gson gson = new Gson();
+            int countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
+                @Override
+                public boolean apply(EventUser eventUser) {
+                    return eventUser.isOrganize();
+                }
+            }).size();
+            model.addAttribute("userlastName", user.getLastName());
+            model.addAttribute("userfirstName", user.getFirstName());
+            model.addAttribute("userPhoto", user.getPhoto_100());
+            model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
+            model.addAttribute("countOrganize", countOrganize);
+            model.addAttribute("countParticipant", user.getListParticipant().size());
 
-        model.addAttribute("userId", userId);
-        model.addAttribute("playerId", playerId);
-        model.addAttribute("userInfoJson", gson.toJson(user.getInfo()));
-        model.addAttribute("userInfo", user.getInfo());
-        String where = EVENTS;
-        if (eventId != null) {
-            where = EVENT;
-        } else if (playgroundId != null) {
-            where = PLAYGROUND;
+            model.addAttribute("userId", userId);
+            model.addAttribute("playerId", playerId);
+            model.addAttribute("userInfoJson", gson.toJson(user.getInfo()));
+            model.addAttribute("userInfo", user.getInfo());
+            String where = EVENTS;
+            if (eventId != null) {
+                where = EVENT;
+            } else if (playgroundId != null) {
+                where = PLAYGROUND;
+            }
+            model.addAttribute("where", where);
+            model.addAttribute("eventId", eventId);
+            model.addAttribute("playgroundId", playgroundId);
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        model.addAttribute("where", where);
-        model.addAttribute("eventId", eventId);
-        model.addAttribute("playgroundId", playgroundId);
         return "user";
     }
 
@@ -649,37 +710,42 @@ public class StartController {
                                   @RequestParam(value = "where", required = false, defaultValue = "profileMain") String where,
                                   @RequestParam(value = "endList", required = false) String endList) {
 
-        User user;
-        if (where.equals("profile")) {
-            where = "profile";
-            user = getPlayers(playerId);
-        } else {
-            user = getUser(userId);
+        try {
+            User user;
+            if (where.equals("profile")) {
+                where = "profile";
+                user = getPlayers(playerId);
+            } else {
+                user = getUser(userId);
+            }
+            int size;
+            if (Objects.nonNull(endList) && !endList.isEmpty()) {
+                int end = Integer.parseInt(endList);
+                size = end * 2;
+            } else {
+                size = 2;
+            }
+            Gson gson = new Gson();
+            List<Event> list = eventsService.getEventUserParticipantOrOrganize(user.getListParticipant());
+            List<Event> newList = null;
+            if (Objects.nonNull(list)) {
+                newList = FluentIterable.from(list).limit(size).toList();
+            }
+            logger.info("newList " + newList.size());
+            // List<Event> list = eventsService.getEvents(user.getPlaygroundIdlList());
+            model.addAttribute("listEvents", newList);
+            model.addAttribute("listSize", list.size());
+            model.addAttribute("listEventsJson", gson.toJson(newList));
+            model.addAttribute("userId", userId);
+            model.addAttribute("playerId", playerId);
+            model.addAttribute("where", where);
+            model.addAttribute("parameter", "userParticipant");
+            model.addAttribute("endList", size);
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        int size;
-        if (Objects.nonNull(endList) && !endList.isEmpty()) {
-            int end = Integer.parseInt(endList);
-            size = end * 2;
-        } else {
-            size = 2;
-        }
-        Gson gson = new Gson();
-        List<Event> list = eventsService.getEventUserParticipantOrOrganize(user.getListParticipant());
-        List<Event> newList = null;
-        if (Objects.nonNull(list)) {
-            newList = FluentIterable.from(list).limit(size).toList();
-        }
-        logger.info("newList " + newList.size());
-       // List<Event> list = eventsService.getEvents(user.getPlaygroundIdlList());
-        model.addAttribute("listEvents", newList);
-        model.addAttribute("listSize", list.size());
-        model.addAttribute("listEventsJson", gson.toJson(newList));
-        model.addAttribute("userId", userId);
-        model.addAttribute("playerId", playerId);
-        model.addAttribute("where", where);
-        model.addAttribute("parameter", "userParticipant");
-        model.addAttribute("endList", size);
-
         return "userParticipation";
     }
 
@@ -710,53 +776,58 @@ public class StartController {
                                @RequestParam(value = "playerId") String playerId,
                                @RequestParam(value = "where", required = false, defaultValue = "profileMain") String where,
                                @RequestParam(value = "endList", required = false) String endList) {
-        User user;
-        if (where.equals("profile")) {
-            where = "profile";
-            user = getPlayers(playerId);
-        } else {
-            user = getUser(userId);
-        }
-        int size;
-        if (Objects.nonNull(endList) && !endList.isEmpty()) {
-            int end = Integer.parseInt(endList);
-            size = end * 2;
-        } else {
-            size = 2;
-        }
-        Gson gson = new Gson();
-        List<Event> list = eventsService.getEventUserParticipantOrOrganize(user.getListParticipant());
-        List<Event> listOrganize = null;
-//        List<Event> list = eventsService.getEvents(user.getPlaygroundIdlList());
-        if (where.equals("profile")) {
-             listOrganize = FluentIterable.from(list).filter(new Predicate<Event>() {
-                @Override
-                public boolean apply(Event event) {
-                    return event.getUserIdCreator().equals(playerId);
-                }
-            }).toList();
-        } else {
-            listOrganize = FluentIterable.from(list).filter(new Predicate<Event>() {
-                @Override
-                public boolean apply(Event event) {
-                    return event.getUserIdCreator().equals(userId);
-                }
-            }).toList();
-        }
+        try {
+            User user;
+            if (where.equals("profile")) {
+                where = "profile";
+                user = getPlayers(playerId);
+            } else {
+                user = getUser(userId);
+            }
+            int size;
+            if (Objects.nonNull(endList) && !endList.isEmpty()) {
+                int end = Integer.parseInt(endList);
+                size = end * 2;
+            } else {
+                size = 2;
+            }
+            Gson gson = new Gson();
+            List<Event> list = eventsService.getEventUserParticipantOrOrganize(user.getListParticipant());
+            List<Event> listOrganize = null;
+//          List<Event> list = eventsService.getEvents(user.getPlaygroundIdlList());
+            if (where.equals("profile")) {
+                listOrganize = FluentIterable.from(list).filter(new Predicate<Event>() {
+                    @Override
+                    public boolean apply(Event event) {
+                        return event.getUserIdCreator().equals(playerId);
+                    }
+                }).toList();
+            } else {
+                listOrganize = FluentIterable.from(list).filter(new Predicate<Event>() {
+                    @Override
+                    public boolean apply(Event event) {
+                        return event.getUserIdCreator().equals(userId);
+                    }
+                }).toList();
+            }
 
-        List<Event> newList = null;
-        if (Objects.nonNull(list)) {
-            newList = FluentIterable.from(listOrganize).limit(size).toList();
+            List<Event> newList = null;
+            if (Objects.nonNull(list)) {
+                newList = FluentIterable.from(listOrganize).limit(size).toList();
+            }
+            model.addAttribute("listEvents", newList);
+            model.addAttribute("listEventsJson", gson.toJson(newList));
+            model.addAttribute("listSize", list.size());
+            model.addAttribute("userId", userId);
+            model.addAttribute("playerId", playerId);
+            model.addAttribute("where", where);
+            model.addAttribute("endList", size);
+            model.addAttribute("parameter", "userOrganize");
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        model.addAttribute("listEvents", newList);
-        model.addAttribute("listEventsJson", gson.toJson(newList));
-        model.addAttribute("listSize", list.size());
-        model.addAttribute("userId", userId);
-        model.addAttribute("playerId", playerId);
-        model.addAttribute("where", where);
-        model.addAttribute("endList", size);
-        model.addAttribute("parameter", "userOrganize");
-
         return "userParticipation";
     }
 
@@ -773,41 +844,47 @@ public class StartController {
                              @RequestParam(name = "templateId", required = false, defaultValue = "0") String templateId,
                              @RequestParam(name = "eventId", required = false, defaultValue = "null") String eventId,
                              @RequestParam(value = "userId") String userId) throws Exception {
-        User user = getUser(userId);
-        Event game;
-        logger.info("Description Event " + description);
-        game = new Event();
-        game.setDescription(description);
-        game.setAnswer(answer);
-        game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 1000 : Integer.valueOf(sel2));
-        game.setDuration(sel1.substring(0, 1).trim());
-        game.setUserIdCreator(userId);
-        game.setUserFirtsNameCreator(user.getFirstName());
-        game.setUserLastNameCreator(user.getLastName());
-        game.setUserCreatorPhoto(user.getPhoto_50());
-        game.setPlaygroundId(playgroundId);
-        game.setSport(sport);
-        game.setDateCreation(Timestamp.of(new Date()));
-        game.setPlaygroundName(namePlayground);
-        List<User> list = new ArrayList<>();
-        list.add(user);
-        game.setUserList(list);
+        try {
+            User user = getUser(userId);
+            Event game;
+            logger.info("Description Event " + description);
+            game = new Event();
+            game.setDescription(description);
+            game.setAnswer(answer);
+            game.setMaxCountAnswer(sel2.equals("Без ограничений") ? 1000 : Integer.valueOf(sel2));
+            game.setDuration(sel1.substring(0, 1).trim());
+            game.setUserIdCreator(userId);
+            game.setUserFirtsNameCreator(user.getFirstName());
+            game.setUserLastNameCreator(user.getLastName());
+            game.setUserCreatorPhoto(user.getPhoto_50());
+            game.setPlaygroundId(playgroundId);
+            game.setSport(sport);
+            game.setDateCreation(Timestamp.of(new Date()));
+            game.setPlaygroundName(namePlayground);
+            List<User> list = new ArrayList<>();
+            list.add(user);
+            game.setUserList(list);
 
 
-        if (!eventId.equals("null")) {
-            logger.info("Изменяем событие с id " + eventId);
-            game.setIdEvent(eventId);
-            eventsService.editEventById(eventId, game.getDescription(), game.getMaxCountAnswer(), game.getDuration());
-        } else {
-            eventsService.publishEvent(game);
-            Playground playground = playgroundService.getPlaygroundById(playgroundId);
-            vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
-                    , user, description, game.getIdEvent(), playground.getName());
+            if (!eventId.equals("null")) {
+                logger.info("Изменяем событие с id " + eventId);
+                game.setIdEvent(eventId);
+                eventsService.editEventById(eventId, game.getDescription(), game.getMaxCountAnswer(), game.getDuration());
+            } else {
+                eventsService.publishEvent(game);
+                Playground playground = playgroundService.getPlaygroundById(playgroundId);
+                vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
+                        , user, description, game.getIdEvent(), playground.getName());
+            }
+            logger.info("event id " + eventId);
+            cacheService.putToCache(game.getIdEvent(), userId);
+            model.addAttribute("userId", userId);
+            model.addAttribute("user", user);
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        logger.info("event id " + eventId);
-        cacheService.putToCache(game.getIdEvent(), userId);
-        model.addAttribute("userId", userId);
-        model.addAttribute("user", user);
         return "redirect:/home";
     }
 
@@ -819,31 +896,36 @@ public class StartController {
                                          @RequestParam(value = "playgroundId") String playgroundId,
                                          @RequestParam(name = "sport", required = false, defaultValue = "Футбол") String sport,
                                          @RequestParam(name = "namePlayground") String namePlayground) throws Exception {
-        User user = getUser(userId);
-        Event game = eventsService.createEventByTemplate(templateId, userId);
-        if (Objects.nonNull(game)) {
-            List<User> list = new ArrayList<>();
-            list.add(user);
-            game.setUserList(list);
-            game.setDateCreation(Timestamp.of(new Date()));
-            game.setPlaygroundId(playgroundId);
-            game.setSport(sport);
-            game.setPlaygroundName(namePlayground);
-            game.setUserIdCreator(userId);
-            game.setUserFirtsNameCreator(user.getFirstName());
-            game.setUserLastNameCreator(user.getLastName());
-            game.setUserCreatorPhoto(user.getPhoto_50());
-            eventsService.publishEvent(game);
-            Playground playground = playgroundService.getPlaygroundById(playgroundId);
-            vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
-                    , user, game.getDescription(), game.getIdEvent(), playground.getName());
+        try {
+            User user = getUser(userId);
+            Event game = eventsService.createEventByTemplate(templateId, userId);
+            if (Objects.nonNull(game)) {
+                List<User> list = new ArrayList<>();
+                list.add(user);
+                game.setUserList(list);
+                game.setDateCreation(Timestamp.of(new Date()));
+                game.setPlaygroundId(playgroundId);
+                game.setSport(sport);
+                game.setPlaygroundName(namePlayground);
+                game.setUserIdCreator(userId);
+                game.setUserFirtsNameCreator(user.getFirstName());
+                game.setUserLastNameCreator(user.getLastName());
+                game.setUserCreatorPhoto(user.getPhoto_50());
+                eventsService.publishEvent(game);
+                Playground playground = playgroundService.getPlaygroundById(playgroundId);
+                vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
+                        , user, game.getDescription(), game.getIdEvent(), playground.getName());
+            }
+            cacheService.putToCache(game.getIdEvent(), userId);
+            model.addAttribute("userId", userId);
+            model.addAttribute("user", user);
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
         }
-        cacheService.putToCache(game.getIdEvent(), userId);
-        model.addAttribute("userId", userId);
-        model.addAttribute("user", user);
         return "redirect:/home";
     }
-
 
 
     private ArrayList<String> getUserTemplates(List<TemplateGame> list) {
@@ -985,7 +1067,6 @@ public class StartController {
         }
         return mapArrayList;
     }
-
 
 
     private String errorSendMessage(String userID, String idPlay, Exception e) {

@@ -59,7 +59,7 @@
 </head>
 <body id="eventMain">
 
-<a href="" class="btn hide" style="padding: 2px 0px" id="templateUserList2">
+<a href="" class="btn hide" style="padding: 2px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
     <img src="" alt="Баскетбол" width="35" class="round"
          height="35" id="imageUser">
@@ -427,7 +427,7 @@
     }
 
 
-
+    var maxWatch = 10;
     var event = ${eventJson};
     var activeEvent = event.active;
     var userId = "${userId}";
@@ -456,7 +456,7 @@
                 $('#descrEvent_' + id).append('<br>');
             });
 
-            if (usersList.length > 2) {
+            if (usersList.length > maxWatch) {
                 $('#watch_' + id).removeClass('hide');
             }
             // Определяем истинное значение игроков
@@ -501,7 +501,7 @@
             }
             isActive = true;
         }
-        if (i > 2) {
+        if (i > maxWatch) {
             if (user.isFake === true) {
                 $('#' + user.userId + '_imgUser_' + id + '_fake').addClass('hide');
             } else {
@@ -680,7 +680,7 @@
                             addCommentToListComments(comment, eventId);
                         })
                     }
-                    if (usersList.length > 2) {
+                    if (usersList.length > maxWatch) {
                         isWatch = true;
                     }
 
