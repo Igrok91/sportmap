@@ -16,16 +16,15 @@ public  class InitVkMain {
 
     private static final String ACCESS_TOKEN = "e3715ec9efbfa67968d33bedbe8080989364423236d2a43d77ab15e0c7d0c8923db1920833f18bd4d2be7";
 
-    private static AtomicReference<VkApiClient> vkApiClient = new AtomicReference<>();
+    private static VkApiClient vkApiClient;
     private static AtomicReference<GroupActor> groupActor = new AtomicReference<>();
 
-    public static VkApiClient getVkApiClient() {
-        if (vkApiClient.get() == null) {
+    public synchronized static VkApiClient getVkApiClient() {
+        if (vkApiClient == null) {
             TransportClient transportClient = new HttpTransportClient();
-            vkApiClient.set(new VkApiClient(transportClient));
+            vkApiClient = new VkApiClient(transportClient);
         }
-
-        return vkApiClient.get();
+        return vkApiClient;
     }
 
     public static GroupActor getGroupActor() {

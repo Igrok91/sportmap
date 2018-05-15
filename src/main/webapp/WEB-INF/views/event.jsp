@@ -59,7 +59,7 @@
 </head>
 <body id="eventMain">
 
-<a href="" class="btn hide" style="padding: 2 px 0px" id="templateUserList2">
+<a href="" class="btn hide" style="padding: 2px 0px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
     <img src="" alt="Баскетбол" width="35" class="round"
          height="35" id="imageUser">
@@ -264,7 +264,7 @@
                         </div>
 
                         <hr style="margin-bottom: 0px">
-                        <span class="btn" style="margin: 5px">
+                        <span class="btn" style="margin: 5px" id="share_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#${event.idEvent}"}, {

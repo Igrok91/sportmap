@@ -179,43 +179,44 @@ var el = document.querySelector('.checkbox-switch');
 
     });
     var returnBack = '${returnBack}';
-    if (returnBack == 'map') {
-        document.getElementById("event").className = "hide";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "hide";
-        document.getElementById("search").className = "";
-        $('#li2').attr('class', 'active');
-        $('#li1').attr('class', '');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', '');
-        $('#li5').attr('class', '');
-        setTimeout('resizeMain()', 300);
-        initMap();
-        isMapInit = true;
+    var start = '${start}';
+        if (returnBack === 'map' || start === 'true') {
+            document.getElementById("event").className = "hide";
+            document.getElementById("prof").className = "hide";
+            document.getElementById("group").className = "hide";
+            document.getElementById("search").className = "";
+            $('#li2').attr('class', 'active');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', '');
+            setTimeout('resizeMain()', 300);
+            initMap();
+            isMapInit = true;
 
-    } else if (returnBack == 'group') {
-        document.getElementById("event").className = "hide";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "";
-        document.getElementById("search").className = "hide";
-        $('#li2').attr('class', '');
-        $('#li1').attr('class', '');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', 'active');
-        $('#li5').attr('class', '');
-        setTimeout('resizeGroups()', 300);
-    }  else if (returnBack == 'home') {
-        document.getElementById("event").className = "";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "hide";
-        document.getElementById("search").className = "hide";
-        $('#li2').attr('class', '');
-        $('#li1').attr('class', 'active');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', '');
-        $('#li5').attr('class', '');
-        setTimeout('resizeEvent()', 300);
-    } else if (returnBack == 'profileMain') {
+        } else if (returnBack === 'group') {
+            document.getElementById("event").className = "hide";
+            document.getElementById("prof").className = "hide";
+            document.getElementById("group").className = "";
+            document.getElementById("search").className = "hide";
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', 'active');
+            $('#li5').attr('class', '');
+            setTimeout('resizeGroups()', 300);
+        } else if (returnBack === 'home') {
+            document.getElementById("event").className = "";
+            document.getElementById("prof").className = "hide";
+            document.getElementById("group").className = "hide";
+            document.getElementById("search").className = "hide";
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', 'active');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', '');
+            setTimeout('resizeEvent()', 300);
+        } else if (returnBack === 'profileMain') {
             document.getElementById("event").className = "hide";
             document.getElementById("prof").className = "";
             document.getElementById("group").className = "hide";
@@ -226,9 +227,10 @@ var el = document.querySelector('.checkbox-switch');
             $('#li4').attr('class', '');
             $('#li5').attr('class', 'active');
             setTimeout('resizeEvent()', 300);
-    } else {
-        setTimeout('resizeEvent()', 300);
-    }
+        } else {
+            setTimeout('resizeEvent()', 300);
+        }
+
     var sessUser =  ${jsonUser};
     var allPlayUser = sessUser.allPlaygroundUser;
 

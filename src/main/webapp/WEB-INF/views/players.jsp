@@ -33,7 +33,7 @@
         }
     </style>
 </head>
-<body>
+<body id="playersMain">
 <nav class="nav  navbar-static-top navbar-default">
     <div class="container-fluid ">
         <div class="pull-left">
@@ -98,6 +98,22 @@
         returnBack = 'home?where=' + '${returnBack}' + '&userId=' + ${userId};
     }
     $('#returnBack').attr('href', returnBack);
+
+    setTimeout('resizePlayers()', 300);
+
+    function resizePlayers() {
+        //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
+
+        var  height =  $('#playersMain').height();
+        if (height < 650) {
+            VK.callMethod('resizeWindow', 900, 650);
+        } else {
+            VK.callMethod('resizeWindow', 900, height + 10);
+        }
+
+        VK.callMethod("scrollWindow", 0, 500);
+
+    }
 
 
 </script>

@@ -7,13 +7,12 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgro
     }).then(function (value) {
         switch (value) {
             case 'true':
+                var hide = (userList > 2);
                 if (maxCountAnswer == 1000) {
                     var count = parseInt($('#badge1_'+ eventId).text());
                     count = count + parseInt(addIgr);
                     $('#badge1_' + eventId).text(count);
-                    if (!(userList > 2)) {
-                        addFakeIgrokToUserList(eventId, addIgr, userId, parameter);
-                    }
+                    addFakeIgrokToUserList(eventId, addIgr, userId, parameter, hide);
                     $('#addIgrok_'+ eventId).modal('hide');
 
                 } else {
@@ -21,9 +20,7 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgro
 
                     count = count + parseInt(addIgr);
                     $('#badge2_' + eventId).text(count + ' / ' + maxCountAnswer);
-                    if (!(userList > 2)) {
-                        addFakeIgrokToUserList(eventId, addIgr, userId, parameter);
-                    }
+                    addFakeIgrokToUserList(eventId, addIgr, userId, parameter, hide);
                     $('#addIgrok_' + eventId).modal('hide');
                 }
                 var answerButton = document.getElementById("answerButton_" + eventId);
@@ -59,25 +56,22 @@ function handleAnswer(maxCountAnswer, eventId, userId, parameter, userList, phot
                 $('#answerButton_'+ eventId).removeClass('active');
                 $('#answerButton_'+ eventId).css('background','#EAEAEC');
                 $('#answerOk_'+ eventId).removeClass('hide');
-
+                var hide = (userList > 2);
                 if (maxCountAnswer == 1000) {
                     var count = parseInt($('#badge1_'+ eventId).text());
                     ++count;
                     $('#badge1_'+ eventId).text(count);
-                    if (!(userList > 2)) {
-                        addIgrokToUserList(eventId, userId, parameter, photoLink);
-                    }
+                    addIgrokToUserList(eventId, userId, parameter, photoLink, hide);
                 } else {
                     var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
                     ++count;
                     $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                    if (!(userList > 2)) {
-                        addIgrokToUserList(eventId, userId, parameter, photoLink);
-                    }
+                        addIgrokToUserList(eventId, userId, parameter, photoLink, hide);
                 }
                 break;
             case 'false':
                 $('#addIgrok_' + eventId).modal('show');
+                VK.callMethod("scrollWindow", 0, 500);
                 break;
             case 'max_count_answer':
                 $('#alertMax_' + eventId).removeClass('hide');
@@ -103,15 +97,14 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList, 
                 $('#answerButton_'+ eventId).removeClass('active');
                 $('#answerButton_'+ eventId).css('background','#EAEAEC');
                 $('#answerOk_'+ eventId).removeClass('hide');
-
+                var hide = (userList > 2);
                 if (maxCountAnswer == 1000) {
 
                     var count = $('#badge1_'+ eventId).text();
                     ++count;
                     $('#badge1_'+ eventId).text(count);
-                    if (!(userList > 2)) {
-                        addIgrokToUserList(eventId, userId, parameter, photoLink);
-                    }
+
+                    addIgrokToUserList(eventId, userId, parameter, photoLink, hide);
                 } else {
                     var count = parseInt($('#badge2_'+ eventId).text().split(' / ')[0]);
                     $('#answerButton_'+ eventId).removeClass('active');
@@ -119,9 +112,7 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList, 
                     $('#answerOk_'+ eventId).removeClass('hide');
                     ++count;
                     $('#badge2_'+ eventId).text(count + ' / ' + maxCountAnswer );
-                    if (!(userList > 2)) {
-                        addIgrokToUserList(eventId, userId, parameter, photoLink);
-                    }
+                    addIgrokToUserList(eventId, userId, parameter, photoLink, hide);
                 }
                 break;
             case 'false':
@@ -172,7 +163,7 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList, 
     });
 }
 
-function addFakeIgrokToUserList(eventId, addIgr, userId, parameter) {
+function addFakeIgrokToUserList(eventId, addIgr, userId, parameter, hide) {
     $('#templateUserList2').removeClass('hide');
     $('#imageUser').addClass('hide');
     var userImg = document.getElementById("templateUserList2").cloneNode(true);
@@ -189,12 +180,15 @@ function addFakeIgrokToUserList(eventId, addIgr, userId, parameter) {
     span.appendChild(document.createTextNode("+" + addIgr));
     userImg.appendChild(span);
     $('#imgUserList_' + eventId).append(userImg)
+    if (hide) {
+        $('#' + userId + '_imgUser_' + eventId + '_fake').addClass('hide');
+    }
     $('#templateUserList2').addClass('hide');
     $('#imageUser').removeClass('hide');
 
 }
 
-function addIgrokToUserList(eventId, userId, parameter, photoLink) {
+function addIgrokToUserList(eventId, userId, parameter, photoLink, hide) {
     $('#templateUserList2').removeClass('hide');
     var img = document.getElementById('imageUser');
     img.src = photoLink;
@@ -205,6 +199,10 @@ function addIgrokToUserList(eventId, userId, parameter, photoLink) {
     } else {
         userImg.href = "user?userId=" + userId;
     }
+
     $('#imgUserList_' + eventId).append(userImg);
+    if (hide) {
+        $('#' + userId + '_imgUser_' + eventId).addClass('hide');
+    }
     $('#templateUserList2').addClass('hide');
 }

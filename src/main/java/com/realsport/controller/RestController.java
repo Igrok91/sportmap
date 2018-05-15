@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.realsport.model.cache.CacheObserver.getCacheObserver;
+import static com.realsport.model.cache.CachePlaygrounds.getCachePlaygrounds;
 import static com.realsport.model.cache.CacheUser.getCacheUser;
 
 @org.springframework.web.bind.annotation.RestController
@@ -41,6 +42,7 @@ public class RestController {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     public static final String MAX_COUNT_ANSWER = "max_count_answer";
+    public static final String PLAYGROUNDS_DATA = "playgroundsData";
 
     @Autowired
     private UserService userService;
@@ -234,12 +236,35 @@ public class RestController {
             user.getPlaygroundIdlList().add(playgroundId);
             playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
             userService.addPlaygroundToUser(userId, playgroundId);
+            List<Playground> playgrounds = playgroundService.getAllPlayground();
+            Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
+                @Override
+                public boolean apply(Playground playground) {
+                    return playground.getIdplayground().equals(playgroundId);
+                }
+            }).get();
+            p.getPlayers().add(getUserMin(user));
+            getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
             isParticipant = Boolean.TRUE;
         } else {
             logger.info("User c id " + userId + " вышел из группы " + playgroundId);
             user.getPlaygroundIdlList().remove(id);
             playgroundService.deleteUserFromPlayground(userId, playgroundId);
             userService.deletePlaygroundFromUser(userId, playgroundId);
+            List<Playground> playgrounds = playgroundService.getAllPlayground();
+            Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
+                @Override
+                public boolean apply(Playground playground) {
+                    return playground.getIdplayground().equals(playgroundId);
+                }
+            }).get();
+            p.getPlayers().removeIf(new Predicate<MinUser>() {
+                @Override
+                public boolean apply(MinUser minUser) {
+                    return minUser.getUserId().equals(userId);
+                }
+            });
+            getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
             isParticipant = Boolean.FALSE;
         }
         putToCacheUser(user);

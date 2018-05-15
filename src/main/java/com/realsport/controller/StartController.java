@@ -53,7 +53,7 @@ public class StartController {
     ArrayList<String> voleyballInfoList = new ArrayList<>();
 
     public static final String FOOTBALL = "football";
-    public static final String BASKETBALL = "basketball";
+    public static final String BASKETBALL = "bч]чasketball";
     public static final String VOLEYBALL = "voleyball";
     public static final String EVENTS = "events";
     public static final String EVENT = "event";
@@ -209,7 +209,13 @@ public class StartController {
             }).size();
         }
 
-        model.addAttribute("allPlaygroundUser", getAllPlaygroundUser(user));
+        List<Playground> listPlygrounds = getAllPlaygroundUser(user);
+        if (listPlygrounds.isEmpty()) {
+            model.addAttribute("start", true);
+        } else {
+            model.addAttribute("start", false);
+        }
+        model.addAttribute("allPlaygroundUser", listPlygrounds);
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("countOrganize", countOrganize);
     }
@@ -414,7 +420,7 @@ public class StartController {
                            @RequestParam(value = "eventId", required = false, defaultValue = "null") String eventId,
                            @RequestParam(value = "userId") String userId) {
 
-        for (Playground playground : allPlaygroundList) {
+        for (Playground playground : playgroundService.getAllPlayground()) {
             if (playground.getIdplayground().equals(id)) {
                 model.addAttribute("namePlayground", playground.getName());
                 model.addAttribute("playId", playground.getIdplayground());

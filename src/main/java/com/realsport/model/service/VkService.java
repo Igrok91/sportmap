@@ -15,6 +15,7 @@ import com.vk.api.sdk.objects.base.BoolInt;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class VkService {
     private static final Integer ADMIN = 172924708;
     private static final String LINK_EVENT = "https://vk.com/app6437488_-148660655#";
 
-
+    @Async
     public void sendMessage(Integer userId, String message) throws Exception {
         try {
             logger.info(" Отправляем сообщение " + message + " пользователю " + userId);
@@ -94,6 +95,7 @@ public class VkService {
 
     }
 
+    @Async
     public void sendMessagePublishEventToUsersGroup(List<MinUser> players, User userCreator, String descr, String idEvent, String namePlayground) {
         try {
             logger.info("Отправляем уведомление о созданни игры " + descr + ", id: " + idEvent);
@@ -111,6 +113,7 @@ public class VkService {
                                     + getMinText(descr) + "\n" + LINK_EVENT + idEvent).userId(userId).randomId(random.nextInt()).execute();
                             countSend++;
                         }
+                        Thread.sleep(1000);
                     }
                 }
                 if (isAllowSendMessages(userIdCreator)) {
@@ -127,9 +130,12 @@ public class VkService {
             logger.error(e);
         } catch (ClientException e) {
             logger.error(e);
+        } catch (InterruptedException e) {
+            logger.error(e);
         }
     }
 
+    @Async
     public void notifyDeleteUsersEvent(Event event, String idCreator) {
         try {
             List<User> userList = event.getUserList();
@@ -146,6 +152,7 @@ public class VkService {
                                     + " удалил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
                                     + getMinText(event.getDescription())).userId(userId).randomId(random.nextInt()).execute();
                         }
+                        Thread.sleep(1000);
                     }
                 }
 
@@ -154,9 +161,12 @@ public class VkService {
             logger.error(e);
         } catch (ClientException e) {
             logger.error(e);
+        } catch (InterruptedException e) {
+            logger.error(e);
         }
     }
 
+    @Async
     public void notifyEndUsersEvent(Event event, String idCreator) {
         try {
             List<User> userList = event.getUserList();
@@ -173,16 +183,21 @@ public class VkService {
                                     + " завершил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
                                     + getMinText(event.getDescription()) + "\n" + LINK_EVENT + event.getIdEvent()).userId(userId).randomId(random.nextInt()).execute();
                         }
+                        Thread.sleep(1000);
                     }
+
                 }
             }
         } catch (ApiException e) {
             logger.error(e);
         } catch (ClientException e) {
             logger.error(e);
+        } catch (InterruptedException e) {
+            logger.error(e);
         }
     }
 
+    @Async
     public void notifyOrganisatorUserAnswer(String id, String idCreator, String eventId) {
         try {
             logger.info("Отправляем уведомление организатору игры, что пользователь отменил голос");
