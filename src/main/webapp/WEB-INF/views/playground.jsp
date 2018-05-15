@@ -554,7 +554,13 @@
                     }
                     isActive = true;
                 }
-
+                if (i > 2) {
+                    if (user.isFake === true) {
+                        $('#' + user.userId + '_imgUser_' + id + '_fake').addClass('hide');
+                    } else {
+                        $('#' + user.userId + '_imgUser_' + id).addClass('hide');
+                    }
+                }
             });
             if (isActive) {
                 $('#answerButton_' + id).removeClass('active');

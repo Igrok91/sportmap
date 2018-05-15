@@ -73,7 +73,7 @@
             <img class="media-object round" src="" alt="user" id="templateCommentId"
                  width="35" height="35">
         </a>
-        <a href="#" onclick="" class="btn pull-right hide"  id="deleteComment" style="padding: 0px;background: white">  <span class="glyphicon glyphicon-remove "></span></a>
+        <a  onclick="" class="btn pull-right hide"  id="deleteComment" style="padding: 0px;background: white">  <span class="glyphicon glyphicon-remove "></span></a>
         <div class="media-body ">
             <h5 class="media-heading"
                 style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px;" id="templateCommentName"></h5>
@@ -236,14 +236,14 @@
                                         <c:forEach var="userFromList" items="${event.userList}">
                                             <c:choose>
                                                 <c:when test="${userFromList.isFake() == true}">
-                                                    <a href="user?playerId=${userFromList.userId}&eventId=${event.idEvent}&userId=${userId}" class="btn" style="padding: 0px" id="${userFromList.userId}_imgUser_${event.idEvent}_fake">
+                                                    <a href="user?playerId=${userFromList.userId}&eventId=${event.idEvent}&userId=${userId}" class="btn" style="padding: 2px 0px" id="${userFromList.userId}_imgUser_${event.idEvent}_fake">
                                                         <span id="${userFromList.userId}_add_${event.idEvent}" count="${userFromList.countFake}">+${userFromList.countFake}</span>
 
                                                     </a>
 
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <a href="user?playerId=${userFromList.userId}&eventId=${event.idEvent}&userId=${userId}" class="btn" style="padding: 0px" id="${userFromList.userId}_imgUser_${event.idEvent}">
+                                                    <a href="user?playerId=${userFromList.userId}&eventId=${event.idEvent}&userId=${userId}" class="btn" style="padding:2px 0px" id="${userFromList.userId}_imgUser_${event.idEvent}">
                                                         <img src="${userFromList.photo_50}" alt="Баскетбол" width="35" class="round"
                                                              height="35" id="${userFromList.userId}_img_${event.idEvent}">
                                                     </a>
@@ -291,7 +291,7 @@
                                                  width="35" height="35">
                                         </a>
                                         <c:if test="${comment.userId == userId}">
-                                            <a href="#" id="${comment.commentId}_del" onclick="deleteComment('${comment.commentId}', '${eventid}')" class="btn pull-right hide"  style="padding: 0px;background: white">  <span class="glyphicon glyphicon-remove "></span></a>
+                                            <a id="${comment.commentId}_del" onclick="deleteComment('${comment.commentId}', '${eventid}')" class="btn pull-right hide"  style="padding: 0px;background: white">  <span class="glyphicon glyphicon-remove "></span></a>
                                         </c:if>
                                         <div class="media-body ">
                                             <h5 class="media-heading"
@@ -501,7 +501,13 @@
             }
             isActive = true;
         }
-
+        if (i > 2) {
+            if (user.isFake === true) {
+                $('#' + user.userId + '_imgUser_' + id + '_fake').addClass('hide');
+            } else {
+                $('#' + user.userId + '_imgUser_' + id).addClass('hide');
+            }
+        }
     });
 
             if (isActive) {
