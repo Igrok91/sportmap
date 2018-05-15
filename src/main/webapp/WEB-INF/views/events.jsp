@@ -39,7 +39,7 @@
 <body>
 
 
-<a href="" class="btn hide" style="padding-top: 2px;padding-bottom: 2px; padding-left: 1px" id="templateUserList2">
+<a href="" class="btn hide" style="padding: 2px 0px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
     <img src="" alt="Баскетбол" width="35" class="round"
          height="35" id="imageUser">

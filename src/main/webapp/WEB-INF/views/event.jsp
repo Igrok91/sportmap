@@ -59,7 +59,7 @@
 </head>
 <body id="eventMain">
 
-<a href="" class="btn hide" style="padding: 0px" id="templateUserList2">
+<a href="" class="btn hide" style="padding: 2 px 0px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
     <img src="" alt="Баскетбол" width="35" class="round"
          height="35" id="imageUser">
