@@ -97,7 +97,6 @@
                 <div class="panel " id="panelGroup">
                     <div class="panel-heading ">
                         <div>
-                            <span style="padding: 5px" class="pull-right"> <img src="resources/image/f.png" width="30" height="30"></span>
                             <a class="pull-left" href="#">
                                 <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                 <img class="media-object" src="resources/image/playbasket.png" alt="Баскетбол"
@@ -515,7 +514,7 @@
             if (activeEvent === true) {
                 eventsId[id] = id;
             }
-            if (event.isEditEvent) {
+            if (event.isEditEvent == true) {
                 location.reload();
             }
             var description = event.description.split('\n');

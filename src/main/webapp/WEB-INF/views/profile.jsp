@@ -42,7 +42,7 @@
                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1"> <span
                         class="glyphicon glyphicon-bell"></span></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#" onclick="getPermissionSendMessages()" id="notification1">>Включить уведомления</a></li>
+                    <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification1">>Включить уведомления</a></li>
                 </ul>
             </c:if>
 
@@ -84,11 +84,11 @@
                                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3"> <span
                                         class="glyphicon glyphicon-option-vertical"></span></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
-                                    <li><a onclick="editInfoUser()">
+                                    <li><a class="cursorPointer" onclick="editInfoUser()">
                                         <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
                                     </a></li>
                                     <c:if test="${allowSendMessage == false}">
-                                        <li><a href="#" onclick="getPermissionSendMessages()" id="notification2"> <span class="glyphicon glyphicon-bell"
+                                        <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification2"> <span class="glyphicon glyphicon-bell"
                                                                                                                         style="margin-right: 20px"></span>Включить </a></li>
                                     </c:if>
                                 </ul>
@@ -128,6 +128,7 @@
                         <c:choose>
                             <c:when test="${user.playgroundIdlList.size() == 0}">
                                 <a href="#"  class="list-group-item borderless ">
+                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="17" height="17"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
@@ -137,6 +138,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="#" id="toGroupsUser" class="list-group-item borderless ">
+                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="17" height="17"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${user.playgroundIdlList.size()}"/>
                             </span>
@@ -151,6 +153,7 @@
                         <c:choose>
                             <c:when test="${user.listParticipant.size() == 0}">
                                 <a href="#" class="list-group-item borderless">
+                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="17" height="17"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                                </span></span>
@@ -158,6 +161,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
+                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="17" height="17"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                   <c:out value="${user.listParticipant.size()}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -167,6 +171,7 @@
                         <c:choose>
                             <c:when test="${countOrganize == 0}">
                                 <a href="#" class="list-group-item borderless">
+                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="17" height="17"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                  <c:out value="нет"/>
                             </span></span>
@@ -175,6 +180,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
+                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="17" height="17"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>

@@ -363,16 +363,10 @@ public class RestController {
         if (isEditData) {
             List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
             if (isEditEvent && !listEvents.isEmpty()) {
-                String finalIdEventEdit = idEventEdit;
-                Event event = FluentIterable.from(listEvents).firstMatch(new Predicate<Event>() {
-                    @Override
-                    public boolean apply(Event event) {
-                        return event.getIdEvent().equals(finalIdEventEdit);
+                for (Event event : listEvents) {
+                    if (event.getIdEvent().equals(idEventEdit)) {
+                        event.setEditEvent(true);
                     }
-                }).orNull();
-
-                if (Objects.nonNull(event)) {
-                    event.setEditEvent(true);
                 }
             }
             return listEvents;

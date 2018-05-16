@@ -684,7 +684,7 @@
                         isWatch = true;
                         $('#watch_' + eventId).removeClass('hide');
                     }
-                if (event.isEditEvent) {
+                if (event.isEditEvent  == true) {
                     location.reload();
                 }
 
