@@ -52,13 +52,9 @@ public class StartController {
     ArrayList<String> basketInfoList = new ArrayList<>();
     ArrayList<String> voleyballInfoList = new ArrayList<>();
 
-    public static final String FOOTBALL = "football";
-    public static final String BASKETBALL = "bч]чasketball";
-    public static final String VOLEYBALL = "voleyball";
     public static final String EVENTS = "events";
     public static final String EVENT = "event";
     public static final String PLAYGROUND = "playground";
-    public static final String EVENT_ID = "eventId";
     public static final Integer COUNT = 5;
 
     private static final Integer ADMIN = 172924708;
@@ -1094,19 +1090,6 @@ public class StartController {
         String error = "Произошла ошибка при создании карты пользователю с Id " + userID + ". Error: " + e.getMessage();
         return error;
     }
-
-    public ArrayList<String> getFootInfoList() {
-        return footInfoList;
-    }
-
-    public ArrayList<String> getBasketInfoList() {
-        return basketInfoList;
-    }
-
-    public ArrayList<String> getVoleyballInfoList() {
-        return voleyballInfoList;
-    }
-
 
     private void putToCacheUser(User user) {
         getCacheUser().put(user.getUserId(), user);
