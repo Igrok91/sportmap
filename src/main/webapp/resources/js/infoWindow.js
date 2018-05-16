@@ -165,7 +165,6 @@ function getplaygroundInfo(id, sport) {
         footInfo.map(function(info, i2) {
             var idPlayground = info.id;
             if (idPlayground == id) {
-                console.log('yes yes');
                 return info;
             }
         });

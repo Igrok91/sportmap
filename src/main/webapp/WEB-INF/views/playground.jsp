@@ -503,7 +503,7 @@
         // Can reload page here
     }, '5.74');
 
-    console.log(listEvents.length);
+
     if (listEvents) {
         var userId = "${userId}";
         listEvents.forEach(function (event, i) {

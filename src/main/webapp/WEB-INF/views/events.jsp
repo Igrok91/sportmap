@@ -413,7 +413,6 @@
     var listEvents = ${listEventsJson};
     var eventsId = {};
     var maxWatch = 2;
-    console.log(listEvents.length);
     var userId = "${userId}";
     if (listEvents) {
         listEvents.forEach(function (event, i) {
@@ -421,7 +420,6 @@
             var usersList = event.userList;
             var sp = event.sport;
             var id = event.idEvent;
-            console.log("idEvent " + id);
             var element = document.getElementById(id);
             var imgPlayground = document.getElementById(id + '_imgPlayground');
             if (sp == 'Футбол') {
