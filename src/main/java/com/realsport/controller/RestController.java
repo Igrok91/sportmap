@@ -9,23 +9,39 @@ import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 import com.realsport.model.entity.LastEditData;
 import com.realsport.model.entity.Template;
-import com.realsport.model.entityDao.*;
-import com.realsport.model.service.*;
+import com.realsport.model.entityDao.Comment;
+import com.realsport.model.entityDao.Event;
+import com.realsport.model.entityDao.MinUser;
+import com.realsport.model.entityDao.Playground;
+import com.realsport.model.entityDao.TemplateGame;
+import com.realsport.model.entityDao.User;
 
 
+import com.realsport.model.service.CacheService;
+import com.realsport.model.service.EventsService;
+import com.realsport.model.service.PlaygroundService;
+import com.realsport.model.service.UserService;
+import com.realsport.model.service.VkService;
 import com.realsport.model.utils.Playgrounds;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.cache.Cache;
 import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.TimeZone;
 
 import static com.realsport.model.cache.CacheObserver.getCacheObserver;
 import static com.realsport.model.cache.CachePlaygrounds.getCachePlaygrounds;

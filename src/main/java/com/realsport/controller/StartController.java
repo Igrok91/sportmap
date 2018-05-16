@@ -6,9 +6,18 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 
-import com.realsport.model.entityDao.*;
-import com.realsport.model.service.*;
+import com.realsport.model.entityDao.Event;
+import com.realsport.model.entityDao.EventUser;
+import com.realsport.model.entityDao.MinUser;
+import com.realsport.model.entityDao.Playground;
+import com.realsport.model.entityDao.TemplateGame;
+import com.realsport.model.entityDao.User;
 
+import com.realsport.model.service.CacheService;
+import com.realsport.model.service.EventsService;
+import com.realsport.model.service.PlaygroundService;
+import com.realsport.model.service.UserService;
+import com.realsport.model.service.VkService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
