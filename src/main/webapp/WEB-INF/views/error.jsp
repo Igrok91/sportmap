@@ -26,6 +26,9 @@
     <div class="container-fluid text-center">
         <div class="row content">
             <div class="text-center error">
+                <div style="padding-bottom: 15px">
+                    <img src="resources/image/error.png" alt="error" width="50" height="50"/>
+                </div>
                 <p style="color: gray" id="smallError"> Произошла ошибка</p>
                 <div id="bigError" class="hide">
                     <p class="hide">Произошла критическая ошибка</p>

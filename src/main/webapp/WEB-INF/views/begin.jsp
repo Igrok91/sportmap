@@ -28,7 +28,7 @@
             <div class="load">
                 <p style="color: gray" id="error" class="hide">Произошла ошибка</p>
                 <div id="loader">
-                    <img src="resources/images/errorgif.gif">
+                    <img src="resources/images/loader.gif">
                 </div>
             </div>
 
