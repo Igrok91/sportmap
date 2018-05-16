@@ -35,8 +35,4 @@ public  class InitVkMain {
         return groupActor.get();
     }
 
-
-    public static String getAccessToken() {
-        return ACCESS_TOKEN;
-    }
 }
