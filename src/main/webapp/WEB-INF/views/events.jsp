@@ -412,7 +412,7 @@
 <script>
     var listEvents = ${listEventsJson};
     var eventsId = {};
-    var maxWatch = 2;
+    var maxWatch = 10;
     var userId = "${userId}";
     if (listEvents) {
         listEvents.forEach(function (event, i) {
