@@ -42,7 +42,7 @@
                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1"> <span
                         class="glyphicon glyphicon-bell"></span></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification1">>Включить уведомления</a></li>
+                    <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification1">Включить уведомления</a></li>
                 </ul>
             </c:if>
 
