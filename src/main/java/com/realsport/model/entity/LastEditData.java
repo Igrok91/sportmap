@@ -7,13 +7,17 @@ public class LastEditData implements Serializable {
 
     private Date date;
     private String idUserEdit;
+    private boolean isEditEvent = false;
 
     public LastEditData(Date date, String idUserEdit) {
         this.date = date;
         this.idUserEdit = idUserEdit;
     }
 
-    public LastEditData() {
+    public LastEditData(Date date, String userId, boolean isEditEvent) {
+        this.date = date;
+        this.idUserEdit = idUserEdit;
+        this.isEditEvent = isEditEvent;
     }
 
     public Date getDate() {
@@ -30,5 +34,9 @@ public class LastEditData implements Serializable {
 
     public void setIdUserEdit(String idUserEdit) {
         this.idUserEdit = idUserEdit;
+    }
+
+    public boolean isEditEvent() {
+        return isEditEvent;
     }
 }

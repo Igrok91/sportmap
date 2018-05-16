@@ -59,6 +59,7 @@ public class StartController {
     public static final String EVENT = "event";
     public static final String PLAYGROUND = "playground";
     public static final String EVENT_ID = "eventId";
+    public static final Integer COUNT = 5;
 
     private static final Integer ADMIN = 172924708;
 
@@ -294,8 +295,8 @@ public class StartController {
 
     @RequestMapping("/groupFromMap")
     public String toGroup(Model model, @RequestParam(value = "playgroundId") String id
-            , @RequestParam(value = "sport", required = false, defaultValue = FOOTBALL) String sport
-            , @RequestParam(value = "userId") String userId) {
+            , @RequestParam(value = "userId") String userId,
+                          @RequestParam(value = "endList", required = false) String endList) {
         try {
             User user = getUser(userId);
 
@@ -303,12 +304,20 @@ public class StartController {
                 model.addAttribute("userId", userId);
                 return "error";
             }
+
+            int size;
+            if (Objects.nonNull(endList) && !endList.isEmpty()) {
+                int end = Integer.parseInt(endList);
+                size = end * 2;
+            } else {
+                size = COUNT;
+            }
             logger.info("Переход в группу " + id);
-            addGroupToModel(model, id, user, 2);
+            addGroupToModel(model, id, user, size);
             model.addAttribute("returnBack", "map");
             model.addAttribute("userId", userId);
             model.addAttribute("userPhoto", user.getPhoto_50());
-            model.addAttribute("endList", 2);
+            model.addAttribute("endList", size);
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);
@@ -375,20 +384,26 @@ public class StartController {
 
     @RequestMapping("/group")
     public String toGroupUser(Model model, @RequestParam(value = "playgroundId") String id
-            , @RequestParam(value = "sport") String sport
-            , @RequestParam(value = "userId") String userId) {
+            , @RequestParam(value = "userId") String userId, @RequestParam(value = "endList", required = false) String endList) {
         try {
             User user = getUser(userId);
             if (user == null) {
                 model.addAttribute("userId", userId);
                 return "error";
             }
-            addGroupToModel(model, id, user, 2);
+            int size;
+            if (Objects.nonNull(endList) && !endList.isEmpty()) {
+                int end = Integer.parseInt(endList);
+                size = end * 2;
+            } else {
+                size = COUNT;
+            }
+            addGroupToModel(model, id, user, size);
 
             model.addAttribute("returnBack", "group");
             model.addAttribute("userId", userId);
             model.addAttribute("userPhoto", user.getPhoto_50());
-            model.addAttribute("endList", 2);
+            model.addAttribute("endList", size);
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);
@@ -402,7 +417,6 @@ public class StartController {
                                    @RequestParam(value = "userId") String userId,
                                    @RequestParam(value = "endList", required = false) String endList) {
         try {
-
             User user = getUser(userId);
             if (user == null) {
                 model.addAttribute("userId", userId);
@@ -413,7 +427,7 @@ public class StartController {
                 int end = Integer.parseInt(endList);
                 size = end * 2;
             } else {
-                size = 2;
+                size = COUNT;
             }
             logger.info("size list event " + size);
             addGroupToModel(model, id, user, size);
@@ -544,7 +558,7 @@ public class StartController {
                 Event event = eventsService.getEventById(eventId);
                 eventsService.deleteGame(eventId);
                 vkService.notifyDeleteUsersEvent(event, userId);
-                cacheService.putToCache(eventId, userId);
+                cacheService.putToCache(eventId, userId, false);
             }
             if (where.equals("playground")) {
                 return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
@@ -620,7 +634,7 @@ public class StartController {
                 }
             }
 
-            cacheService.putToCache(eventId, userId);
+            cacheService.putToCache(eventId, userId,false);
             if (where.equals("playground")) {
                 return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
             }
@@ -723,7 +737,7 @@ public class StartController {
                 int end = Integer.parseInt(endList);
                 size = end * 2;
             } else {
-                size = 2;
+                size = COUNT;
             }
             Gson gson = new Gson();
             List<Event> list = eventsService.getEventUserParticipantOrOrganize(user.getListParticipant());
@@ -789,7 +803,7 @@ public class StartController {
                 int end = Integer.parseInt(endList);
                 size = end * 2;
             } else {
-                size = 2;
+                size = COUNT;
             }
             Gson gson = new Gson();
             List<Event> list = eventsService.getEventUserParticipantOrOrganize(user.getListParticipant());
@@ -870,14 +884,16 @@ public class StartController {
                 logger.info("Изменяем событие с id " + eventId);
                 game.setIdEvent(eventId);
                 eventsService.editEventById(eventId, game.getDescription(), game.getMaxCountAnswer(), game.getDuration());
+                cacheService.putToCache(game.getIdEvent(), userId, true);
             } else {
                 eventsService.publishEvent(game);
                 Playground playground = playgroundService.getPlaygroundById(playgroundId);
                 vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
                         , user, description, game.getIdEvent(), playground.getName());
+                cacheService.putToCache(game.getIdEvent(), userId, false);
             }
             logger.info("event id " + eventId);
-            cacheService.putToCache(game.getIdEvent(), userId);
+
             model.addAttribute("userId", userId);
             model.addAttribute("user", user);
         } catch (Exception e) {
@@ -916,7 +932,7 @@ public class StartController {
                 vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()
                         , user, game.getDescription(), game.getIdEvent(), playground.getName());
             }
-            cacheService.putToCache(game.getIdEvent(), userId);
+            cacheService.putToCache(game.getIdEvent(), userId, false);
             model.addAttribute("userId", userId);
             model.addAttribute("user", user);
         } catch (Exception e) {

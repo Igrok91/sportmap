@@ -156,7 +156,7 @@
                                                        </div>--%>
                                     <div style="padding-bottom: 10px">
                                         <div>
-                                            <label for="sel2"><span><img src="resources/image/количество.png" width="20"
+                                            <label for="sel2"><span><img src="resources/image/count.png" width="20"
                                                                          height="20" style="margin-right: 5px"></span>Количество
                                                 голосов</label>
                                         </div>

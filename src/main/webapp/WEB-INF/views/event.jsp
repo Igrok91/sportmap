@@ -682,7 +682,11 @@
                     }
                     if (usersList.length > maxWatch) {
                         isWatch = true;
+                        $('#watch_' + eventId).removeClass('hide');
                     }
+                if (event.isEditEvent) {
+                    location.reload();
+                }
 
                      resizeEvent();
 

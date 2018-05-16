@@ -46,7 +46,7 @@ public class VkService {
         }
     }
 
-    public boolean isAllowSendMessages(Integer userId) {
+    public  boolean isAllowSendMessages(Integer userId) {
         BoolInt allowedQuery = null;
         try {
             allowedQuery = getVkApiClient().messages().isMessagesFromGroupAllowed(InitVkMain.getGroupActor(), userId).execute().getIsAllowed();

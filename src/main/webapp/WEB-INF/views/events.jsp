@@ -412,7 +412,7 @@
 <script>
     var listEvents = ${listEventsJson};
     var eventsId = {};
-    var maxWatch = 10;
+    var maxWatch = 2;
     console.log(listEvents.length);
     var userId = "${userId}";
     if (listEvents) {
@@ -546,10 +546,6 @@
                 console.log("data edit");
                 dateNow = new Date().getTime();
 
-                if (value.length != listEvents.length) {
-                    location.reload();
-                }
-
                 value.forEach(function (event, i) {
                     var isWatch = false;
                     var eventId = event.idEvent;
@@ -560,7 +556,10 @@
                     }
                     if (usersList.length > maxWatch) {
                         isWatch = true;
-                        //$('#watch_' + eventId).removeClass('hide');
+                        $('#watch_' + eventId).removeClass('hide');
+                    }
+                    if (event.isEditEvent) {
+                        location.reload();
                     }
 
                     if (event.maxCountAnswer == 1000) {

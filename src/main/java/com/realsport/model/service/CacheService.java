@@ -14,12 +14,17 @@ import static com.realsport.model.cache.CacheObserver.getCacheObserver;
 public class CacheService {
     private Log logger = LogFactory.getLog(CacheService.class);
 
-    public void putToCache(String eventId, String userId) throws Exception {
+    public void putToCache(String eventId, String userId, boolean isEditEvent) throws Exception {
         logger.info("Добавляем последнюю дату изменения ");
         for (long delayMs = 1; delayMs < 1000; delayMs *= 2) {
             MemcacheService syncCache = getCacheObserver();
             MemcacheService.IdentifiableValue oldValue = syncCache.getIdentifiable(eventId);
-            LastEditData lastEditData = new LastEditData(new Date(), userId);
+            LastEditData lastEditData = null;
+            if (isEditEvent) {
+                lastEditData = new LastEditData(new Date(), userId, isEditEvent);
+            } else {
+                lastEditData = new LastEditData(new Date(), userId);
+            }
             if (oldValue == null) {
                 // Key doesn't exist. We can safely put it in cache.
                 syncCache.put(eventId, lastEditData);

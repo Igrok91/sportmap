@@ -145,7 +145,7 @@ function createInfoWindow(info, index, userId, sport) {
     a.className = " btn toGroup";
     a.role = "button";
     a.id = info[index].id;
-    a.href = "groupFromMap?playgroundId=" + info[index].id + "&sport=" + sport + "&userId=" + userId;
+    a.href = "groupFromMap?playgroundId=" + info[index].id + "&userId=" + userId;
 
 
 

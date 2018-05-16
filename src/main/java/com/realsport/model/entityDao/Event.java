@@ -22,6 +22,7 @@ public class Event implements Serializable{
     private String playgroundId;
     private String playgroundName;
     private boolean active = true;
+    private boolean isEditEvent = false;
     private Timestamp dateCreation;
     private String date;
     private List<User> userList = new ArrayList<>();
@@ -177,5 +178,13 @@ public class Event implements Serializable{
 
     public void setUserCreatorPhoto(String userCreatorPhoto) {
         this.userCreatorPhoto = userCreatorPhoto;
+    }
+
+    public boolean isEditEvent() {
+        return isEditEvent;
+    }
+
+    public void setEditEvent(boolean editEvent) {
+        isEditEvent = editEvent;
     }
 }

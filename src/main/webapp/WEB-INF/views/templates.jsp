@@ -67,7 +67,7 @@
                      </div>
 
                      <div >
-                         <span  style="margin-right: 15px"><span><img src="D:\бизнес\Проекты\SportMap\Разработка\icon\количество.png" width="20" height="20" style="margin-right: 5px"></span> Количество голосов</span>
+                         <span  style="margin-right: 15px"><span><img src="D:\бизнес\Проекты\SportMap\Разработка\icon\count.png" width="20" height="20" style="margin-right: 5px"></span> Количество голосов</span>
                          <span class="list-group-item-heading "> 20</span>
 
                      </div>

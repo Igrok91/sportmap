@@ -229,7 +229,7 @@
                     </c:forEach>
 
                 </div>
-                <c:if test="${listSize >=  2}">
+                <c:if test="${listSize >=  5}">
                     <c:if test="${listSize >  endList}">
                         <c:choose>
                             <c:when test="${parameter == 'userParticipant'}">

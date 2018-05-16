@@ -7,7 +7,7 @@ function addIgrok(maxCountAnswer, eventId, userId, parameter,  userList, addIgro
     }).then(function (value) {
         switch (value) {
             case 'true':
-                var hide = (userList > 10);
+                var hide = (userList > 2);
                 if (maxCountAnswer == 1000) {
                     var count = parseInt($('#badge1_'+ eventId).text());
                     count = count + parseInt(addIgr);
@@ -56,7 +56,7 @@ function handleAnswer(maxCountAnswer, eventId, userId, parameter, userList, phot
                 $('#answerButton_'+ eventId).removeClass('active');
                 $('#answerButton_'+ eventId).css('background','#EAEAEC');
                 $('#answerOk_'+ eventId).removeClass('hide');
-                var hide = (userList > 10);
+                var hide = (userList > 2);
                 if (maxCountAnswer == 1000) {
                     var count = parseInt($('#badge1_'+ eventId).text());
                     ++count;
@@ -97,7 +97,7 @@ function handleAnswerMain(maxCountAnswer, eventId, userId, parameter, userList, 
                 $('#answerButton_'+ eventId).removeClass('active');
                 $('#answerButton_'+ eventId).css('background','#EAEAEC');
                 $('#answerOk_'+ eventId).removeClass('hide');
-                var hide = (userList > 10);
+                var hide = (userList > 2);
                 if (maxCountAnswer == 1000) {
 
                     var count = $('#badge1_'+ eventId).text();

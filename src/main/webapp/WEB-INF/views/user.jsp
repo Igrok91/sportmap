@@ -263,6 +263,7 @@
     }
 
     setTimeout('resizeUser()', 300);
+    VK.callMethod("scrollWindow", 0, 500);
 </script>
 </body>
 </html>

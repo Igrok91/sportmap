@@ -96,7 +96,7 @@ public class RestController {
         String commentId = eventsService.addCommentToEvent(eventId, comment);
         if (commentId != null) {
             comment.setCommentId(commentId);
-            cacheService.putToCache(eventId, userId);
+            cacheService.putToCache(eventId, userId, false);
             comment.setSuccess(true);
             return comment;
         }
@@ -111,7 +111,7 @@ public class RestController {
                               @RequestParam(value = "playgroundId") String playgroundId,
                               @RequestParam(value = "userId") String userId) throws Exception {
         eventsService.deleteCommentFromEvent(commentId, eventId);
-        cacheService.putToCache(eventId, userId);
+        cacheService.putToCache(eventId, userId, false);
     }
 
     @RequestMapping("/loadPlayground")
@@ -153,13 +153,13 @@ public class RestController {
                 if (countUser >= event.getMaxCountAnswer()) {
                     return MAX_COUNT_ANSWER;
                 }
-                cacheService.putToCache(eventId, userId);
+                cacheService.putToCache(eventId, userId, false);
                 eventsService.addUserToEvent(eventId, user, false);
                 logger.info("Пользователь " + user + " поставил плюс");
                 return TRUE;
             } else {
                 eventsService.deleteUserFromEvent(eventId, userId);
-                cacheService.putToCache(eventId, userId);
+                cacheService.putToCache(eventId, userId, false);
                 vkService.notifyOrganisatorUserAnswer(userId, event.getUserIdCreator(), eventId);
                 logger.info("Пользователь " + user + " поставил минус");
                 return FALSE;
@@ -191,7 +191,7 @@ public class RestController {
             }).isPresent();
             if (b == null || b.equals(Boolean.FALSE)) {
                 eventsService.addUserToEvent(eventId, user, false);
-                cacheService.putToCache(eventId, userId);
+                cacheService.putToCache(eventId, userId, false);
                 logger.info("Boolean.TRUE.toString() " + Boolean.TRUE.toString());
                 return TRUE;
             } else {
@@ -319,7 +319,7 @@ public class RestController {
                 user.setFake(true);
                 user.setCountFake(Integer.parseInt(count));
                 eventsService.addUserToEvent(eventId, user, true);
-                cacheService.putToCache(eventId, userId);
+                cacheService.putToCache(eventId, userId, false);
                 return TRUE;
             } else {
                 return FALSE;
@@ -338,6 +338,8 @@ public class RestController {
         Date now = new Date(date);
         User user = getUser(userId);
         boolean isEditData = false;
+        boolean isEditEvent = false;
+        String idEventEdit = "";
         Gson gson = new Gson();
         HashMap<String, String> map = gson.fromJson(eventsId, HashMap.class);
         MemcacheService memcacheService = getCacheObserver();
@@ -350,12 +352,29 @@ public class RestController {
                         logger.info("Данные изменились ");
                         isEditData = true;
                     }
+                    if (last.isEditEvent()) {
+                        isEditEvent = true;
+                        idEventEdit = id;
+                    }
                 }
 
             }
         }
         if (isEditData) {
             List<Event> listEvents = eventsService.getEvents(user.getPlaygroundIdlList());
+            if (isEditEvent && !listEvents.isEmpty()) {
+                String finalIdEventEdit = idEventEdit;
+                Event event = FluentIterable.from(listEvents).firstMatch(new Predicate<Event>() {
+                    @Override
+                    public boolean apply(Event event) {
+                        return event.getIdEvent().equals(finalIdEventEdit);
+                    }
+                }).orNull();
+
+                if (Objects.nonNull(event)) {
+                    event.setEditEvent(true);
+                }
+            }
             return listEvents;
         }
         return null;
@@ -370,6 +389,8 @@ public class RestController {
 
         Date now = new Date(date);
         boolean isEditData = false;
+        boolean isEditEvent = false;
+        String idEventEdit = "";
         Gson gson = new Gson();
         HashMap<String, String> map = gson.fromJson(eventsId, HashMap.class);
         MemcacheService memcacheService = getCacheObserver();
@@ -382,6 +403,10 @@ public class RestController {
                         logger.info("Данные изменились ");
                         isEditData = true;
                     }
+                    if (last.isEditEvent()) {
+                        isEditEvent = true;
+                        idEventEdit = id;
+                    }
                 }
 
             }
@@ -391,6 +416,19 @@ public class RestController {
             List<Event> newList = null;
             if (Objects.nonNull(listEvents)) {
                 newList = FluentIterable.from(listEvents).limit(map.size()).toList();
+            }
+            if (isEditEvent && !newList.isEmpty()) {
+                String finalIdEventEdit = idEventEdit;
+                Event event = FluentIterable.from(newList).firstMatch(new Predicate<Event>() {
+                    @Override
+                    public boolean apply(Event event) {
+                        return event.getIdEvent().equals(finalIdEventEdit);
+                    }
+                }).orNull();
+
+                if (Objects.nonNull(event)) {
+                    event.setEditEvent(true);
+                }
             }
             return newList;
         }
@@ -406,6 +444,7 @@ public class RestController {
         Date now = new Date(date);
         logger.info("Date " + now);
         boolean isEditData = false;
+        boolean isEditEvent = false;
         MemcacheService memcacheService = getCacheObserver();
         MemcacheService.IdentifiableValue value = memcacheService.getIdentifiable(eventId);
         if (Objects.nonNull(value)) {
@@ -416,12 +455,20 @@ public class RestController {
                     logger.info("Данные изменились ");
                     isEditData = true;
                 }
+                if (last.isEditEvent()) {
+                    isEditEvent = true;
+                }
             }
 
         }
 
         if (isEditData) {
             Event event = eventsService.getEventById(eventId);
+            if (isEditEvent) {
+                if (Objects.nonNull(event)) {
+                    event.setEditEvent(true);
+                }
+            }
             return event;
         }
         return null;

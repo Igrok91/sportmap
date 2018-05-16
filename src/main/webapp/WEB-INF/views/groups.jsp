@@ -59,7 +59,7 @@
                     <c:otherwise>
                         <div class="list-group" id="listGroupsUser" style="padding-top: 7px">
                             <c:forEach var="group" items="${allPlaygroundUser}">
-                                <a href="group?playgroundId=${group.idplayground}&sport=${group.getSport()}&userId=${userId}"
+                                <a href="group?playgroundId=${group.idplayground}&userId=${userId}"
                                    class="list-group-item borderless">
                                     <div class="media">
                                         <div class="pull-left">

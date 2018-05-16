@@ -97,6 +97,7 @@
                 <div class="panel " id="panelGroup">
                     <div class="panel-heading ">
                         <div>
+                            <span style="padding: 5px" class="pull-right"> <img src="resources/image/f.png" width="30" height="30"></span>
                             <a class="pull-left" href="#">
                                 <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                 <img class="media-object" src="resources/image/playbasket.png" alt="Баскетбол"
@@ -109,6 +110,7 @@
                                 <h4 class="media-heading"
                                     style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">
                                     ${namePlayground}</h4>
+
 
 
                                 <span style="color: gray">${sport}</span>
@@ -457,12 +459,26 @@
                         </c:forEach>
                     </c:otherwise>
                 </c:choose>
-                <c:if test="${listSize >=  2}">
+                <c:if test="${listSize >=  5}">
                     <c:if test="${listSize >  endList}">
-                        <div class="text-center" style="padding-bottom: 10px">
-                            <a href="playground?playgroundId=${playgroundId}&userId=${userId}&endList=${endList}"
-                               class="btn">Загрузить еще</a>
-                        </div>
+                        <c:if test="${returnBack == 'group'}">
+                            <div class="text-center" style="padding-bottom: 10px">
+                                <a href="group?playgroundId=${playgroundId}&userId=${userId}&endList=${endList}"
+                                   class="btn">Загрузить еще</a>
+                            </div>
+                        </c:if>
+                        <c:if test="${returnBack == 'map'}">
+                            <div class="text-center" style="padding-bottom: 10px">
+                                <a href="groupFromMap?playgroundId=${playgroundId}&userId=${userId}&endList=${endList}"
+                                   class="btn">Загрузить еще</a>
+                            </div>
+                        </c:if>
+                        <c:if test="${returnBack == 'home'}">
+                            <div class="text-center" style="padding-bottom: 10px">
+                                <a href="playground?playgroundId=${playgroundId}&userId=${userId}&endList=${endList}"
+                                   class="btn">Загрузить еще</a>
+                            </div>
+                        </c:if>
                     </c:if>
                 </c:if>
 
@@ -498,6 +514,9 @@
             var activeEvent = event.active;
             if (activeEvent === true) {
                 eventsId[id] = id;
+            }
+            if (event.isEditEvent) {
+                location.reload();
             }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
@@ -687,7 +706,7 @@
                         }
                         if (usersList.length > maxWatch) {
                             isWatch = true;
-                            // $('#watch_' + eventId).removeClass('hide');
+                            $('#watch_' + eventId).removeClass('hide');
                         }
 
                         if (event.maxCountAnswer == 1000) {
