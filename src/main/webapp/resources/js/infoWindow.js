@@ -2,7 +2,7 @@
  * Created by IgorR on 25.06.2017.
  */
 function getFootWindowContent(info, index, userId){
-    var infoWindow = createInfoWindow(info, index, userId);
+    var infoWindow = createInfoWindow(info, index, userId, 'football');
 
 
 /*    var coString = '<div>' +
@@ -19,14 +19,14 @@ function getFootWindowContent(info, index, userId){
 
 function getBasketWindowContent(info, index, userId){
 
-    var infoWindow = createInfoWindow(info, index, userId);
+    var infoWindow = createInfoWindow(info, index, userId, 'basketball');
 
     return infoWindow;
 }
 
 function getVoleyballWindowContent(info, index, userId){
 
-    var infoWindow = createInfoWindow(info, index, userId);
+    var infoWindow = createInfoWindow(info, index, userId, 'voleyball');
 
     return infoWindow;
 }
@@ -68,45 +68,108 @@ function getVoleyballWindowContent(info, index, userId){
     }
 }*/
 
-function createInfoWindow(info, index, userId) {
+function createInfoWindow(info, index, userId, sport) {
+
+    var imgfootball = document.createElement('img');
+    imgfootball.src = "resources/image/стадион3.png";
+    imgfootball.className = ' text-center';
+    imgfootball.width = '35';
+    imgfootball.height = '35';
+    imgfootball.style.marginBottom = '0px';
+
+
+    var imgbasket = document.createElement('img');
+    imgbasket.src = "resources/image/площадка2.png";
+    imgbasket.className = ' text-center';
+    imgbasket.width = '35';
+    imgbasket.height = '35';
+    imgbasket.style.marginBottom = '0px';
+
+    var imgvoley = document.createElement('img');
+    imgvoley.src = "resources/image/спортивная-сетка.png";
+    imgvoley.className = ' text-center';
+    imgvoley.width = '35';
+    imgvoley.height = '35';
+    imgvoley.style.marginBottom = '0px';
 
     var idFoot = info[index].id;
     var userID = userId;
 
     var divMain = document.createElement('div');
     divMain.className = "divMain";
-    var name = document.createElement('h5');
-    name.appendChild( document.createTextNode(info[index].namePlayground));
+    var divTitle = document.createElement('div');
+    divTitle.className = "divTitle";
 
-    var p = document.createElement('p');
-    p.appendChild( document.createTextNode( "" ) );
-    p.id = "sms";
+    var media = document.createElement('div');
+    var image = document.createElement('a');
+    image.href = '#';
+    //image.class = 'pull-left';
+    if (sport === 'basketball') {
+        image.appendChild(imgbasket);
+    }
+    if (sport === 'voleyball') {
+        image.appendChild(imgvoley);
+    }
+    if (sport === 'football') {
+        image.appendChild(imgfootball);
+    }
+
+    var mediaBody = document.createElement('span');
+
+
 
     var hr = document.createElement('hr');
-    var div = document.createElement('div');
+    hr.style.marginTop = '4px';
+    hr.style.marginBottom = '0px';
+    var span = document.createElement('span');
+    span.className = "glyphicon glyphicon-menu-right";
+    span.style.marginLeft = '4px';
+    mediaBody.appendChild(document.createTextNode(info[index].namePlayground));
+    mediaBody.appendChild(span);
+
+    media.appendChild(image);
+    //media.appendChild(mediaBody);
+
+
+/*    var div = document.createElement('div');
     div.className = "text-center ";
+    div.id = info[index].id;*/
+
 
     var a = document.createElement('a');
-    a.appendChild( document.createTextNode("Перейти в группу  "));
+
+
+    a.appendChild( mediaBody);
     a.id = "button";
-    var img = document.createElement('img');
-    img.src = "resources/image/whatsapp.png";
 
-    a.className = "whatsapp btn btn-default btn-xs";
+    a.className = " btn toGroup";
     a.role = "button";
-    a.id = "footballId";
-    a.href = info[index].link;
-    a.target = "_blank";
-    // a.onclick = function () {
-    //     sendMessage(idFoot, userID, a, p);
-    // };
-    //a.appendChild( document.createTextNode( "Получить ссылку" ) );
-    a.appendChild(img);
-    div.appendChild(a);
+    a.id = info[index].id;
+    a.href = "groupFromMap?playgroundId=" + info[index].id + "&userId=" + userId;
 
-    divMain.appendChild(name);
+
+
+   // a.appendChild(img);
+   // div.appendChild(a);
+    divTitle.appendChild(media);
+    divMain.appendChild(divTitle);
     divMain.appendChild(hr);
-    divMain.appendChild(div);
-    divMain.appendChild(p);
+    divMain.appendChild(a);
+    //divMain.appendChild(p);
     return divMain;
+}
+
+
+function getplaygroundInfo(id, sport) {
+    if (sport === 'football') {
+        footInfo.map(function(info, i2) {
+            var idPlayground = info.id;
+            if (idPlayground == id) {
+                console.log('yes yes');
+                return info;
+            }
+        });
+
+    }
+
 }

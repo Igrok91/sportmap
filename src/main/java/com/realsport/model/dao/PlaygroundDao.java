@@ -1,11 +1,6 @@
 package com.realsport.model.dao;
 
-
-
-import com.realsport.model.dao.daoException.DataBaseException;
-import com.realsport.model.entityDao.Basketball;
-import com.realsport.model.entityDao.Playfootball;
-import com.realsport.model.entityDao.Voleyball;
+import com.realsport.model.entityDao.Playground;
 
 import java.util.List;
 
@@ -17,24 +12,22 @@ public interface PlaygroundDao {
     /**
      *   Method to get all playground available
      * @return List of product
-     * @throws DataBaseException
+     * @param allPlaygroundList
      */
-    List<Playfootball> getFootballPlayground() throws DataBaseException;
+    List<Playground> getFootballPlayground(List<Playground> allPlaygroundList);
 
     /**
      *   Method to get all playground available
      * @return List of product
-     * @throws DataBaseException
+     * @param allPlaygroundList
      */
-    List<Voleyball> getVoleyballPlayground() throws DataBaseException;
+    List<Playground> getVoleyballPlayground(List<Playground> allPlaygroundList);
 
     /**
      *   Method to get all playground available
      * @return List of product
-     * @throws DataBaseException
      */
-    List<Basketball> getBasketballPlayground() throws DataBaseException;
+    List<Playground> getBasketballPlayground(List<Playground> allPlaygroundList);
 
-    Playfootball getFootballById(String id) throws DataBaseException;
 
 }

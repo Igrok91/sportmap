@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+<!--    <cron>
+        <url>/_ah/sessioncleanup?clear</url>
+        <description>Clean up sessions</description>
+        <schedule>every day 04:00</schedule>
+    </cron>-->
+    <cron>
+        <url>/updateEvent</url>
+        <description>daily summary job</description>
+            <schedule>every 1 hours</schedule>
+            <!--<schedule>every 10 minutes</schedule>-->
+    </cron>
+</cronentries>
