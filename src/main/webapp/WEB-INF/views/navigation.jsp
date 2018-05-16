@@ -97,19 +97,19 @@
     </nav>
 </header>
 
-<footer class="container-fluid text-center navbar-fixed-bottom" style="margin-bottom: 0px; padding-bottom: 0px">
-    <div class="row text-center" id="mobile" style="height: 45px">
+<footer class="container-fluid text-center navbar-fixed-bottom" style="margin-bottom: 0px; padding-bottom: 0px; box-shadow: 0 0 3px;">
+    <div class="row text-center" id="mobile" style="height: 50px">
         <div class="btn-group btn-group-justified">
-            <a href="#" id="eventsMobile" class="btn " style="padding-top: 13px;; "><span
+            <a href="#" id="eventsMobile" class="btn " style="padding-top: 15px;; "><span
                     class="glyphicon glyphicon-calendar " aria-hidden=""><span class="tablet"> События</span></span></a>
-            <a href="#" id="searchPlaygroundMobile" class="btn " style="padding-top: 13px;"><span
+            <a href="#" id="searchPlaygroundMobile" class="btn " style="padding-top: 15px;"><span
                     class="glyphicon glyphicon-search  " aria-hidden=""><span class="tablet"> Площадки</span></span></a>
-            <a href="#" id="createMobile" class="btn" style="padding-top: 13px;" data-toggle="modal"
+            <a href="#" id="createMobile" class="btn" style="padding-top: 15px;" data-toggle="modal"
                data-target="#exampleModal"><span class="glyphicon glyphicon-plus-sign "
                                                  aria-hidden="Создать"></span></a>
-            <a href="#" id="groupsMobile" class="btn" style="padding-top: 13px;"><span
+            <a href="#" id="groupsMobile" class="btn" style="padding-top: 15px;"><span
                     class="glyphicon glyphicon-th-list " aria-hidden=""><span class="tablet"> Группы</span></span></a>
-            <a href="#" id="profileMobile" class="btn " style="padding-top: 13px;"><span
+            <a href="#" id="profileMobile" class="btn " style="padding-top: 15px;"><span
                     class="glyphicon glyphicon-user  " aria-hidden=""><span class="tablet"> Профиль</span></span></a>
         </div>
     </div>
