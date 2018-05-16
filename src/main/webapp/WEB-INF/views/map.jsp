@@ -49,13 +49,17 @@
             }
 
             .row.content {height:auto;}
+            #pac-input {
+                width: auto;
+                margin-right: 5px;
+            }
         }
-        a.disabled {
-            pointer-events: none; /* делаем ссылку некликабельной */
-            cursor: default;  /* устанавливаем курсор в виде стрелки */
-            color: #999; /* цвет текста для нективной ссылки */
+ /*       a.disabled {
+            pointer-events: none; !* делаем ссылку некликабельной *!
+            cursor: default;  !* устанавливаем курсор в виде стрелки *!
+            color: #999; !* цвет текста для нективной ссылки *!
         }
-
+*/
 
         .divMain {
             height: 110px;
@@ -65,7 +69,6 @@
         }
 
         hr {
-
             margin-top: 3px;
             margin-bottom: 10px;
         }
@@ -101,13 +104,13 @@
             <hr>
             <div class="container">
                 <%--<div class="btn-group ">--%>
-                    <a  class="myButton btn btn-default btn-sm" id="football" role="button">
+                    <a  class="myButton btn btn-primary btn-sm" id="football" role="button">
                         <img src="resources/image/football.png" alt="" align="middle">
                     </a>
-                    <a class="myButton btn btn-default btn-sm" id="basketball">
+                    <a class="myButton btn btn-primary btn-sm" id="basketball">
                         <img src="resources/image/basketball.png" alt="" align="middle">
                     </a>
-                    <a  class="myButton btn btn-default btn-sm" id="voleyball">
+                    <a  class="myButton btn btn-primary btn-sm" id="voleyball">
                         <img src="resources/image/voleyball.png" alt="" align="middle">
                     </a>
                 <%--</div>--%>
@@ -148,7 +151,7 @@
 
     var errorMaps = "${errorMaps}";
 
-
+    var infoWindow;
 
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -157,9 +160,10 @@
             mapTypeId: 'roadmap'
         });
         initAutocomplete(map);
-        var infoWindow = new google.maps.InfoWindow({map: map});
-
-
+        infoWindow = new google.maps.InfoWindow({map: map});
+        infoWindow.setPosition(map.getCenter());
+        infoWindow.setContent('Нажмите на маркер для перехода к площадке');
+        initMarkers(map, infoWindow);
         // alert(footInfo[index].link);
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -171,19 +175,19 @@
                 infoWindow.setPosition(pos);
                 infoWindow.setContent('Нажмите на маркер для перехода к площадке');
                 map.setCenter(pos);
-                initMarkers(map, infoWindow);
+                //initMarkers(map, infoWindow);
+                setTimeout(updateInfoWindow, 4000, infoWindow);
 
             }, function() {
                 handleLocationError(true, map, infoWindow);
-                initMarkers(map, infoWindow);
+                //initMarkers(map, infoWindow);
             });
 
 
         } else {
             handleLocationError(false, map, infoWindow);
-            initMarkers(map, infoWindow);
+            //initMarkers(map, infoWindow);
             // Browser doesn't support Geolocation
-
         }
         function initMarkers(map, infoWindow) {
             if (errorMaps.localeCompare("fail") === 0){
@@ -202,12 +206,12 @@
         var imageBasketball = 'resources/images/basketballSm.png';
         var imageVoleyball = 'resources/images/voleyballSm.png';
 
-        var imageFootball2 = 'resources/images/ball2.png';
+        var imageFootball2 = 'resources/image/football2.png';
         var imageBasketball2 = 'resources/images/basketballSm2.png';
         var imageVoleyball2 = 'resources/images/voleyballSm2.png';
 
-
         var  allInfowindow = [];
+
         // Add some markers to the map.
         // Note: The code uses the JavaScript Array.prototype.map() method to
         // create an array of markers based on a given "footLocations" array.
@@ -225,9 +229,7 @@
 
             marker.addListener('click', function() {
                 closeAllInfoWindows();
-                marker.icon = imageFootball2;
                 footInfowindow.open(map, marker);
-
             });
 
             /*map.addListener('click', function(){
@@ -283,8 +285,9 @@
 
 
         var markers = footMarkers.concat(basketMarkers, voleyMarkers);
-            map.addListener('click', function(){
+        map.addListener('click', function(){
             closeAllInfoWindows();
+            infoWindow.close();
 
         });
 
@@ -296,12 +299,8 @@
             allInfowindow.map(function(infoWindow, i) {
                 infoWindow.close();
             });
-            markers.map(function(marker, i) {
-                   if (marker.icon !== imageFootball) {
-                            marker.icon = imageFootball;
-                   }
 
-             });
+
         }
     }
 
@@ -333,7 +332,7 @@
 <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
 </script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1tr-_gVY9qwaDTDpvfgckDzV_uqekjEQ&libraries=places&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXkXTJQMPNPInJcJt2yT6pNgzksYfpw1c&libraries=places&callback=initMap">
 </script>
 
 </body>

@@ -41,15 +41,16 @@ public class StartController {
     private static final Integer ADMIN = 172924708;
 
 
-
-
     @Autowired
     private PlaygroundService playgroundService;
 
     @Autowired
     private VkMessageService messageService;
 
-
+    @RequestMapping(value = "/error2")
+    public String error(){
+        return "error2";
+    }
 
     /**
      * Возвращает представление карты Google со всеми данными
@@ -58,13 +59,14 @@ public class StartController {
      * @return
      */
     @RequestMapping(value = "/maps")
-    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id) throws Exception {
+    public String onMap(Model model, @RequestParam(value = "viewer_id", required = false) String id, @RequestParam(value = "access_token", required = false) String access_token ) throws Exception {
         try {
             if (id != null) {
                 model.addAttribute("userId", id);
+                messageService.sendMessage(ADMIN, "В приложение зашел пользователь с id " + id);
             } else {
                 model.addAttribute("userId", "null");
-                messageService.sendMessage(ADMIN, "Невозможно распознать пользователя " +  id);
+                messageService.sendMessage(ADMIN, "Невозможно распознать пользователя ");
             }
             // Получение данных по площадкам из базы данных
             voleyballList = playgroundService.getVoleyballPlayground();
@@ -101,25 +103,7 @@ public class StartController {
         return "map";
     }
 
-    /**
-     * Возвращает изображение по id
-     * @param type
-     * @param id
-     * @return
-     */
-    @RequestMapping("/images/{type}/{id}")
-    public @ResponseBody byte[] getImage(@PathVariable String type, @PathVariable String id) {
-        byte[] bytes = null;
-        if(type.equals(FOOTBALL)) {
-            bytes = playfootballList.get(Integer.parseInt(id)).getImage();
-        } else if(type.equals(BASKETBALL)) {
-            bytes = basketballList.get(Integer.parseInt(id)).getImage();
-        } else if(type.equals(VOLEYBALL)) {
-            bytes = voleyballList.get(Integer.parseInt(id)).getImage();
-        }
 
-        return bytes;
-    }
 
     /**
      * Получение основных данных по площадкам и конвертация данных в формат JSON
