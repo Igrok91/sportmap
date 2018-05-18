@@ -418,9 +418,6 @@
 
 <script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
-    $(document).ready(function () {
-        $('#all').tooltip({title: "Смотреть всех", container: ".row"});
-    });
     var where = '${where}';
     if (where === 'comment') {
         $('#textComment').focus();

@@ -173,11 +173,6 @@ var el = document.querySelector('.checkbox-switch');
         onText: '',
         offText: ''
     });
-
-    $(document).ready(function(){
-        $('#all2').tooltip({title: "Смотреть всех"});
-
-    });
     var returnBack = '${returnBack}';
     var start = '${start}';
         if (returnBack === 'map' || start === 'true') {

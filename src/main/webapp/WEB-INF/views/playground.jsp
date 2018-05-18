@@ -496,12 +496,7 @@
     var playgroundId = '${playgroundId}';
     var eventsId = {};
     var maxWatch = 10;
-    VK.init(function () {
 
-    }, function () {
-        // API initialization failed
-        // Can reload page here
-    }, '5.74');
 
 
     if (listEvents) {
@@ -626,6 +621,8 @@
     }
     var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp + '&userId=' + ${userId};
     $('#returnBack').attr('href', returnBack);
+
+
 
     function handleGroup() {
 
@@ -819,6 +816,12 @@
 
 
     setInterval(updateData, 5000);
+    VK.init(function () {
+
+    }, function () {
+        // API initialization failed
+        // Can reload page here
+    }, '5.74');
 </script>
 </body>
 </html>
