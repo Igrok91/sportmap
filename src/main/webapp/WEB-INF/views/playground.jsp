@@ -410,7 +410,7 @@
                                         </c:if>
                                     </span>
                                 </a>
-                                <span class="btn">
+                                <span class="btn" id="share_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#${event.idEvent}"}, {

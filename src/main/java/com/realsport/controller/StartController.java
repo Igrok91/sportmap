@@ -138,7 +138,13 @@ public class StartController {
                     }*/
                     //return "redirect:/event?eventId=" + hash.trim() + "&userId=" + userId;
                     Gson gson = new Gson();
-                    Event event = eventsService.getEventById(hash.trim());
+                    Event event;
+                    if (hash.contains("&")) {
+                        String[] idev = hash.split("&");
+                        event = eventsService.getEventById(idev[0].trim());
+                    } else {
+                        event = eventsService.getEventById(hash.trim());
+                    }
                     if (Objects.isNull(event)) {
                         model.addAttribute("userId", userId);
                         return "error";
