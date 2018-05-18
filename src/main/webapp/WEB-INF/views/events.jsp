@@ -554,7 +554,7 @@
                     }
                     if (usersList.length > maxWatch) {
                         isWatch = true;
-                        $('#watch_' + eventId).removeClass('hide');
+                        // $('#watch_' + eventId).removeClass('hide');
                     }
                     if (event.isEditEvent == true) {
                         location.reload();

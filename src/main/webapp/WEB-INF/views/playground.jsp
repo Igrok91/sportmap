@@ -705,7 +705,7 @@
                         }
                         if (usersList.length > maxWatch) {
                             isWatch = true;
-                            $('#watch_' + eventId).removeClass('hide');
+                            // $('#watch_' + eventId).removeClass('hide');
                         }
 
                         if (event.maxCountAnswer == 1000) {
