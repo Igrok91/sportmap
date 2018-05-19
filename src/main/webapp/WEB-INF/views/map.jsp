@@ -21,14 +21,10 @@
     <script src="resources/js/markerclusterer.js"></script>
 
     <style>
-        /* Remove the navbar's default margin-bottom and rounded borders */
-
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
         .row.content {
             height: 550px
         }
-
-        /* Set black background color, white text and some padding */
 
         .borderless {
             border: 0 none;
@@ -55,26 +51,14 @@
                         height: 90px;
                         width: 140px;
             */
-
         }
 
         .divTitle {
             /*background-color:#fafafa;*/
-
         }
-
-
     </style>
 </head>
 <body>
-
-<%--<nav class="navbar navbar-inverse navbar-static-top">
-    <div class="container ">
-        <div class="navbar-header " >
-            <a class="navbar-brand" href="#">SportMap</a>
-        </div>
-    </div>
-</nav>--%>
 <header>
     <nav class="nav navbar-static-top navbar-default navSportMap">
         <div class="container-fluid ">
@@ -412,7 +396,6 @@
 
         }
     }
-
 
     $(function () {
         $('#football ').click(function (event) {

@@ -383,60 +383,6 @@
         }
     }
 
-    function createGame() {
-        var description = $('#desc').val();
-        var answer = '+';
-        var sel2 = $('#sel2').val();
-        var sel1 = $('#sel1').val();
-        var sport = '${sport}';
-        var playgroundId = '${playgroundId}';
-
-        if (sel2 === 'Без ограничений') {
-            sel2 = 'infinity';
-        }
-
-        var href = "createGame?descr=" + description + "&answer=" + answer + "&sel2=" + sel2 + "&sel1=" + sel1 + "&sport=" + sport + "&playgroundId=" + playgroundId;
-        //var href = 'home';
-        // $('#createGame').attr('href', href);
-        /* $.ajax({
-              url: 'createGame',
-              method: "POST",
-              data: ({descr: description, answer: answer, sel2: sel2, sel1: sel1, sport: sport, playgroundId: playgroundId}),
-              beforeSend: function (xhr) {
-                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-             }
-          }).then(function (value) {
-
-             $('#createGame').attr('onclick', toHome());
-
-             $.get('home');
-
-
-         });*/
-
-
-        $.post("createGame", {
-            descr: description,
-            answer: answer,
-            sel2: sel2,
-            sel1: sel1,
-            sport: sport,
-            playgroundId: playgroundId
-        });
-
-        /* var xhr = new XMLHttpRequest();
-
-         var body = 'descr=' + encodeURIComponent(description) +
-             '&answer=' + encodeURIComponent(answer) + "&sel2=" + encodeURIComponent(sel2) + "&sel1=" + encodeURIComponent(sel1) + "&sport=" + encodeURIComponent(sport) + "&playgroundId=" + encodeURIComponent(playgroundId);
-
-         xhr.open("POST", '/createGame', true);
-         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-
-         xhr.send(body);
- */
-    }
-
     function toHome() {
         var href = 'home';
         $('#createGame').attr('href', href);

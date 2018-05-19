@@ -292,11 +292,12 @@
             }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
-            description.forEach(function (message, i) {
-                $('#descrEvent_' + id).append(message);
-                $('#descrEvent_' + id).append('<br>');
-            });
-
+            if (description && description.length > 0) {
+                description.forEach(function (message, i) {
+                    $('#descrEvent_' + id).append(message);
+                    $('#descrEvent_' + id).append('<br>');
+                });
+            }
             if (usersList.length > 2) {
                 isWatch = true;
                 $('#watch_' + id).removeClass('hide');

@@ -18,14 +18,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/events.js"></script>
+    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
     <style>
-
-        /* Set black background color, white text and some padding */
-
-        .hrDescription {
-            margin-top: 9px;
-            margin-bottom: 9px;
-        }
 
         a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
@@ -489,8 +483,15 @@
         </div>
     </div>
 </main>
-
-<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
+<script>
+    VK.init(function () {
+        console.log('vk init');
+    }, function () {
+        alert('vk init fail \n Напишите нам об ошибке')
+        // API initialization failed
+        // Can reload page here
+    }, '5.74');
+</script>
 <script>
     var listEvents = ${listEventsJson};
     var playgroundId = '${playgroundId}';
@@ -514,11 +515,13 @@
             }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
-            description.forEach(function (message, i) {
+            if (description && description.length > 0) {
+                description.forEach(function (message, i) {
 
-                $('#descrEvent_' + id).append(message);
-                $('#descrEvent_' + id).append('<br>');
-            });
+                    $('#descrEvent_' + id).append(message);
+                    $('#descrEvent_' + id).append('<br>');
+                });
+            }
 
             if (usersList.length > maxWatch) {
                 $('#watch_' + id).removeClass('hide');
@@ -816,12 +819,8 @@
 
 
     setInterval(updateData, 5000);
-    VK.init(function () {
 
-    }, function () {
-        // API initialization failed
-        // Can reload page here
-    }, '5.74');
 </script>
+
 </body>
 </html>

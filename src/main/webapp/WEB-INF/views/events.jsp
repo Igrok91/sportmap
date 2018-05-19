@@ -16,23 +16,14 @@
     <script src="resources/js/events.js"></script>
 
     <style>
-
-        /* Set black background color, white text and some padding */
         a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
         }
 
-        .hrDescription {
-            margin-top: 9px;
-            margin-bottom: 9px;
-        }
-
         body {
             overflow-y: scroll;
         }
-
-
     </style>
     <script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
 </head>
@@ -51,14 +42,9 @@
         <div class="pull-left">
             <a class="navbar-brand" href="#">События</a>
         </div>
-        <%--        <div class="pull-right" style="padding-top: 10px">
-                    <span style="margin-right: 3px">Все</span>
-                    <input type="checkbox" class="checkbox-switch"/>
-                </div>--%>
     </div>
 </nav>
 <div class="container-fluid ">
-
     <div class="row content">
         <div class="col-sm-2">
 
@@ -86,7 +72,6 @@
                                                  src="resources/image/playbasket.png"
                                                  alt="Баскетбол" width="40" height="40">
                                         </a>
-
 
                                         <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
                                             <a class="btn  dropdown-toggle" data-toggle="dropdown"
@@ -211,11 +196,9 @@
                                         </div>
 
                                     </div>
-                                        <%--<hr style="margin-bottom: 9px; margin-top: 0px">--%>
                                     <div style="padding-bottom: 12px;">
                                         <span style="color: black;" id="descrEvent_${event.idEvent}"></span>
                                     </div>
-                                        <%--<hr class="hrDescription">--%>
                                     <div class="alert alert-danger fade in hide" role="alert"
                                          id="alertMax_${event.idEvent}">
                                         <button type="button" class="close" onclick="hideButton(${event.idEvent})"
@@ -306,10 +289,7 @@
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
                                   </script>
-
                                 </span>
-
-
                             </div>
 
                             <div class="modal fade" id="addIgrok_${event.idEvent}">
@@ -407,8 +387,6 @@
 
     </div>
 </div>
-
-
 <script>
     var listEvents = ${listEventsJson};
     var eventsId = {};
@@ -435,11 +413,12 @@
             eventsId[id] = id;
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
-            description.forEach(function (message, i) {
-                $('#descrEvent_' + id).append(message);
-                $('#descrEvent_' + id).append('<br>');
-            });
-
+            if (description && description.length > 0) {
+                description.forEach(function (message, i) {
+                    $('#descrEvent_' + id).append(message);
+                    $('#descrEvent_' + id).append('<br>');
+                });
+            }
             if (usersList.length > maxWatch) {
                 $('#watch_' + id).removeClass('hide');
             }

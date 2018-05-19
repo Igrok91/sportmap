@@ -19,16 +19,12 @@
         /* Set black background color, white text and some padding */
         .borderless {
             border: 0 none;
-
             box-shadow: none;
 
         }
-
         textarea {
             resize: none;
         }
-
-
     </style>
 </head>
 <body>
@@ -50,10 +46,7 @@
     </div>
 </nav>
 <main>
-
     <div class="container-fluid " style="margin-top: 20px">
-
-
         <div class="row content">
             <div class="col-sm-2">
 

@@ -255,7 +255,7 @@ public class StartController {
 
     private void setPlaygroundDataToModel(Model model, String id) throws Exception {
         try {
-            //vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + id);
+            vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + id);
             allPlaygroundList = playgroundService.getAllPlayground();
             logger.info("allPlaygroundList " + allPlaygroundList.size());
             // Получение данных по площадкам из базы данных

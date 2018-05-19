@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="resources\switch\switch.css" />
     <script src="resources\switch\switch.js"></script>
     <script src="resources\js\device.js"></script>
+    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
 
 
     <style>
@@ -144,21 +145,16 @@
         </div>
     </div>
 </div>
-<script src="https://vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
 <script>
-
-/*    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://api.vk.com/method/users.get?user_ids=\' +  + \'&fields=photo_max_orig&v=5.74', false);
-// 2. Конфигурируем его: GET-запрос на URL 'phones.json'
-    xhr.setRequestHeader('Access-Control-Allow-Origin', "*");
-    xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST');
-// 3. Отсылаем запрос
-    xhr.send();*/
-    VK.init(function() {
-    }, function() {
-    // API initialization failed
-    // Can reload page here
+    VK.init(function () {
+        console.log('vk init');
+    }, function () {
+        alert('vk init fail \n Напишите нам об ошибке')
+        // API initialization failed
+        // Can reload page here
     }, '5.74');
+</script>
+<script>
 
 var el = document.querySelector('.checkbox-switch');
     var el2 = document.querySelector('.checkbox-switch2');
@@ -255,18 +251,14 @@ var el = document.querySelector('.checkbox-switch');
         });
     });
 
-
-
     function resizeEvent() {
        //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
-
         var  height =  $('#event').height();
         if (height < 650) {
             VK.callMethod('resizeWindow', 900, 650);
         } else {
             VK.callMethod('resizeWindow', 900, height + 10);
         }
-
         //VK.callMethod('scrollWindow', 0);
     }
 
@@ -284,10 +276,6 @@ var el = document.querySelector('.checkbox-switch');
         VK.callMethod('resizeWindow', 900, 650);
         //VK.callMethod('scrollWindow', 0);
     }
-
-
-
 </script>
-
 </body>
 </html>
