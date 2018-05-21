@@ -17,6 +17,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
     <style>
 
         /* Set black background color, white text and some padding */
@@ -88,7 +89,6 @@
         </div>
     </div>
 </main>
-<script src="https://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
 <script>
     var back = '${returnBack}';
     var returnBack;

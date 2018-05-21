@@ -14,6 +14,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="resources/js/events.js"></script>
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
 
     <style>
         a.disabled {
@@ -25,9 +26,9 @@
             overflow-y: scroll;
         }
     </style>
-    <script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
+    <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 </head>
-<body>
+<body id="eventsBody">
 
 
 <a href="" class="btn hide" style="padding: 1px" id="templateUserList2">
@@ -49,7 +50,31 @@
         <div class="col-sm-2">
 
         </div>
-        <div class="col-sm-8" style="padding-bottom: 45px">
+        <div class="col-sm-8" >
+            <div id="subscribe" class="hide">
+                <c:if test="${returnBack == 'start'}">
+                    <div class="text-center"  style="padding-bottom: 15px" >
+                            <div  style="padding-top: 10px" id="subscribe_vk_groups" >
+                                <p style="color: gray" id="error">Будь в курсе всех новостей, подпишись на наш паблик</p>
+                                <!-- VK Widget -->
+                                <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px" class="center-block"></div>
+                                <script type="text/javascript">
+                                    VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
+                                    VK.Observer.subscribe("widgets.groups.joined", function f()
+                                    {
+                                        console.log("user joined")
+                                        setTimeout(function () {
+                                            $('#subscribe').remove();
+                                        }, 1000);
+                                    });
+                                </script>
+
+                            </div>
+                    </div>
+                </c:if>
+            </div>
+
+            <div style="padding-bottom: 45px">
             <c:choose>
                 <c:when test="${listEvents.size() == 0}">
                     <div class="text-center">
@@ -69,7 +94,7 @@
                                            href="playground?playgroundId=${event.playgroundId}&sport=${event.sport}&userId=${userId}">
                                             <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                             <img id="${event.idEvent}_imgPlayground"
-                                                 src="resources/image/playbasket.png"
+                                                 src="resources/image/стадион.png"
                                                  alt="Баскетбол" width="40" height="40">
                                         </a>
 
@@ -379,7 +404,7 @@
                 </c:otherwise>
             </c:choose>
 
-
+            </div>
         </div>
 
     </div>

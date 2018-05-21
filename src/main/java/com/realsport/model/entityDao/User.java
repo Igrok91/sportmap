@@ -16,6 +16,7 @@ public class User implements Serializable {
     private String info = "";
     private boolean isAdmin = false;
     private boolean isFake = false;
+    private boolean isMember = false;
     private int countFake;
     // Список id  событий, в которых учавствовал
     private List<EventUser> listParticipant = new ArrayList<>();
@@ -131,6 +132,14 @@ public class User implements Serializable {
 
     public void setPhoto_100(String photo_100) {
         this.photo_100 = photo_100;
+    }
+
+    public boolean isMember() {
+        return isMember;
+    }
+
+    public void setMember(boolean member) {
+        isMember = member;
     }
 
     @Override

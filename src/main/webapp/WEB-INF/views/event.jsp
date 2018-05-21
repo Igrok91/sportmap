@@ -43,7 +43,7 @@
             cursor: pointer;
         }
     </style>
-    <script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
+    <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 </head>
 <body id="eventMain">
 
@@ -98,7 +98,7 @@
                                href="playground?playgroundId=${event.playgroundId}&sport=${event.sport}&userId=${userId}">
                                 <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
                                 <img id="${event.idEvent}_imgPlayground" class="media-object"
-                                     src="resources/image/playbasket.png"
+                                     src="resources/image/стадион.png"
                                      alt="Баскетбол" width="40" height="40">
                             </a>
 

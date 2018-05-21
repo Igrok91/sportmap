@@ -260,6 +260,7 @@
 
     var back = '${where}';
     var returnBack;
+    var maxWatch = 5;
     if (back === 'profile') {
         returnBack = 'user?userId=${userId}&playerId=${playerId}';
     } else if (back === 'profileMain') {
@@ -298,7 +299,7 @@
                     $('#descrEvent_' + id).append('<br>');
                 });
             }
-            if (usersList.length > 2) {
+            if (usersList.length > maxWatch) {
                 isWatch = true;
                 $('#watch_' + id).removeClass('hide');
             }
@@ -335,6 +336,13 @@
             usersList.forEach(function (user, i) {
                 if (user.userId === userId) {
                     isActive = true;
+                }
+                if (i > maxWatch) {
+                    if (user.isFake === true) {
+                        $('#' + user.userId + '_imgUser_' + id + '_fake').addClass('hide');
+                    } else {
+                        $('#' + user.userId + '_imgUser_' + id).addClass('hide');
+                    }
                 }
             });
 

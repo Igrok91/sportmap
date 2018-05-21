@@ -46,7 +46,7 @@
             cursor: pointer;
         }
     </style>
-    <script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
+    <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 </head>
 <body>
 <nav class="nav  navbar-static-top navbar-default">
@@ -93,7 +93,7 @@
                         <div>
                             <a class="pull-left" href="#">
                                 <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                <img class="media-object" src="resources/image/playbasket.png" alt="Баскетбол"
+                                <img class="media-object" src="resources/image/стадион.png" alt="Баскетбол"
                                      width="40" height="40" id="imageGroup">
                             </a>
 

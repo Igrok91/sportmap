@@ -108,6 +108,7 @@ public class StartController {
                     model.addAttribute("listEventsJson", gson.toJson(listEvents));
                     model.addAttribute("listEvents", listEvents);
                     model.addAttribute("playgroundCoordinate", "empty");
+                    model.addAttribute("returnBack", "start");
                     // События в которых пользователь поставил плюс
                     model.addAttribute("eventUserActive", getEventUserActive(listEvents, userId));
                 } else {
@@ -385,8 +386,11 @@ public class StartController {
         Gson gson = new Gson();
         List<Event> list = eventsService.getEventsByIdGroup(idGroup);
         List<Event> newList = null;
-        if (Objects.nonNull(list)) {
+        if (Objects.nonNull(list) && list.size() > 0) {
             newList = FluentIterable.from(list).limit(size).toList();
+        }
+        if (Objects.isNull(newList)) {
+            newList = new ArrayList<>();
         }
         model.addAttribute("listEvents", newList);
         model.addAttribute("listEventsJson", gson.toJson(newList));
