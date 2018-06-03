@@ -158,11 +158,25 @@
 <script>
     VK.init(function () {
         console.log('vk init');
+        VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+            infoAllowMessages(true);
+        });
+        VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
+            infoAllowMessages(false);
+        });
     }, function () {
         alert('vk init fail \n Напишите нам об ошибке')
         // API initialization failed
         // Can reload page here
     }, '5.74');
+
+    function infoAllowMessages(flag) {
+        $.ajax({
+            url: 'infoAllowMessages?isAllow=' + flag + '&userId=' + ${userId}
+        }).then(function (value) {
+
+        });
+    }
 </script>
 <script>
 
@@ -303,6 +317,7 @@
         VK.callMethod('resizeWindow', 900, 650);
         //VK.callMethod('scrollWindow', 0);
     }
+
 </script>
 </body>
 </html>

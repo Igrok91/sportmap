@@ -485,7 +485,13 @@
 </main>
 <script>
     VK.init(function () {
-        console.log('vk init');
+        console.log('vk init')
+        VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+            infoAllowMessages(true);
+        });
+        VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
+            infoAllowMessages(false);
+        });
     }, function () {
         alert('vk init fail \n Напишите нам об ошибке')
         // API initialization failed
@@ -644,6 +650,7 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 + 1;
                 $('#players').text(count2);
+                infoHandleGroup();
                 if (!allowSendMessage) {
                     VK.callMethod("showAllowMessagesFromCommunityBox");
                 }
@@ -819,6 +826,22 @@
 
 
     setInterval(updateData, 5000);
+
+    function infoAllowMessages(flag) {
+        $.ajax({
+            url: 'infoAllowMessages?isAllow=' + flag + '&userId=' + ${userId}
+        }).then(function (value) {
+
+        });
+    }
+
+    function infoHandleGroup() {
+        $.ajax({
+            url: 'infoHandleGroup?userId=' + ${userId} + '&playgroundId=' + playgroundId
+        }).then(function (value) {
+
+        });
+    }
 
 </script>
 

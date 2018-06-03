@@ -59,6 +59,8 @@ public class RestController {
     public static final String FALSE = "false";
     public static final String MAX_COUNT_ANSWER = "max_count_answer";
     public static final String PLAYGROUNDS_DATA = "playgroundsData";
+    private static final Integer ADMIN = 172924708;
+    private static final String LINK_PLAYGROUND = "https://vk.com/app6437488_-148660655#pid=";
 
     @Autowired
     private UserService userService;
@@ -146,6 +148,18 @@ public class RestController {
         putToCacheUser(user);
         userService.editUserInfo(userInfo, userId);
     }
+
+    @RequestMapping(value = "/infoAllowMessages")
+    public void infoAllowMessages(@RequestParam(value = "isAllow") boolean isAllow,
+                             @RequestParam(value = "userId") String userId) throws Exception {
+        vkService.sendMessage(ADMIN, "Пользователь https://vk.com/id" + userId + "  разрешил присылать сообщения " + isAllow);
+    }
+
+    @RequestMapping(value = "/infoHandleGroup")
+    public void infoHandleGroup(@RequestParam(value = "userId") String userId, @RequestParam(value = "playgroundId") String playgroundId) throws Exception {
+        vkService.sendMessage(ADMIN, "Пользователь https://vk.com/id" + userId + "  вступил в группу " + LINK_PLAYGROUND + playgroundId);
+    }
+
 
     @RequestMapping("/handleAnswerMain")
     @ResponseBody

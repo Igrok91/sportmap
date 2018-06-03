@@ -6,6 +6,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 
+import com.realsport.model.entity.PlaygroundInfo;
 import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.EventUser;
 import com.realsport.model.entityDao.MinUser;
@@ -46,20 +47,6 @@ public class StartController {
 
     Log logger = LogFactory.getLog(StartController.class);
 
-    private List<Playground> footballPlaygroundList = new ArrayList<>();
-    private List<Playground> voleyballPlaygroundList = new ArrayList<>();
-    private List<Playground> basketballPlaygroundList = new ArrayList<>();
-
-    private List<Playground> allPlaygroundList = new ArrayList<>();
-
-
-    ArrayList<String> footLocationList = new ArrayList<>();
-    ArrayList<String> basketLocationList = new ArrayList<>();
-    ArrayList<String> voleyLocationList = new ArrayList<>();
-
-    ArrayList<String> footInfoList = new ArrayList<>();
-    ArrayList<String> basketInfoList = new ArrayList<>();
-    ArrayList<String> voleyballInfoList = new ArrayList<>();
 
     public static final String EVENTS = "events";
     public static final String EVENT = "event";
@@ -139,12 +126,33 @@ public class StartController {
                     }*/
                     //return "redirect:/event?eventId=" + hash.trim() + "&userId=" + userId;
                     Gson gson = new Gson();
+
                     Event event;
                     if (hash.contains("&")) {
                         String[] idev = hash.split("&");
-                        event = eventsService.getEventById(idev[0].trim());
+                        if (idev[0].contains("pid")) {
+                            String pid = idev[0].split("=")[1].trim();
+                            addGroupToModel(model, pid, user, COUNT);
+                            model.addAttribute("returnBack", "home");
+                            model.addAttribute("userPhoto", user.getPhoto_50());
+                            model.addAttribute("endList", COUNT);
+                            model.addAttribute("userId", userId);
+                            return "playground";
+                        } else {
+                            event = eventsService.getEventById(idev[0].trim());
+                        }
                     } else {
-                        event = eventsService.getEventById(hash.trim());
+                        if (hash.contains("pid")) {
+                            String pid = hash.split("=")[1].trim();
+                            addGroupToModel(model, pid, user, COUNT);
+                            model.addAttribute("returnBack", "home");
+                            model.addAttribute("userPhoto", user.getPhoto_50());
+                            model.addAttribute("endList", COUNT);
+                            model.addAttribute("userId", userId);
+                            return "playground";
+                        } else {
+                            event = eventsService.getEventById(hash.trim());
+                        }
                     }
                     if (Objects.isNull(event)) {
                         model.addAttribute("userId", userId);
@@ -177,7 +185,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             return "error";
         }
-        //vkService.sendMessage(Integer.valueOf(userId), "edwedwedw");
+        vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + userId);
         return "main";
     }
 
@@ -210,8 +218,8 @@ public class StartController {
         map.put("isAdmin", user.isAdmin());
         map.put("playgroundUser", user.getPlaygroundIdlList());
         map.put("info", user.getInfo());
-
-        map.put("allPlaygroundUser", getAllPlaygroundUser(user));
+        List<Playground> listPlygrounds = getAllPlaygroundUser(user);
+        map.put("allPlaygroundUser", listPlygrounds);
         String jsonUser = gson.toJson(map);
         model.addAttribute("jsonUser", jsonUser);
         int countOrganize = 0;
@@ -224,7 +232,6 @@ public class StartController {
             }).size();
         }
 
-        List<Playground> listPlygrounds = getAllPlaygroundUser(user);
         if (listPlygrounds.isEmpty()) {
             model.addAttribute("start", true);
         } else {
@@ -239,7 +246,7 @@ public class StartController {
         List<Playground> allList = new ArrayList<>();
         if (user.getPlaygroundIdlList().size() != 0) {
             for (String id : user.getPlaygroundIdlList()) {
-                Playground p = FluentIterable.from(allPlaygroundList).firstMatch(new Predicate<Playground>() {
+                Playground p = FluentIterable.from(playgroundService.getAllPlayground()).firstMatch(new Predicate<Playground>() {
                     @Override
                     public boolean apply(Playground playfootball) {
                         return playfootball.getIdplayground().equals(id);
@@ -256,35 +263,34 @@ public class StartController {
 
     private void setPlaygroundDataToModel(Model model, String id) throws Exception {
         try {
-            vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + id);
-            allPlaygroundList = playgroundService.getAllPlayground();
-            logger.info("allPlaygroundList " + allPlaygroundList.size());
+            List<Playground> allPlaygroundList = playgroundService.getAllPlayground();
             // Получение данных по площадкам из базы данных
-            voleyballPlaygroundList = playgroundService.getVoleyballPlayground(allPlaygroundList);
-            footballPlaygroundList = playgroundService.getFootballPlayground(allPlaygroundList);
-            basketballPlaygroundList = playgroundService.getBasketballPlayground(allPlaygroundList);
+            List<Playground> voleyballPlaygroundList = playgroundService.getVoleyballPlayground(allPlaygroundList);
+            List<Playground> footballPlaygroundList = playgroundService.getFootballPlayground(allPlaygroundList);
+            List<Playground> basketballPlaygroundList = playgroundService.getBasketballPlayground(allPlaygroundList);
         /*    if (voleyballPlaygroundList == null || footballPlaygroundList == null || basketballPlaygroundList == null) {
                 throw new DataBaseException(DataBaseException.ERORR_MESSAGE);
             }*/
+            PlaygroundInfo info = new PlaygroundInfo();
             // Получение координат площадок и конвертация в JSON
             if (voleyballPlaygroundList != null) {
-                voleyballInfoList = getVoleyballInfoList(voleyballPlaygroundList);
-                voleyLocationList = getСoordinateVoleyPlayground(voleyballPlaygroundList);
+                info.setVoleyballInfoList(getVoleyballInfoList(voleyballPlaygroundList));
+                info.setVoleyLocationList(getСoordinateVoleyPlayground(voleyballPlaygroundList));
             }
             if (footballPlaygroundList != null) {
                 // Получение основных данных по площадкам и конвертация данных в формат JSON
-                footInfoList = getFootInfoList(footballPlaygroundList);
-                footLocationList = getСoordinateFootPlayground(footballPlaygroundList);
+                info.setFootInfoList(getFootInfoList(footballPlaygroundList));
+                info.setFootLocationList(getСoordinateFootPlayground(footballPlaygroundList));
 
             }
             if (basketballPlaygroundList != null) {
-                basketInfoList = getBasketInfoList(basketballPlaygroundList);
-                basketLocationList = getСoordinateBasketPlayground(basketballPlaygroundList);
+                info.setBasketInfoList(getBasketInfoList(basketballPlaygroundList));
+                info.setBasketLocationList(getСoordinateBasketPlayground(basketballPlaygroundList));
             }
 
 
             // Добавление данных в модель
-            addPlaygroundDataToModel(model);
+            addPlaygroundDataToModel(model, info);
 
             model.addAttribute("errorMaps", "success");
         } catch (Exception e) {
@@ -295,14 +301,14 @@ public class StartController {
 
     }
 
-    private void addPlaygroundDataToModel(Model model) {
-        model.addAttribute("footLocation", footLocationList);
-        model.addAttribute("basketLocation", basketLocationList);
-        model.addAttribute("voleyLocation", voleyLocationList);
+    private void addPlaygroundDataToModel(Model model, PlaygroundInfo info) {
+        model.addAttribute("footLocation", info.getFootLocationList());
+        model.addAttribute("basketLocation", info.getBasketLocationList());
+        model.addAttribute("voleyLocation", info.getVoleyLocationList());
 
-        model.addAttribute("footInfo", footInfoList);
-        model.addAttribute("basketInfo", basketInfoList);
-        model.addAttribute("voleyballInfo", voleyballInfoList);
+        model.addAttribute("footInfo", info.getFootInfoList());
+        model.addAttribute("basketInfo", info.getBasketInfoList());
+        model.addAttribute("voleyballInfo", info.getVoleyballInfoList());
     }
 
     @RequestMapping("/groupFromMap")
@@ -523,7 +529,7 @@ public class StartController {
                 HashMap<String, Double> map = new HashMap<>();
                 Gson gson = new Gson();
 
-                for (Playground p : allPlaygroundList) {
+                for (Playground p : playgroundService.getAllPlayground()) {
                     if (p.getIdplayground().equals(id)) {
                         map.put("lat", Double.parseDouble(p.getLatitude()));
                         map.put("lng", Double.parseDouble(p.getLongitude()));
@@ -541,7 +547,7 @@ public class StartController {
                 model.addAttribute("returnBack", "home");
                 model.addAttribute("playgroundCoordinate", "empty");
             }
-            addPlaygroundDataToModel(model);
+            setPlaygroundDataToModel(model, userId);
             User user = getUser(userId);
             setUserDataToModel(user, model);
             Gson gson = new Gson();

@@ -386,7 +386,7 @@
 
         // Add a marker clusterer to manage the markers.
         markerCluster = new MarkerClusterer(map, markers,
-            {imagePath: 'resources/image/m'});
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
         function closeAllInfoWindows() {
             allInfowindow.map(function (infoWindow, i) {

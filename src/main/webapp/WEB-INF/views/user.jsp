@@ -106,7 +106,6 @@
                                </span>
                                     Группы
                                 </a>
-                                <c:out value="нет"/>
                             </c:when>
                             <c:otherwise>
                                 <a href="groupsUser?userId=${userId}&where=profile&playerId=${playerId}"

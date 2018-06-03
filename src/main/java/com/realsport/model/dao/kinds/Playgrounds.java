@@ -30,8 +30,6 @@ public class Playgrounds {
 
     public static final String PLAYGROUNDS = "Playgrounds";
 
-    List<Playground> listPlayground = new ArrayList<>();
-
     private static final KeyFactory keyFactory = getKeyFactory(Playgrounds.class);
 
     private List<Playground> convertListEntityToPlayground(QueryResults<Entity> queryResults) {
@@ -79,6 +77,7 @@ public class Playgrounds {
 
 
     public List<Playground> getAllPlayground() {
+        List<Playground> listPlayground = null;
         try {
             Query<Entity> entityQuery = Query.newEntityQueryBuilder()
                     .setKind(PLAYGROUNDS).build();
