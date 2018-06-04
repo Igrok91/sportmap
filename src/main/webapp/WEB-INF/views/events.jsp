@@ -55,7 +55,7 @@
                 <c:if test="${returnBack == 'start'}">
                     <div class="text-center"  style="padding-bottom: 15px" >
                             <div  style="padding-top: 10px" id="subscribe_vk_groups" >
-                                <p style="color: gray" id="error">Будь в курсе всех новостей, подпишись на наш паблик</p>
+                                <p style="color: gray" id="error">Будь в курсе всех новостей</p>
                                 <!-- VK Widget -->
                                 <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px" class="center-block"></div>
                                 <script type="text/javascript">

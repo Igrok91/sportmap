@@ -19,6 +19,23 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/events.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
+    <script src="resources\js\device.js"></script>
+    <script>
+        VK.init(function () {
+            console.log('vk init')
+            /*      VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+                      infoAllowMessages(true);
+                  });
+                  VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
+                      infoAllowMessages(false);
+                  });*/
+        }, function () {
+            alert('vk init fail \n Напишите нам об ошибке')
+            // API initialization failed
+            // Can reload page here
+        }, '5.74');
+    </script>
     <style>
 
         a.disabled {
@@ -105,7 +122,6 @@
                                     ${namePlayground}</h4>
 
 
-
                                 <span style="color: gray">${sport}</span>
 
                             </div>
@@ -113,6 +129,14 @@
                         </div>
                     </div>
                     <div class="panel-body">
+                        <c:if test="${isParticipant == false}">
+                            <div >
+                                <h4 class="text-center">Привет, ${firstName}! </h4>
+                                <p>Сейчас идет набор в группу, здесь ты сможешь позвать
+                                    на игру, либо узнать о ближайшей игре. Чтобы не пропустить игру, мы будем присылать тебе уведомления в личные сообщения. </p>
+                            </div>
+                        </c:if>
+
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="text-center">
@@ -180,6 +204,26 @@
                                            <!--   <a href="#" class="btn " ><span class="glyphicon glyphicon-th-list"></span> Рейтинг</a> -->
                                        </div>
                                    </div>--%>
+                </div>
+                <div id="subscribe" class="hide">
+                    <div class="text-center" style="padding-bottom: 10px">
+                        <div  id="subscribe_vk_groups">
+                            <p style="color: gray" id="error">Будь в курсе всех новостей</p>
+                            <!-- VK Widget -->
+                            <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
+                                 class="center-block"></div>
+                            <script type="text/javascript">
+                                VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
+                                VK.Observer.subscribe("widgets.groups.joined", function f() {
+                                    console.log("user joined")
+                                    setTimeout(function () {
+                                        $('#subscribe').remove();
+                                    }, 1000);
+                                });
+                            </script>
+
+                        </div>
+                    </div>
                 </div>
                 <c:choose>
                     <c:when test="${listSize == 0}">
@@ -483,29 +527,29 @@
         </div>
     </div>
 </main>
-<script>
-    VK.init(function () {
-        console.log('vk init')
-  /*      VK.addCallback('onAllowMessagesFromCommunity', function f(location){
-            infoAllowMessages(true);
-        });
-        VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
-            infoAllowMessages(false);
-        });*/
-    }, function () {
-        alert('vk init fail \n Напишите нам об ошибке')
-        // API initialization failed
-        // Can reload page here
-    }, '5.74');
-</script>
+
 <script>
     var listEvents = ${listEventsJson};
     var playgroundId = '${playgroundId}';
     var eventsId = {};
     var maxWatch = 10;
 
-
-
+    if (device.desktop()) {
+        VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
+            var isMember = data.response === 1;
+            if (isMember) {
+                $('#subscribe').remove();
+            } else {
+                $('#subscribe').removeClass('hide');
+                var count = 0;
+                while (count < 5) {
+                    setTimeout('resizePlayground()', 1000);
+                    count++;
+                }
+            }
+        });
+    }
+    setTimeout('resizePlayground()', 500);
     if (listEvents) {
         var userId = "${userId}";
         listEvents.forEach(function (event, i) {
@@ -630,7 +674,6 @@
     }
     var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp + '&userId=' + ${userId};
     $('#returnBack').attr('href', returnBack);
-
 
 
     function handleGroup() {
@@ -836,7 +879,7 @@
     function infoHandleGroup(flag, allowSendMessage) {
 
         $.ajax({
-            url: 'infoHandleGroup?userId=' + ${userId} + '&playgroundId=' + playgroundId + '&flag=' + flag
+            url: 'infoHandleGroup?userId=' + ${userId} +'&playgroundId=' + playgroundId + '&flag=' + flag
         }).then(function (value) {
             if (flag) {
                 if (!allowSendMessage) {
