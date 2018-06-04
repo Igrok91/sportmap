@@ -656,7 +656,7 @@
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');
                 $('#goGame').addClass("disabled");
-                infoHandleGroup(false, false);
+                infoHandleGroup(false, true);
                 var count2 = parseInt($('#players').text());
                 count2 = count2 - 1;
                 $('#players').text(count2);
