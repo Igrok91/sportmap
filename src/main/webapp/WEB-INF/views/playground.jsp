@@ -486,12 +486,12 @@
 <script>
     VK.init(function () {
         console.log('vk init')
-        VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+  /*      VK.addCallback('onAllowMessagesFromCommunity', function f(location){
             infoAllowMessages(true);
         });
         VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
             infoAllowMessages(false);
-        });
+        });*/
     }, function () {
         alert('vk init fail \n Напишите нам об ошибке')
         // API initialization failed
@@ -650,15 +650,13 @@
                 var count2 = parseInt($('#players').text());
                 count2 = count2 + 1;
                 $('#players').text(count2);
-                infoHandleGroup();
-                if (!allowSendMessage) {
-                    VK.callMethod("showAllowMessagesFromCommunityBox");
-                }
+                infoHandleGroup(true, allowSendMessage);
+
             } else {
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');
                 $('#goGame').addClass("disabled");
-
+                infoHandleGroup(false, false);
                 var count2 = parseInt($('#players').text());
                 count2 = count2 - 1;
                 $('#players').text(count2);
@@ -835,10 +833,16 @@
         });
     }
 
-    function infoHandleGroup() {
+    function infoHandleGroup(flag, allowSendMessage) {
+
         $.ajax({
-            url: 'infoHandleGroup?userId=' + ${userId} + '&playgroundId=' + playgroundId
+            url: 'infoHandleGroup?userId=' + ${userId} + '&playgroundId=' + playgroundId + '&flag=' + flag
         }).then(function (value) {
+            if (flag) {
+                if (!allowSendMessage) {
+                    VK.callMethod("showAllowMessagesFromCommunityBox");
+                }
+            }
 
         });
     }

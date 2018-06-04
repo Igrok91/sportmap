@@ -156,8 +156,15 @@ public class RestController {
     }
 
     @RequestMapping(value = "/infoHandleGroup")
-    public void infoHandleGroup(@RequestParam(value = "userId") String userId, @RequestParam(value = "playgroundId") String playgroundId) throws Exception {
-        vkService.sendMessage(ADMIN, "Пользователь https://vk.com/id" + userId + "  вступил в группу " + LINK_PLAYGROUND + playgroundId);
+    public void infoHandleGroup(@RequestParam(value = "userId") String userId,
+                                @RequestParam(value = "playgroundId") String playgroundId,
+                                @RequestParam(value = "flag") boolean flag) throws Exception {
+        if (flag) {
+            vkService.sendMessage(ADMIN, "Пользователь https://vk.com/id" + userId + "  вступил в группу " + LINK_PLAYGROUND + playgroundId);
+        } else {
+            vkService.sendMessage(ADMIN, "Пользователь https://vk.com/id" + userId + "  вышел из группы " + LINK_PLAYGROUND + playgroundId);
+        }
+
     }
 
 
