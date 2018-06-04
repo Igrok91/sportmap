@@ -72,6 +72,9 @@
             <a class="navbar-brand btn" id="returnBack"><span class="glyphicon glyphicon-menu-left"
                                                               aria-hidden=""></span></a>
         </div>
+        <div class="pull-right" style="padding-top: 5px">
+            <a  href="https://vk.com/sporterr" target="_blank"><img src="resources/image/vk.png" width="40" height="40"></a>
+        </div>
     </div>
 </nav>
 <a href="" class="btn hide" style="padding: 2px" id="templateUserList2">
@@ -113,6 +116,7 @@
                                 <img class="media-object" src="resources/image/стадион.png" alt="Баскетбол"
                                      width="40" height="40" id="imageGroup">
                             </a>
+
 
 
                             <div class="media-body" style="padding-left: 10px">
