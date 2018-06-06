@@ -350,7 +350,9 @@ public class StartController {
         if (Objects.isNull(user)) {
             logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
             user = userService.getUser(userId);
-            cache.put(userId, user);
+            if (Objects.nonNull(user)) {
+                cache.put(userId, user);
+            }
         }
         return user;
     }

@@ -403,7 +403,8 @@ public class Users {
                     .build();
             tx.add(task);
             tx.commit();
-
+        } catch (Exception e) {
+            logger.error("Ошибка при регистрации: " + e);
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
