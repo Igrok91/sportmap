@@ -41,7 +41,7 @@
         <div class="row content">
             <div class="list-group" id="listTemplates">
                 <c:forEach var="templ" items="${template}">
-                    <a href="createGameFromTemplate?templateId=${templ.templateId}&userId=${userId}&playgroundId=${playgroundId}&sport=${sport}&namePlayground=${namePlayground}"
+                    <a href="createGameFromTemplate?templateId=${templ.templateId}&userId=${userId}&playgroundId=${playgroundId}&sport=${sport}&namePlayground=${namePlayground}&city=${city}"
                        onclick="disabledLink('${templ.templateId}')" class="list-group-item  borderless"
                        id="${templ.templateId}">
                         <h5>${templ.description}</h5>

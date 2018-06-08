@@ -207,6 +207,8 @@
                                            value="${event.idEvent}"/>
                                     <input type="hidden" name="userId"
                                            value="${userId}"/>
+                                        <input type="hidden" name="city"
+                                               value="${city}"/>
 
                                     <div style="padding-bottom: 10px">
                                         <div>

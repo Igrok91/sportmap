@@ -136,8 +136,9 @@
                         <c:if test="${isParticipant == false}">
                             <div >
                                 <h4 class="text-center">Привет, ${firstName}! </h4>
-                                <p>Сейчас идет набор в группу, здесь ты сможешь позвать
-                                    на игру, либо узнать о ближайшей игре. Все игры публикуются на стене группы ниже и ведется статистика по каждому игроку. Чтобы не пропустить игру, мы будем присылать тебе уведомления в личные сообщения.
+                                <p><span class="glyphicon glyphicon-flash" style="padding-right: 3px"></span> Сейчас идет набор в группу, здесь ты сможешь позвать
+                                    на игру, либо узнать о ближайшей игре. Все игры публикуются на стене группы <span class="glyphicon glyphicon-arrow-down"></span> и ведется статистика по каждому игроку.
+                                    Чтобы не пропустить игру, мы будем присылать тебе уведомления в личные сообщения  <span class="glyphicon glyphicon-bell" style="padding-right: 3px;padding-left: 3px"></span>
                                 </p>
                             </div>
                         </c:if>
@@ -203,6 +204,16 @@
 
 
                     </div>
+                    <div style="padding: 4px" class="text-center">
+                        <span class="btn">
+                            <script type="text/javascript">
+                                document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#pid=${playgroundId}"}, {
+                                    type: "custom",
+                                    text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Пригласить в группу</span>"
+                                }));
+                            </script>
+                        </span>
+                    </div>
                     <%--               <div class="container-fluid">
                                        <div class="row text-center" >
                                            <a href="#" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px"><span class="glyphicon  glyphicon-share-alt"  aria-hidden="Комментировать" style="margin-right: 5px"></span> Пригласить в группу</a>
@@ -230,6 +241,7 @@
                         </div>
                     </div>
                 </div>
+                <div style="padding-bottom: 45px">
                 <c:choose>
                     <c:when test="${listSize == 0}">
                         <div class="panel  panel-default">
@@ -500,7 +512,9 @@
 
                         </c:forEach>
                     </c:otherwise>
+
                 </c:choose>
+                    </div>
                 <c:if test="${listSize >=  5}">
                     <c:if test="${listSize >  endList}">
                         <c:if test="${returnBack == 'group'}">
@@ -531,6 +545,8 @@
             </div>
         </div>
     </div>
+    <jsp:include page="navigationPlaygrounds.jsp"/>
+
 </main>
 
 <script>
@@ -694,6 +710,8 @@
                 $('#exitFromGroup').removeClass('hide');
                 $('#enterToGroup').addClass('hide');
                 $('#goGame').removeClass("disabled");
+                $('#createMobile').removeClass("disabled");
+                $('#create').removeClass("disabled");
 
                 var count2 = parseInt($('#players').text());
                 count2 = count2 + 1;
@@ -704,6 +722,8 @@
                 $('#exitFromGroup').addClass('hide');
                 $('#enterToGroup').removeClass('hide');
                 $('#goGame').addClass("disabled");
+                $('#createMobile').addClass("disabled");
+                $('#create').addClass("disabled");
                 infoHandleGroup(false, true);
                 var count2 = parseInt($('#players').text());
                 count2 = count2 - 1;
@@ -729,6 +749,8 @@
     var isParticipant = ${isParticipant};
     if (isParticipant === false) {
         $('#goGame').addClass("disabled");
+        $('#createMobile').addClass("disabled");
+        $('#create').addClass("disabled");
     }
 
 

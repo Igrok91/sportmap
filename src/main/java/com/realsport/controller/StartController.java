@@ -391,6 +391,7 @@ public class StartController {
         model.addAttribute("house", playground.getHouse());
         model.addAttribute("sport", playground.getSport());
         model.addAttribute("players", playground.getPlayers());
+        model.addAttribute("city", playground.getCity());
         Gson gson = new Gson();
         List<Event> list = eventsService.getEventsByIdGroup(idGroup);
         List<Event> newList = null;
@@ -479,6 +480,8 @@ public class StartController {
                     model.addAttribute("house", playground.getHouse());
                     model.addAttribute("sport", playground.getSport());
                     model.addAttribute("players", playground.getPlayers());
+                    model.addAttribute("city", playground.getCity());
+                    logger.info("city playground " + playground.getCity());
                 }
             }
 
@@ -880,7 +883,8 @@ public class StartController {
                              @RequestParam(name = "namePlayground") String namePlayground,
                              @RequestParam(name = "templateId", required = false, defaultValue = "0") String templateId,
                              @RequestParam(name = "eventId", required = false, defaultValue = "null") String eventId,
-                             @RequestParam(value = "userId") String userId) throws Exception {
+                             @RequestParam(value = "userId") String userId,
+                             @RequestParam(value = "city") String city) throws Exception {
         try {
             User user = getUser(userId);
             Event game;
@@ -898,6 +902,7 @@ public class StartController {
             game.setSport(sport);
             game.setDateCreation(Timestamp.of(new Date()));
             game.setPlaygroundName(namePlayground);
+            game.setCity(city);
             List<User> list = new ArrayList<>();
             list.add(user);
             game.setUserList(list);
@@ -934,7 +939,8 @@ public class StartController {
                                          @RequestParam(value = "userId") String userId,
                                          @RequestParam(value = "playgroundId") String playgroundId,
                                          @RequestParam(name = "sport", required = false, defaultValue = "Футбол") String sport,
-                                         @RequestParam(name = "namePlayground") String namePlayground) throws Exception {
+                                         @RequestParam(name = "namePlayground") String namePlayground,
+                                         @RequestParam(value = "city") String city) throws Exception {
         try {
             User user = getUser(userId);
             Event game = eventsService.createEventByTemplate(templateId, userId);
@@ -950,6 +956,7 @@ public class StartController {
                 game.setUserFirtsNameCreator(user.getFirstName());
                 game.setUserLastNameCreator(user.getLastName());
                 game.setUserCreatorPhoto(user.getPhoto_50());
+                game.setCity(city);
                 eventsService.publishEvent(game);
                 Playground playground = playgroundService.getPlaygroundById(playgroundId);
                 vkService.sendMessagePublishEventToUsersGroup(playground.getPlayers()

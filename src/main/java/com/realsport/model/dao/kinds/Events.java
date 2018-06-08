@@ -72,6 +72,7 @@ public class Events {
                     .set("active", BooleanValue.of(game.isActive()))
                     .set("dateCreation", TimestampValue.of(game.getDateCreation()))
                     .set("userList", ListValue.of(entityList))
+                    .set("city", game.getCity())
                     .build();
             Entity entity = tx.add(task);
             game.setIdEvent(entity.getKey().getId().toString());
@@ -147,6 +148,12 @@ public class Events {
             Timestamp timestamp = entity.getTimestamp("dateCreation");
             event.setDateCreation(timestamp);
             event.setDate(getDateFormat(timestamp));
+            try {
+                event.setCity(entity.getString("city"));
+            } catch (DatastoreException ex) {
+                logger.warn(ex.getMessage());
+            }
+
             logger.info(entity.getString("description"));
             try {
                 List<EntityValue> entityValues = entity.getList("userList");
@@ -292,6 +299,11 @@ public class Events {
         Timestamp timestamp = entity.getTimestamp("dateCreation");
         event.setDateCreation(timestamp);
         event.setDate(getDateFormat(timestamp));
+        try {
+            event.setCity(entity.getString("city"));
+        } catch (DatastoreException ex) {
+            logger.warn(ex.getMessage());
+        }
         try {
             List<EntityValue> entityValues = entity.getList("userList");
             event.setUserList(getUserListFromEntity(entityValues));

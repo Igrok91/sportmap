@@ -2,7 +2,6 @@ package com.realsport.model.entityDao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,7 +12,7 @@ public class Playground implements Serializable{
     private String longitude;
     private String links;
     private String сreator;
-    private String sity;
+    private String city;
     private String street;
     private String house;
     private byte[] image;
@@ -71,12 +70,12 @@ public class Playground implements Serializable{
         this.сreator = сreator;
     }
 
-    public String getSity() {
-        return sity;
+    public String getCity() {
+        return city;
     }
 
-    public void setSity(String sity) {
-        this.sity = sity;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getStreet() {
@@ -147,7 +146,7 @@ public class Playground implements Serializable{
                 Objects.equals(name, that.name) &&
                 Objects.equals(latitude, that.latitude) &&
                 Objects.equals(longitude, that.longitude) &&
-                Objects.equals(sity, that.sity) &&
+                Objects.equals(city, that.city) &&
                 Objects.equals(street, that.street) &&
                 Objects.equals(house, that.house) &&
                 Objects.equals(sport, that.sport);
@@ -156,6 +155,6 @@ public class Playground implements Serializable{
     @Override
     public int hashCode() {
 
-        return Objects.hash(idplayground, name, latitude, longitude, sity, street, house, sport);
+        return Objects.hash(idplayground, name, latitude, longitude, city, street, house, sport);
     }
 }

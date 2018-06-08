@@ -43,7 +43,7 @@ public class Playgrounds {
             playground.setName(entity.getString("name"));
             playground.setLatitude(String.valueOf(latLng.getLatitude()));
             playground.setLongitude(String.valueOf(latLng.getLongitude()));
-            playground.setSity(entity.getString("city"));
+            playground.setCity(entity.getString("city"));
             playground.setStreet(entity.getString("street"));
             playground.setHouse(entity.getString("house"));
             playground.setSport(entity.getString("sport"));
@@ -105,7 +105,7 @@ public class Playgrounds {
         playground.setName(entity.getString("name"));
         playground.setLatitude(String.valueOf(latLng.getLatitude()));
         playground.setLongitude(String.valueOf(latLng.getLongitude()));
-        playground.setSity(entity.getString("city"));
+        playground.setCity(entity.getString("city"));
         playground.setStreet(entity.getString("street"));
         playground.setHouse(entity.getString("house"));
         playground.setSport(entity.getString("sport"));

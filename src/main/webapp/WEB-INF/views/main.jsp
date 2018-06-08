@@ -154,6 +154,30 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="startInfo" tabindex="-1" role="dialog" aria-labelledby="startInfoLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title text-center" id="startInfoLabel">Привет, ${firstName}!</h4>
+                    <p><span class="glyphicon glyphicon-info-sign" style="padding-right: 3px"></span> Чтобы быть в курсе игр и сборов на площадках, вступай в группы площадок!
+                        Для перехода к группе, кликните на карте по нужному вам маркеру <span class="glyphicon glyphicon-map-marker"></span> </p>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <a id="hideStartInfo" onclick="hideStartInfo()" class="btn btn-primary" data-dismiss="modal"><span
+                                class="glyphicon glyphicon-search" style="margin-right: 10px"></span>Найти группу</a>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     VK.init(function () {
@@ -208,6 +232,9 @@
         setTimeout('resizeMain()', 300);
         initMap();
         isMapInit = true;
+        if (start === 'true') {
+            $('#startInfo').modal('show');
+        }
 
     } else if (returnBack === 'group') {
         document.getElementById("event").className = "hide";
@@ -316,6 +343,10 @@
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
         VK.callMethod('resizeWindow', 900, 650);
         //VK.callMethod('scrollWindow', 0);
+    }
+
+    function hideStartInfo() {
+        $('#startInfo').modal('hide');
     }
 
 </script>

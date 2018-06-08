@@ -25,6 +25,7 @@ public class Event implements Serializable{
     private boolean isEditEvent = false;
     private Timestamp dateCreation;
     private String date;
+    private String city;
     private List<User> userList = new ArrayList<>();
     private List<Comment> commentsList = new ArrayList<>();
     private List<HistoryEvent> historyEvent = new ArrayList<>();
@@ -186,5 +187,13 @@ public class Event implements Serializable{
 
     public void setEditEvent(boolean editEvent) {
         isEditEvent = editEvent;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }
