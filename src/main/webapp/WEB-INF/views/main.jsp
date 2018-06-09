@@ -219,6 +219,7 @@
     });
     var returnBack = '${returnBack}';
     var start = '${start}';
+    var startInfo = '${startInfo}';
     if (returnBack === 'map' || start === 'true') {
         document.getElementById("event").className = "hide";
         document.getElementById("prof").className = "hide";
@@ -232,7 +233,7 @@
         setTimeout('resizeMain()', 300);
         initMap();
         isMapInit = true;
-        if (start === 'true') {
+        if (startInfo === 'true') {
             $('#startInfo').modal('show');
         }
 

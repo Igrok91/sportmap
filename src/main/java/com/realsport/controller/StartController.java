@@ -175,6 +175,7 @@ public class StartController {
                 model.addAttribute("firstName", user.getFirstName());
                 model.addAttribute("lastName", user.getLastName());
                 model.addAttribute("minUser", minUser);
+                model.addAttribute("startInfo", true);
 
             } catch (Exception e) {
                 logger.error(e);
