@@ -408,7 +408,7 @@ public class Subscriptions {
         Entity user = null;
         try {
             user = tx.get(keyFactory.newKey(userId));
-            if (Objects.isNull(user)) {
+            if (Objects.nonNull(user)) {
                 return user.getString("status");
             }
 
