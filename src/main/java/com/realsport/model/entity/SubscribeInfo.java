@@ -10,6 +10,9 @@ public class SubscribeInfo implements Serializable {
     private Integer price;
     private Integer period;
 
+    public SubscribeInfo() {
+    }
+
     public SubscribeInfo(String title, String photo_url, Integer item_id, Integer price, Integer period) {
         this.title = title;
         this.photo_url = photo_url;

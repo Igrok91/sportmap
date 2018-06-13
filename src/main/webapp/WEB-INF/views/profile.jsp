@@ -122,13 +122,17 @@
 
 
                     </div>
-                    <c:if test="${user.isPremium() == false}">
                         <div id="premium" class="text-center" style="padding: 3px">
                             <a  href="#" onclick="toPremium()" class="btn btn-primary">Стать игроком "Премиум"</a>
                         </div>
-                    </c:if>
+                    <div id="premiumCancel" class="text-center" style="padding: 3px">
+                        <a  href="#" onclick="ordeCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
+                    </div>
+                    <div id="premiumResume" class="text-center " style="padding: 3px">
+                        <a  href="#" onclick="ordeResume()" class="btn btn-primary">Продлить подписку "Премиум"</a>
+                    </div>
 
-                    <div id="premiumDiv" class=" hide">
+                    <div id="premiumDiv" class="hide">
                         <div class="text-center">
                             <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
                             <p style="color: gray">Опции для проффесионального игрока:</p>
@@ -186,7 +190,7 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <c:if test="${user.isPremium() == true}">
+                        <c:if test="${user.getSubscriptionStatus() == 'active'}">
                         <c:choose>
                             <c:when test="${user.listParticipant.size() == 0}">
                                 <a href="#" class="list-group-item borderless">
@@ -255,6 +259,21 @@
             $('#informationUser').append(message);
             $('#informationUser').append('<br>');
         });
+    }
+
+    var subscriptionStatus = '${subscriptionStatus}';
+    if (subscriptionStatus === 'active') {
+        $('#premiumCancel').removeClass('hide');
+        $('#premium').addClass('hide');
+        $('#premiumResume').addClass('hide');
+    } else if (subscriptionStatus === 'resume') {
+        $('#premiumCancel').addClass('hide');
+        $('#premium').addClass('hide');
+        $('#premiumResume').removeClass('hide');
+    } else if (subscriptionStatus === 'not') {
+        $('#premiumCancel').addClass('hide');
+        $('#premium').removeClass('hide');
+        $('#premiumResume').addClass('hide');
     }
 
     function editInfoUser() {
@@ -330,6 +349,25 @@
     function order() {
         VK.callMethod('showSubscriptionBox', 'create', {item: 'premium'});
     }
+
+    function ordeCancel() {
+        VK.callMethod('showSubscriptionBox', 'cancel', {subscription_id: '${subscription_id}'});
+    }
+
+    function ordeResume() {
+        VK.callMethod('showSubscriptionBox', 'resume', {subscription_id: '${subscription_id}'});
+    }
+
+    function resizeProfileMain() {
+        var height = $('#bodyProfile').height();
+        if (height < 650) {
+            VK.callMethod('resizeWindow', 900, 650);
+        } else {
+            VK.callMethod('resizeWindow', 900, height + 10);
+        }
+    }
+
+    setTimeout(resizeProfileMain(), 500);
 
 </script>
 </body>

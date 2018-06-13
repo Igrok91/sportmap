@@ -13,11 +13,11 @@ public class User implements Serializable {
     private String photoLink;
     private String photo_50;
     private String photo_100;
+    private String subscriptionStatus;
     private String info = "";
     private boolean isAdmin = false;
     private boolean isFake = false;
     private boolean isMember = false;
-    private boolean isPremium = false;
     private int countFake;
     // Список id  событий, в которых учавствовал
     private List<EventUser> listParticipant = new ArrayList<>();
@@ -143,12 +143,12 @@ public class User implements Serializable {
         isMember = member;
     }
 
-    public boolean isPremium() {
-        return isPremium;
+    public String getSubscriptionStatus() {
+        return subscriptionStatus;
     }
 
-    public void setPremium(boolean premium) {
-        isPremium = premium;
+    public void setSubscriptionStatus(String subscriptionStatus) {
+        this.subscriptionStatus = subscriptionStatus;
     }
 
     @Override

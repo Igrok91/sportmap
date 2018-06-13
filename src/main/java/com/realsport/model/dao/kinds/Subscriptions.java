@@ -1,15 +1,6 @@
 package com.realsport.model.dao.kinds;
 
-import com.google.cloud.datastore.BooleanValue;
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.Entity;
-import com.google.cloud.datastore.EntityValue;
-import com.google.cloud.datastore.FullEntity;
-import com.google.cloud.datastore.KeyFactory;
-import com.google.cloud.datastore.ListValue;
-import com.google.cloud.datastore.LongValue;
-import com.google.cloud.datastore.StringValue;
-import com.google.cloud.datastore.Transaction;
+import com.google.cloud.datastore.*;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.Event;
@@ -28,9 +19,9 @@ import static com.realsport.model.dao.Persistence.getDatastore;
 import static com.realsport.model.dao.Persistence.getKeyFactory;
 
 @Component
-public class Users {
-    private Log logger = LogFactory.getLog(Users.class);
-    private static final KeyFactory keyFactory = getKeyFactory(Users.class);
+public class Subscriptions {
+    private Log logger = LogFactory.getLog(Subscriptions.class);
+    private static final KeyFactory keyFactory = getKeyFactory(Subscriptions.class);
 
 
     private User getUserFromEntity(Entity entity) {
@@ -410,5 +401,82 @@ public class Users {
                 tx.rollback();
             }
         }
+    }
+
+    public String getSubscriptionStatusUser(String userId) {
+        Transaction tx = getDatastore().newTransaction();
+        Entity user = null;
+        try {
+            user = tx.get(keyFactory.newKey(userId));
+            if (Objects.isNull(user)) {
+                return user.getString("status");
+            }
+
+        } catch (Exception e) {
+            logger.error("Ошибка при регистрации подписки: " + e);
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+        }
+        return null;
+    }
+
+
+    public Integer addSubscriptionToUser(Integer user_id, Integer subscription_id, String item_id, Integer item_price) {
+        Transaction tx = getDatastore().newTransaction();
+        Entity user = null;
+        try {
+            user = tx.get(keyFactory.newKey(user_id));
+            if (Objects.isNull(user)) {
+                FullEntity task = FullEntity.newBuilder(keyFactory.newKey(user_id))
+                        .set("subscription_id", LongValue.of(subscription_id))
+                        .set("userId", user_id)
+                        .set("item_id", item_id)
+                        .set("item_price", LongValue.of(item_price))
+                        .build();
+                Entity entity = tx.add(task);
+                tx.commit();
+                return entity.getKey().getId().intValue();
+            } else {
+                return user.getKey().getId().intValue();
+            }
+
+        } catch (Exception e) {
+            logger.error("Ошибка при регистрации подписки: " + e);
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+        }
+        return null;
+    }
+
+    public Integer setSubscriptionStatusUser(Integer user_id, Integer subscription_id, String item_id, String cancel_reason, String status) {
+        Transaction tx = getDatastore().newTransaction();
+        Entity userEntity = null;
+        try {
+            userEntity = tx.get(keyFactory.newKey(user_id));
+            if (Objects.nonNull(userEntity)) {
+                if (cancel_reason != null) {
+                    tx.update(Entity.newBuilder(userEntity)
+                            .set("status", status.trim())
+                            .set("cancel_reason", cancel_reason.trim())
+                            .build());
+                } else {
+                    tx.update(Entity.newBuilder(userEntity).set("status", status.trim()).build());
+                }
+                tx.commit();
+                return userEntity.getKey().getId().intValue();
+            }
+
+        } catch (Exception e) {
+            logger.error("Ошибка при изменении статуса подписки: " + e);
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+        }
+        return null;
     }
 }

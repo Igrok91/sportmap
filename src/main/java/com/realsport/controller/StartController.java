@@ -9,6 +9,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 
 import com.realsport.model.entity.*;
+import com.realsport.model.entity.Error;
 import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.EventUser;
 import com.realsport.model.entityDao.MinUser;
@@ -16,11 +17,7 @@ import com.realsport.model.entityDao.Playground;
 import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 
-import com.realsport.model.service.CacheService;
-import com.realsport.model.service.EventsService;
-import com.realsport.model.service.PlaygroundService;
-import com.realsport.model.service.UserService;
-import com.realsport.model.service.VkService;
+import com.realsport.model.service.*;
 import com.realsport.model.utils.NotificationType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.realsport.model.cache.CacheUser.getCacheUser;
+import static com.realsport.model.utils.Utils.getSubstrictionStatusUser;
 
 /**
  * Created by Igor on 31.03.2017.
@@ -56,6 +54,9 @@ public class StartController {
     public static final String EVENT = "event";
     public static final String PLAYGROUND = "playground";
     public static final String TITLE_SUBSCRIBE = "Игрок \"Премиум\"";
+    public static final String CHARGEABLE = "chargeable";
+    public static final String ACTIVE = "active";
+    public static final String CANCELLED = "cancelled";
     public static final Integer COUNT = 5;
 
     private static final Integer ADMIN = 172924708;
@@ -75,6 +76,9 @@ public class StartController {
 
     @Autowired
     private CacheService cacheService;
+
+    @Autowired
+    private SubscriptionsService subscriptionsService;
 
 
     @RequestMapping(value = "/error2")
@@ -359,6 +363,9 @@ public class StartController {
             logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
             user = userService.getUser(userId);
             if (Objects.nonNull(user)) {
+                String status = getSubstrictionStatusUser(subscriptionsService.getSubscriptionStatusUser(userId));
+                logger.info("status подписки пользователя " + userId + " " + status);
+                user.setSubscriptionStatus(status);
                 cache.put(userId, user);
             }
         }
@@ -507,23 +514,53 @@ public class StartController {
         try {
             logger.info("Тест платежа: " + "notification_type - " + notification_type + ", item - " + item +
             ", order_id - " + order_id + ", item_id - " + item_id + ", status - " + status + ", subscription_id - " + subscription_id);
-            Gson gson = new Gson();
-            Response response;
             switch (notification_type) {
                 case "get_subscription_test":
                     SubscribeInfo subscribeInfo = new SubscribeInfo(SubscribeInfoData.PREMIUM_NAME, SubscribeInfoData.PHOTO_URL,
                             SubscribeInfoData.PREMIUM_ID, SubscribeInfoData.PRICE, SubscribeInfoData.PERIOD);
-                     response = new Response(subscribeInfo);
-                    return toJson(response);
+                    return toJson(new Response(subscribeInfo));
                 case "subscription_status_change_test":
-                    StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, 2);
-                     response = new Response(statusSubscribe);
-                     return toJson(response);
+                    if (Objects.nonNull(status)) {
+                        if (status.equals(CHARGEABLE)) {
+                            logger.info(CHARGEABLE + " подписка готова к оплате, userId " + user_id);
+                            Integer app_order_id = subscriptionsService.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
+                            if (Objects.isNull(app_order_id)) {
+                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при создании заказа на подписку", true);
+                                return toJson(new Error(errorInfo));
+                            }
+
+                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
+                            return toJson(new Response(statusSubscribe));
+                        } else if (status.equals(ACTIVE)) {
+                            logger.info(ACTIVE + " подписка активна, userId " + user_id);
+                            Integer app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
+                            if (Objects.isNull(app_order_id)) {
+                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при изменении статуса подписки на активную", true);
+                                return toJson(new Error(errorInfo));
+                            }
+
+                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
+                            return toJson(new Response(statusSubscribe));
+                        } else if (status.equals(CANCELLED)) {
+                            logger.info(CANCELLED + " подписка отменена, userId " + user_id + ", причина: " + cancel_reason);
+                            Integer app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
+                            if (Objects.isNull(app_order_id)) {
+                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при отмене подписики", true);
+                                return toJson(new Error(errorInfo));
+                            }
+                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
+                            return toJson(new Response(statusSubscribe));
+                        }
+                    } else {
+                        ErrorInfo errorInfo = new ErrorInfo(11, "Параметр status null", true);
+                        return toJson(new Error(errorInfo));
+                    }
             }
 
         } catch (Exception e) {
             logger.error(e);
-            return "error";
+            ErrorInfo errorInfo = new ErrorInfo(1, "Общая ошибка", false);
+            return toJson(new Error(errorInfo));
         }
         return "";
     }

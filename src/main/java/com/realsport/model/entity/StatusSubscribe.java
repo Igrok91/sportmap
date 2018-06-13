@@ -7,6 +7,9 @@ public class StatusSubscribe implements Serializable {
     private Integer subscription_id;
     private Integer app_order_id ;
 
+    public StatusSubscribe() {
+    }
+
     public StatusSubscribe(Integer subscription_id, Integer app_order_id) {
         this.subscription_id = subscription_id;
         this.app_order_id = app_order_id;

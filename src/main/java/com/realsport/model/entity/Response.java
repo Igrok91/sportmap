@@ -6,6 +6,9 @@ public class Response implements Serializable {
 
     private Object response;
 
+    public Response() {
+    }
+
     public Response(Object response) {
         this.response = response;
     }

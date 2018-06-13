@@ -200,6 +200,7 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', '');
             $('#li5').attr('class', 'active');
+            $('#premiumDiv').addClass('hide');
             resizeMain();
         });
     });

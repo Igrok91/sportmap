@@ -191,6 +191,7 @@
 
         VK.addCallback('onSubscriptionSuccess', function(subscription_id) {
            console.log("onSubscriptionSuccess  " + subscription_id);
+            subscriptionSuccess(subscription_id);
         });
         VK.addCallback('onSubscriptionFail', function() {
             console.log("onSubscriptionFail");
@@ -366,6 +367,10 @@
 
     function resizeProfile() {
             VK.callMethod('resizeWindow', 900, 650);
+    }
+
+    function subscriptionSuccess(subscription_id) {
+
     }
 
 </script>

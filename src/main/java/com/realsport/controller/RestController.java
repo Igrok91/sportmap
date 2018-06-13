@@ -17,11 +17,7 @@ import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 
 
-import com.realsport.model.service.CacheService;
-import com.realsport.model.service.EventsService;
-import com.realsport.model.service.PlaygroundService;
-import com.realsport.model.service.UserService;
-import com.realsport.model.service.VkService;
+import com.realsport.model.service.*;
 import com.realsport.model.utils.Playgrounds;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,6 +42,7 @@ import java.util.TimeZone;
 import static com.realsport.model.cache.CacheObserver.getCacheObserver;
 import static com.realsport.model.cache.CachePlaygrounds.getCachePlaygrounds;
 import static com.realsport.model.cache.CacheUser.getCacheUser;
+import static com.realsport.model.utils.Utils.getSubstrictionStatusUser;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -77,6 +74,9 @@ public class RestController {
 
     @Autowired
     private VkService vkService;
+
+    @Autowired
+    private SubscriptionsService subscriptionsService;
 
     @RequestMapping(value = "registerUser", method = RequestMethod.POST)
     public void registerUser(@RequestParam(value = "userId") String userId,
@@ -329,7 +329,12 @@ public class RestController {
         if (Objects.isNull(user)) {
             logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
             user = userService.getUser(userId);
-            cache.put(userId, user);
+            if (Objects.nonNull(user)) {
+                String status = getSubstrictionStatusUser(subscriptionsService.getSubscriptionStatusUser(userId));
+                logger.info("status подписки пользователя " + userId + " " + status);
+                user.setSubscriptionStatus(status);
+                cache.put(userId, user);
+            }
         }
         return user;
     }
