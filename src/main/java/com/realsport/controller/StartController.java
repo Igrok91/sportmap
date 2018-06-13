@@ -250,6 +250,7 @@ public class StartController {
         model.addAttribute("allPlaygroundUser", listPlygrounds);
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("countOrganize", countOrganize);
+        model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
     }
 
     private List<Playground> getAllPlaygroundUser(User user) {

@@ -10,13 +10,14 @@ public class Utils {
     private static final String NOT = "not";
 
     public static String getSubstrictionStatusUser(String status) {
-        switch (status) {
-            case ACTIVE:
-                return ACTIVE;
-            case CANCELLED:
-                return RESUME;
-            default: return NOT;
+        if (status == null) {
+            return NOT;
+        } else if (status.equals(ACTIVE)) {
+            return ACTIVE;
+        } else if (status.equals(CANCELLED)) {
+            return RESUME;
         }
+        return NOT;
     }
 
 }
