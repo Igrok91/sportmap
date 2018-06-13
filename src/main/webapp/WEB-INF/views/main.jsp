@@ -164,12 +164,15 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title text-center" id="startInfoLabel">Привет, ${firstName}!</h4>
-                    <p><span class="glyphicon glyphicon-info-sign" style="padding-right: 3px"></span> Чтобы быть в курсе игр и сборов на площадках, вступай в группы площадок!
-                        Для перехода к группе, кликните на карте по маркеру <span class="glyphicon glyphicon-map-marker"></span> </p>
+                    <p><span class="glyphicon glyphicon-info-sign" style="padding-right: 3px"></span> Чтобы быть в курсе
+                        игр и сборов на площадках, вступай в группы площадок!
+                        Для перехода к группе, кликните на карте по маркеру <span
+                                class="glyphicon glyphicon-map-marker"></span></p>
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <a id="hideStartInfo" onclick="hideStartInfo()" class="btn btn-primary" data-dismiss="modal"><span
+                        <a id="hideStartInfo" onclick="hideStartInfo()" class="btn btn-primary"
+                           data-dismiss="modal"><span
                                 class="glyphicon glyphicon-search" style="margin-right: 10px"></span>Найти группу</a>
                     </div>
 
@@ -182,21 +185,21 @@
 <script>
     VK.init(function () {
         console.log('vk init');
-        VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+        VK.addCallback('onAllowMessagesFromCommunity', function f(location) {
             infoAllowMessages(true);
         });
-        VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
+        VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location) {
             infoAllowMessages(false);
         });
 
-        VK.addCallback('onSubscriptionSuccess', function(subscription_id) {
-           console.log("onSubscriptionSuccess  " + subscription_id);
+        VK.addCallback('onSubscriptionSuccess', function (subscription_id) {
+            console.log("SubscriptionSuccess: " + subscription_id);
             subscriptionSuccess(subscription_id);
         });
-        VK.addCallback('onSubscriptionFail', function() {
+        VK.addCallback('onSubscriptionFail', function () {
             console.log("onSubscriptionFail");
         });
-        VK.addCallback('onSubscriptionCancel', function() {
+        VK.addCallback('onSubscriptionCancel', function () {
             console.log("onSubscriptionCancel");
         });
     }, function () {
@@ -360,17 +363,30 @@
     function hideStartInfo() {
         $('#startInfo').modal('hide');
     }
+
     function resizeProfilePremium() {
         var height = $('#premiumDiv').height();
         VK.callMethod('resizeWindow', 900, height + 650);
     }
 
     function resizeProfile() {
-            VK.callMethod('resizeWindow', 900, 650);
+        VK.callMethod('resizeWindow', 900, 650);
     }
 
     function subscriptionSuccess(subscription_id) {
+        $('#premiumDiv').addClass('hide');
+        $('#premium').addClass('hide');
+        $('#premiumCancel').addClass('hide');
+        $('#premiumResume').addClass('hide');
+        resizeProfile();
+    }
 
+    function subscriptionCancel() {
+        $('#premiumDiv').addClass('hide');
+        $('#premium').addClass('hide');
+        $('#premiumCancel').addClass('hide');
+        $('#premiumResume').removeClass('hide');
+        resizeProfile();
     }
 
 </script>

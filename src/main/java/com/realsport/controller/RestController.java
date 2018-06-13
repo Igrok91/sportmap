@@ -8,6 +8,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 import com.realsport.model.entity.LastEditData;
+import com.realsport.model.entity.SubscribtionInfoUser;
 import com.realsport.model.entity.Template;
 import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.Event;
@@ -330,9 +331,11 @@ public class RestController {
             logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
             user = userService.getUser(userId);
             if (Objects.nonNull(user)) {
-                String status = getSubstrictionStatusUser(subscriptionsService.getSubscriptionStatusUser(userId));
+                SubscribtionInfoUser subscribtionInfoUser = subscriptionsService.getSubscriptionStatusUser(userId);
+                String status = getSubstrictionStatusUser(subscribtionInfoUser.getStatus());
                 logger.info("status подписки пользователя " + userId + " " + status);
                 user.setSubscriptionStatus(status);
+                user.setSubscription_id(subscribtionInfoUser.getSubscription_id());
                 cache.put(userId, user);
             }
         }

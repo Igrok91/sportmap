@@ -18,7 +18,6 @@ import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 
 import com.realsport.model.service.*;
-import com.realsport.model.utils.NotificationType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.realsport.model.cache.CacheUser.getCacheUser;
+import static com.realsport.model.utils.Utils.NOT;
+import static com.realsport.model.utils.Utils.RESUME;
 import static com.realsport.model.utils.Utils.getSubstrictionStatusUser;
 
 /**
@@ -251,6 +252,7 @@ public class StartController {
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("countOrganize", countOrganize);
         model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
+        model.addAttribute("subscription_id", user.getSubscription_id());
     }
 
     private List<Playground> getAllPlaygroundUser(User user) {
@@ -364,9 +366,17 @@ public class StartController {
             logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
             user = userService.getUser(userId);
             if (Objects.nonNull(user)) {
-                String status = getSubstrictionStatusUser(subscriptionsService.getSubscriptionStatusUser(userId));
-                logger.info("status подписки пользователя " + userId + " " + status);
-                user.setSubscriptionStatus(status);
+                SubscribtionInfoUser subscribtionInfoUser = subscriptionsService.getSubscriptionStatusUser(userId);
+                if (Objects.nonNull(subscribtionInfoUser)) {
+                    String status = getSubstrictionStatusUser(subscribtionInfoUser.getStatus());
+                    logger.info("status подписки пользователя " + userId + " " + status);
+                    user.setSubscriptionStatus(status);
+                    user.setSubscription_id(subscribtionInfoUser.getSubscription_id());
+                } else {
+                    String status = getSubstrictionStatusUser(null);
+                    logger.info("status подписки пользователя " + userId + " " + status);
+                    user.setSubscriptionStatus(status);
+                }
                 cache.put(userId, user);
             }
         }
@@ -517,38 +527,57 @@ public class StartController {
             ", order_id - " + order_id + ", item_id - " + item_id + ", status - " + status + ", subscription_id - " + subscription_id);
             switch (notification_type) {
                 case "get_subscription_test":
-                    SubscribeInfo subscribeInfo = new SubscribeInfo(SubscribeInfoData.PREMIUM_NAME, SubscribeInfoData.PHOTO_URL,
-                            SubscribeInfoData.PREMIUM_ID, SubscribeInfoData.PRICE, SubscribeInfoData.PERIOD);
-                    return toJson(new Response(subscribeInfo));
+                    SubscribtionInfo subscribtionInfo = new SubscribtionInfo(SubscribtionInfoData.PREMIUM_NAME, SubscribtionInfoData.PHOTO_URL,
+                            SubscribtionInfoData.PREMIUM_ID, SubscribtionInfoData.PRICE, SubscribtionInfoData.PERIOD);
+                    return toJson(new Response(subscribtionInfo));
                 case "subscription_status_change_test":
                     if (Objects.nonNull(status)) {
                         if (status.equals(CHARGEABLE)) {
                             logger.info(CHARGEABLE + " подписка готова к оплате, userId " + user_id);
-                            Integer app_order_id = subscriptionsService.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
+                            Long app_order_id = subscriptionsService.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
                             if (Objects.isNull(app_order_id)) {
                                 ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при создании заказа на подписку", true);
                                 return toJson(new Error(errorInfo));
                             }
 
+                            User user = getUser(String.valueOf(user_id));
+                            user.setSubscription_id(subscription_id);
+                            user.setSubscriptionStatus(ACTIVE);
+
+                            Cache cache = getCacheUser();
+                            cache.put(String.valueOf(user_id), user);
+
                             StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
                             return toJson(new Response(statusSubscribe));
                         } else if (status.equals(ACTIVE)) {
                             logger.info(ACTIVE + " подписка активна, userId " + user_id);
-                            Integer app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
+                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
                             if (Objects.isNull(app_order_id)) {
                                 ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при изменении статуса подписки на активную", true);
                                 return toJson(new Error(errorInfo));
                             }
+                            User user = getUser(String.valueOf(user_id));
+                            user.setSubscription_id(subscription_id);
+                            user.setSubscriptionStatus(ACTIVE);
+
+                            Cache cache = getCacheUser();
+                            cache.put(String.valueOf(user_id), user);
 
                             StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
                             return toJson(new Response(statusSubscribe));
                         } else if (status.equals(CANCELLED)) {
                             logger.info(CANCELLED + " подписка отменена, userId " + user_id + ", причина: " + cancel_reason);
-                            Integer app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
+                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
                             if (Objects.isNull(app_order_id)) {
                                 ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при отмене подписики", true);
                                 return toJson(new Error(errorInfo));
                             }
+                            User user = getUser(String.valueOf(user_id));
+                            user.setSubscription_id(subscription_id);
+                            user.setSubscriptionStatus(RESUME);
+
+                            Cache cache = getCacheUser();
+                            cache.put(String.valueOf(user_id), user);
                             StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
                             return toJson(new Response(statusSubscribe));
                         }

@@ -4,6 +4,7 @@ import com.realsport.model.dao.kinds.Events;
 import com.realsport.model.dao.kinds.Playgrounds;
 import com.realsport.model.dao.kinds.Subscriptions;
 import com.realsport.model.dao.kinds.Users;
+import com.realsport.model.entity.SubscribtionInfoUser;
 import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.EventUser;
@@ -185,15 +186,15 @@ public class DatastoreService {
         users.registerUser(userId, first_name, last_name, photo_50, photo_100);
     }
 
-    public String getSubscriptionStatusUser(String userId) {
+    public SubscribtionInfoUser getSubscriptionStatusUser(String userId) {
         return subscriptions.getSubscriptionStatusUser(userId);
     }
 
-    public Integer addSubscriptionToUser(Integer user_id, Integer subscription_id, String item_id, Integer item_price) {
+    public Long addSubscriptionToUser(Integer user_id, Integer subscription_id, String item_id, Integer item_price) {
         return subscriptions.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
     }
 
-    public Integer setSubscriptionStatusUser(Integer user_id, Integer subscription_id, String item_id, String cancel_reason, String status) {
+    public Long setSubscriptionStatusUser(Integer user_id, Integer subscription_id, String item_id, String cancel_reason, String status) {
         return subscriptions.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
     }
 }

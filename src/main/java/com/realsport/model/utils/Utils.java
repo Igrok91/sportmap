@@ -4,10 +4,10 @@ package com.realsport.model.utils;
 
 
 public class Utils {
-    private static final String ACTIVE = "active";
-    private static final String CANCELLED = "cancelled";
-    private static final String RESUME = "resume";
-    private static final String NOT = "not";
+    public static final String ACTIVE = "active";
+    public static final String CANCELLED = "cancelled";
+    public static final String RESUME = "resume";
+    public static final String NOT = "not";
 
     public static String getSubstrictionStatusUser(String status) {
         if (status == null) {

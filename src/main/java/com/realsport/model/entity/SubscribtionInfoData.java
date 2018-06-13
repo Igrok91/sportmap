@@ -1,6 +1,6 @@
 package com.realsport.model.entity;
 
-public class SubscribeInfoData {
+public class SubscribtionInfoData {
 
     public static final String PREMIUM_NAME = "Player \"Premium\"";
     public static final String PHOTO_URL = "https://area-sport.appspot.com/premium.jpg";

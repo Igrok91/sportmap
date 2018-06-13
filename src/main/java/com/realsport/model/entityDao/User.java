@@ -14,6 +14,7 @@ public class User implements Serializable {
     private String photo_50;
     private String photo_100;
     private String subscriptionStatus;
+    private Integer subscription_id;
     private String info = "";
     private boolean isAdmin = false;
     private boolean isFake = false;
@@ -149,6 +150,14 @@ public class User implements Serializable {
 
     public void setSubscriptionStatus(String subscriptionStatus) {
         this.subscriptionStatus = subscriptionStatus;
+    }
+
+    public Integer getSubscription_id() {
+        return subscription_id;
+    }
+
+    public void setSubscription_id(Integer subscription_id) {
+        this.subscription_id = subscription_id;
     }
 
     @Override

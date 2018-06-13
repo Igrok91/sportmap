@@ -126,10 +126,10 @@
                             <a  href="#" onclick="toPremium()" class="btn btn-primary">Стать игроком "Премиум"</a>
                         </div>
                     <div id="premiumCancel" class="text-center" style="padding: 3px">
-                        <a  href="#" onclick="ordeCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
+                        <a href="#" onclick="orderCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
                     </div>
                     <div id="premiumResume" class="text-center " style="padding: 3px">
-                        <a  href="#" onclick="ordeResume()" class="btn btn-primary">Продлить подписку "Премиум"</a>
+                        <a href="#" onclick="orderResume()" class="btn btn-primary">Продлить подписку "Премиум"</a>
                     </div>
 
                     <div id="premiumDiv" class="hide">
@@ -170,7 +170,7 @@
                             <c:when test="${user.playgroundIdlList.size() == 0}">
                                 <a href="#"  class="list-group-item borderless ">
                                     <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
                                </span>
@@ -180,7 +180,7 @@
                             <c:otherwise>
                                 <a href="#" id="toGroupsUser" class="list-group-item borderless ">
                                     <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <c:out value="${user.playgroundIdlList.size()}"/>
                             </span>
                                 <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
@@ -195,7 +195,7 @@
                             <c:when test="${user.listParticipant.size() == 0}">
                                 <a href="#" class="list-group-item borderless">
                                     <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <c:out value="нет"/>
                                </span></span>
                                     Участие в играх</a>
@@ -203,7 +203,7 @@
                             <c:otherwise>
                                 <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
                                     <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                   <c:out value="${user.listParticipant.size()}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                                     Участие в играх</a>
@@ -213,7 +213,7 @@
                             <c:when test="${countOrganize == 0}">
                                 <a href="#" class="list-group-item borderless">
                                     <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                  <c:out value="нет"/>
                             </span></span>
                                     Организация игр</a>
@@ -222,7 +222,7 @@
                             <c:otherwise>
                                 <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
                                     <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                                     Организация игр</a>
@@ -350,11 +350,11 @@
         VK.callMethod('showSubscriptionBox', 'create', {item: 'premium'});
     }
 
-    function ordeCancel() {
+    function orderCancel() {
         VK.callMethod('showSubscriptionBox', 'cancel', {subscription_id: '${subscription_id}'});
     }
 
-    function ordeResume() {
+    function orderResume() {
         VK.callMethod('showSubscriptionBox', 'resume', {subscription_id: '${subscription_id}'});
     }
 

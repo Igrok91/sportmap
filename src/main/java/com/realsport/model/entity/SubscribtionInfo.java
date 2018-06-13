@@ -2,7 +2,7 @@ package com.realsport.model.entity;
 
 import java.io.Serializable;
 
-public class SubscribeInfo implements Serializable {
+public class SubscribtionInfo implements Serializable {
 
     private String title;
     private String photo_url;
@@ -10,10 +10,10 @@ public class SubscribeInfo implements Serializable {
     private Integer price;
     private Integer period;
 
-    public SubscribeInfo() {
+    public SubscribtionInfo() {
     }
 
-    public SubscribeInfo(String title, String photo_url, Integer item_id, Integer price, Integer period) {
+    public SubscribtionInfo(String title, String photo_url, Integer item_id, Integer price, Integer period) {
         this.title = title;
         this.photo_url = photo_url;
         this.item_id = item_id;
