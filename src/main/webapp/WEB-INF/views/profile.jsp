@@ -25,15 +25,19 @@
         textarea {
             resize: none;
         }
+        .premium {
+            border: 2px dotted rgba(0, 10, 141, 0.76);
+
+        }
     </style>
 </head>
-<body>
+<body id="bodyProfile">
 <nav class="nav  navbar-static-top navbar-default ">
     <div class="container-fluid ">
         <div class="navbar-brand ">
             Мои профиль
         </div>
-        <div class="pull-right dropdown" style="padding-top: 10px">
+<%--        <div class="pull-right dropdown" style="padding-top: 10px">
             <c:if test="${allowSendMessage == false}">
                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1"> <span
                         class="glyphicon glyphicon-bell"></span></a>
@@ -42,7 +46,7 @@
                 </ul>
             </c:if>
 
-        </div>
+        </div>--%>
     </div>
 </nav>
 <main>
@@ -58,7 +62,7 @@
                             <div>
                                 <a  href="https://vk.com/id${userId}" target="_blank" >
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
-                                    <img class="round" src="${user.photo_100}" alt="Футбол" width="100"
+                                    <img class="round" src="${user.photo_100}" alt="Пользователь" width="100"
                                          height="100">
                                 </a>
                             </div>
@@ -80,10 +84,10 @@
                                     <li><a class="cursorPointer" onclick="editInfoUser()">
                                         <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
                                     </a></li>
-                                    <c:if test="${allowSendMessage == false}">
+                        <%--            <c:if test="${allowSendMessage == false}">
                                         <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification2"> <span class="glyphicon glyphicon-bell"
                                                                                                                         style="margin-right: 20px"></span>Включить </a></li>
-                                    </c:if>
+                                    </c:if>--%>
                                 </ul>
                             </div>
                             <div>
@@ -116,12 +120,52 @@
                         </div>
 
 
+
+                    </div>
+                    <c:if test="${user.isPremium() == false}">
+                        <div id="premium" class="text-center" style="padding: 3px">
+                            <a  href="#" onclick="toPremium()" class="btn btn-primary">Стать игроком "Премиум"</a>
+                        </div>
+                    </c:if>
+
+                    <div id="premiumDiv" class=" hide">
+                        <div class="text-center">
+                            <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
+                            <p style="color: gray">Опции для проффесионального игрока:</p>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item borderless">
+                                  <span style="padding-right: 10px"><img class="round " src="resources\image\marketing.png" alt="Нет" width="50"
+                                                                        height="50"></span>
+                                Нет рекламы в приложении</li>
+                            <li class="list-group-item borderless">
+                                  <span style="padding-right: 10px"><img class="round " src="resources\image\infinity2.png" alt="Нет" width="50"
+                                                                         height="50"></span>
+                                Вступление в группы без ограничений (сейчас 3 макс.)</li>
+                            <li class="list-group-item borderless">
+                                     <span style="padding-right: 10px"><img class="round " src="resources\image\first.png" alt="Нет" width="50"
+                                                                            height="50"></span>
+                                Первым получение уведомлений</li>
+                            <li class="list-group-item borderless">
+                                     <span style="padding-right: 10px"><img class="round " src="resources\image\stat.png" alt="Нет" width="50"
+                                                                            height="50"></span>
+                                 Cтатистика по играм</li>
+                   <%--         <li class="list-group-item borderless">
+                              <span style="padding-right: 10px"><img class="round premium" src="${user.photo_50}" alt="Премиум" width="50"
+                                                                    height="50"></span>
+                                Иконка "Премиум"</li>--%>
+                        </ul>
+                        <div class="text-center">
+                            <a href="#" onclick="order()" class="btn btn-primary">Приобрести подписку</a>
+                            <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
+                            <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
+                        </div>
                     </div>
                     <div class="list-group">
                         <c:choose>
                             <c:when test="${user.playgroundIdlList.size() == 0}">
                                 <a href="#"  class="list-group-item borderless ">
-                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
@@ -131,7 +175,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="#" id="toGroupsUser" class="list-group-item borderless ">
-                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${user.playgroundIdlList.size()}"/>
                             </span>
@@ -142,11 +186,11 @@
                             </c:otherwise>
                         </c:choose>
 
-
+                        <c:if test="${user.isPremium() == true}">
                         <c:choose>
                             <c:when test="${user.listParticipant.size() == 0}">
                                 <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                                </span></span>
@@ -154,7 +198,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                   <c:out value="${user.listParticipant.size()}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -164,7 +208,7 @@
                         <c:choose>
                             <c:when test="${countOrganize == 0}">
                                 <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                  <c:out value="нет"/>
                             </span></span>
@@ -173,7 +217,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -181,6 +225,7 @@
 
                             </c:otherwise>
                         </c:choose>
+                        </c:if>
 
                     </div>
 
@@ -270,6 +315,21 @@
         VK.callMethod("showAllowMessagesFromCommunityBox");
     }
 
+    function toPremium() {
+        $('#premiumDiv').removeClass('hide');
+        //$('#premium').addClass('hide');
+        setTimeout(resizeProfilePremium(), 300);
+    }
+
+    function hidePremium() {
+        $('#premiumDiv').addClass('hide');
+      //  $('#premium').removeClass('hide');
+        setTimeout(resizeProfile(), 300);
+    }
+
+    function order() {
+        VK.callMethod('showSubscriptionBox', 'create', {item: 'premium'});
+    }
 
 </script>
 </body>

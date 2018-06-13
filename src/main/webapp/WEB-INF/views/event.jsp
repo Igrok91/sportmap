@@ -293,7 +293,7 @@
                     <hr style="margin-bottom: 0px">
                     <span class="btn" style="margin: 5px" id="share_${event.idEvent}">
                         <script type="text/javascript">
-                            document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#${event.idEvent}"}, {
+                            document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
                                 type: "custom",
                                 text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));

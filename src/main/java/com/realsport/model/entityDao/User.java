@@ -17,6 +17,7 @@ public class User implements Serializable {
     private boolean isAdmin = false;
     private boolean isFake = false;
     private boolean isMember = false;
+    private boolean isPremium = false;
     private int countFake;
     // Список id  событий, в которых учавствовал
     private List<EventUser> listParticipant = new ArrayList<>();
@@ -140,6 +141,14 @@ public class User implements Serializable {
 
     public void setMember(boolean member) {
         isMember = member;
+    }
+
+    public boolean isPremium() {
+        return isPremium;
+    }
+
+    public void setPremium(boolean premium) {
+        isPremium = premium;
     }
 
     @Override

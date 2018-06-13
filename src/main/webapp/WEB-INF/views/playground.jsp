@@ -72,9 +72,9 @@
             <a class="navbar-brand btn" id="returnBack"><span class="glyphicon glyphicon-menu-left"
                                                               aria-hidden=""></span></a>
         </div>
-        <div class="pull-right" style="padding-top: 5px">
+<%--        <div class="pull-right" style="padding-top: 5px">
             <a  href="https://vk.com/sporterr" target="_blank"><img src="resources/image/vk.png" width="40" height="40"></a>
-        </div>
+        </div>--%>
     </div>
 </nav>
 <a href="" class="btn hide" style="padding: 2px" id="templateUserList2">
@@ -137,8 +137,8 @@
                             <div >
                                 <h4 class="text-center">Привет, ${firstName}! </h4>
                                 <p><span class="glyphicon glyphicon-flash" style="padding-right: 3px"></span> Сейчас идет набор в группу, здесь ты сможешь позвать
-                                    на игру, либо узнать о ближайшей игре. Все игры публикуются на стене группы <span class="glyphicon glyphicon-arrow-down"></span> и ведется статистика по каждому игроку.
-                                    Чтобы не пропустить игру, мы будем присылать тебе уведомления в личные сообщения  <span class="glyphicon glyphicon-bell" style="padding-right: 3px;padding-left: 3px"></span>
+                                    на игру, либо узнать о ближайшей игре. Все игры публикуются на стене группы <span class="glyphicon glyphicon-arrow-down"></span> и ведется статистика по каждому игроку
+
                                 </p>
                             </div>
                         </c:if>
@@ -207,7 +207,7 @@
                     <div style="padding: 4px" class="text-center">
                         <span class="btn">
                             <script type="text/javascript">
-                                document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#pid=${playgroundId}"}, {
+                                document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#pid=${playgroundId}"}, {
                                     type: "custom",
                                     text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Пригласить в группу</span>"
                                 }));
@@ -468,7 +468,7 @@
                                 <span class="btn" id="share_${event.idEvent}">
 
                                     <script type="text/javascript">
-                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#${event.idEvent}"}, {
+                                    document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
                                         type: "custom",
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
@@ -546,7 +546,26 @@
         </div>
     </div>
     <jsp:include page="navigationPlaygrounds.jsp"/>
-
+    <div class="modal fade" id="allowMessage" tabindex="-1" role="dialog" aria-labelledby="startInfoLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title text-center" id="startInfoLabel">Отлично, ${firstName}!</h4>
+                    <p>Чтобы не пропустить игру, мы можем мгновенно присылать тебе уведомления в личные сообщения <span class="glyphicon glyphicon-bell" style="padding-right: 3px;padding-left: 3px"></span> </p>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <a href="https://vk.com/app6602081_-148660655" target="_blank" id="goToAllow" class="btn btn-primary" >Разрешить отправку сообщений</a>
+                        <%--<a href="vk://vk.com/app6602081_-148660655" target="_blank" id="goToAllow" class="btn btn-primary" >Разрешить отправку сообщений</a>--%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script>
@@ -910,7 +929,8 @@
         }).then(function (value) {
             if (flag) {
                 if (!allowSendMessage) {
-                    VK.callMethod("showAllowMessagesFromCommunityBox");
+                    //VK.callMethod("showAllowMessagesFromCommunityBox");
+                    $('#allowMessage').modal('show');
                 }
             }
 

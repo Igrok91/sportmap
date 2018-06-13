@@ -1,12 +1,16 @@
 package com.realsport.model.service;
 
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.MinUser;
 import com.realsport.model.entityDao.User;
 import com.realsport.vk.InitVkMain;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
+import com.vk.api.sdk.client.actors.ServiceActor;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -32,13 +36,17 @@ public class VkService {
     private Log logger = LogFactory.getLog(VkService.class);
     private final Random random = new Random();
     private static final Integer ADMIN = 172924708;
-    private static final String LINK_EVENT = "https://vk.com/app6437488_-148660655#";
+    private static final String LINK_EVENT = "https://vk.com/app6600445";
+    private static final String LINK_PLAYGROUND = "https://vk.com/app6600445#pid=";
+    private static final Integer APP_ID = 6600445;
+    private static final String ACCESS_TOKEN = "d65021c0d65021c0d65021c019d634973ddd650d65021c08d4ae151d8bec8618a7565f0";
 
     @Async
     public void sendMessage(Integer userId, String message) throws Exception {
         try {
             logger.info(" Отправляем сообщение " + message + " пользователю " + userId);
             getVkApiClient().messages().send(InitVkMain.getGroupActor()).message(message).userId(userId).randomId(random.nextInt()).execute();
+            Thread.sleep(1000);
         } catch (ApiException e) {
             logger.error(e);
         } catch (ClientException e) {
@@ -46,10 +54,11 @@ public class VkService {
         }
     }
 
-    public  boolean isAllowSendMessages(Integer userId) {
+    public boolean isAllowSendMessages(Integer userId) {
         BoolInt allowedQuery = null;
         try {
             allowedQuery = getVkApiClient().messages().isMessagesFromGroupAllowed(InitVkMain.getGroupActor(), userId).execute().getIsAllowed();
+
         } catch (ApiException e) {
             logger.error(e);
         } catch (ClientException e) {
@@ -102,21 +111,31 @@ public class VkService {
             if (players.size() > 0) {
                 VkApiClient vkApiClient = getVkApiClient();
                 GroupActor groupActor = InitVkMain.getGroupActor();
+                ServiceActor serviceActor = new ServiceActor(APP_ID, ACCESS_TOKEN);
                 Integer userIdCreator = Integer.valueOf(userCreator.getUserId());
                 int countSend = 0;
                 for (MinUser user : players) {
                     Integer userId = Integer.valueOf(user.getUserId());
                     if (!Objects.equals(userId, userIdCreator)) {
-                        if (isAllowSendMessages(userId)) {
-                            vkApiClient.messages().send(groupActor).message(" Открыт опрос в группе " + "\""
-                                    + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
-                                    + getMinText(descr) + "\n" + LINK_EVENT + idEvent).userId(userId).randomId(random.nextInt()).execute();
-                            countSend++;
+                        try {
+                            if (isAllowSendMessages(userId)) {
+                                Thread.sleep(1000);
+                                vkApiClient.messages().send(groupActor).message("Открыт опрос в группе " + "\""
+                                        + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
+                                        + getMinText(descr) + "\n" + LINK_EVENT).userId(userId).randomId(random.nextInt()).execute();
+                                countSend++;
+                            }
+                        } catch (Exception e) {
+                                logger.warn(e);
                         }
-                        Thread.sleep(1000);
+                        Thread.sleep(3000);
                     }
                 }
+
+               List<Integer> userIds = getUserIds(players, userCreator.getUserId());
+
                 if (isAllowSendMessages(userIdCreator)) {
+                    Thread.sleep(1000);
                     vkApiClient.messages().send(groupActor)
                             .message("Вы успешно открыли опрос в группе " + "\"" + namePlayground + "\": \n"
                                     + LINK_EVENT + idEvent)
@@ -124,7 +143,9 @@ public class VkService {
 
                 }
                 logger.info("Уведомление отправлено " + countSend + " участникам группы " + namePlayground);
-
+                sendNotification(userIds,userCreator.getFirstName() + " "
+                        + userCreator.getLastName() + ": \n"
+                        + getMinText(descr) );
             }
         } catch (ApiException e) {
             logger.error(e);
@@ -133,6 +154,22 @@ public class VkService {
         } catch (InterruptedException e) {
             logger.error(e);
         }
+    }
+
+    private List<Integer> getUserIds(List<MinUser> players, String userId) {
+        List<Integer> userIds = FluentIterable.from(players).filter(new Predicate<MinUser>() {
+            @Override
+            public boolean apply(MinUser minUser) {
+                return !minUser.getUserId().equals(userId);
+            }
+        }).transform(new Function<MinUser, Integer>() {
+            @Override
+            public Integer apply(MinUser minUser) {
+                return Integer.valueOf(minUser.getUserId().trim());
+            }
+        }).toList();
+        logger.info("MinUser players size " + players.size() + ", После фильтра " + userIds.size() );
+        return userIds;
     }
 
     @Async
@@ -148,6 +185,7 @@ public class VkService {
                     Integer userId = Integer.valueOf(user.getUserId());
                     if (!Objects.equals(userId, userIdCreator)) {
                         if (isAllowSendMessages(userId) && !user.isFake()) {
+                            Thread.sleep(1000);
                             vkApiClient.messages().send(groupActor).message(event.getUserFirtsNameCreator() + " " + event.getUserLastNameCreator()
                                     + " удалил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
                                     + getMinText(event.getDescription())).userId(userId).randomId(random.nextInt()).execute();
@@ -179,9 +217,10 @@ public class VkService {
                     Integer userId = Integer.valueOf(user.getUserId());
                     if (!Objects.equals(userId, userIdCreator)) {
                         if (isAllowSendMessages(userId) && !user.isFake()) {
+                            Thread.sleep(1000);
                             vkApiClient.messages().send(groupActor).message(event.getUserFirtsNameCreator() + " " + event.getUserLastNameCreator()
                                     + " завершил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
-                                    + getMinText(event.getDescription()) + "\n" + LINK_EVENT + event.getIdEvent()).userId(userId).randomId(random.nextInt()).execute();
+                                    + getMinText(event.getDescription()) + "\n" + LINK_EVENT + "#" + event.getIdEvent()).userId(userId).randomId(random.nextInt()).execute();
                         }
                         Thread.sleep(1000);
                     }
@@ -207,14 +246,17 @@ public class VkService {
             Integer userId = Integer.valueOf(id);
             if (!Objects.equals(userId, userIdCreator)) {
                 if (isAllowSendMessages(userIdCreator)) {
+                    Thread.sleep(1000);
                     vkApiClient.messages().send(groupActor).message("Пользователь https://vk.com/id" + userId
                             + " отменил голос: \n"
-                            + LINK_EVENT + eventId).userId(userIdCreator).randomId(random.nextInt()).execute();
+                            + LINK_EVENT).userId(userIdCreator).randomId(random.nextInt()).execute();
                 }
             }
         } catch (ApiException e) {
             logger.error(e);
         } catch (ClientException e) {
+            logger.error(e);
+        } catch (InterruptedException e) {
             logger.error(e);
         }
     }
@@ -227,5 +269,51 @@ public class VkService {
         return minText;
     }
 
+    @Async
+    public void notifyNewUserInvite(User user, String namePlayground, List<MinUser> players, String idplayground) {
+        try {
+            logger.info("Отправляем уведомление о вступлении участника   " + user);
+            if (players.size() > 0) {
+                VkApiClient vkApiClient = getVkApiClient();
+                GroupActor groupActor = InitVkMain.getGroupActor();
 
+                Integer userIdCreator = Integer.valueOf(user.getUserId());
+                int countSend = 0;
+                for (MinUser minUser : players) {
+                    Integer userId = Integer.valueOf(minUser.getUserId());
+                    if (!Objects.equals(userId, userIdCreator)) {
+                        try {
+                            if (isAllowSendMessages(userId)) {
+                                Thread.sleep(1000);
+                                vkApiClient.messages().send(groupActor).message("Новый игрок в группе "
+                                        + "\"" + namePlayground + "\": \n" + LINK_PLAYGROUND + idplayground).userId(userId).randomId(random.nextInt()).execute();
+                                countSend++;
+                            }
+
+                        } catch (Exception e) {
+                            logger.warn(e);
+                        }
+                        Thread.sleep(3000);
+                    }
+                }
+                logger.info("Уведомление отправлено " + countSend + " участникам группы " + namePlayground);
+                List<Integer> userIds = getUserIds(players, user.getUserId());
+                sendNotification(userIds, "Новый игрок в группе "
+                        + "\"" + namePlayground + "\"!");
+            }
+        } catch (InterruptedException e) {
+            logger.error(e);
+        }
+    }
+
+    @Async
+    public void sendNotification(List<Integer> listId, String message) {
+        try {
+            ServiceActor serviceActor = new ServiceActor(APP_ID, ACCESS_TOKEN);
+            getVkApiClient().secure().sendNotification(serviceActor, message).userIds(listId).execute();
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            logger.warn(e);
+        }
+    }
 }

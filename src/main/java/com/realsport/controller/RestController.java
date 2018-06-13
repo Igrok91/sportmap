@@ -60,7 +60,8 @@ public class RestController {
     public static final String MAX_COUNT_ANSWER = "max_count_answer";
     public static final String PLAYGROUNDS_DATA = "playgroundsData";
     private static final Integer ADMIN = 172924708;
-    private static final String LINK_PLAYGROUND = "https://vk.com/app6437488_-148660655#pid=";
+    private static final String LINK_EVENT = "https://vk.com/app6600445#";
+    private static final String LINK_PLAYGROUND = "https://vk.com/app6600445#pid=";
 
     @Autowired
     private UserService userService;
@@ -283,6 +284,7 @@ public class RestController {
             p.getPlayers().add(getUserMin(user));
             getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
             isParticipant = Boolean.TRUE;
+            vkService.notifyNewUserInvite(user, p.getName(), p.getPlayers(), p.getIdplayground());
         } else {
             logger.info("User c id " + userId + " вышел из группы " + playgroundId);
             user.getPlaygroundIdlList().remove(id);

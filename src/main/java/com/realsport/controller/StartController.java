@@ -1,12 +1,14 @@
 package com.realsport.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.Timestamp;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 
-import com.realsport.model.entity.PlaygroundInfo;
+import com.realsport.model.entity.*;
 import com.realsport.model.entityDao.Event;
 import com.realsport.model.entityDao.EventUser;
 import com.realsport.model.entityDao.MinUser;
@@ -19,6 +21,7 @@ import com.realsport.model.service.EventsService;
 import com.realsport.model.service.PlaygroundService;
 import com.realsport.model.service.UserService;
 import com.realsport.model.service.VkService;
+import com.realsport.model.utils.NotificationType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.cache.Cache;
 
@@ -51,6 +55,7 @@ public class StartController {
     public static final String EVENTS = "events";
     public static final String EVENT = "event";
     public static final String PLAYGROUND = "playground";
+    public static final String TITLE_SUBSCRIBE = "Игрок \"Премиум\"";
     public static final Integer COUNT = 5;
 
     private static final Integer ADMIN = 172924708;
@@ -245,9 +250,11 @@ public class StartController {
 
     private List<Playground> getAllPlaygroundUser(User user) {
         List<Playground> allList = new ArrayList<>();
+
         if (user.getPlaygroundIdlList().size() != 0) {
+            List<Playground> list = playgroundService.getAllPlayground();
             for (String id : user.getPlaygroundIdlList()) {
-                Playground p = FluentIterable.from(playgroundService.getAllPlayground()).firstMatch(new Predicate<Playground>() {
+                Playground p = FluentIterable.from(list).firstMatch(new Predicate<Playground>() {
                     @Override
                     public boolean apply(Playground playfootball) {
                         return playfootball.getIdplayground().equals(id);
@@ -468,12 +475,89 @@ public class StartController {
         return "playground";
     }
 
+/*    @RequestMapping(value = "/money", method = RequestMethod.POST)
+    public String money(@RequestParam(value = "notification_type ") String notification_type , @RequestParam(value = "app_id ") Integer app_id ,
+                        @RequestParam(value = "user_id ") Integer user_id ,
+                        @RequestParam(value = "receiver_id ") Integer receiver_id ,
+                        @RequestParam(value = "sig  ") String sig )  {
+        try {
+           logger.info("Тест платежа " + notification_type);
+        } catch (Exception e) {
+            logger.error(e);
+            return "error";
+        }
+        return "playground";
+    }*/
+
+    @RequestMapping(value = "/money", method = RequestMethod.POST)
+    @ResponseBody
+    public String money(@RequestParam(value = "notification_type", required = false) String notification_type ,
+                        @RequestParam(value = "app_id") Integer app_id ,
+                        @RequestParam(value = "user_id") Integer user_id ,
+                        @RequestParam(value = "receiver_id", required = false) Integer receiver_id ,
+                        @RequestParam(value = "sig", required = false) String sig,
+                        @RequestParam(value = "item", required = false) String item ,
+                        @RequestParam(value = "order_id", required = false) Integer order_id,
+                        @RequestParam(value = "cancel_reason", required = false) String cancel_reason,
+                        @RequestParam(value = "item_id", required = false) String item_id,
+                        @RequestParam(value = "status", required = false) String status,
+                        @RequestParam(value = "item_price", required = false) Integer item_price,
+                        @RequestParam(value = "pending_cancel", required = false) Integer pending_cancel,
+                        @RequestParam(value = "subscription_id", required = false) Integer subscription_id)  {
+        try {
+            logger.info("Тест платежа: " + "notification_type - " + notification_type + ", item - " + item +
+            ", order_id - " + order_id + ", item_id - " + item_id + ", status - " + status + ", subscription_id - " + subscription_id);
+            Gson gson = new Gson();
+            Response response;
+            switch (notification_type) {
+                case "get_subscription_test":
+                    SubscribeInfo subscribeInfo = new SubscribeInfo(SubscribeInfoData.PREMIUM_NAME, SubscribeInfoData.PHOTO_URL,
+                            SubscribeInfoData.PREMIUM_ID, SubscribeInfoData.PRICE, SubscribeInfoData.PERIOD);
+                     response = new Response(subscribeInfo);
+                    return toJson(response);
+                case "subscription_status_change_test":
+                    StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, 2);
+                     response = new Response(statusSubscribe);
+                     return toJson(response);
+            }
+
+        } catch (Exception e) {
+            logger.error(e);
+            return "error";
+        }
+        return "";
+    }
+/*
+    @RequestMapping("/toPremium")
+    public String toPremium(Model model, @RequestParam(value = "from") String from,
+                                   @RequestParam(value = "userId") String userId,
+                            @RequestParam(value = "playgroundId", required = false) String id) {
+        try {
+            User user = getUser(userId);
+            if (user == null) {
+                model.addAttribute("userId", userId);
+                return "error";
+            }
+
+            model.addAttribute("returnBack", from);
+            model.addAttribute("userPhoto", user.getPhoto_50());
+            model.addAttribute("endList", size);
+            model.addAttribute("userId", userId);
+        } catch (Exception e) {
+            logger.error(e);
+            model.addAttribute("userId", userId);
+            return "error";
+        }
+        return "premium";
+    }*/
+
     @RequestMapping("/create")
     public String toCreate(Model model, @RequestParam(value = "playgroundId") String id, @RequestParam(value = "sport") String sport,
                            @RequestParam(value = "eventId", required = false, defaultValue = "null") String eventId,
                            @RequestParam(value = "userId") String userId) {
         try {
-            for (Playground playground : playgroundService.getAllPlayground()) {
+            List<Playground> listPlaygrounds = playgroundService.getAllPlayground();
+            for (Playground playground : listPlaygrounds) {
                 if (playground.getIdplayground().equals(id)) {
                     model.addAttribute("namePlayground", playground.getName());
                     model.addAttribute("playId", playground.getIdplayground());
@@ -534,8 +618,8 @@ public class StartController {
                 String json = null;
                 HashMap<String, Double> map = new HashMap<>();
                 Gson gson = new Gson();
-
-                for (Playground p : playgroundService.getAllPlayground()) {
+                List<Playground> list = playgroundService.getAllPlayground();
+                for (Playground p : list) {
                     if (p.getIdplayground().equals(id)) {
                         map.put("lat", Double.parseDouble(p.getLatitude()));
                         map.put("lng", Double.parseDouble(p.getLongitude()));
@@ -1113,6 +1197,18 @@ public class StartController {
             mapArrayList.add(json);
         }
         return mapArrayList;
+    }
+
+    private String toJson(Object template) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String value = mapper.writeValueAsString(template);
+            logger.info(value);
+            return value;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

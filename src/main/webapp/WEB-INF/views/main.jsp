@@ -165,7 +165,7 @@
                     </button>
                     <h4 class="modal-title text-center" id="startInfoLabel">Привет, ${firstName}!</h4>
                     <p><span class="glyphicon glyphicon-info-sign" style="padding-right: 3px"></span> Чтобы быть в курсе игр и сборов на площадках, вступай в группы площадок!
-                        Для перехода к группе, кликните на карте по нужному вам маркеру <span class="glyphicon glyphicon-map-marker"></span> </p>
+                        Для перехода к группе, кликните на карте по маркеру <span class="glyphicon glyphicon-map-marker"></span> </p>
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
@@ -187,6 +187,16 @@
         });
         VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
             infoAllowMessages(false);
+        });
+
+        VK.addCallback('onSubscriptionSuccess', function(subscription_id) {
+           console.log("onSubscriptionSuccess  " + subscription_id);
+        });
+        VK.addCallback('onSubscriptionFail', function() {
+            console.log("onSubscriptionFail");
+        });
+        VK.addCallback('onSubscriptionCancel', function() {
+            console.log("onSubscriptionCancel");
         });
     }, function () {
         alert('vk init fail \n Напишите нам об ошибке')
@@ -348,6 +358,14 @@
 
     function hideStartInfo() {
         $('#startInfo').modal('hide');
+    }
+    function resizeProfilePremium() {
+        var height = $('#premiumDiv').height();
+        VK.callMethod('resizeWindow', 900, height + 650);
+    }
+
+    function resizeProfile() {
+            VK.callMethod('resizeWindow', 900, 650);
     }
 
 </script>

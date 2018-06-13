@@ -46,6 +46,11 @@ public class Users {
             logger.warn(e);
         }
         try {
+            user.setPremium(entity.getBoolean("isPremium"));
+        } catch (Exception e) {
+            logger.warn(e);
+        }
+        try {
             user.setPlaygroundIdlList(convertListValuePlaygroundIdToList(entity.getList("playgroundIdList")));
         } catch (Exception e) {
             logger.warn(e);
