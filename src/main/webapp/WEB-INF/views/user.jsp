@@ -99,7 +99,7 @@
                         <c:choose>
                             <c:when test="${countGroup == 0}">
                                 <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
@@ -110,7 +110,7 @@
                             <c:otherwise>
                                 <a href="groupsUser?userId=${userId}&where=profile&playerId=${playerId}"
                                    class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countGroup}"/>
                             </span>
@@ -120,11 +120,11 @@
 
                             </c:otherwise>
                         </c:choose>
-
+                        <c:if test="${subscriptionStatus == 'active'}">
                         <c:choose>
                             <c:when test="${countParticipant == 0}">
                                 <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                                </span></span>
@@ -133,7 +133,7 @@
                             <c:otherwise>
                                 <a href="userParticipant?userId=${userId}&where=profile&playerId=${playerId}"
                                    class="borderless list-group-item">
-                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                   <c:out value="${countParticipant}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -144,7 +144,7 @@
                         <c:choose>
                             <c:when test="${countOrganize == 0}">
                                 <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                  <c:out value="нет"/>
                             </span></span>
@@ -154,7 +154,7 @@
                             <c:otherwise>
                                 <a href="userOrganize?userId=${userId}&where=profile&playerId=${playerId}"
                                    class=" borderless list-group-item">
-                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="17" height="17"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -162,6 +162,7 @@
 
                             </c:otherwise>
                         </c:choose>
+                        </c:if>
                     </div>
 
                     <div style="padding: 20px">

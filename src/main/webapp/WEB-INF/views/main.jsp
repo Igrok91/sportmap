@@ -201,6 +201,7 @@
         });
         VK.addCallback('onSubscriptionCancel', function () {
             console.log("onSubscriptionCancel");
+            subscriptionCancel();
         });
     }, function () {
         alert('vk init fail \n Напишите нам об ошибке')
@@ -378,6 +379,8 @@
         $('#premium').addClass('hide');
         $('#premiumCancel').addClass('hide');
         $('#premiumResume').addClass('hide');
+        $('#alertSuccess').removeClass('hide');
+        $('#alertSuccess').alert();
         resizeProfile();
     }
 
@@ -386,6 +389,8 @@
         $('#premium').addClass('hide');
         $('#premiumCancel').addClass('hide');
         $('#premiumResume').removeClass('hide');
+        $('#alertWarning').removeClass('hide');
+        $('#alertWarning').alert();
         resizeProfile();
     }
 

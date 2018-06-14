@@ -31,7 +31,7 @@
         }
     </style>
 </head>
-<body id="bodyProfile">
+<body >
 <nav class="nav  navbar-static-top navbar-default ">
     <div class="container-fluid ">
         <div class="navbar-brand ">
@@ -49,7 +49,7 @@
         </div>--%>
     </div>
 </nav>
-<main>
+<main id="bodyProfile">
     <div class="container-fluid " style="margin-top: 20px">
         <div class="row content">
             <div class="col-sm-2">
@@ -76,6 +76,67 @@
                         </div>
                     </div>
                     <div class="panel-body">
+
+                        <div id="alertSuccess" class="alert alert-success fade in hide" style="padding-top: 10px" role="alert">
+                            <button type="button" class="close" onclick="hideButtonAlert('alertSuccess')"
+                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            Подписка оформлена! Перезапустите приложение
+                        </div>
+                        <div id="alertDanger" class="alert alert-danger fade in hide" role="alert" style="padding-top: 10px">
+                            <button type="button" class="close" onclick="hideButtonAlert('alertDanger')"
+                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>Произошла ошибка!</strong>
+                        </div>
+                        <div id="alertWarning" class="alert alert-warning fade in hide" role="alert" style="padding-top: 10px">
+                            <button type="button" class="close" onclick="hideButtonAlert('alertWarning')"
+                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            Подписка отменена!
+                        </div>
+
+                        <div id="premium" class="text-center" style="padding: 3px">
+                            <a  href="#" onclick="toPremium()" class="btn btn-primary">Стать игроком "Премиум"</a>
+                        </div>
+                        <div id="premiumCancel" class="text-center" style="padding: 3px">
+                            <a href="#" onclick="orderCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
+                        </div>
+                        <div id="premiumResume" class="text-center " style="padding: 3px">
+                            <a href="#" onclick="toPremiumResume()" class="btn btn-primary">Продлить подписку "Премиум"</a>
+                        </div>
+
+                        <div id="premiumDiv" class="hide">
+                            <div class="text-center">
+                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
+                                <p style="color: gray">Опции для проффесионального игрока:</p>
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item borderless">
+                                  <span style="padding-right: 10px"><img class="round " src="resources\image\marketing.png" alt="Нет" width="50"
+                                                                         height="50"></span>
+                                    Нет рекламы в приложении</li>
+                                <li class="list-group-item borderless">
+                                  <span style="padding-right: 10px"><img class="round " src="resources\image\infinity2.png" alt="Нет" width="50"
+                                                                         height="50"></span>
+                                    Вступление в группы без ограничений (сейчас 3 макс.)</li>
+                                <li class="list-group-item borderless">
+                                     <span style="padding-right: 10px"><img class="round " src="resources\image\first.png" alt="Нет" width="50"
+                                                                            height="50"></span>
+                                    Первым получение уведомлений</li>
+                                <li class="list-group-item borderless">
+                                     <span style="padding-right: 10px"><img class="round " src="resources\image\stat.png" alt="Нет" width="50"
+                                                                            height="50"></span>
+                                    Cтатистика по играм</li>
+                                <%--         <li class="list-group-item borderless">
+                                           <span style="padding-right: 10px"><img class="round premium" src="${user.photo_50}" alt="Премиум" width="50"
+                                                                                 height="50"></span>
+                                             Иконка "Премиум"</li>--%>
+                            </ul>
+                            <div class="text-center">
+                                <a id="pay" href="#" onclick="order()" class="btn btn-primary hide">Приобрести подписку</a>
+                                <a id="resumePay" href="#" onclick="orderResume()" class="btn btn-primary hide">Продлить подписку</a>
+                                <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
+                                <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
+                            </div>
+                        </div>
                         <div>
                             <div class="pull-right dropdown">
                                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3"> <span
@@ -122,54 +183,12 @@
 
 
                     </div>
-                        <div id="premium" class="text-center" style="padding: 3px">
-                            <a  href="#" onclick="toPremium()" class="btn btn-primary">Стать игроком "Премиум"</a>
-                        </div>
-                    <div id="premiumCancel" class="text-center" style="padding: 3px">
-                        <a href="#" onclick="orderCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
-                    </div>
-                    <div id="premiumResume" class="text-center " style="padding: 3px">
-                        <a href="#" onclick="orderResume()" class="btn btn-primary">Продлить подписку "Премиум"</a>
-                    </div>
 
-                    <div id="premiumDiv" class="hide">
-                        <div class="text-center">
-                            <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
-                            <p style="color: gray">Опции для проффесионального игрока:</p>
-                        </div>
-                        <ul class="list-group">
-                            <li class="list-group-item borderless">
-                                  <span style="padding-right: 10px"><img class="round " src="resources\image\marketing.png" alt="Нет" width="50"
-                                                                        height="50"></span>
-                                Нет рекламы в приложении</li>
-                            <li class="list-group-item borderless">
-                                  <span style="padding-right: 10px"><img class="round " src="resources\image\infinity2.png" alt="Нет" width="50"
-                                                                         height="50"></span>
-                                Вступление в группы без ограничений (сейчас 3 макс.)</li>
-                            <li class="list-group-item borderless">
-                                     <span style="padding-right: 10px"><img class="round " src="resources\image\first.png" alt="Нет" width="50"
-                                                                            height="50"></span>
-                                Первым получение уведомлений</li>
-                            <li class="list-group-item borderless">
-                                     <span style="padding-right: 10px"><img class="round " src="resources\image\stat.png" alt="Нет" width="50"
-                                                                            height="50"></span>
-                                 Cтатистика по играм</li>
-                   <%--         <li class="list-group-item borderless">
-                              <span style="padding-right: 10px"><img class="round premium" src="${user.photo_50}" alt="Премиум" width="50"
-                                                                    height="50"></span>
-                                Иконка "Премиум"</li>--%>
-                        </ul>
-                        <div class="text-center">
-                            <a href="#" onclick="order()" class="btn btn-primary">Приобрести подписку</a>
-                            <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
-                            <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
-                        </div>
-                    </div>
                     <div class="list-group">
                         <c:choose>
                             <c:when test="${user.playgroundIdlList.size() == 0}">
                                 <a href="#"  class="list-group-item borderless ">
-                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/users.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
@@ -179,7 +198,7 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="#" id="toGroupsUser" class="list-group-item borderless ">
-                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/users.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <c:out value="${user.playgroundIdlList.size()}"/>
                             </span>
@@ -230,6 +249,21 @@
                             </c:otherwise>
                         </c:choose>
                         </c:if>
+                        <a href="#" onclick="showInviteBox()" class="list-group-item borderless">
+                            <span style="padding-right: 5px"> <img src="resources/image/invite.png"  width="25" height="25"></span>
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                            Пригласить друзей</a>
+                        <a href="#" onclick="showInstallPushBox()" class="list-group-item borderless">
+                            <span style="padding-right: 5px"> <img src="resources/image/mobile.png"  width="25" height="25"></span>
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                            Мобильная версия</a>
+                        <a href="https://vk.com/im?media=&sel=-148660655" target="_blank" class="list-group-item borderless">
+                            <span style="padding-right: 5px"> <img src="resources/image/settings.png"  width="25" height="25"></span>
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                            Связаться с разработчиками</a>
 
                     </div>
 
@@ -283,6 +317,7 @@
             var info = $('#informationUser').val();
             $('#userInfo').append(info);
         }
+        setTimeout(resizeProfileMain(), 500);
     }
 
     function saveInfoUser() {
@@ -336,7 +371,13 @@
 
     function toPremium() {
         $('#premiumDiv').removeClass('hide');
+        $('#pay').removeClass('hide');
         //$('#premium').addClass('hide');
+        setTimeout(resizeProfilePremium(), 300);
+    }
+    function toPremiumResume() {
+        $('#premiumDiv').removeClass('hide');
+        $('#resumePay').removeClass('hide');
         setTimeout(resizeProfilePremium(), 300);
     }
 
@@ -359,15 +400,27 @@
     }
 
     function resizeProfileMain() {
-        var height = $('#bodyProfile').height();
+        var height = $('#prof').height();
         if (height < 650) {
             VK.callMethod('resizeWindow', 900, 650);
         } else {
-            VK.callMethod('resizeWindow', 900, height + 10);
+            VK.callMethod('resizeWindow', 900, height + 20);
         }
     }
 
     setTimeout(resizeProfileMain(), 500);
+
+    function hideButtonAlert(id) {
+        $('#' + id).addClass('hide');
+    }
+
+    function showInviteBox() {
+        VK.callMethod("showInviteBox");
+    }
+    
+    function showInstallPushBox() {
+        VK.callMethod("showInstallPushBox");
+    }
 
 </script>
 </body>

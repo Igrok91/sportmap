@@ -540,12 +540,7 @@ public class StartController {
                                 return toJson(new Error(errorInfo));
                             }
 
-                            User user = getUser(String.valueOf(user_id));
-                            user.setSubscription_id(subscription_id);
-                            user.setSubscriptionStatus(ACTIVE);
-
-                            Cache cache = getCacheUser();
-                            cache.put(String.valueOf(user_id), user);
+                            setStatusUserToCache(ACTIVE, user_id, subscription_id);
 
                             StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
                             return toJson(new Response(statusSubscribe));
@@ -556,12 +551,7 @@ public class StartController {
                                 ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при изменении статуса подписки на активную", true);
                                 return toJson(new Error(errorInfo));
                             }
-                            User user = getUser(String.valueOf(user_id));
-                            user.setSubscription_id(subscription_id);
-                            user.setSubscriptionStatus(ACTIVE);
-
-                            Cache cache = getCacheUser();
-                            cache.put(String.valueOf(user_id), user);
+                            setStatusUserToCache(ACTIVE, user_id, subscription_id);
 
                             StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
                             return toJson(new Response(statusSubscribe));
@@ -572,12 +562,8 @@ public class StartController {
                                 ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при отмене подписики", true);
                                 return toJson(new Error(errorInfo));
                             }
-                            User user = getUser(String.valueOf(user_id));
-                            user.setSubscription_id(subscription_id);
-                            user.setSubscriptionStatus(RESUME);
+                            setStatusUserToCache(RESUME, user_id, subscription_id);
 
-                            Cache cache = getCacheUser();
-                            cache.put(String.valueOf(user_id), user);
                             StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
                             return toJson(new Response(statusSubscribe));
                         }
@@ -593,6 +579,15 @@ public class StartController {
             return toJson(new Error(errorInfo));
         }
         return "";
+    }
+
+    private void setStatusUserToCache(String resume, Integer user_id, Integer subscription_id) {
+        User user = getUser(String.valueOf(user_id));
+        user.setSubscription_id(subscription_id);
+        user.setSubscriptionStatus(resume);
+
+        Cache cache = getCacheUser();
+        cache.put(String.valueOf(user_id), user);
     }
 /*
     @RequestMapping("/toPremium")
@@ -860,33 +855,46 @@ public class StartController {
                          @RequestParam(value = "playgroundId", required = false) String playgroundId) {
         try {
             User user = getPlayers(playerId);
-            Gson gson = new Gson();
-            int countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
-                @Override
-                public boolean apply(EventUser eventUser) {
-                    return eventUser.isOrganize();
+            if (Objects.nonNull(user)) {
+                Gson gson = new Gson();
+                int countOrganize = FluentIterable.from(user.getListParticipant()).filter(new Predicate<EventUser>() {
+                    @Override
+                    public boolean apply(EventUser eventUser) {
+                        return eventUser.isOrganize();
+                    }
+                }).size();
+                SubscribtionInfoUser subscribtionInfoUser = subscriptionsService.getSubscriptionStatusUser(userId);
+                if (Objects.nonNull(subscribtionInfoUser)) {
+                    model.addAttribute("subscriptionStatus", subscribtionInfoUser.getStatus());
+                } else {
+                    model.addAttribute("subscriptionStatus", NOT);
                 }
-            }).size();
-            model.addAttribute("userlastName", user.getLastName());
-            model.addAttribute("userfirstName", user.getFirstName());
-            model.addAttribute("userPhoto", user.getPhoto_100());
-            model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
-            model.addAttribute("countOrganize", countOrganize);
-            model.addAttribute("countParticipant", user.getListParticipant().size());
+                model.addAttribute("userlastName", user.getLastName());
+                model.addAttribute("userfirstName", user.getFirstName());
+                model.addAttribute("userPhoto", user.getPhoto_100());
+                model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
+                model.addAttribute("countOrganize", countOrganize);
+                model.addAttribute("countParticipant", user.getListParticipant().size());
 
-            model.addAttribute("userId", userId);
-            model.addAttribute("playerId", playerId);
-            model.addAttribute("userInfoJson", gson.toJson(user.getInfo()));
-            model.addAttribute("userInfo", user.getInfo());
-            String where = EVENTS;
-            if (eventId != null) {
-                where = EVENT;
-            } else if (playgroundId != null) {
-                where = PLAYGROUND;
+
+                model.addAttribute("userId", userId);
+                model.addAttribute("playerId", playerId);
+                model.addAttribute("userInfoJson", gson.toJson(user.getInfo()));
+                model.addAttribute("userInfo", user.getInfo());
+                String where = EVENTS;
+                if (eventId != null) {
+                    where = EVENT;
+                } else if (playgroundId != null) {
+                    where = PLAYGROUND;
+                }
+                model.addAttribute("where", where);
+                model.addAttribute("eventId", eventId);
+                model.addAttribute("playgroundId", playgroundId);
+            } else {
+                logger.error("User null " + userId);
+                model.addAttribute("userId", userId);
+                return "error";
             }
-            model.addAttribute("where", where);
-            model.addAttribute("eventId", eventId);
-            model.addAttribute("playgroundId", playgroundId);
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);
