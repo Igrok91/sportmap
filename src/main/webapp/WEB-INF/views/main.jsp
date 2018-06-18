@@ -447,7 +447,7 @@
                 }
             } else {
                 if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 650);
+                    VK.callMethod('resizeWindow', 900, 777);
                 } else {
                     VK.callMethod('resizeWindow', 900, height + 140);
                 }
