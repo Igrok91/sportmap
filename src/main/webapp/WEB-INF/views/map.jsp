@@ -64,6 +64,7 @@
                     <span style="margin-right: 3px">Free</span>
                     <input type="checkbox" class="checkbox-switch2" />
                 </div>--%>
+
             <div class="pull-right dropdown" style="padding-top: 10px">
                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu5"><span
                         class="glyphicon glyphicon-filter"></span></a>
@@ -109,6 +110,54 @@
                     </a></li>
                 </ul>
             </div>
+            <c:if test="${user.isAdmin() == true}">
+                <div id="addPlaygroundToMap"  class="pull-right hide dropdown" style="padding-top: 10px">
+                    <a  id="addPlaygroundToMapLink" class="btn dropdown-toggle" data-toggle="dropdown" href="#" ><span
+                            class="glyphicon glyphicon-plus"></span></a>
+
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="addPlaygroundToMapLink">
+                        <li><a href="#" onclick="addPlaygroundToMap('Футбол')"  style="padding-top: 3px;padding-bottom: 3px;">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20"
+                                         height="20" style="margin-top: 5px"/>
+                                </div>
+
+
+                                <div class="media-body ">
+                                    <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Футбол</h5>
+                                </div>
+                            </div>
+                        </a></li>
+                        <li><a href="#" >
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img src="resources/image/basket.png" alt="Футбол" width="20" height="20"
+                                         style="margin-top: 5px"/>
+                                </div>
+
+
+                                <div class="media-body ">
+                                    <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Баскетбол</h5>
+                                </div>
+                            </div>
+                        </a></li>
+                        <li><a href="#">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img src="resources/image/voley.png" alt="Футбол" width="20" height="20"
+                                         style="margin-top: 5px"/>
+                                </div>
+
+
+                                <div class="media-body ">
+                                    <h5 style="margin-top: 7px;margin-bottom: 7px">Волейбол</h5>
+                                </div>
+                            </div>
+                        </a></li>
+                    </ul>
+                </div>
+            </c:if>
         </div>
     </nav>
 
@@ -117,6 +166,27 @@
     <div id="map" class="text-center">
     </div>
     <input id="pac-input" class="controls" type="text" placeholder="Поиск..">
+
+    <div class="modal fade" id="addFootball" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 id="titleAdd" class="modal-title text-center"></h4>
+
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <p>После проверки, площадка будет добавлена на карту</p>
+                        <a href="#" onclick="" id="pay" class="btn btn-primary ">Добавить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script>
@@ -140,6 +210,8 @@
 
     var infoWindow;
 
+    var markerAdd;
+
     function setBackPosition(map) {
         var coor = ${playgroundCoordinate};
         map.setCenter(coor);
@@ -153,6 +225,14 @@
             $('#mapMain').css('margin-bottom', '25px');
         }
     }
+
+    if (device.desktop()) {
+        var buttonAdd = document.getElementById('addPlaygroundToMap');
+        if (buttonAdd) {
+            $('#addPlaygroundToMap').removeClass('hide');
+        }
+    }
+
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -366,6 +446,35 @@
             console.log('loadPlayground success')
         });
 
+    }
+
+    function addPlaygroundToMap(sport) {
+        if (!markerAdd) {
+            if (sport === 'Футбол') {
+
+                var myLatLng = map.getCenter();
+
+                markerAdd = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: 'Нажмите на маркер, чтобы добавить площадку',
+                    label: 'Ф',
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
+                });
+
+                markerAdd.addListener('click', function () {
+                    showModallAdd(sport);
+                });
+            }
+        }
+    }
+
+    function showModallAdd(sport) {
+        if (sport === 'Футбол') {
+            $('#titleAdd').text("Футбольная площадка");
+            $('#addFootball').modal('show');
+        }
     }
 
 </script>

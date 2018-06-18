@@ -380,6 +380,10 @@ public class StartController {
                 }
                 cache.put(userId, user);
             }
+
+        }
+        if (user.getUserId().equals(String.valueOf(ADMIN))) {
+            user.setAdmin(true);
         }
         return user;
     }

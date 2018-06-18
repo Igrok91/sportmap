@@ -345,6 +345,10 @@ public class RestController {
                 user.setSubscription_id(subscribtionInfoUser.getSubscription_id());
                 cache.put(userId, user);
             }
+
+        }
+        if (user.getUserId().equals(String.valueOf(ADMIN))) {
+            user.setAdmin(true);
         }
         return user;
     }
