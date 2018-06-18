@@ -80,8 +80,10 @@
                     }, onAdsReady, onNoAds);
                 } else {
                     getMedia();
-                    setTimeout(resizeEvent(), 1000);
+                    setTimeout(handleReturn(), 1000);
                 }
+            } else {
+                handleReturn();
             }
 
             function onAdsReady(adman) {
@@ -293,7 +295,7 @@
         onText: '',
         offText: ''
     });
-    var subscriptionStatus = '${subscriptionStatus}';
+
     var mySwitch2 = new Switch(el2, {
         showText: true,
         onText: '',
@@ -302,6 +304,7 @@
     var returnBack = '${returnBack}';
     var start = '${start}';
     var firstStart = '${firstStart}';
+    var subscriptionStatus = '${subscriptionStatus}';
     if (device.desktop()) {
         $('#navbarEvents').addClass('hide');
         $('#navbarProfile').addClass('hide');
@@ -310,80 +313,84 @@
         $('#event').css('padding-top', '20px');
     }
 
-    if (returnBack === 'map' || start === 'true') {
-        document.getElementById("event").className = "hide";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "hide";
-        document.getElementById("search").className = "";
-        $('#li2').attr('class', 'active');
-        $('#li1').attr('class', '');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', '');
-        $('#li5').attr('class', '');
+    function handleReturn() {
+        if (returnBack === 'map' || start === 'true') {
+            document.getElementById("event").className = "hide";
+            document.getElementById("prof").className = "hide";
+            document.getElementById("group").className = "hide";
+            document.getElementById("search").className = "";
+            $('#li2').attr('class', 'active');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', '');
 
-        initMap();
-        isMapInit = true;
-        // Если нет групп и первый заход в приложение
-        if (firstStart === 'true') {
-            $('#startInfo').modal('show');
-        }
-        setMobileMap();
-        setTimeout('resizeMain()', 1000);
+            initMap();
+            isMapInit = true;
+            // Если нет групп и первый заход в приложение
+            if (firstStart === 'true') {
+                $('#startInfo').modal('show');
+            }
+            setMobileMap();
+            setTimeout('resizeMain()', 1000);
 
-    } else if (returnBack === 'group') {
-        document.getElementById("event").className = "hide";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "";
-        document.getElementById("search").className = "hide";
-        $('#li2').attr('class', '');
-        $('#li1').attr('class', '');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', 'active');
-        $('#li5').attr('class', '');
-        setTimeout('resizeGroups()', 300);
-    } else if (returnBack === 'home') {
-        document.getElementById("event").className = "";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "hide";
-        document.getElementById("search").className = "hide";
-        $('#li2').attr('class', '');
-        $('#li1').attr('class', 'active');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', '');
-        $('#li5').attr('class', '');
-        setTimeout('resizeEvent()', 300);
-    } else if (returnBack === 'profileMain') {
-        document.getElementById("event").className = "hide";
-        document.getElementById("prof").className = "";
-        document.getElementById("group").className = "hide";
-        document.getElementById("search").className = "hide";
-        $('#li2').attr('class', '');
-        $('#li1').attr('class', '');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', '');
-        $('#li5').attr('class', 'active');
-        setTimeout('resizeProfileMain()', 500);
-    } else if (returnBack === 'start') {
-        if (device.desktop()) {
-            VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.73"}, function (data) {
-                var isMember = data.response === 1;
-                if (isMember) {
-                    $('#subscribe').remove();
-                } else {
-                    $('#subscribe').removeClass('hide');
-                    var count = 0;
-                    while (count < 5) {
-                        setTimeout('resizeEvent()', 1000);
-                        count++;
+        } else if (returnBack === 'group') {
+            document.getElementById("event").className = "hide";
+            document.getElementById("prof").className = "hide";
+            document.getElementById("group").className = "";
+            document.getElementById("search").className = "hide";
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', 'active');
+            $('#li5').attr('class', '');
+            setTimeout('resizeGroups()', 300);
+        } else if (returnBack === 'home') {
+            document.getElementById("event").className = "";
+            document.getElementById("prof").className = "hide";
+            document.getElementById("group").className = "hide";
+            document.getElementById("search").className = "hide";
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', 'active');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', '');
+            setTimeout('resizeEvent()', 300);
+        } else if (returnBack === 'profileMain') {
+            document.getElementById("event").className = "hide";
+            document.getElementById("prof").className = "";
+            document.getElementById("group").className = "hide";
+            document.getElementById("search").className = "hide";
+            $('#li2').attr('class', '');
+            $('#li1').attr('class', '');
+            $('#li3').attr('class', '');
+            $('#li4').attr('class', '');
+            $('#li5').attr('class', 'active');
+            setTimeout('resizeProfileMain()', 500);
+        } else if (returnBack === 'start') {
+            if (device.desktop()) {
+                VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.73"}, function (data) {
+                    var isMember = data.response === 1;
+                    if (isMember) {
+                        $('#subscribe').remove();
+                    } else {
+                        $('#subscribe').removeClass('hide');
+                        var count = 0;
+                        while (count < 5) {
+                            setTimeout('resizeEvent()', 1000);
+                            count++;
+                        }
                     }
-                }
-            });
+                });
+            }
+            setTimeout('resizeEvent()', 500);
+        } else {
+            setTimeout('resizeEvent()', 500);
+            setTimeout('resizeProfileMain()', 500);
         }
-        setTimeout('resizeEvent()', 500);
-    } else {
-        setTimeout('resizeEvent()', 500);
-        setTimeout('resizeProfileMain()', 500);
     }
+
+
 
     var sessUser =  ${jsonUser};
     var allPlayUser = sessUser.allPlaygroundUser;

@@ -909,19 +909,21 @@
 
     function resizePlayground() {
         var height = $('#mainPlayground').height();
-        if (subscriptionStatus == 'active') {
-            if (height < 650) {
-                VK.callMethod('resizeWindow', 900, 650);
+        if (device.desktop()) {
+            if (subscriptionStatus == 'active') {
+                if (height < 650) {
+                    VK.callMethod('resizeWindow', 900, 650);
+                } else {
+                    VK.callMethod('resizeWindow', 900, height + 50);
+                }
             } else {
-                VK.callMethod('resizeWindow', 900, height + 50);
-            }
-        } else {
-            if (height < 650) {
-                VK.callMethod('resizeWindow', 900, 777);
-            } else {
-                VK.callMethod('resizeWindow', 900, height + 160);
-            }
+                if (height < 650) {
+                    VK.callMethod('resizeWindow', 900, 777);
+                } else {
+                    VK.callMethod('resizeWindow', 900, height + 160);
+                }
 
+            }
         }
     }
 
