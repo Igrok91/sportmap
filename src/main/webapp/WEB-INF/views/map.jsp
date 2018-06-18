@@ -21,17 +21,6 @@
     <script src="resources/js/markerclusterer.js"></script>
 
     <style>
-        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-     /*   .row.content {
-
-        }*/
-
-        .borderless {
-            border: 0 none;
-
-            box-shadow: none;
-
-        }
 
         /* On small screens, set height to 'auto' for sidenav and grid */
         @media screen and (max-width: 480px) {
@@ -124,64 +113,8 @@
     </nav>
 
 </header>
-<main>
-    <div class="row content hide ">
-        <div class="col-md-2">
-
-        </div>
-        <div class="col-md-8">
-            <div class="text-center">
-                <p style="margin-top: 5px">Площадки рядом с вами</p>
-            </div>
-
-            <div class="list-group ">
-                <a href="#" class="list-group-item borderless">
-                    <div class="media">
-                        <div class="pull-left">
-                            <img class="media-object" src="resources/image/стадион3.png" alt="Футбол" width="40"
-                                 height="40"/>
-                        </div>
-
-
-                        <div class="media-body ">
-                            <h4 class="media-heading">Площадка у школы № 29</h4>
-                            <span style="color: gray">Футбол</span>
-                            <hr>
-                        </div>
-                    </div>
-                </a>
-                <a href="#" class="list-group-item borderless">
-                    <div class="media">
-                        <div class="pull-left">
-                            <img class="media-object" src="resources/image/площадка2.png" alt="Баскетбол" width="40"
-                                 height="40"/>
-                        </div>
-
-                        <div class="media-body">
-                            <h4 class="media-heading">Площадка у школы № 345</h4>
-                            <span style="color: gray">Баскетбол</span>
-                            <hr>
-                        </div>
-                    </div>
-                </a>
-
-            </div>
-
-        </div>
-        <div class="col-md-2">
-
-        </div>
-    </div>
-
-
-    <div class="container-fluid text-center">
-
-        <div class="row content">
-            <div class="panel borderless" id="map">
-            </div>
-
-        </div>
-
+<main id="mapMain">
+    <div id="map" class="text-center">
     </div>
     <input id="pac-input" class="controls" type="text" placeholder="Поиск..">
 </main>
@@ -216,7 +149,8 @@
 
     function setMobileMap() {
         if (!device.desktop()) {
-            $('#map').css('padding-bottom', '10px');
+            $('#mapMain').css('padding-bottom', '25px');
+            $('#mapMain').css('margin-bottom', '25px');
         }
     }
 

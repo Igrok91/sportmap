@@ -256,11 +256,11 @@
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                             Пригласить друзей</a>
-                        <a href="#" onclick="showInstallPushBox()" class="list-group-item borderless">
+                       <%-- <a href="#" onclick="showInstallPushBox()" class="list-group-item borderless">
                             <span style="padding-right: 5px"> <img src="resources/image/mobile.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                            Мобильная версия</a>
+                            Мобильная версия</a>--%>
                         <a href="https://vk.com/board148660655" target="_blank" class="list-group-item borderless">
                             <span style="padding-right: 5px"> <img src="resources/image/settings.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">

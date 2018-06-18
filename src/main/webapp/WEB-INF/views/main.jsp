@@ -143,9 +143,6 @@
         }
 
 
-        html, body {
-            height: 100%;
-        }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     </style>
@@ -323,14 +320,15 @@
         $('#li3').attr('class', '');
         $('#li4').attr('class', '');
         $('#li5').attr('class', '');
-        setTimeout('resizeMain()', 300);
-        setMobileMap();
+
         initMap();
         isMapInit = true;
         // Если нет групп и первый заход в приложение
         if (firstStart === 'true') {
             $('#startInfo').modal('show');
         }
+        setMobileMap();
+        setTimeout('resizeMain()', 1000);
 
     } else if (returnBack === 'group') {
         document.getElementById("event").className = "hide";
@@ -464,7 +462,7 @@
             if (subscriptionStatus == 'active') {
                 VK.callMethod('resizeWindow', 900, 650);
             } else {
-                VK.callMethod('resizeWindow', 900, 775);
+                VK.callMethod('resizeWindow', 900, 777);
             }
         }
         //VK.callMethod('scrollWindow', 0);
@@ -505,14 +503,14 @@
                 }
             } else {
                 if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 775);
+                    VK.callMethod('resizeWindow', 900, 777);
                 } else {
                     VK.callMethod('resizeWindow', 900, height + 160);
                 }
-
             }
         }
     }
+
 </script>
 </body>
 </html>

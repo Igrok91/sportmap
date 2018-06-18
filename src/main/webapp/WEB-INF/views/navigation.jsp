@@ -207,11 +207,11 @@
 
     $(function () {
         $('#searchPlaygroundMobile').click(function (event) {
-            setMobileMap();
             if (!isMapInit) {
                 initMap();
                 isMapInit = true;
             }
+            setMobileMap();
             document.getElementById("event").className = "hide";
             document.getElementById("prof").className = "hide";
             document.getElementById("group").className = "hide";
