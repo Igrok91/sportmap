@@ -20,7 +20,105 @@
     <link rel="stylesheet" href="resources\switch\switch.css"/>
     <script src="resources\switch\switch.js"></script>
     <script src="resources\js\device.js"></script>
+    <script src="resources\js\media.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+
+
+    <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
+    <script src="https://vk.com/js/api/adman_init.js"></script>
+    <script src="https://js.appscentrum.com/scr/preroll.js"></script>
+    <script>
+        VK.init(function () {
+            console.log('vk init');
+            VK.addCallback('onAllowMessagesFromCommunity', function f(location) {
+                infoAllowMessages(true);
+            });
+            VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location) {
+                infoAllowMessages(false);
+            });
+
+            VK.addCallback('onSubscriptionSuccess', function (subscription_id) {
+                console.log("SubscriptionSuccess: " + subscription_id);
+                subscriptionSuccess(subscription_id);
+            });
+            VK.addCallback('onSubscriptionFail', function () {
+                console.log("onSubscriptionFail");
+            });
+            VK.addCallback('onSubscriptionCancel', function () {
+                console.log("onSubscriptionCancel");
+                subscriptionCancel();
+            });
+        }, function () {
+            alert('vk init fail \n Напишите нам об ошибке')
+            // API initialization failed
+            // Can reload page here
+        }, '5.74');
+
+        function infoAllowMessages(flag) {
+            $.ajax({
+                url: 'infoAllowMessages?isAllow=' + flag + '&userId=' + ${userId}
+            }).then(function (value) {
+
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        var firstStart = '${firstStart}';
+        var subscriptionStatus = '${subscriptionStatus}';
+        window.addEventListener('load', function () {
+
+            var user_id = '${userId}';
+            var app_id = 6600445;
+            if (subscriptionStatus !== 'active' && device.desktop()) {
+                if (firstStart === 'true') {
+                    $("#event").addClass('hide');
+                    admanInit({
+                        user_id: user_id,
+                        app_id: app_id,
+                        type: 'preloader',
+                        params: {preview: 1}
+                    }, onAdsReady, onNoAds);
+                } else {
+                    getMedia();
+                    setTimeout(resizeEvent(), 1000);
+                }
+            }
+
+            function onAdsReady(adman) {
+                adman.onStarted(function () {
+                    console.log("Adman: Started");
+                    admanStat(app_id, user_id);
+                });
+
+                adman.onCompleted(function () {
+                    console.log("Adman: Completed");
+                    $("#event").removeClass('hide');
+                    getMedia();
+                    setTimeout(resizeEvent(), 1000);
+
+                });
+                adman.onSkipped(function () {
+                    console.log("Adman: Skipped");
+                });
+                adman.onClicked(function () {
+                    console.log("Adman: Clicked");
+                });
+
+                adman.start('preroll');
+
+            };
+
+
+            function onNoAds() {
+                console.log("Adman: No ads");
+                getMedia();
+                setTimeout(resizeEvent(), 1000);
+            };
+        });
+
+
+
+    </script>
 
 
     <style>
@@ -44,14 +142,20 @@
             border-radius: 50%;
         }
 
-        body {
-            overflow-y: scroll;
+
+        html, body {
+            height: 100%;
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     </style>
 </head>
 <body id="body">
+<header>
+    <div id="vk_ads_105219"></div>
+</header>
+<jsp:include page="navigation.jsp"/>
+
 <div>
 
     <div id="event">
@@ -75,7 +179,7 @@
 </div>
 
 <div>
-    <jsp:include page="navigation.jsp"/>
+
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -182,41 +286,7 @@
         </div>
     </div>
 </div>
-<script>
-    VK.init(function () {
-        console.log('vk init');
-        VK.addCallback('onAllowMessagesFromCommunity', function f(location) {
-            infoAllowMessages(true);
-        });
-        VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location) {
-            infoAllowMessages(false);
-        });
 
-        VK.addCallback('onSubscriptionSuccess', function (subscription_id) {
-            console.log("SubscriptionSuccess: " + subscription_id);
-            subscriptionSuccess(subscription_id);
-        });
-        VK.addCallback('onSubscriptionFail', function () {
-            console.log("onSubscriptionFail");
-        });
-        VK.addCallback('onSubscriptionCancel', function () {
-            console.log("onSubscriptionCancel");
-            subscriptionCancel();
-        });
-    }, function () {
-        alert('vk init fail \n Напишите нам об ошибке')
-        // API initialization failed
-        // Can reload page here
-    }, '5.74');
-
-    function infoAllowMessages(flag) {
-        $.ajax({
-            url: 'infoAllowMessages?isAllow=' + flag + '&userId=' + ${userId}
-        }).then(function (value) {
-
-        });
-    }
-</script>
 <script>
 
     var el = document.querySelector('.checkbox-switch');
@@ -226,7 +296,7 @@
         onText: '',
         offText: ''
     });
-
+    var subscriptionStatus = '${subscriptionStatus}';
     var mySwitch2 = new Switch(el2, {
         showText: true,
         onText: '',
@@ -234,7 +304,15 @@
     });
     var returnBack = '${returnBack}';
     var start = '${start}';
-    var startInfo = '${startInfo}';
+    var firstStart = '${firstStart}';
+    if (device.desktop()) {
+        $('#navbarEvents').addClass('hide');
+        $('#navbarProfile').addClass('hide');
+        $('#navbarGroups').addClass('hide');
+
+        $('#event').css('padding-top', '20px');
+    }
+
     if (returnBack === 'map' || start === 'true') {
         document.getElementById("event").className = "hide";
         document.getElementById("prof").className = "hide";
@@ -246,9 +324,11 @@
         $('#li4').attr('class', '');
         $('#li5').attr('class', '');
         setTimeout('resizeMain()', 300);
+        setMobileMap();
         initMap();
         isMapInit = true;
-        if (startInfo === 'true') {
+        // Если нет групп и первый заход в приложение
+        if (firstStart === 'true') {
             $('#startInfo').modal('show');
         }
 
@@ -284,7 +364,7 @@
         $('#li3').attr('class', '');
         $('#li4').attr('class', '');
         $('#li5').attr('class', 'active');
-        setTimeout('resizeEvent()', 300);
+        setTimeout('resizeProfileMain()', 500);
     } else if (returnBack === 'start') {
         if (device.desktop()) {
             VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.73"}, function (data) {
@@ -304,6 +384,7 @@
         setTimeout('resizeEvent()', 500);
     } else {
         setTimeout('resizeEvent()', 500);
+        setTimeout('resizeProfileMain()', 500);
     }
 
     var sessUser =  ${jsonUser};
@@ -338,40 +419,59 @@
     function resizeEvent() {
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
         var height = $('#event').height();
-        if (height < 650) {
-            VK.callMethod('resizeWindow', 900, 650);
-        } else {
-            VK.callMethod('resizeWindow', 900, height + 10);
+        if (device.desktop()) {
+            if (subscriptionStatus == 'active') {
+                if (height < 650) {
+                    VK.callMethod('resizeWindow', 900, 650);
+                } else {
+                    VK.callMethod('resizeWindow', 900, height + 50);
+                }
+            } else {
+                if (height < 650) {
+                    VK.callMethod('resizeWindow', 900, 650);
+                } else {
+                    VK.callMethod('resizeWindow', 900, height + 160);
+                }
+
+            }
         }
         //VK.callMethod('scrollWindow', 0);
     }
 
     function resizeGroups() {
         var height = $('#group').height();
-        if (height < 650) {
-            VK.callMethod('resizeWindow', 900, 650);
-        } else {
-            VK.callMethod('resizeWindow', 900, height + 10);
+        if (device.desktop()) {
+            if (subscriptionStatus == 'active') {
+                if (height < 650) {
+                    VK.callMethod('resizeWindow', 900, 650);
+                } else {
+                    VK.callMethod('resizeWindow', 900, height + 10);
+                }
+            } else {
+                if (height < 650) {
+                    VK.callMethod('resizeWindow', 900, 650);
+                } else {
+                    VK.callMethod('resizeWindow', 900, height + 140);
+                }
+
+            }
         }
     }
 
     function resizeMain() {
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
-        VK.callMethod('resizeWindow', 900, 650);
+        if (device.desktop()) {
+            if (subscriptionStatus == 'active') {
+                VK.callMethod('resizeWindow', 900, 650);
+            } else {
+                VK.callMethod('resizeWindow', 900, 775);
+            }
+        }
         //VK.callMethod('scrollWindow', 0);
     }
 
     function hideStartInfo() {
         $('#startInfo').modal('hide');
-    }
-
-    function resizeProfilePremium() {
-        var height = $('#premiumDiv').height();
-        VK.callMethod('resizeWindow', 900, height + 650);
-    }
-
-    function resizeProfile() {
-        VK.callMethod('resizeWindow', 900, 650);
     }
 
     function subscriptionSuccess(subscription_id) {
@@ -381,7 +481,7 @@
         $('#premiumResume').addClass('hide');
         $('#alertSuccess').removeClass('hide');
         $('#alertSuccess').alert();
-        resizeProfile();
+        resizeProfileMain();
     }
 
     function subscriptionCancel() {
@@ -391,9 +491,28 @@
         $('#premiumResume').removeClass('hide');
         $('#alertWarning').removeClass('hide');
         $('#alertWarning').alert();
-        resizeProfile();
+        resizeProfileMain();
     }
 
+    function resizeProfileMain() {
+        var height = $('#prof').height();
+        if (device.desktop()) {
+            if (subscriptionStatus == 'active') {
+                if (height < 650) {
+                    VK.callMethod('resizeWindow', 900, 650);
+                } else {
+                    VK.callMethod('resizeWindow', 900, height + 50);
+                }
+            } else {
+                if (height < 650) {
+                    VK.callMethod('resizeWindow', 900, 775);
+                } else {
+                    VK.callMethod('resizeWindow', 900, height + 160);
+                }
+
+            }
+        }
+    }
 </script>
 </body>
 </html>

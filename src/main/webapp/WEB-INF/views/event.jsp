@@ -19,6 +19,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources\js\device.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <script src="resources\js\media.js"></script>
     <style>
         .borderless {
             border: 0 none;
@@ -46,7 +47,9 @@
     <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 </head>
 <body id="eventMain">
-
+<header>
+    <div id="vk_ads_105219"></div>
+</header>
 <a href="" class="btn hide" style="padding: 2px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
     <img src="" alt="Баскетбол" width="35" class="round"
@@ -460,8 +463,16 @@
 </script>
 <script>
     var where = '${where}';
+    var subscriptionStatus = '${subscriptionStatus}';
     if (where === 'comment') {
         $('#textComment').focus();
+    }
+
+    if (device.desktop()) {
+        $('#navPlaygrounds').addClass('hide');
+        if (subscriptionStatus !== 'active') {
+            getMedia();
+        }
     }
 
 
@@ -687,12 +698,13 @@
 
     function resizeEvent() {
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
-
-        var height = $('#eventMain').height();
-        if (height < 650) {
-            VK.callMethod('resizeWindow', 900, 650);
-        } else {
-            VK.callMethod('resizeWindow', 900, height + 10);
+        if (device.desktop()) {
+            var height = $('#eventMain').height();
+            if (height < 650) {
+                VK.callMethod('resizeWindow', 900, 650);
+            } else {
+                VK.callMethod('resizeWindow', 900, height + 100);
+            }
         }
 
     }

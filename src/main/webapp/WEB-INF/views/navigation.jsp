@@ -74,7 +74,7 @@
 </head>
 <body>
 <header>
-    <nav class="nav navbar-default navbar-fixed-top  " role="navigation" id="web">
+    <nav class="nav navbar-default navbar-static-top  " id="web">
         <div class="container-fluid">
             <div class="btn-group btn-group-justified">
                 <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
@@ -201,12 +201,13 @@
             $('#li4').attr('class', '');
             $('#li5').attr('class', 'active');
             $('#premiumDiv').addClass('hide');
-            resizeMain();
+            resizeProfileMain();
         });
     });
 
     $(function () {
         $('#searchPlaygroundMobile').click(function (event) {
+            setMobileMap();
             if (!isMapInit) {
                 initMap();
                 isMapInit = true;

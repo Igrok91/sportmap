@@ -18,19 +18,19 @@ import com.realsport.model.entityDao.TemplateGame;
 import com.realsport.model.entityDao.User;
 
 import com.realsport.model.service.*;
+import com.realsport.model.utils.Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.cache.Cache;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -61,6 +61,7 @@ public class StartController {
     public static final Integer COUNT = 5;
 
     private static final Integer ADMIN = 172924708;
+
 
 
     @Autowired
@@ -185,7 +186,7 @@ public class StartController {
                 model.addAttribute("firstName", user.getFirstName());
                 model.addAttribute("lastName", user.getLastName());
                 model.addAttribute("minUser", minUser);
-                model.addAttribute("startInfo", true);
+                model.addAttribute("firstStart", true);
 
             } catch (Exception e) {
                 logger.error(e);
@@ -396,7 +397,11 @@ public class StartController {
         }
         model.addAttribute("firstName", user.getFirstName());
         model.addAttribute("lastName", user.getLastName());
+        model.addAttribute("lastName", user.getLastName());
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
+        model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
+        model.addAttribute("subscription_id", user.getSubscription_id());
+        model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
 
         model.addAttribute("isParticipant", isParticipant(user.getPlaygroundIdlList(), idGroup));
     }
@@ -521,17 +526,34 @@ public class StartController {
                         @RequestParam(value = "status", required = false) String status,
                         @RequestParam(value = "item_price", required = false) Integer item_price,
                         @RequestParam(value = "pending_cancel", required = false) Integer pending_cancel,
+                        @RequestParam(value = "lang", required = false) String lang ,
                         @RequestParam(value = "subscription_id", required = false) Integer subscription_id)  {
         try {
             logger.info("Тест платежа: " + "notification_type - " + notification_type + ", item - " + item +
             ", order_id - " + order_id + ", item_id - " + item_id + ", status - " + status + ", subscription_id - " + subscription_id);
+          logger.info("sig = " + sig);
+            String md5;
             switch (notification_type) {
                 case "get_subscription_test":
-                    SubscribtionInfo subscribtionInfo = new SubscribtionInfo(SubscribtionInfoData.PREMIUM_NAME, SubscribtionInfoData.PHOTO_URL,
+                     md5 = getHash(notification_type, app_id, user_id,
+                            receiver_id, item, order_id, cancel_reason, item_id,
+                            status, item_price,pending_cancel ,subscription_id, lang);
+                    if (!sig.equals(md5)) {
+                        ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
+                        return toJson(new Error(errorInfo));
+                    }
+                    SubscribtionInfo subscribtion = new SubscribtionInfo(SubscribtionInfoData.PREMIUM_NAME, SubscribtionInfoData.PHOTO_URL,
                             SubscribtionInfoData.PREMIUM_ID, SubscribtionInfoData.PRICE, SubscribtionInfoData.PERIOD);
-                    return toJson(new Response(subscribtionInfo));
+                    return toJson(new Response(subscribtion));
                 case "subscription_status_change_test":
                     if (Objects.nonNull(status)) {
+                        md5 = getHash(notification_type, app_id, user_id,
+                                receiver_id, item, order_id, cancel_reason, item_id,
+                                status, item_price,pending_cancel ,subscription_id, lang);
+                        if (!sig.equals(md5)) {
+                            ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
+                            return toJson(new Error(errorInfo));
+                        }
                         if (status.equals(CHARGEABLE)) {
                             logger.info(CHARGEABLE + " подписка готова к оплате, userId " + user_id);
                             Long app_order_id = subscriptionsService.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
@@ -546,7 +568,7 @@ public class StartController {
                             return toJson(new Response(statusSubscribe));
                         } else if (status.equals(ACTIVE)) {
                             logger.info(ACTIVE + " подписка активна, userId " + user_id);
-                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
+                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, null, ACTIVE);
                             if (Objects.isNull(app_order_id)) {
                                 ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при изменении статуса подписки на активную", true);
                                 return toJson(new Error(errorInfo));
@@ -557,7 +579,66 @@ public class StartController {
                             return toJson(new Response(statusSubscribe));
                         } else if (status.equals(CANCELLED)) {
                             logger.info(CANCELLED + " подписка отменена, userId " + user_id + ", причина: " + cancel_reason);
-                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, subscription_id, item_id, cancel_reason, status);
+                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, cancel_reason, CANCELLED);
+                            if (Objects.isNull(app_order_id)) {
+                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при отмене подписики", true);
+                                return toJson(new Error(errorInfo));
+                            }
+                            setStatusUserToCache(RESUME, user_id, subscription_id);
+
+                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
+                            return toJson(new Response(statusSubscribe));
+                        }
+                    } else {
+                        ErrorInfo errorInfo = new ErrorInfo(11, "Параметр status null", true);
+                        return toJson(new Error(errorInfo));
+                    }
+                case "get_subscription":
+                     md5 = getHash(notification_type, app_id, user_id,
+                            receiver_id, item, order_id, cancel_reason, item_id,
+                            status, item_price,pending_cancel ,subscription_id, lang);
+                    if (!sig.equals(md5)) {
+                        ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
+                        return toJson(new Error(errorInfo));
+                    }
+                    SubscribtionInfo subscribtionInfo = new SubscribtionInfo(SubscribtionInfoData.PREMIUM_NAME, SubscribtionInfoData.PHOTO_URL,
+                            SubscribtionInfoData.PREMIUM_ID, SubscribtionInfoData.PRICE, SubscribtionInfoData.PERIOD);
+                    return toJson(new Response(subscribtionInfo));
+                case "subscription_status_change":
+                    if (Objects.nonNull(status)) {
+                        md5 = getHash(notification_type, app_id, user_id,
+                                receiver_id, item, order_id, cancel_reason, item_id,
+                                status, item_price,pending_cancel ,subscription_id, lang);
+                        if (!sig.equals(md5)) {
+                            ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
+                            return toJson(new Error(errorInfo));
+                        }
+                        if (status.equals(CHARGEABLE)) {
+                            logger.info(CHARGEABLE + " подписка готова к оплате, userId " + user_id);
+                            Long app_order_id = subscriptionsService.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
+                            if (Objects.isNull(app_order_id)) {
+                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при создании заказа на подписку", true);
+                                return toJson(new Error(errorInfo));
+                            }
+
+                            setStatusUserToCache(ACTIVE, user_id, subscription_id);
+
+                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
+                            return toJson(new Response(statusSubscribe));
+                        } else if (status.equals(ACTIVE)) {
+                            logger.info(ACTIVE + " подписка активна, userId " + user_id);
+                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, cancel_reason, ACTIVE);
+                            if (Objects.isNull(app_order_id)) {
+                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при изменении статуса подписки на активную", true);
+                                return toJson(new Error(errorInfo));
+                            }
+                            setStatusUserToCache(ACTIVE, user_id, subscription_id);
+
+                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
+                            return toJson(new Response(statusSubscribe));
+                        } else if (status.equals(CANCELLED)) {
+                            logger.info(CANCELLED + " подписка отменена, userId " + user_id + ", причина: " + cancel_reason);
+                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, cancel_reason, CANCELLED);
                             if (Objects.isNull(app_order_id)) {
                                 ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при отмене подписики", true);
                                 return toJson(new Error(errorInfo));
@@ -579,6 +660,33 @@ public class StartController {
             return toJson(new Error(errorInfo));
         }
         return "";
+    }
+
+    private String getHash(String notification_type, Integer app_id, Integer user_id,
+                           Integer receiver_id, String item, Integer order_id,
+                           String cancel_reason, String item_id, String status, Integer item_price,
+                           Integer pending_cancel, Integer subscription_id, String lang) {
+        String list = Utils.getSortParam(notification_type, app_id, user_id,
+                receiver_id, item, order_id, cancel_reason, item_id, status, item_price,pending_cancel ,subscription_id, lang);
+           logger.info("Param " + list);
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            logger.error(e);
+            return "error";
+        }
+        md.update(list.getBytes());
+        byte byteData[] = md.digest();
+        //конвертируем байт в шестнадцатеричный формат вторым способом
+        StringBuffer hexString = new StringBuffer();
+        for (byte aByteData : byteData) {
+            String hex = Integer.toHexString(0xff & aByteData);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+    logger.info("sigCheck = " + hexString.toString());
+        return hexString.toString();
     }
 
     private void setStatusUserToCache(String resume, Integer user_id, Integer subscription_id) {
@@ -653,10 +761,12 @@ public class StartController {
                 model.addAttribute("event", new Event());
                 model.addAttribute("templates", userTemplates);
                 model.addAttribute("template", list);
+                model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
             }
             model.addAttribute("returnBack", "home");
             model.addAttribute("userId", userId);
             model.addAttribute("playgroundId", id);
+
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);
@@ -839,6 +949,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             model.addAttribute("user", user);
             model.addAttribute("where", where);
+            model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);

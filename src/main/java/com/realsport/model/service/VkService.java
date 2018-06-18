@@ -19,9 +19,11 @@ import com.vk.api.sdk.objects.base.BoolInt;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -40,6 +42,9 @@ public class VkService {
     private static final String LINK_PLAYGROUND = "https://vk.com/app6600445#pid=";
     private static final Integer APP_ID = 6600445;
     private static final String ACCESS_TOKEN = "d65021c0d65021c0d65021c019d634973ddd650d65021c08d4ae151d8bec8618a7565f0";
+
+    @Autowired
+    private SubscriptionsService subscriptionsService;
 
     @Async
     public void sendMessage(Integer userId, String message) throws Exception {
@@ -108,27 +113,61 @@ public class VkService {
     public void sendMessagePublishEventToUsersGroup(List<MinUser> players, User userCreator, String descr, String idEvent, String namePlayground) {
         try {
             logger.info("Отправляем уведомление о созданни игры " + descr + ", id: " + idEvent);
+            logger.info("user size: " + players.size());
             if (players.size() > 0) {
                 VkApiClient vkApiClient = getVkApiClient();
                 GroupActor groupActor = InitVkMain.getGroupActor();
-                ServiceActor serviceActor = new ServiceActor(APP_ID, ACCESS_TOKEN);
                 Integer userIdCreator = Integer.valueOf(userCreator.getUserId());
                 int countSend = 0;
+                List<MinUser> listUserPremium = new ArrayList<>();
+                List<MinUser> listUserNotPremium = new ArrayList<>();
                 for (MinUser user : players) {
-                    Integer userId = Integer.valueOf(user.getUserId());
-                    if (!Objects.equals(userId, userIdCreator)) {
-                        try {
-                            if (isAllowSendMessages(userId)) {
-                                Thread.sleep(1000);
-                                vkApiClient.messages().send(groupActor).message("Открыт опрос в группе " + "\""
-                                        + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
-                                        + getMinText(descr) + "\n" + LINK_EVENT).userId(userId).randomId(random.nextInt()).execute();
-                                countSend++;
-                            }
-                        } catch (Exception e) {
+                    boolean isPremium = subscriptionsService.isPremiumUser(user.getUserId());
+                    if (isPremium) {
+                        listUserPremium.add(user);
+                    } else {
+                        listUserNotPremium.add(user);
+                    }
+                }
+                logger.info("user premium size: " + listUserPremium.size());
+                // Отправляем уведомления премиум
+                if (listUserPremium.size() > 0) {
+                    for (MinUser user : listUserPremium) {
+                        Integer userId = Integer.valueOf(user.getUserId());
+                        if (!Objects.equals(userId, userIdCreator)) {
+                            try {
+                                if (isAllowSendMessages(userId)) {
+                                    Thread.sleep(1000);
+                                    vkApiClient.messages().send(groupActor).message("Открыт опрос в группе " + "\""
+                                            + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
+                                            + getMinText(descr) + "\n" + LINK_EVENT).userId(userId).randomId(random.nextInt()).execute();
+                                    countSend++;
+                                }
+                            } catch (Exception e) {
                                 logger.warn(e);
+                            }
+                            Thread.sleep(3000);
                         }
-                        Thread.sleep(3000);
+                    }
+                }
+                Thread.sleep(5000);
+                if (listUserNotPremium.size() > 0) {
+                    for (MinUser user : listUserNotPremium) {
+                        Integer userId = Integer.valueOf(user.getUserId());
+                        if (!Objects.equals(userId, userIdCreator)) {
+                            try {
+                                if (isAllowSendMessages(userId)) {
+                                    Thread.sleep(3000);
+                                    vkApiClient.messages().send(groupActor).message("Открыт опрос в группе " + "\""
+                                            + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
+                                            + getMinText(descr) + "\n" + LINK_EVENT).userId(userId).randomId(random.nextInt()).execute();
+                                    countSend++;
+                                }
+                            } catch (Exception e) {
+                                logger.warn(e);
+                            }
+                            Thread.sleep(5000);
+                        }
                     }
                 }
 
@@ -138,7 +177,7 @@ public class VkService {
                     Thread.sleep(1000);
                     vkApiClient.messages().send(groupActor)
                             .message("Вы успешно открыли опрос в группе " + "\"" + namePlayground + "\": \n"
-                                    + LINK_EVENT + idEvent)
+                                    + LINK_EVENT + "#" + idEvent)
                             .userId(userIdCreator).randomId(random.nextInt()).execute();
 
                 }

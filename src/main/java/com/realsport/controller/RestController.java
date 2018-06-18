@@ -43,6 +43,8 @@ import java.util.TimeZone;
 import static com.realsport.model.cache.CacheObserver.getCacheObserver;
 import static com.realsport.model.cache.CachePlaygrounds.getCachePlaygrounds;
 import static com.realsport.model.cache.CacheUser.getCacheUser;
+import static com.realsport.model.utils.Utils.NOT;
+import static com.realsport.model.utils.Utils.RESUME;
 import static com.realsport.model.utils.Utils.getSubstrictionStatusUser;
 
 @org.springframework.web.bind.annotation.RestController
@@ -257,12 +259,12 @@ public class RestController {
 
     @RequestMapping("/handleGroup")
     @ResponseBody
-    public Boolean handleGroup(@RequestParam(value = "playgroundId", required = false, defaultValue = "1") String playgroundId,
+    public String handleGroup(@RequestParam(value = "playgroundId", required = false, defaultValue = "1") String playgroundId,
                                @RequestParam(value = "sport", required = false, defaultValue = " Футбол") String sport,
                                @RequestParam(value = "userId") String userId) {
 
         User user = getUser(userId);
-        Boolean isParticipant = false;
+        String isParticipant = "false";
         String id = FluentIterable.from(user.getPlaygroundIdlList()).filter(new Predicate<String>() {
             @Override
             public boolean apply(String id) {
@@ -270,43 +272,48 @@ public class RestController {
             }
         }).first().orNull();
         System.out.println("id= " + id);
-        if (id == null) {
-            logger.info("User c id " + userId + " вступил в группу " + playgroundId);
-            user.getPlaygroundIdlList().add(playgroundId);
-            playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
-            userService.addPlaygroundToUser(userId, playgroundId);
-            List<Playground> playgrounds = playgroundService.getAllPlayground();
-            Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
-                @Override
-                public boolean apply(Playground playground) {
-                    return playground.getIdplayground().equals(playgroundId);
+            if (id == null) {
+                if (user.getPlaygroundIdlList().size() > 2 && (user.getSubscriptionStatus().equals(RESUME) || user.getSubscriptionStatus().equals(NOT))) {
+                    isParticipant = "notAllow";
+                } else {
+                    logger.info("User c id " + userId + " вступил в группу " + playgroundId);
+                    user.getPlaygroundIdlList().add(playgroundId);
+                    playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
+                    userService.addPlaygroundToUser(userId, playgroundId);
+                    List<Playground> playgrounds = playgroundService.getAllPlayground();
+                    Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
+                        @Override
+                        public boolean apply(Playground playground) {
+                            return playground.getIdplayground().equals(playgroundId);
+                        }
+                    }).get();
+                    p.getPlayers().add(getUserMin(user));
+                    getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
+                    isParticipant = "true";
+                    vkService.notifyNewUserInvite(user, p.getName(), p.getPlayers(), p.getIdplayground());
                 }
-            }).get();
-            p.getPlayers().add(getUserMin(user));
-            getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
-            isParticipant = Boolean.TRUE;
-            vkService.notifyNewUserInvite(user, p.getName(), p.getPlayers(), p.getIdplayground());
-        } else {
-            logger.info("User c id " + userId + " вышел из группы " + playgroundId);
-            user.getPlaygroundIdlList().remove(id);
-            playgroundService.deleteUserFromPlayground(userId, playgroundId);
-            userService.deletePlaygroundFromUser(userId, playgroundId);
-            List<Playground> playgrounds = playgroundService.getAllPlayground();
-            Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
-                @Override
-                public boolean apply(Playground playground) {
-                    return playground.getIdplayground().equals(playgroundId);
-                }
-            }).get();
-            p.getPlayers().removeIf(new Predicate<MinUser>() {
-                @Override
-                public boolean apply(MinUser minUser) {
-                    return minUser.getUserId().equals(userId);
-                }
-            });
-            getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
-            isParticipant = Boolean.FALSE;
-        }
+            } else {
+                logger.info("User c id " + userId + " вышел из группы " + playgroundId);
+                user.getPlaygroundIdlList().remove(id);
+                playgroundService.deleteUserFromPlayground(userId, playgroundId);
+                userService.deletePlaygroundFromUser(userId, playgroundId);
+                List<Playground> playgrounds = playgroundService.getAllPlayground();
+                Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
+                    @Override
+                    public boolean apply(Playground playground) {
+                        return playground.getIdplayground().equals(playgroundId);
+                    }
+                }).get();
+                p.getPlayers().removeIf(new Predicate<MinUser>() {
+                    @Override
+                    public boolean apply(MinUser minUser) {
+                        return minUser.getUserId().equals(userId);
+                    }
+                });
+                getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
+                isParticipant = "false";
+            }
+
         putToCacheUser(user);
         return isParticipant;
     }

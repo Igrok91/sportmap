@@ -48,7 +48,7 @@
 
 <main>
 
-    <div class="container " style="margin-top: 5px">
+    <div class="container-fluid" style="margin-top: 5px">
 
 
         <div class="row content">

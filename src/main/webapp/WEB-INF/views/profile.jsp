@@ -32,7 +32,7 @@
     </style>
 </head>
 <body >
-<nav class="nav  navbar-static-top navbar-default ">
+<nav id="navbarProfile" class="nav  navbar-static-top navbar-default ">
     <div class="container-fluid ">
         <div class="navbar-brand ">
             Мои профиль
@@ -80,7 +80,9 @@
                         <div id="alertSuccess" class="alert alert-success fade in hide" style="padding-top: 10px" role="alert">
                             <button type="button" class="close" onclick="hideButtonAlert('alertSuccess')"
                                     aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            Подписка оформлена! Перезапустите приложение
+                            <div class="text-center">
+                                Подписка успешно оформлена, перезапустите приложение!
+                            </div>
                         </div>
                         <div id="alertDanger" class="alert alert-danger fade in hide" role="alert" style="padding-top: 10px">
                             <button type="button" class="close" onclick="hideButtonAlert('alertDanger')"
@@ -93,14 +95,14 @@
                             Подписка отменена!
                         </div>
 
-                        <div id="premium" class="text-center" style="padding: 3px">
-                            <a  href="#" onclick="toPremium()" class="btn btn-primary">Стать игроком "Премиум"</a>
+                        <div id="premium" class="text-center" style="padding-bottom: 15px">
+                            <a  href="#" onclick="toPremium()" class="btn btn-success">Стать игроком "Премиум"</a>
                         </div>
-                        <div id="premiumCancel" class="text-center" style="padding: 3px">
+                        <div id="premiumCancel" class="text-center" style="padding-bottom: 15px">
                             <a href="#" onclick="orderCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
                         </div>
-                        <div id="premiumResume" class="text-center " style="padding: 3px">
-                            <a href="#" onclick="toPremiumResume()" class="btn btn-primary">Продлить подписку "Премиум"</a>
+                        <div id="premiumResume" class="text-center " style="padding-bottom: 15px">
+                            <a href="#" onclick="toPremiumResume()" class="btn btn-success">Стать игроком "Премиум"</a>
                         </div>
 
                         <div id="premiumDiv" class="hide">
@@ -132,7 +134,7 @@
                             </ul>
                             <div class="text-center">
                                 <a id="pay" href="#" onclick="order()" class="btn btn-primary hide">Приобрести подписку</a>
-                                <a id="resumePay" href="#" onclick="orderResume()" class="btn btn-primary hide">Продлить подписку</a>
+                                <a id="resumePay" href="#" onclick="orderResume()" class="btn btn-primary hide">Возобновить подписку</a>
                                 <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
                                 <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
                             </div>
@@ -153,9 +155,9 @@
                             </div>
                             <div>
                                 <h5><span class="glyphicon glyphicon-info-sign"></span>
-                                    <span id="informationUser" style="padding-left: 10px">
+                                    <span id="informationUser" style="padding-left: 10px;color: gray">
                                          <c:if test="${user.info == null || user.info.length() == 0}">
-                                             нет информации
+                                             Напишите о себе
                                          </c:if>
                                     </span>
 
@@ -184,7 +186,7 @@
 
                     </div>
 
-                    <div class="list-group">
+                    <div class="list-group" style="margin-bottom: 15px">
                         <c:choose>
                             <c:when test="${user.playgroundIdlList.size() == 0}">
                                 <a href="#"  class="list-group-item borderless ">
@@ -259,7 +261,7 @@
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                             Мобильная версия</a>
-                        <a href="https://vk.com/im?media=&sel=-148660655" target="_blank" class="list-group-item borderless">
+                        <a href="https://vk.com/board148660655" target="_blank" class="list-group-item borderless">
                             <span style="padding-right: 5px"> <img src="resources/image/settings.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
@@ -317,7 +319,7 @@
             var info = $('#informationUser').val();
             $('#userInfo').append(info);
         }
-        setTimeout(resizeProfileMain(), 500);
+        setTimeout(resizeProfileMain(), 1000);
     }
 
     function saveInfoUser() {
@@ -327,7 +329,7 @@
         var userId = '${userId}';
         if (!text) {
             text = '';
-            $('#informationUser').text("нет информации");
+            $('#informationUser').text("Напишите о себе");
         } else {
             var description = text.split('\n');
             $('#informationUser').html('');
@@ -373,18 +375,18 @@
         $('#premiumDiv').removeClass('hide');
         $('#pay').removeClass('hide');
         //$('#premium').addClass('hide');
-        setTimeout(resizeProfilePremium(), 300);
+        resizeProfileMain();
     }
     function toPremiumResume() {
         $('#premiumDiv').removeClass('hide');
         $('#resumePay').removeClass('hide');
-        setTimeout(resizeProfilePremium(), 300);
+        resizeProfileMain();
     }
 
     function hidePremium() {
         $('#premiumDiv').addClass('hide');
       //  $('#premium').removeClass('hide');
-        setTimeout(resizeProfile(), 300);
+        resizeProfileMain();
     }
 
     function order() {
@@ -399,16 +401,6 @@
         VK.callMethod('showSubscriptionBox', 'resume', {subscription_id: '${subscription_id}'});
     }
 
-    function resizeProfileMain() {
-        var height = $('#prof').height();
-        if (height < 650) {
-            VK.callMethod('resizeWindow', 900, 650);
-        } else {
-            VK.callMethod('resizeWindow', 900, height + 20);
-        }
-    }
-
-    setTimeout(resizeProfileMain(), 500);
 
     function hideButtonAlert(id) {
         $('#' + id).addClass('hide');

@@ -19,8 +19,23 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
     <link rel="stylesheet" href="resources\switch\switch.css"/>
     <script src="resources\switch\switch.js"></script>
+    <script src="resources\js\media.js"></script>
+    <script src="resources\js\device.js"></script>
+    <script>
+        VK.init(function () {
+            console.log('vk init')
+
+        }, function () {
+            alert('vk init fail \n Напишите нам об ошибке')
+            // API initialization failed
+            // Can reload page here
+        }, '5.74');
+
+    </script>
     <style>
 
         /* Set black background color, white text and some padding */
@@ -42,7 +57,9 @@
     </style>
 </head>
 <body>
-
+<header>
+    <div id="vk_ads_105219"></div>
+</header>
 <nav class="nav navbar-static-top navbar-default" style="background: #eeeeee">
     <div class="container-fluid ">
         <div class="pull-left">
@@ -58,7 +75,7 @@
 
     </div>
 </nav>
-<main>
+<main id="mainCreate">
 
 
     <div class="container-fluid ">
@@ -263,6 +280,7 @@
 
 <script>
     var el3 = document.querySelector('.checkbox-switch3');
+    var subscriptionStatus = '${subscriptionStatus}';
     var mySwitch3 = new Switch(el3, {
         showText: true,
         onText: '',
@@ -275,6 +293,12 @@
             }
         }
     });
+
+    if (device.desktop()) {
+        if (subscriptionStatus !== 'active') {
+            getMedia();
+        }
+    }
 
     var event = ${eventJson};
     if (event.idEvent) {
@@ -412,6 +436,17 @@
     }
 
     setInterval(handleText, 300);
+    setTimeout(resizeCreate(), 1000);
+    function resizeCreate() {
+        var height = $('#mainCreate').height();
+        if (device.desktop()) {
+            if (height < 650) {
+                VK.callMethod('resizeWindow', 900, 650);
+            } else {
+                VK.callMethod('resizeWindow', 900, height + 20);
+            }
+        }
+    }
 
     function disabledButton() {
         isDisabled = false;

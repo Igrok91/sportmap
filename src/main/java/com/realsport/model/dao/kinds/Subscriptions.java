@@ -82,7 +82,7 @@ public class Subscriptions {
         return null;
     }
 
-    public Long setSubscriptionStatusUser(Integer user_id, Integer subscription_id, String item_id, String cancel_reason, String status) {
+    public Long setSubscriptionStatusUser(Integer user_id, String cancel_reason, String status) {
         Transaction tx = getDatastore().newTransaction();
         Entity userEntity = null;
         try {
@@ -108,5 +108,26 @@ public class Subscriptions {
             }
         }
         return null;
+    }
+
+    public boolean isPremiumUser(String userId) {
+        Transaction tx = getDatastore().newTransaction();
+        Entity userEntity = null;
+        try {
+            userEntity = tx.get(keyFactory.newKey(Long.valueOf(userId)));
+            if (Objects.nonNull(userEntity)) {
+                return userEntity.getString("status").equals(Utils.ACTIVE);
+            } else {
+                return false;
+            }
+
+        } catch (Exception e) {
+            logger.error("Ошибка при получении статуса подписки: " + e);
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+        }
+        return false;
     }
 }

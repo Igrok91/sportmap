@@ -99,7 +99,7 @@
                         <c:choose>
                             <c:when test="${countGroup == 0}">
                                 <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/users.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
@@ -110,7 +110,7 @@
                             <c:otherwise>
                                 <a href="groupsUser?userId=${userId}&where=profile&playerId=${playerId}"
                                    class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/groups.png"  width="25" height="25"></span>
+                                    <span style="padding-right: 5px"> <img src="resources/image/users.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countGroup}"/>
                             </span>

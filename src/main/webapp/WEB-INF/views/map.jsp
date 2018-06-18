@@ -22,9 +22,9 @@
 
     <style>
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-        .row.content {
-            height: 550px
-        }
+     /*   .row.content {
+
+        }*/
 
         .borderless {
             border: 0 none;
@@ -35,15 +35,17 @@
 
         /* On small screens, set height to 'auto' for sidenav and grid */
         @media screen and (max-width: 480px) {
-            .sidenav {
-                height: auto;
-            }
 
             /*            .row.content {height:auto;}*/
             #pac-input {
                 width: 175px;
                 margin-left: 3px;
             }
+        }
+
+        #map {
+            width: 100%;
+            height: 550px;
         }
 
         .divMain {
@@ -60,7 +62,7 @@
 </head>
 <body>
 <header>
-    <nav class="nav navbar-static-top navbar-default navSportMap">
+    <nav id="navbarSearch" class="nav navbar-static-top navbar-default">
         <div class="container-fluid ">
             <div class="pull-left">
                 <a class="navbar-brand" href="#">Поиск</a>
@@ -175,7 +177,7 @@
     <div class="container-fluid text-center">
 
         <div class="row content">
-            <div class="sidenav panel borderless" id="map">
+            <div class="panel borderless" id="map">
             </div>
 
         </div>
@@ -211,6 +213,12 @@
     }
 
     var map;
+
+    function setMobileMap() {
+        if (!device.desktop()) {
+            $('#map').css('padding-bottom', '10px');
+        }
+    }
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
