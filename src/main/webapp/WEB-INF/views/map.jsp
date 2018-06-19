@@ -114,7 +114,7 @@
                 <div id="addPlaygroundToMap" class="pull-right hide dropdown" style="padding-top: 10px">
                     <a id="addPlaygroundToMapLink" class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span
                             class="glyphicon glyphicon-plus"></span></a>
-                    <a id="cancelAddPlaygroundToMapLink" class="btn hide" onclick="cancelAddPlaygroundToMapLink()" href="#"> Отмена <span
+                    <a id="cancelAddPlaygroundToMapLink" class="btn hide" onclick="cancelAddPlaygroundToMapLink()" href="#"><span
                             class="glyphicon glyphicon-trash"  style="padding-top: 3px"></span></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="addPlaygroundToMapLink">
                         <li><a href="#" onclick="addPlaygroundToMap('Футбол')"
@@ -131,7 +131,7 @@
                                 </div>
                             </div>
                         </a></li>
-                        <li><a href="#">
+                        <li><a href="#" onclick="addPlaygroundToMap('Баскетбол')">
                             <div class="media">
                                 <div class="pull-left">
                                     <img src="resources/image/basket.png" alt="Футбол" width="20" height="20"
@@ -144,7 +144,7 @@
                                 </div>
                             </div>
                         </a></li>
-                        <li><a href="#">
+                        <li><a href="#" onclick="addPlaygroundToMap('Волейбол')">
                             <div class="media">
                                 <div class="pull-left">
                                     <img src="resources/image/voley.png" alt="Футбол" width="20" height="20"
@@ -160,6 +160,11 @@
                     </ul>
                 </div>
             </c:if>
+
+            <c:if test="${user.isAdmin() == true && countPlaygroundAdd > 0}">
+                <a id="notifyAddPlayground" class="btn" onclick="getNotifications()"  href="#"><span
+                        class="glyphicon glyphicon-bell"></span><c:out value="${countPlaygroundAdd}"/></a>
+            </c:if>
         </div>
     </nav>
 
@@ -169,7 +174,7 @@
     </div>
     <input id="pac-input" class="controls" type="text" placeholder="Поиск..">
 
-    <div class="modal fade" id="addFootball" tabindex="-1" role="dialog"
+    <div class="modal fade" id="addPlayModal" tabindex="-1" role="dialog"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -178,13 +183,14 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <div class="text-center">
-                        <img class="media-object" src="resources/image/стадион.png" alt="Баскетбол"
-                                 width="40" height="40" id="imageGroup">
-                     </div>
+                        <img src="resources/image/стадион.png" alt="Баскетбол"
+                             width="40" height="40" id="imageGroup">
+                    </div>
                     <h4 id="titleAdd" class="modal-title text-center"></h4>
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
+
                         <%--<c:if test="${user.isAdmin() == false}">--%>
                         <c:choose>
                             <c:when test="${subscriptionStatus == 'active' || subscriptionIntern == 'active'}">
@@ -197,7 +203,7 @@
                         </c:choose>
                         <%--</c:if>--%>
 
-                        <a href="#" onclick="" id="pay" class="btn btn-primary ">Добавить</a>
+                        <a href="#" onclick="checkPlayground()" id="pay" class="btn btn-primary ">Добавить</a>
                     </div>
                 </div>
             </div>
@@ -227,6 +233,8 @@
     var infoWindow;
 
     var markerAdd;
+    var sportMarker;
+    var playgroundAddData = ${playgroundAddData};
 
     function setBackPosition(map) {
         var coor = ${playgroundCoordinate};
@@ -465,10 +473,10 @@
     }
 
     function addPlaygroundToMap(sport) {
+        $('#addPlaygroundToMapLink').addClass('hide');
+        $('#cancelAddPlaygroundToMapLink').removeClass('hide');
+        var myLatLng = map.getCenter();
             if (sport === 'Футбол') {
-                $('#addPlaygroundToMapLink').addClass('hide');
-                $('#cancelAddPlaygroundToMapLink').removeClass('hide');
-                var myLatLng = map.getCenter();
 
                 markerAdd = new google.maps.Marker({
                     position: myLatLng,
@@ -478,25 +486,79 @@
                     draggable: true,
                     animation: google.maps.Animation.DROP
                 });
-
-                markerAdd.addListener('click', function () {
-                    showModalAdd(sport);
+            } else if (sport === 'Баскетбол') {
+                markerAdd = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: 'Нажмите на маркер, чтобы добавить площадку',
+                    label: 'Б',
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
+                });
+            } else if (sport === 'Волейбол') {
+                markerAdd = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: 'Нажмите на маркер, чтобы добавить площадку',
+                    label: 'В',
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
                 });
             }
+
+
+        markerAdd.addListener('click', function () {
+            showModalAdd(sport);
+        });
     }
 
     function showModalAdd(sport) {
         if (sport === 'Футбол') {
             $('#titleAdd').text("Футбольная площадка");
             $('#imageGroup').attr("src", "resources/image/стадион3.png")
-            $('#addFootball').modal('show');
+            sportMarker = 'Футбол';
+        } else if (sport === 'Баскетбол') {
+            $('#titleAdd').text("Баскетбольная площадка");
+            $('#imageGroup').attr("src", "resources/image/площадка2.png")
+            sportMarker = 'Баскетбол';
+        } else if (sport === 'Волейбол') {
+            $('#titleAdd').text("Волейбольная площадка");
+            $('#imageGroup').attr("src", "resources/image/спортивная-сетка.png")
+            sportMarker = 'Волейбол';
         }
+
+        $('#addPlayModal').modal('show');
     }
 
     function cancelAddPlaygroundToMapLink() {
         markerAdd.setMap(null);
         $('#addPlaygroundToMapLink').removeClass('hide');
         $('#cancelAddPlaygroundToMapLink').addClass('hide');
+    }
+
+    function getNotifications() {
+            playgroundAddData.forEach(function (data, i) {
+            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+                markerAdd.addListener('click', function () {
+                    showModalAdd(data.sport);
+                });
+            marker.setMap(map);
+        });
+    }
+
+    function checkPlayground() {
+        $('#addPlayModal').modal('hide');
+        var latLng = markerAdd.getPosition();
+        $.ajax({
+            url: 'addPlaygroundToCheck?lat=' + latLng.lat() + '&lng=' + latLng.lng() + '&sport=' + sportMarker + '&userIdCreator=' + ${userId}
+        }).then(function (value) {
+            console.log('addPlaygroundToCheck success');
+        });
     }
 
 </script>

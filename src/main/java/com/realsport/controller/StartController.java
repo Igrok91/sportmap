@@ -255,6 +255,12 @@ public class StartController {
         model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
         model.addAttribute("subscriptionIntern", user.getSubscriptionStatus());
         model.addAttribute("subscription_id", user.getSubscription_id());
+
+        if (user.isAdmin()) {
+            List<CheckPlaygroundData> dataList = playgroundService.getPlaygroundsCheck();
+            model.addAttribute("countPlaygroundAdd", dataList.size());
+            model.addAttribute("playgroundAddData", gson.toJson(dataList));
+        }
     }
 
     private List<Playground> getAllPlaygroundUser(User user) {

@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.dao.PlaygroundDao;
+import com.realsport.model.entity.CheckPlaygroundData;
 import com.realsport.model.entityDao.MinUser;
 import com.realsport.model.entityDao.Playground;
 import com.realsport.model.utils.KindSport;
@@ -100,5 +101,13 @@ public class PlaygroundService implements PlaygroundDao {
 
     public void deleteUserFromPlayground(String userId, String playgroundId) {
         datastoreService.deleteUserFromPlayground(userId, playgroundId);
+    }
+
+    public void addPlaygroundToCheck(Double lat, Double lng, String sport, String userId) {
+        datastoreService.addPlaygroundToCheck(lat, lng, sport, userId);
+    }
+
+    public List<CheckPlaygroundData> getPlaygroundsCheck() {
+        return datastoreService.getPlaygroundsCheck();
     }
 }

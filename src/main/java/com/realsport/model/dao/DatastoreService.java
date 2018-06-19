@@ -1,9 +1,7 @@
 package com.realsport.model.dao;
 
-import com.realsport.model.dao.kinds.Events;
-import com.realsport.model.dao.kinds.Playgrounds;
-import com.realsport.model.dao.kinds.Subscriptions;
-import com.realsport.model.dao.kinds.Users;
+import com.realsport.model.dao.kinds.*;
+import com.realsport.model.entity.CheckPlaygroundData;
 import com.realsport.model.entity.SubscribtionInfoUser;
 import com.realsport.model.entityDao.Comment;
 import com.realsport.model.entityDao.Event;
@@ -36,6 +34,9 @@ public class DatastoreService {
 
     @Autowired
     private Subscriptions subscriptions;
+
+    @Autowired
+    private Notifications notifications;
 
 
     {
@@ -200,5 +201,13 @@ public class DatastoreService {
 
     public boolean isPremiumUser(String userId) {
         return subscriptions.isPremiumUser(userId);
+    }
+
+    public void addPlaygroundToCheck(Double lat, Double lng, String sport, String userId) {
+        notifications.addPlaygroundToCheck(lat, lng, sport, userId);
+    }
+
+    public List<CheckPlaygroundData> getPlaygroundsCheck() {
+        return  notifications.getPlaygroundsCheck();
     }
 }

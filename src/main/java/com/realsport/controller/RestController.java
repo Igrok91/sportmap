@@ -387,6 +387,24 @@ public class RestController {
         return ERROR;
     }
 
+    @RequestMapping("/getNotifications")
+    @ResponseBody
+    public String getNotifications() throws Exception {
+
+        return ERROR;
+    }
+
+    @RequestMapping("/addPlaygroundToCheck")
+    public void addPlaygroundToCheck(@RequestParam(value = "lat", required = false) String lat,
+                                     @RequestParam(value = "lng", required = false) String lng,
+                                     @RequestParam(value = "userIdCreator", required = false) String userId,
+                                     @RequestParam(value = "sport", required = false) String sport) throws Exception {
+
+        logger.info("Parameter: lat - " + lat + ", lng - " + lng + ", sport - " + sport);
+        playgroundService.addPlaygroundToCheck(Double.valueOf(lat), Double.valueOf(lng), sport, userId);
+        vkService.sendMessage(ADMIN, "Пользователь https://vk.com/id" + userId + " добавил площадку на проверку, спорт - " + sport);
+    }
+
     @RequestMapping(value = "/getNewDataEvents", method = RequestMethod.POST)
     @ResponseBody
     public List<Event> getNewDataEvents(Model model, @RequestParam(value = "date") long date,
