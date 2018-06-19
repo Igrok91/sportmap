@@ -111,12 +111,14 @@
                 </ul>
             </div>
             <c:if test="${user.isAdmin() == true}">
-                <div id="addPlaygroundToMap"  class="pull-right hide dropdown" style="padding-top: 10px">
-                    <a  id="addPlaygroundToMapLink" class="btn dropdown-toggle" data-toggle="dropdown" href="#" ><span
+                <div id="addPlaygroundToMap" class="pull-right hide dropdown" style="padding-top: 10px">
+                    <a id="addPlaygroundToMapLink" class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span
                             class="glyphicon glyphicon-plus"></span></a>
-
+                    <a id="cancelAddPlaygroundToMapLink" class="btn hide" onclick="cancelAddPlaygroundToMapLink()" href="#"> Отмена <span
+                            class="glyphicon glyphicon-trash"  style="padding-top: 3px"></span></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="addPlaygroundToMapLink">
-                        <li><a href="#" onclick="addPlaygroundToMap('Футбол')"  style="padding-top: 3px;padding-bottom: 3px;">
+                        <li><a href="#" onclick="addPlaygroundToMap('Футбол')"
+                               style="padding-top: 3px;padding-bottom: 3px;">
                             <div class="media">
                                 <div class="pull-left">
                                     <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20"
@@ -129,7 +131,7 @@
                                 </div>
                             </div>
                         </a></li>
-                        <li><a href="#" >
+                        <li><a href="#">
                             <div class="media">
                                 <div class="pull-left">
                                     <img src="resources/image/basket.png" alt="Футбол" width="20" height="20"
@@ -175,12 +177,26 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <div class="text-center">
+                        <img class="media-object" src="resources/image/стадион.png" alt="Баскетбол"
+                                 width="40" height="40" id="imageGroup">
+                     </div>
                     <h4 id="titleAdd" class="modal-title text-center"></h4>
-
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <p>После проверки, площадка будет добавлена на карту</p>
+                        <%--<c:if test="${user.isAdmin() == false}">--%>
+                        <c:choose>
+                            <c:when test="${subscriptionStatus == 'active' || subscriptionIntern == 'active'}">
+                                <p>После проверки, площадка будет добавлена на карту  <span style="padding-right: 5px; padding-left: 5px" class="glyphicon glyphicon-globe"></span></p>
+                            </c:when>
+                            <c:otherwise>
+                                <p>После проверки, площадка будет добавлена на карту <span style="padding-right: 5px; padding-left: 5px" class="glyphicon glyphicon-globe"></span>
+                                    и активируется подписка "Премиум" на 3 месяца <span class="glyphicon glyphicon-star-empty"></span></p>
+                            </c:otherwise>
+                        </c:choose>
+                        <%--</c:if>--%>
+
                         <a href="#" onclick="" id="pay" class="btn btn-primary ">Добавить</a>
                     </div>
                 </div>
@@ -449,9 +465,9 @@
     }
 
     function addPlaygroundToMap(sport) {
-        if (!markerAdd) {
             if (sport === 'Футбол') {
-
+                $('#addPlaygroundToMapLink').addClass('hide');
+                $('#cancelAddPlaygroundToMapLink').removeClass('hide');
                 var myLatLng = map.getCenter();
 
                 markerAdd = new google.maps.Marker({
@@ -464,17 +480,23 @@
                 });
 
                 markerAdd.addListener('click', function () {
-                    showModallAdd(sport);
+                    showModalAdd(sport);
                 });
             }
+    }
+
+    function showModalAdd(sport) {
+        if (sport === 'Футбол') {
+            $('#titleAdd').text("Футбольная площадка");
+            $('#imageGroup').attr("src", "resources/image/стадион3.png")
+            $('#addFootball').modal('show');
         }
     }
 
-    function showModallAdd(sport) {
-        if (sport === 'Футбол') {
-            $('#titleAdd').text("Футбольная площадка");
-            $('#addFootball').modal('show');
-        }
+    function cancelAddPlaygroundToMapLink() {
+        markerAdd.setMap(null);
+        $('#addPlaygroundToMapLink').removeClass('hide');
+        $('#cancelAddPlaygroundToMapLink').addClass('hide');
     }
 
 </script>

@@ -253,6 +253,7 @@ public class StartController {
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("countOrganize", countOrganize);
         model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
+        model.addAttribute("subscriptionIntern", user.getSubscriptionStatus());
         model.addAttribute("subscription_id", user.getSubscription_id());
     }
 
