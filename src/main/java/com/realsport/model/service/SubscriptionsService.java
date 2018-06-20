@@ -26,4 +26,8 @@ public class SubscriptionsService {
     public boolean isPremiumUser(String userId) {
         return databaseService.isPremiumUser(userId);
     }
+
+    public void deleteNotification(String idPlayground) {
+        databaseService.deleteNotification(idPlayground);
+    }
 }

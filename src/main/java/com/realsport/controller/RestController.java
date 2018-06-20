@@ -387,11 +387,31 @@ public class RestController {
         return ERROR;
     }
 
-    @RequestMapping("/getNotifications")
-    @ResponseBody
-    public String getNotifications() throws Exception {
+    @RequestMapping("/addPlaygroundToDB")
+    public void addPlaygroundToDB(@RequestParam(value = "lat") String lat,
+                                  @RequestParam(value = "lng") String lng,
+                                  @RequestParam(value = "userIdCreator") String userId,
+                                  @RequestParam(value = "id") String idPlayground,
+                                  @RequestParam(value = "name") String name,
+                                  @RequestParam(value = "city") String city,
+                                  @RequestParam(value = "street") String street,
+                                  @RequestParam(value = "house") String house,
+                                  @RequestParam(value = "sport") String sport) throws Exception {
+        playgroundService.addPlaygroundToDB(userId.trim(), lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
+        subscriptionsService.deleteNotification(idPlayground);
+        List<Playground> playgrounds = playgroundService.getAllPlayground();
+        Playground playground = new Playground();
+        playground.setIdplayground(idPlayground.trim());
+        playground.setLatitude(lat);
+        playground.setLongitude(lng);
+        playground.setName(name);
+        playground.setSport(sport);
+        playground.setStreet(street);
+        playground.setHouse(house);
+        playground.setCity(city);
+        playgrounds.add(playground);
+        getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
 
-        return ERROR;
     }
 
     @RequestMapping("/addPlaygroundToCheck")

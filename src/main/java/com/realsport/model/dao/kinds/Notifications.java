@@ -74,4 +74,13 @@ public class Notifications {
         }
         return list;
     }
+
+    public void deleteNotification(String idPlayground) {
+        try {
+            logger.info("Удаление площадки из уведомлений с id " + idPlayground);
+            getDatastore().delete(keyFactory.newKey(Long.valueOf(idPlayground)));
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
 }

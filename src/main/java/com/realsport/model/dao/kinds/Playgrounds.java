@@ -1,14 +1,6 @@
 package com.realsport.model.dao.kinds;
 
-import com.google.cloud.datastore.Entity;
-import com.google.cloud.datastore.EntityValue;
-import com.google.cloud.datastore.FullEntity;
-import com.google.cloud.datastore.KeyFactory;
-import com.google.cloud.datastore.LatLng;
-import com.google.cloud.datastore.ListValue;
-import com.google.cloud.datastore.Query;
-import com.google.cloud.datastore.QueryResults;
-import com.google.cloud.datastore.Transaction;
+import com.google.cloud.datastore.*;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.entityDao.MinUser;
@@ -197,6 +189,29 @@ public class Playgrounds {
         } finally {
             if (transaction.isActive()) {
                 transaction.rollback();
+            }
+        }
+    }
+
+    public void addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
+        Transaction tx = getDatastore().newTransaction();
+        try {
+            FullEntity task = FullEntity.newBuilder(keyFactory.newKey())
+                    .set("userIdCreator", userId)
+                    .set("latlong", LatLngValue.of(LatLng.of(Double.valueOf(lat), Double.valueOf(lng))))
+                    .set("name", name)
+                    .set("city", city)
+                    .set("street", street)
+                    .set("house", house)
+                    .set("sport", sport)
+                    .build();
+            tx.add(task);
+            tx.commit();
+        } catch (Exception e) {
+            logger.error("Ошибка при добавлении площадки: " + e);
+        } finally {
+            if (tx.isActive()) {
+                tx.rollback();
             }
         }
     }

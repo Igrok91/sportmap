@@ -168,12 +168,6 @@
                             class="glyphicon glyphicon-bell" style="padding-right: 5px"></span> <c:out
                             value="${countPlaygroundAdd}"/></a>
                 </div>
-
-                <div id="notifyAddPlaygroundCancel" class="pull-right hide" style="padding-top: 10px">
-                    <a class="btn" onclick="cancelGetNotifications()" href="#"><span
-                            class="glyphicon glyphicon-trash" style="padding-right: 5px"></span></a>
-                </div>
-
             </c:if>
         </div>
     </nav>
@@ -200,15 +194,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <c:if test="${user.isAdmin() == true}">
-                            <div class="input-group" style="padding: 10px">
-                                <input id="inputCity" type="text" class="form-control" placeholder="Город"  style="margin: 5px">
-                                <input id="inputName" type="text" class="form-control" placeholder="Название площадки" style="margin: 5px">
-                                <input id="inputStreet" type="text" class="form-control" placeholder="Улица" style="margin: 5px">
-                            </div>
-                            <span id="idPlayground"></span>
-                        </c:if>
-                        <%--<c:if test="${user.isAdmin() == false}">--%>
                         <c:choose>
                             <c:when test="${subscriptionStatus == 'active' || subscriptionIntern == 'active'}">
                                 <p>После проверки, площадка будет добавлена на карту <span
@@ -223,22 +208,50 @@
                                             class="glyphicon glyphicon-star-empty"></span></p>
                             </c:otherwise>
                         </c:choose>
-                        <%--</c:if>--%>
-                        <c:choose>
-                            <c:when test="${user.isAdmin() == true}">
-                                <a href="#"  id="addAdmin" class="btn btn-primary ">Добавить</a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="#" onclick="checkPlayground()" id="pay" class="btn btn-primary ">Добавить</a>
-                            </c:otherwise>
-
-                        </c:choose>
-
+                        <a href="#" onclick="checkPlayground()" id="pay" class="btn btn-primary ">Добавить</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <c:forEach var="markerModal" items="${playgroundAddData}">
+        <div class="modal fade" id="addPlayModalAdmin_${markerModal.id}" tabindex="-1" role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="text-center">
+                            <img src="resources/image/стадион.png" alt="Баскетбол"
+                                 width="40" height="40" id="imageGroupAdmin_${markerModal.id}">
+                        </div>
+                        <h4 id="titleAddAdmin_${markerModal.id}" class="modal-title text-center"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="alertWarningMap" class="alert alert-warning fade in hide" role="alert" style="padding-top: 10px">
+                            <button type="button" class="close" onclick="hideButtonAlert('alertWarningMap')"
+                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            Заполните все поля!
+                        </div>
+                        <div class="text-center">
+                            <div class="input-group" style="padding: 10px">
+                                <input id="inputCity_${markerModal.id}" type="text" class="form-control" placeholder="Город" required style="margin: 5px">
+                                <input id="inputName_${markerModal.id}" type="text" class="form-control" placeholder="Название площадки"  required style="margin: 5px">
+                                <input id="inputStreet_${markerModal.id}" type="text" class="form-control" placeholder="Улица" required style="margin: 5px">
+                                <input id="inputHouse_${markerModal.id}" type="text" class="form-control" placeholder="Дом" required style="margin: 5px">
+                            </div>
+                            <p id="idPlayground_${markerModal.id}"></p>
+                            <a href="#"  id="addAdmin_${markerModal.id}" class="btn btn-primary ">Добавить</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:forEach>
+
 </main>
 
 <script>
@@ -264,7 +277,7 @@
 
     var markerAdd;
     var sportMarker;
-    var playgroundAddData = ${playgroundAddData};
+    var playgroundAddData = ${playgroundAddDataJson};
     var playgroundAddMarker = [];
 
     function setBackPosition(map) {
@@ -543,7 +556,7 @@
         });
     }
 
-    function showModalAdd(sport, id) {
+    function showModalAdd(sport) {
         if (sport === 'Футбол') {
             $('#titleAdd').text("Футбольная площадка");
             $('#imageGroup').attr("src", "resources/image/стадион3.png")
@@ -557,8 +570,27 @@
             $('#imageGroup').attr("src", "resources/image/спортивная-сетка.png")
             sportMarker = 'Волейбол';
         }
-
         $('#addPlayModal').modal('show');
+    }
+
+    function showModalAddAdmin(sport, id) {
+        if (sport === 'Футбол') {
+            $('#titleAddAdmin_' + id).text("Футбольная площадка");
+            $('#imageGroupAdmin_' + id).attr("src", "resources/image/стадион3.png")
+            sportMarker = 'Футбол';
+        } else if (sport === 'Баскетбол') {
+            $('#titleAddAdmin_' + id).text("Баскетбольная площадка");
+            $('#imageGroupAdmin_' + id).attr("src", "resources/image/площадка2.png")
+            sportMarker = 'Баскетбол';
+        } else if (sport === 'Волейбол') {
+            $('#titleAddAdmin_' + id).text("Волейбольная площадка");
+            $('#imageGroupAdmin_' + id).attr("src", "resources/image/спортивная-сетка.png")
+            sportMarker = 'Волейбол';
+        }
+        $('#idPlayground_' + id).text('Id площадки - ' + id);
+
+        $('#addPlayModalAdmin_' + id).modal('show');
+
     }
 
     function cancelAddPlaygroundToMapLink() {
@@ -568,12 +600,9 @@
     }
 
     function getNotifications() {
-        $('#notifyAddPlaygroundCancel').removeClass('hide');
         $('#notifyAddPlayground').addClass('hide');
 
         playgroundAddData.forEach(function (data, i) {
-            console.log((data))
-            console.log((data.lat))
             var myLatlng = new google.maps.LatLng(data.lat, data.lng);
             var marker = new google.maps.Marker({
                 position: myLatlng,
@@ -581,11 +610,15 @@
                 animation: google.maps.Animation.DROP
             });
             marker.addListener('click', function () {
-                showModalAdd(data.sport);
-                $('#addAdmin').click(function (event) {
-                    addPlaygroundToDB(id);
-                })
+                showModalAddAdmin(data.sport, data.id);
             });
+            $('#addAdmin_' + data.id).click(function (event) {
+                $('#addAdmin_' + data.id).addClass('disabled');
+                addPlaygroundToDB(data.id);
+                marker.setMap(null);
+
+            });
+
             marker.setMap(map);
             playgroundAddMarker.push(marker);
         });
@@ -593,7 +626,11 @@
 
     function checkPlayground() {
         $('#addPlayModal').modal('hide');
+        $('#addPlaygroundToMapLink').removeClass('hide');
+        $('#cancelAddPlaygroundToMapLink').addClass('hide');
+
         var latLng = markerAdd.getPosition();
+        markerAdd.setMap(null);
         $.ajax({
             url: 'addPlaygroundToCheck?lat=' + latLng.lat() + '&lng=' + latLng.lng() + '&sport=' + sportMarker + '&userIdCreator=' + ${userId}
         }).then(function (value) {
@@ -601,17 +638,35 @@
         });
     }
 
-    function cancelGetNotifications() {
-        $('#notifyAddPlaygroundCancel').addClass('hide');
-        $('#notifyAddPlayground').removeClass('hide');
-        playgroundAddMarker.forEach(function (marker) {
-            marker.setMap(null);
-        });
-        playgroundAddMarker = [];
-    }
 
     function addPlaygroundToDB(id) {
-     console.log(id + 'addPlaygroundToDB ');
+        $('#addPlayModalAdmin_' + id).modal('hide');
+         console.log(id + ' addPlaygroundToDB ');
+        $('#addAdmin_' + id).removeClass('disabled');
+        var dataMarker;
+        playgroundAddData.forEach(function (data, i) {
+            if (data.id === id) {
+                dataMarker = data;
+            }
+        });
+        var namePlayground = $('#inputName_' + id).val();
+        var city = $('#inputCity_' + id).val();
+        var street = $('#inputStreet_' + id).val();
+        var house = $('#inputHouse_' + id).val();
+        if (namePlayground.length === 0 || city.length === 0 || street.length === 0 || house.length === 0) {
+            $('#alertWarningMap').removeClass('hide');
+            $('#alertWarningMap').alert();
+        } else {
+            $.ajax({
+                url: 'addPlaygroundToDB',
+                method: 'post',
+                data: ({id: dataMarker.id, lat: dataMarker.lat, lng: dataMarker.lng, userIdCreator: dataMarker.userIdCreator, name: namePlayground,
+                    city: city, street: street, house: house, sport: dataMarker.sport })
+            }).then(function (value) {
+                console.log('loadPlayground success')
+            });
+        }
+
     }
 
 </script>

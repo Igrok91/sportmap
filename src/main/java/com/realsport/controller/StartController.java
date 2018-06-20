@@ -259,7 +259,8 @@ public class StartController {
         if (user.isAdmin()) {
             List<CheckPlaygroundData> dataList = playgroundService.getPlaygroundsCheck();
             model.addAttribute("countPlaygroundAdd", dataList.size());
-            model.addAttribute("playgroundAddData", gson.toJson(dataList));
+            model.addAttribute("playgroundAddDataJson", gson.toJson(dataList));
+            model.addAttribute("playgroundAddData", dataList);
         }
     }
 
