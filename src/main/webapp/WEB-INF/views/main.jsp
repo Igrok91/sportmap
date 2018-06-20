@@ -71,6 +71,7 @@
             var app_id = 6600445;
             if (subscriptionStatus !== 'active' && device.desktop()) {
                 if (firstStart === 'true') {
+                    disableNavigtion(true);
                     $("#event").addClass('hide');
                     admanInit({
                         user_id: user_id,
@@ -97,6 +98,7 @@
                     $("#event").removeClass('hide');
                     getMedia();
                     setTimeout(resizeEvent(), 1000);
+                    disableNavigtion(false);
 
                 });
                 adman.onSkipped(function () {
@@ -142,6 +144,10 @@
 
         .round {
             border-radius: 50%;
+        }
+        a.disabled {
+            pointer-events: none; /* делаем элемент неактивным для взаимодействия */
+            cursor: default; /*  курсор в виде стрелки */
         }
 
 
@@ -515,6 +521,22 @@
                     VK.callMethod('resizeWindow', 900, height + 160);
                 }
             }
+        }
+    }
+
+    function disableNavigtion(flag) {
+        if (flag) {
+            $('#events').addClass('disabled');
+            $('#searchPlayground').addClass('disabled');
+            $('#create').addClass('disabled');
+            $('#groups').addClass('disabled');
+            $('#profile').addClass('disabled');
+        } else {
+            $('#events').removeClass('disabled');
+            $('#searchPlayground').removeClass('disabled');
+            $('#create').removeClass('disabled');
+            $('#groups').removeClass('disabled');
+            $('#profile').removeClass('disabled');
         }
     }
 

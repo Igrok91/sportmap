@@ -114,8 +114,9 @@
                 <div id="addPlaygroundToMap" class="pull-right hide dropdown" style="padding-top: 10px">
                     <a id="addPlaygroundToMapLink" class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span
                             class="glyphicon glyphicon-plus"></span></a>
-                    <a id="cancelAddPlaygroundToMapLink" class="btn hide" onclick="cancelAddPlaygroundToMapLink()" href="#"><span
-                            class="glyphicon glyphicon-trash"  style="padding-top: 3px"></span></a>
+                    <a id="cancelAddPlaygroundToMapLink" class="btn hide" onclick="cancelAddPlaygroundToMapLink()"
+                       href="#"><span
+                            class="glyphicon glyphicon-trash" style="padding-top: 3px"></span></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="addPlaygroundToMapLink">
                         <li><a href="#" onclick="addPlaygroundToMap('Футбол')"
                                style="padding-top: 3px;padding-bottom: 3px;">
@@ -162,8 +163,17 @@
             </c:if>
 
             <c:if test="${user.isAdmin() == true && countPlaygroundAdd > 0}">
-                <a id="notifyAddPlayground" class="btn" onclick="getNotifications()"  href="#"><span
-                        class="glyphicon glyphicon-bell"></span><c:out value="${countPlaygroundAdd}"/></a>
+                <div class="pull-right" style="padding-top: 10px">
+                    <a id="notifyAddPlayground" class="btn" onclick="getNotifications()" href="#"><span
+                            class="glyphicon glyphicon-bell" style="padding-right: 5px"></span> <c:out
+                            value="${countPlaygroundAdd}"/></a>
+                </div>
+
+                <div id="notifyAddPlaygroundCancel" class="pull-right hide" style="padding-top: 10px">
+                    <a class="btn" onclick="cancelGetNotifications()" href="#"><span
+                            class="glyphicon glyphicon-trash" style="padding-right: 5px"></span></a>
+                </div>
+
             </c:if>
         </div>
     </nav>
@@ -190,20 +200,40 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-
+                        <c:if test="${user.isAdmin() == true}">
+                            <div class="input-group" style="padding: 10px">
+                                <input id="inputCity" type="text" class="form-control" placeholder="Город"  style="margin: 5px">
+                                <input id="inputName" type="text" class="form-control" placeholder="Название площадки" style="margin: 5px">
+                                <input id="inputStreet" type="text" class="form-control" placeholder="Улица" style="margin: 5px">
+                            </div>
+                            <span id="idPlayground"></span>
+                        </c:if>
                         <%--<c:if test="${user.isAdmin() == false}">--%>
                         <c:choose>
                             <c:when test="${subscriptionStatus == 'active' || subscriptionIntern == 'active'}">
-                                <p>После проверки, площадка будет добавлена на карту  <span style="padding-right: 5px; padding-left: 5px" class="glyphicon glyphicon-globe"></span></p>
+                                <p>После проверки, площадка будет добавлена на карту <span
+                                        style="padding-right: 5px; padding-left: 5px"
+                                        class="glyphicon glyphicon-globe"></span></p>
                             </c:when>
                             <c:otherwise>
-                                <p>После проверки, площадка будет добавлена на карту <span style="padding-right: 5px; padding-left: 5px" class="glyphicon glyphicon-globe"></span>
-                                    и активируется подписка "Премиум" на 3 месяца <span class="glyphicon glyphicon-star-empty"></span></p>
+                                <p>После проверки, площадка будет добавлена на карту <span
+                                        style="padding-right: 5px; padding-left: 5px"
+                                        class="glyphicon glyphicon-globe"></span>
+                                    и активируется подписка "Премиум" на 3 месяца <span
+                                            class="glyphicon glyphicon-star-empty"></span></p>
                             </c:otherwise>
                         </c:choose>
                         <%--</c:if>--%>
+                        <c:choose>
+                            <c:when test="${user.isAdmin() == true}">
+                                <a href="#"  id="addAdmin" class="btn btn-primary ">Добавить</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="#" onclick="checkPlayground()" id="pay" class="btn btn-primary ">Добавить</a>
+                            </c:otherwise>
 
-                        <a href="#" onclick="checkPlayground()" id="pay" class="btn btn-primary ">Добавить</a>
+                        </c:choose>
+
                     </div>
                 </div>
             </div>
@@ -235,6 +265,7 @@
     var markerAdd;
     var sportMarker;
     var playgroundAddData = ${playgroundAddData};
+    var playgroundAddMarker = [];
 
     function setBackPosition(map) {
         var coor = ${playgroundCoordinate};
@@ -476,35 +507,35 @@
         $('#addPlaygroundToMapLink').addClass('hide');
         $('#cancelAddPlaygroundToMapLink').removeClass('hide');
         var myLatLng = map.getCenter();
-            if (sport === 'Футбол') {
+        if (sport === 'Футбол') {
 
-                markerAdd = new google.maps.Marker({
-                    position: myLatLng,
-                    map: map,
-                    title: 'Нажмите на маркер, чтобы добавить площадку',
-                    label: 'Ф',
-                    draggable: true,
-                    animation: google.maps.Animation.DROP
-                });
-            } else if (sport === 'Баскетбол') {
-                markerAdd = new google.maps.Marker({
-                    position: myLatLng,
-                    map: map,
-                    title: 'Нажмите на маркер, чтобы добавить площадку',
-                    label: 'Б',
-                    draggable: true,
-                    animation: google.maps.Animation.DROP
-                });
-            } else if (sport === 'Волейбол') {
-                markerAdd = new google.maps.Marker({
-                    position: myLatLng,
-                    map: map,
-                    title: 'Нажмите на маркер, чтобы добавить площадку',
-                    label: 'В',
-                    draggable: true,
-                    animation: google.maps.Animation.DROP
-                });
-            }
+            markerAdd = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Нажмите на маркер, чтобы добавить площадку',
+                label: 'Ф',
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+        } else if (sport === 'Баскетбол') {
+            markerAdd = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Нажмите на маркер, чтобы добавить площадку',
+                label: 'Б',
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+        } else if (sport === 'Волейбол') {
+            markerAdd = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Нажмите на маркер, чтобы добавить площадку',
+                label: 'В',
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+        }
 
 
         markerAdd.addListener('click', function () {
@@ -512,7 +543,7 @@
         });
     }
 
-    function showModalAdd(sport) {
+    function showModalAdd(sport, id) {
         if (sport === 'Футбол') {
             $('#titleAdd').text("Футбольная площадка");
             $('#imageGroup').attr("src", "resources/image/стадион3.png")
@@ -537,17 +568,26 @@
     }
 
     function getNotifications() {
-            playgroundAddData.forEach(function (data, i) {
+        $('#notifyAddPlaygroundCancel').removeClass('hide');
+        $('#notifyAddPlayground').addClass('hide');
+
+        playgroundAddData.forEach(function (data, i) {
+            console.log((data))
+            console.log((data.lat))
             var myLatlng = new google.maps.LatLng(data.lat, data.lng);
             var marker = new google.maps.Marker({
                 position: myLatlng,
                 draggable: true,
                 animation: google.maps.Animation.DROP
             });
-                markerAdd.addListener('click', function () {
-                    showModalAdd(data.sport);
-                });
+            marker.addListener('click', function () {
+                showModalAdd(data.sport);
+                $('#addAdmin').click(function (event) {
+                    addPlaygroundToDB(id);
+                })
+            });
             marker.setMap(map);
+            playgroundAddMarker.push(marker);
         });
     }
 
@@ -559,6 +599,19 @@
         }).then(function (value) {
             console.log('addPlaygroundToCheck success');
         });
+    }
+
+    function cancelGetNotifications() {
+        $('#notifyAddPlaygroundCancel').addClass('hide');
+        $('#notifyAddPlayground').removeClass('hide');
+        playgroundAddMarker.forEach(function (marker) {
+            marker.setMap(null);
+        });
+        playgroundAddMarker = [];
+    }
+
+    function addPlaygroundToDB(id) {
+     console.log(id + 'addPlaygroundToDB ');
     }
 
 </script>

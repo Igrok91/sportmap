@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class CheckPlaygroundData implements Serializable {
 
+    private Long id;
     private Double lat;
     private Double lng;
     private String sport;
@@ -49,5 +50,13 @@ public class CheckPlaygroundData implements Serializable {
 
     public void setUserIdCreator(String userIdCreator) {
         this.userIdCreator = userIdCreator;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

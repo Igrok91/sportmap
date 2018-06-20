@@ -69,6 +69,7 @@ public class Notifications {
                                                                 entity.getDouble("lng"),
                                                                     entity.getString("sport"),
                                                                         entity.getString("userIdCreator"));
+            data.setId(entity.getKey().getId());
             list.add(data);
         }
         return list;
