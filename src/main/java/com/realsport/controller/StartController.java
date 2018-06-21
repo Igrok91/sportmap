@@ -261,6 +261,10 @@ public class StartController {
             model.addAttribute("countPlaygroundAdd", dataList.size());
             model.addAttribute("playgroundAddDataJson", gson.toJson(dataList));
             model.addAttribute("playgroundAddData", dataList);
+        } else {
+            model.addAttribute("countPlaygroundAdd", 0);
+            model.addAttribute("playgroundAddDataJson", gson.toJson(new ArrayList<>()));
+            model.addAttribute("playgroundAddData", new ArrayList<>());
         }
     }
 

@@ -397,11 +397,11 @@ public class RestController {
                                   @RequestParam(value = "street") String street,
                                   @RequestParam(value = "house") String house,
                                   @RequestParam(value = "sport") String sport) throws Exception {
-        playgroundService.addPlaygroundToDB(userId.trim(), lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
+        Long idNew = playgroundService.addPlaygroundToDB(userId.trim(), lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
         subscriptionsService.deleteNotification(idPlayground);
         List<Playground> playgrounds = playgroundService.getAllPlayground();
         Playground playground = new Playground();
-        playground.setIdplayground(idPlayground.trim());
+        playground.setIdplayground(String.valueOf(idNew));
         playground.setLatitude(lat);
         playground.setLongitude(lng);
         playground.setName(name);
@@ -412,6 +412,17 @@ public class RestController {
         playgrounds.add(playground);
         getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
 
+    }
+
+    @RequestMapping("/addPlaygroundToDBAdmin")
+    public void addPlaygroundToDBAdmin(@RequestParam(value = "lat") String lat,
+                                  @RequestParam(value = "lng") String lng,
+                                  @RequestParam(value = "name") String name,
+                                  @RequestParam(value = "city") String city,
+                                  @RequestParam(value = "street") String street,
+                                  @RequestParam(value = "house") String house,
+                                  @RequestParam(value = "sport") String sport) throws Exception {
+         playgroundService.addPlaygroundToDB(null, lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
     }
 
     @RequestMapping("/addPlaygroundToCheck")

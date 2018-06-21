@@ -110,57 +110,106 @@
                     </a></li>
                 </ul>
             </div>
-            <c:if test="${user.isAdmin() == true}">
-                <div id="addPlaygroundToMap" class="pull-right hide dropdown" style="padding-top: 10px">
-                    <a id="addPlaygroundToMapLink" class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span
-                            class="glyphicon glyphicon-plus"></span></a>
-                    <a id="cancelAddPlaygroundToMapLink" class="btn hide" onclick="cancelAddPlaygroundToMapLink()"
-                       href="#"><span
-                            class="glyphicon glyphicon-trash" style="padding-top: 3px"></span></a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="addPlaygroundToMapLink">
-                        <li><a href="#" onclick="addPlaygroundToMap('Футбол')"
-                               style="padding-top: 3px;padding-bottom: 3px;">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20"
-                                         height="20" style="margin-top: 5px"/>
-                                </div>
+            <div id="addPlaygroundToMap" class="pull-right hide dropdown" style="padding-top: 10px">
+                <a id="addPlaygroundToMapLink" class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span
+                        class="glyphicon glyphicon-plus"></span></a>
+
+                <a id="cancelAddPlaygroundToMapLink" class="btn hide" onclick="cancelAddPlaygroundToMapLink()"
+                   href="#"><span
+                        class="glyphicon glyphicon-trash" style="padding-top: 3px"></span></a>
+                <c:choose>
+                    <c:when test="${user.isAdmin() == false}">
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="addPlaygroundToMapLink">
+                            <li><a href="#" onclick="addPlaygroundToMap('Футбол')"
+                                   style="padding-top: 3px;padding-bottom: 3px;">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20"
+                                             height="20" style="margin-top: 5px"/>
+                                    </div>
 
 
-                                <div class="media-body ">
-                                    <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Футбол</h5>
+                                    <div class="media-body ">
+                                        <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Футбол</h5>
+                                    </div>
                                 </div>
-                            </div>
-                        </a></li>
-                        <li><a href="#" onclick="addPlaygroundToMap('Баскетбол')">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img src="resources/image/basket.png" alt="Футбол" width="20" height="20"
-                                         style="margin-top: 5px"/>
-                                </div>
+                            </a></li>
+                            <li><a href="#" onclick="addPlaygroundToMap('Баскетбол')">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img src="resources/image/basket.png" alt="Футбол" width="20" height="20"
+                                             style="margin-top: 5px"/>
+                                    </div>
 
 
-                                <div class="media-body ">
-                                    <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Баскетбол</h5>
+                                    <div class="media-body ">
+                                        <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">
+                                            Баскетбол</h5>
+                                    </div>
                                 </div>
-                            </div>
-                        </a></li>
-                        <li><a href="#" onclick="addPlaygroundToMap('Волейбол')">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img src="resources/image/voley.png" alt="Футбол" width="20" height="20"
-                                         style="margin-top: 5px"/>
-                                </div>
+                            </a></li>
+                            <li><a href="#" onclick="addPlaygroundToMap('Волейбол')">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img src="resources/image/voley.png" alt="Футбол" width="20" height="20"
+                                             style="margin-top: 5px"/>
+                                    </div>
 
 
-                                <div class="media-body ">
-                                    <h5 style="margin-top: 7px;margin-bottom: 7px">Волейбол</h5>
+                                    <div class="media-body ">
+                                        <h5 style="margin-top: 7px;margin-bottom: 7px">Волейбол</h5>
+                                    </div>
                                 </div>
-                            </div>
-                        </a></li>
-                    </ul>
-                </div>
-            </c:if>
+                            </a></li>
+                        </ul>
+                    </c:when>
+                    <c:otherwise>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="addPlaygroundToMapLink">
+                            <li><a href="#" onclick="addPlaygroundToMapAdmin('Футбол')"
+                                   style="padding-top: 3px;padding-bottom: 3px;">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img class="media-object" src="resources/image/foot.png" alt="Футбол" width="20"
+                                             height="20" style="margin-top: 5px"/>
+                                    </div>
+
+
+                                    <div class="media-body ">
+                                        <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">Футбол</h5>
+                                    </div>
+                                </div>
+                            </a></li>
+                            <li><a href="#" onclick="addPlaygroundToMapAdmin('Баскетбол')">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img src="resources/image/basket.png" alt="Футбол" width="20" height="20"
+                                             style="margin-top: 5px"/>
+                                    </div>
+
+
+                                    <div class="media-body ">
+                                        <h5 class="media-heading" style="margin-top: 7px;margin-bottom: 7px">
+                                            Баскетбол</h5>
+                                    </div>
+                                </div>
+                            </a></li>
+                            <li><a href="#" onclick="addPlaygroundToMapAdmin('Волейбол')">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <img src="resources/image/voley.png" alt="Футбол" width="20" height="20"
+                                             style="margin-top: 5px"/>
+                                    </div>
+
+
+                                    <div class="media-body ">
+                                        <h5 style="margin-top: 7px;margin-bottom: 7px">Волейбол</h5>
+                                    </div>
+                                </div>
+                            </a></li>
+                        </ul>
+                    </c:otherwise>
+                </c:choose>
+            </div>
 
             <c:if test="${user.isAdmin() == true && countPlaygroundAdd > 0}">
                 <div class="pull-right" style="padding-top: 10px">
@@ -215,6 +264,46 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="addPlayModalAdmin" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="text-center">
+                        <img src="resources/image/стадион.png" alt="Баскетбол"
+                             width="40" height="40" id="imageGroupAdmin">
+                    </div>
+                    <h4 id="titleAddAdmin" class="modal-title text-center"></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="alertWarningMap" class="alert alert-warning fade in hide" role="alert"
+                         style="padding-top: 10px">
+                        <button type="button" class="close" onclick="hideButtonAlert('alertWarningMap')"
+                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        Заполните все поля!
+                    </div>
+                    <div class="text-center">
+                        <div class="input-group" style="padding: 10px">
+                            <input id="inputCity" type="text" class="form-control"
+                                   placeholder="Город" required style="margin: 5px">
+                            <input id="inputName" type="text" class="form-control"
+                                   placeholder="Название площадки" required style="margin: 5px">
+                            <input id="inputStreet" type="text" class="form-control"
+                                   placeholder="Улица" required style="margin: 5px">
+                            <input id="inputHouse" type="text" class="form-control"
+                                   placeholder="Дом" required style="margin: 5px">
+                        </div>
+                        <a href="#" id="addAdmin" class="btn btn-primary ">Добавить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <c:forEach var="markerModal" items="${playgroundAddData}">
         <div class="modal fade" id="addPlayModalAdmin_${markerModal.id}" tabindex="-1" role="dialog"
              aria-hidden="true">
@@ -231,20 +320,25 @@
                         <h4 id="titleAddAdmin_${markerModal.id}" class="modal-title text-center"></h4>
                     </div>
                     <div class="modal-body">
-                        <div id="alertWarningMap" class="alert alert-warning fade in hide" role="alert" style="padding-top: 10px">
+                        <div id="alertWarningMap_${markerModal.id}" class="alert alert-warning fade in hide" role="alert"
+                             style="padding-top: 10px">
                             <button type="button" class="close" onclick="hideButtonAlert('alertWarningMap')"
                                     aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             Заполните все поля!
                         </div>
                         <div class="text-center">
                             <div class="input-group" style="padding: 10px">
-                                <input id="inputCity_${markerModal.id}" type="text" class="form-control" placeholder="Город" required style="margin: 5px">
-                                <input id="inputName_${markerModal.id}" type="text" class="form-control" placeholder="Название площадки"  required style="margin: 5px">
-                                <input id="inputStreet_${markerModal.id}" type="text" class="form-control" placeholder="Улица" required style="margin: 5px">
-                                <input id="inputHouse_${markerModal.id}" type="text" class="form-control" placeholder="Дом" required style="margin: 5px">
+                                <input id="inputCity_${markerModal.id}" type="text" class="form-control"
+                                       placeholder="Город" required style="margin: 5px">
+                                <input id="inputName_${markerModal.id}" type="text" class="form-control"
+                                       placeholder="Название площадки" required style="margin: 5px">
+                                <input id="inputStreet_${markerModal.id}" type="text" class="form-control"
+                                       placeholder="Улица" required style="margin: 5px">
+                                <input id="inputHouse_${markerModal.id}" type="text" class="form-control"
+                                       placeholder="Дом" required style="margin: 5px">
                             </div>
                             <p id="idPlayground_${markerModal.id}"></p>
-                            <a href="#"  id="addAdmin_${markerModal.id}" class="btn btn-primary ">Добавить</a>
+                            <a href="#" id="addAdmin_${markerModal.id}" class="btn btn-primary ">Добавить</a>
                         </div>
                     </div>
                 </div>
@@ -556,6 +650,69 @@
         });
     }
 
+    function addPlaygroundToMapAdmin(sport) {
+        $('#addPlaygroundToMapLink').addClass('hide');
+        $('#cancelAddPlaygroundToMapLink').removeClass('hide');
+        var myLatLng = map.getCenter();
+        if (sport === 'Футбол') {
+
+            markerAdd = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Нажмите на маркер, чтобы добавить площадку',
+                label: 'Ф',
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+        } else if (sport === 'Баскетбол') {
+            markerAdd = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Нажмите на маркер, чтобы добавить площадку',
+                label: 'Б',
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+        } else if (sport === 'Волейбол') {
+            markerAdd = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Нажмите на маркер, чтобы добавить площадку',
+                label: 'В',
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+        }
+
+
+        markerAdd.addListener('click', function () {
+            showModalAddAdminMain(sport);
+        });
+        $('#addAdmin').click(function (event) {
+            $('#addAdmin').addClass('disabled');
+            addPlaygroundToDB(true);
+            markerAdd.setMap(null);
+
+        });
+    }
+
+    function showModalAddAdminMain(sport) {
+        if (sport === 'Футбол') {
+            $('#titleAddAdmin').text("Футбольная площадка");
+            $('#imageGroupAdmin').attr("src", "resources/image/стадион3.png")
+            sportMarker = 'Футбол';
+        } else if (sport === 'Баскетбол') {
+            $('#titleAddAdmin').text("Баскетбольная площадка");
+            $('#imageGroupAdmin').attr("src", "resources/image/площадка2.png")
+            sportMarker = 'Баскетбол';
+        } else if (sport === 'Волейбол') {
+            $('#titleAddAdmin').text("Волейбольная площадка");
+            $('#imageGroupAdmin').attr("src", "resources/image/спортивная-сетка.png")
+            sportMarker = 'Волейбол';
+        }
+        $('#addPlayModalAdmin').modal('show');
+    }
+
     function showModalAdd(sport) {
         if (sport === 'Футбол') {
             $('#titleAdd').text("Футбольная площадка");
@@ -614,7 +771,7 @@
             });
             $('#addAdmin_' + data.id).click(function (event) {
                 $('#addAdmin_' + data.id).addClass('disabled');
-                addPlaygroundToDB(data.id);
+                addPlaygroundToDB(false, data.id);
                 marker.setMap(null);
 
             });
@@ -639,34 +796,81 @@
     }
 
 
-    function addPlaygroundToDB(id) {
-        $('#addPlayModalAdmin_' + id).modal('hide');
-         console.log(id + ' addPlaygroundToDB ');
-        $('#addAdmin_' + id).removeClass('disabled');
-        var dataMarker;
-        playgroundAddData.forEach(function (data, i) {
-            if (data.id === id) {
-                dataMarker = data;
+    function addPlaygroundToDB(flag, id) {
+        var namePlayground;
+        var city;
+        var street;
+        var house;
+        if (flag) {
+            namePlayground = $('#inputName').val().trim();
+            city = $('#inputCity').val().trim();
+            street = $('#inputStreet').val().trim();
+            house = $('#inputHouse').val().trim();
+            if (namePlayground.length == 0 || city.length == 0 || street.length == 0 || house.length == 0) {
+                $('#alertWarningMap').removeClass('hide');
+                $('#alertWarningMap').alert();
+            } else {
+                $('#addPlayModalAdmin').modal('hide');
+                var position = markerAdd.getPosition();
+                $.ajax({
+                    url: 'addPlaygroundToDBAdmin',
+                    method: 'post',
+                    data: ({
+                        lat: position.lat(),
+                        lng: position.lng(),
+                        name: namePlayground,
+                        city: city,
+                        street: street,
+                        house: house,
+                        sport: sportMarker
+                    })
+                }).then(function (value) {
+                    console.log('loadPlayground success')
+                });
             }
-        });
-        var namePlayground = $('#inputName_' + id).val();
-        var city = $('#inputCity_' + id).val();
-        var street = $('#inputStreet_' + id).val();
-        var house = $('#inputHouse_' + id).val();
-        if (namePlayground.length === 0 || city.length === 0 || street.length === 0 || house.length === 0) {
-            $('#alertWarningMap').removeClass('hide');
-            $('#alertWarningMap').alert();
+            $('#addAdmin').removeClass('disabled');
+            $('#addPlaygroundToMapLink').removeClass('hide');
+            $('#cancelAddPlaygroundToMapLink').addClass('hide');
         } else {
-            $.ajax({
-                url: 'addPlaygroundToDB',
-                method: 'post',
-                data: ({id: dataMarker.id, lat: dataMarker.lat, lng: dataMarker.lng, userIdCreator: dataMarker.userIdCreator, name: namePlayground,
-                    city: city, street: street, house: house, sport: dataMarker.sport })
-            }).then(function (value) {
-                console.log('loadPlayground success')
-            });
-        }
+             namePlayground = $('#inputName_' + id).val().trim();
+             city = $('#inputCity_' + id).val().trim();
+             street = $('#inputStreet_' + id).val().trim();
+             house = $('#inputHouse_' + id).val().trim();
+            if (namePlayground.length == 0 || city.length == 0 || street.length == 0 || house.length == 0) {
+                $('#alertWarningMap_' + id).removeClass('hide');
+                $('#alertWarningMap_' + id).alert();
+            } else {
+                $('#addPlayModalAdmin_' + id).modal('hide');
+                console.log(id + ' addPlaygroundToDB ');
 
+                var dataMarker;
+                playgroundAddData.forEach(function (data, i) {
+                    if (data.id === id) {
+                        dataMarker = data;
+                    }
+                });
+                $.ajax({
+                    url: 'addPlaygroundToDB',
+                    method: 'post',
+                    data: ({
+                        id: dataMarker.id,
+                        lat: dataMarker.lat,
+                        lng: dataMarker.lng,
+                        userIdCreator: dataMarker.userIdCreator,
+                        name: namePlayground,
+                        city: city,
+                        street: street,
+                        house: house,
+                        sport: dataMarker.sport
+                    })
+                }).then(function (value) {
+                    console.log('loadPlayground success')
+                });
+            }
+            $('#addAdmin_' + id).removeClass('disabled');
+            $('#addPlaygroundToMapLink').removeClass('hide');
+            $('#cancelAddPlaygroundToMapLink').addClass('hide');
+        }
     }
 
 </script>
@@ -674,8 +878,8 @@
 <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXkXTJQMPNPInJcJt2yT6pNgzksYfpw1c&libraries=places">
 </script>
-<%--<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-</script>--%>
+    <%--<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>--%>
 
 </body>
 </html>

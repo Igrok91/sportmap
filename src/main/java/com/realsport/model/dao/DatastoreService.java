@@ -211,8 +211,8 @@ public class DatastoreService {
         return  notifications.getPlaygroundsCheck();
     }
 
-    public void addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
-        playgrounds.addPlaygroundToDB(userId, lat, lng, name, city, street, house, sport);
+    public Long addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
+       return playgrounds.addPlaygroundToDB(userId, lat, lng, name, city, street, house, sport);
     }
 
     public void deleteNotification(String idPlayground) {

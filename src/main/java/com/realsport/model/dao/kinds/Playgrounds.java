@@ -193,20 +193,34 @@ public class Playgrounds {
         }
     }
 
-    public void addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
+    public Long addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
         Transaction tx = getDatastore().newTransaction();
         try {
-            FullEntity task = FullEntity.newBuilder(keyFactory.newKey())
-                    .set("userIdCreator", userId)
-                    .set("latlong", LatLngValue.of(LatLng.of(Double.valueOf(lat), Double.valueOf(lng))))
-                    .set("name", name)
-                    .set("city", city)
-                    .set("street", street)
-                    .set("house", house)
-                    .set("sport", sport)
-                    .build();
-            tx.add(task);
+            FullEntity task;
+            if (userId == null) {
+                task = FullEntity.newBuilder(keyFactory.newKey())
+                        .set("latlong", LatLngValue.of(LatLng.of(Double.valueOf(lat), Double.valueOf(lng))))
+                        .set("name", name)
+                        .set("city", city)
+                        .set("street", street)
+                        .set("house", house)
+                        .set("sport", sport)
+                        .build();
+            } else {
+                task = FullEntity.newBuilder(keyFactory.newKey())
+                        .set("userIdCreator", userId)
+                        .set("latlong", LatLngValue.of(LatLng.of(Double.valueOf(lat), Double.valueOf(lng))))
+                        .set("name", name)
+                        .set("city", city)
+                        .set("street", street)
+                        .set("house", house)
+                        .set("sport", sport)
+                        .build();
+            }
+
+            Entity entity = tx.add(task);
             tx.commit();
+            return entity.getKey().getId();
         } catch (Exception e) {
             logger.error("Ошибка при добавлении площадки: " + e);
         } finally {
@@ -214,5 +228,6 @@ public class Playgrounds {
                 tx.rollback();
             }
         }
+        return null;
     }
 }

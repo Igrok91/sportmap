@@ -111,7 +111,7 @@ public class PlaygroundService implements PlaygroundDao {
         return datastoreService.getPlaygroundsCheck();
     }
 
-    public void addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
-        datastoreService.addPlaygroundToDB(userId, lat, lng, name, city, street, house, sport);
+    public Long addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
+        return datastoreService.addPlaygroundToDB(userId, lat, lng, name, city, street, house, sport);
     }
 }
