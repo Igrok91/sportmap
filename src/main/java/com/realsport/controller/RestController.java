@@ -7,18 +7,18 @@ import com.google.cloud.Timestamp;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
-import com.realsport.model.entity.LastEditData;
-import com.realsport.model.entity.SubscribtionInfoUser;
-import com.realsport.model.entity.Template;
-import com.realsport.model.entityDao.Comment;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.MinUser;
-import com.realsport.model.entityDao.Playground;
-import com.realsport.model.entityDao.TemplateGame;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.vo.LastEditData;
+import com.realsport.model.vo.SubscribtionInfoUser;
+import com.realsport.model.vo.Template;
+import com.realsport.model.dao.entityDao.Comment;
+import com.realsport.model.dao.entityDao.Event;
+import com.realsport.model.vo.MinUser;
+import com.realsport.model.dao.entityDao.Playground;
+import com.realsport.model.dao.entityDao.TemplateGame;
+import com.realsport.model.dao.entityDao.User;
 
 
-import com.realsport.model.service.*;
+import com.realsport.service.*;
 import com.realsport.model.utils.Playgrounds;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,18 +34,12 @@ import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.TimeZone;
+import java.util.*;
 
 import static com.realsport.model.cache.CacheObserver.getCacheObserver;
 import static com.realsport.model.cache.CachePlaygrounds.getCachePlaygrounds;
 import static com.realsport.model.cache.CacheUser.getCacheUser;
-import static com.realsport.model.utils.Utils.NOT;
-import static com.realsport.model.utils.Utils.RESUME;
-import static com.realsport.model.utils.Utils.getSubstrictionStatusUser;
+import static com.realsport.model.utils.Utils.*;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -339,10 +333,24 @@ public class RestController {
             user = userService.getUser(userId);
             if (Objects.nonNull(user)) {
                 SubscribtionInfoUser subscribtionInfoUser = subscriptionsService.getSubscriptionStatusUser(userId);
-                String status = getSubstrictionStatusUser(subscribtionInfoUser.getStatus());
-                logger.info("status подписки пользователя " + userId + " " + status);
-                user.setSubscriptionStatus(status);
-                user.setSubscription_id(subscribtionInfoUser.getSubscription_id());
+                if (Objects.nonNull(subscribtionInfoUser)) {
+                    String status = getSubstrictionStatusUser(subscribtionInfoUser.getStatus());
+                    logger.info("status подписки пользователя " + userId + " " + status);
+                    user.setSubscriptionStatus(status);
+                    user.setSubscription_id(subscribtionInfoUser.getSubscription_id());
+                } else {
+                    String status = NOT;
+                    if (user.getSubscriptionsTemp() != null && isActiveSubscriptionsTemp(user.getSubscriptionsTemp())) {
+                        status = TEMP;
+                        int end = getCountDaytoEndSubscribe(user.getSubscriptionsTemp());
+                        logger.info("getCountDaytoEndSubscribe " + end   );
+                        user.setCountDaytoEndSubscribeTemp(end);
+                        logger.info("status подписки пользователя " + userId + " Temp");
+                    } else {
+                        logger.info("status подписки пользователя " + userId + " " + status);
+                    }
+                    user.setSubscriptionStatus(status);
+                }
                 cache.put(userId, user);
             }
 
@@ -398,7 +406,35 @@ public class RestController {
                                   @RequestParam(value = "house") String house,
                                   @RequestParam(value = "sport") String sport) throws Exception {
         Long idNew = playgroundService.addPlaygroundToDB(userId.trim(), lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
-        subscriptionsService.deleteNotification(idPlayground);
+        playgroundService.deleteNotification(idPlayground);
+        boolean isActiveSubsctrictions = subscriptionsService.isPremiumUser(userId);
+        userService.addSubscriptionsTemp(userId);
+        Cache cache = getCacheUser();
+        User user = (User) cache.get(userId);
+        if (Objects.nonNull(user)) {
+            user.setSubscriptionStatus(TEMP);
+            int end = getCountDaytoEndSubscribe(user.getSubscriptionsTemp());
+            logger.info("getCountDaytoEndSubscribe " + end);
+            user.setCountDaytoEndSubscribeTemp(end);
+            cache.put(userId, user);
+        }
+
+        if (vkService.isAllowSendMessages(Integer.valueOf(userId))) {
+            if (isActiveSubsctrictions) {
+                vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка прошла проверку и добавлена на карту \n https://vk.com/app6600445");
+            } else {
+                vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка добавлена на карту и активирована подписка \"Премиум\" \n https://vk.com/app6600445");
+            }
+
+        } else {
+            if (isActiveSubsctrictions) {
+                vkService.sendNotification(Collections.singletonList(Integer.valueOf(userId)), "Ваша площадка прошла проверку и добавлена на карту");
+            } else {
+                vkService.sendNotification(Collections.singletonList(Integer.valueOf(userId)), "Ваша площадка добавлена на карту и активирована подписка \"Премиум\"");
+            }
+        }
+
+
         List<Playground> playgrounds = playgroundService.getAllPlayground();
         Playground playground = new Playground();
         playground.setIdplayground(String.valueOf(idNew));

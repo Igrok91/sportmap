@@ -470,7 +470,7 @@
 
     if (device.desktop()) {
         $('#navPlaygrounds').addClass('hide');
-        if (subscriptionStatus !== 'active') {
+        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
             getMedia();
         }
     }

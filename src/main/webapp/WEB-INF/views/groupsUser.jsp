@@ -17,6 +17,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <script src="resources\js\device.js"></script>
     <style>
 
         /* Set black background color, white text and some padding */
@@ -125,11 +126,13 @@
     $('#returnBack').attr('href', returnBack);
 
     function resizeGroups() {
-        var height = $('#bodyGroups').height();
-        if (height < 650) {
-            VK.callMethod('resizeWindow', 900, 650);
-        } else {
-            VK.callMethod('resizeWindow', 900, height + 10);
+        if (device.desktop()) {
+            var height = $('#bodyGroups').height();
+            if (height < 650) {
+                VK.callMethod('resizeWindow', 900, 650);
+            } else {
+                VK.callMethod('resizeWindow', 900, height + 10);
+            }
         }
     }
 

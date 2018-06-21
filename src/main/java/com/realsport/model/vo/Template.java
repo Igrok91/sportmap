@@ -1,7 +1,6 @@
-package com.realsport.model.entity;
+package com.realsport.model.vo;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Template implements Serializable {
     private String templateId;

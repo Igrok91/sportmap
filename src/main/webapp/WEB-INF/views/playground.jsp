@@ -210,7 +210,7 @@
                     <c:if test="${subscriptionStatus == 'resume' || subscriptionStatus == 'not'}">
                         <div id="premium" class="text-center" style="padding-bottom: 15px">
                             <a href="#" data-toggle="modal"
-                               data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум"</a>
+                               data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум" бесплатно</a>
                         </div>
                     </c:if>
                     <div class="list-group">
@@ -700,6 +700,9 @@
                             </c:otherwise>
                         </c:choose>
                         <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
+                        <p>или добавьте площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
+                            и активируйте подписку "Премиум" на три месяца
+                        </p>
                     </div>
                 </div>
             </div>
@@ -716,7 +719,7 @@
 
     if (device.desktop()) {
         $('#navPlaygrounds').addClass('hide');
-        if (subscriptionStatus !== 'active') {
+        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
             getMedia();
         }
         VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
@@ -733,6 +736,10 @@
             }
         });
 
+    } else {
+        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
+            $('#premium').addClass('hide');
+        }
     }
     setTimeout('resizePlayground()', 500);
     if (listEvents) {
@@ -910,7 +917,7 @@
     function resizePlayground() {
         var height = $('#mainPlayground').height();
         if (device.desktop()) {
-            if (subscriptionStatus == 'active') {
+            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp' ) {
                 if (height < 650) {
                     VK.callMethod('resizeWindow', 900, 650);
                 } else {

@@ -1,12 +1,12 @@
-package com.realsport.model.service;
+package com.realsport.service;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
 import com.realsport.model.dao.PlaygroundDao;
-import com.realsport.model.entity.CheckPlaygroundData;
-import com.realsport.model.entityDao.MinUser;
-import com.realsport.model.entityDao.Playground;
+import com.realsport.model.vo.CheckPlaygroundData;
+import com.realsport.model.vo.MinUser;
+import com.realsport.model.dao.entityDao.Playground;
 import com.realsport.model.utils.KindSport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -113,5 +113,9 @@ public class PlaygroundService implements PlaygroundDao {
 
     public Long addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
         return datastoreService.addPlaygroundToDB(userId, lat, lng, name, city, street, house, sport);
+    }
+
+    public void deleteNotification(String idPlayground) {
+        datastoreService.deleteNotification(idPlayground);
     }
 }

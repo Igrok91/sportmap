@@ -1,10 +1,9 @@
-package com.realsport.model.entityDao;
+package com.realsport.model.dao.entityDao;
 
 import com.google.cloud.Timestamp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Event implements Serializable{

@@ -1,7 +1,7 @@
-package com.realsport.model.service;
+package com.realsport.service;
 
 import com.realsport.model.dao.DatastoreService;
-import com.realsport.model.entity.SubscribtionInfoUser;
+import com.realsport.model.vo.SubscribtionInfoUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,4 @@ public class SubscriptionsService {
         return databaseService.isPremiumUser(userId);
     }
 
-    public void deleteNotification(String idPlayground) {
-        databaseService.deleteNotification(idPlayground);
-    }
 }

@@ -1,4 +1,4 @@
-package com.realsport.model.entity;
+package com.realsport.model.vo;
 
 public class SubscribtionInfoData {
 

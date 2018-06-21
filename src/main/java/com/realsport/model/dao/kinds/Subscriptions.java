@@ -1,20 +1,12 @@
 package com.realsport.model.dao.kinds;
 
 import com.google.cloud.datastore.*;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.realsport.model.entity.SubscribtionInfoUser;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.EventUser;
-import com.realsport.model.entityDao.TemplateGame;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.vo.SubscribtionInfoUser;
 import com.realsport.model.utils.Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static com.realsport.model.dao.Persistence.getDatastore;

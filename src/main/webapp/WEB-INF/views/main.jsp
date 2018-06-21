@@ -21,12 +21,22 @@
     <script src="resources\switch\switch.js"></script>
     <script src="resources\js\device.js"></script>
     <script src="resources\js\media.js"></script>
-    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
 
+ <%--   <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+
+    <script src="https://vk.com/js/api/mobile_sdk.js"  type="text/javascript"></script>--%>
 
     <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
     <script src="https://vk.com/js/api/adman_init.js"></script>
     <script src="https://js.appscentrum.com/scr/preroll.js"></script>
+
+    <script type="text/javascript">
+        if (device.desktop()) {
+            document.write('<script src="resources/js/xd_connection.js"></scr' + 'ipt>');
+        } else {
+            document.write('<script src="resources/js/mobile.js"></scr' + 'ipt>');
+        }
+    </script>
     <script>
         VK.init(function () {
             console.log('vk init');
@@ -68,24 +78,30 @@
         window.addEventListener('load', function () {
 
             var user_id = '${userId}';
+            var isAdmin = '${isAdmin}';
             var app_id = 6600445;
-            if (subscriptionStatus !== 'active' && device.desktop()) {
-                if (firstStart === 'true') {
-                    disableNavigtion(true);
-                    $("#event").addClass('hide');
-                    admanInit({
-                        user_id: user_id,
-                        app_id: app_id,
-                        type: 'preloader',
-                        params: {preview: 1}
-                    }, onAdsReady, onNoAds);
+
+                if ((subscriptionStatus === 'not' || subscriptionStatus === 'resume') && device.desktop()) {
+                    if (!isAdmin) {
+                        if (firstStart === 'true') {
+                            disableNavigtion(true);
+                            $("#event").addClass('hide');
+                            admanInit({
+                                user_id: user_id,
+                                app_id: app_id,
+                                type: 'preloader',
+                                params: {preview: 1}
+                            }, onAdsReady, onNoAds);
+
+                        } else {
+                            getMedia();
+                            setTimeout(handleReturn(), 1000);
+                        }
+                    }
                 } else {
-                    getMedia();
-                    setTimeout(handleReturn(), 1000);
+                    handleReturn();
                 }
-            } else {
-                handleReturn();
-            }
+
 
             function onAdsReady(adman) {
                 adman.onStarted(function () {
@@ -431,7 +447,7 @@
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
         var height = $('#event').height();
         if (device.desktop()) {
-            if (subscriptionStatus == 'active') {
+            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 if (height < 650) {
                     VK.callMethod('resizeWindow', 900, 650);
                 } else {
@@ -452,7 +468,7 @@
     function resizeGroups() {
         var height = $('#group').height();
         if (device.desktop()) {
-            if (subscriptionStatus == 'active') {
+            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 if (height < 650) {
                     VK.callMethod('resizeWindow', 900, 650);
                 } else {
@@ -472,7 +488,7 @@
     function resizeMain() {
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
         if (device.desktop()) {
-            if (subscriptionStatus == 'active') {
+            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 VK.callMethod('resizeWindow', 900, 650);
             } else {
                 VK.callMethod('resizeWindow', 900, 777);
@@ -508,7 +524,7 @@
     function resizeProfileMain() {
         var height = $('#prof').height();
         if (device.desktop()) {
-            if (subscriptionStatus == 'active') {
+            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 if (height < 650) {
                     VK.callMethod('resizeWindow', 900, 650);
                 } else {

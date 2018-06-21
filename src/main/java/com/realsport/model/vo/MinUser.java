@@ -1,4 +1,4 @@
-package com.realsport.model.entityDao;
+package com.realsport.model.vo;
 
 import java.io.Serializable;
 import java.util.ArrayList;

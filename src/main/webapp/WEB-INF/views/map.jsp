@@ -244,7 +244,7 @@
                 <div class="modal-body">
                     <div class="text-center">
                         <c:choose>
-                            <c:when test="${subscriptionStatus == 'active' || subscriptionIntern == 'active'}">
+                            <c:when test="${subscriptionStatus == 'active' || subscriptionStatus == 'temp'}">
                                 <p>После проверки, площадка будет добавлена на карту <span
                                         style="padding-right: 5px; padding-left: 5px"
                                         class="glyphicon glyphicon-globe"></span></p>

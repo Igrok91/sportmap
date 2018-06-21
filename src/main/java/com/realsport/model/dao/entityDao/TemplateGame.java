@@ -1,8 +1,6 @@
-package com.realsport.model.entityDao;
+package com.realsport.model.dao.entityDao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TemplateGame implements Serializable{
     private String templateId;

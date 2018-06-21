@@ -8,16 +8,16 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 
-import com.realsport.model.entity.*;
-import com.realsport.model.entity.Error;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.EventUser;
-import com.realsport.model.entityDao.MinUser;
-import com.realsport.model.entityDao.Playground;
-import com.realsport.model.entityDao.TemplateGame;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.vo.*;
+import com.realsport.model.vo.Error;
+import com.realsport.model.dao.entityDao.Event;
+import com.realsport.model.dao.entityDao.EventUser;
+import com.realsport.model.vo.MinUser;
+import com.realsport.model.dao.entityDao.Playground;
+import com.realsport.model.dao.entityDao.TemplateGame;
+import com.realsport.model.dao.entityDao.User;
 
-import com.realsport.model.service.*;
+import com.realsport.service.*;
 import com.realsport.model.utils.Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,9 +38,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.realsport.model.cache.CacheUser.getCacheUser;
-import static com.realsport.model.utils.Utils.NOT;
-import static com.realsport.model.utils.Utils.RESUME;
-import static com.realsport.model.utils.Utils.getSubstrictionStatusUser;
+import static com.realsport.model.utils.Utils.*;
 
 /**
  * Created by Igor on 31.03.2017.
@@ -59,6 +57,8 @@ public class StartController {
     public static final String ACTIVE = "active";
     public static final String CANCELLED = "cancelled";
     public static final Integer COUNT = 5;
+
+
 
     private static final Integer ADMIN = 172924708;
 
@@ -253,8 +253,8 @@ public class StartController {
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("countOrganize", countOrganize);
         model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
-        model.addAttribute("subscriptionIntern", user.getSubscriptionStatus());
         model.addAttribute("subscription_id", user.getSubscription_id());
+        model.addAttribute("isAdmin", user.isAdmin());
 
         if (user.isAdmin()) {
             List<CheckPlaygroundData> dataList = playgroundService.getPlaygroundsCheck();
@@ -386,8 +386,16 @@ public class StartController {
                     user.setSubscriptionStatus(status);
                     user.setSubscription_id(subscribtionInfoUser.getSubscription_id());
                 } else {
-                    String status = getSubstrictionStatusUser(null);
-                    logger.info("status подписки пользователя " + userId + " " + status);
+                    String status = NOT;
+                    if (user.getSubscriptionsTemp() != null && isActiveSubscriptionsTemp(user.getSubscriptionsTemp())) {
+                        status = TEMP;
+                        int end = getCountDaytoEndSubscribe(user.getSubscriptionsTemp());
+                        logger.info("getCountDaytoEndSubscribe " + end   );
+                        user.setCountDaytoEndSubscribeTemp(end);
+                        logger.info("status подписки пользователя " + userId + " Temp");
+                    } else {
+                        logger.info("status подписки пользователя " + userId + " " + status);
+                    }
                     user.setSubscriptionStatus(status);
                 }
                 cache.put(userId, user);
@@ -399,6 +407,8 @@ public class StartController {
         }
         return user;
     }
+
+
 
     private User getPlayers(String userId) {
         logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");

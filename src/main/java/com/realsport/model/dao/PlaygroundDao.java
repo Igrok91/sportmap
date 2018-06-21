@@ -1,6 +1,6 @@
 package com.realsport.model.dao;
 
-import com.realsport.model.entityDao.Playground;
+import com.realsport.model.dao.entityDao.Playground;
 
 import java.util.List;
 

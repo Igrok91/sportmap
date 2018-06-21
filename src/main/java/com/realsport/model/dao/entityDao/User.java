@@ -1,10 +1,9 @@
-package com.realsport.model.entityDao;
+package com.realsport.model.dao.entityDao;
+
+import com.google.cloud.Timestamp;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class User implements Serializable {
     private String userId;
@@ -15,7 +14,9 @@ public class User implements Serializable {
     private String photo_100;
     private String subscriptionStatus;
     private Integer subscription_id;
+    private Integer countDaytoEndSubscribeTemp;
     private String info = "";
+    private Timestamp subscriptionsTemp;
     private boolean isAdmin = false;
     private boolean isFake = false;
     private boolean isMember = false;
@@ -158,6 +159,22 @@ public class User implements Serializable {
 
     public void setSubscription_id(Integer subscription_id) {
         this.subscription_id = subscription_id;
+    }
+
+    public Timestamp getSubscriptionsTemp() {
+        return subscriptionsTemp;
+    }
+
+    public void setSubscriptionsTemp(Timestamp subscriptionsTemp) {
+        this.subscriptionsTemp = subscriptionsTemp;
+    }
+
+    public Integer getCountDaytoEndSubscribeTemp() {
+        return countDaytoEndSubscribeTemp;
+    }
+
+    public void setCountDaytoEndSubscribeTemp(Integer countDaytoEndSubscribeTemp) {
+        this.countDaytoEndSubscribeTemp = countDaytoEndSubscribeTemp;
     }
 
     @Override

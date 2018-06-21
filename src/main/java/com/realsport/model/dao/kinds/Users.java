@@ -1,26 +1,19 @@
 package com.realsport.model.dao.kinds;
 
-import com.google.cloud.datastore.BooleanValue;
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.Entity;
-import com.google.cloud.datastore.EntityValue;
-import com.google.cloud.datastore.FullEntity;
-import com.google.cloud.datastore.KeyFactory;
-import com.google.cloud.datastore.ListValue;
-import com.google.cloud.datastore.LongValue;
-import com.google.cloud.datastore.StringValue;
-import com.google.cloud.datastore.Transaction;
+import com.google.cloud.Timestamp;
+import com.google.cloud.datastore.*;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.EventUser;
-import com.realsport.model.entityDao.TemplateGame;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.dao.entityDao.Event;
+import com.realsport.model.dao.entityDao.EventUser;
+import com.realsport.model.dao.entityDao.TemplateGame;
+import com.realsport.model.dao.entityDao.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,6 +37,12 @@ public class Users {
             user.setInfo(entity.getString("info"));
         } catch (Exception e) {
             logger.warn(e);
+        }
+        try {
+            user.setSubscriptionsTemp(entity.getTimestamp("subscriptionsTemp"));
+        } catch (Exception e) {
+            logger.warn(e);
+            user.setSubscriptionsTemp(null);
         }
         try {
             user.setPlaygroundIdlList(convertListValuePlaygroundIdToList(entity.getList("playgroundIdList")));
@@ -88,10 +87,10 @@ public class Users {
                     .setKind("Users")
                     .setFilter(StructuredQuery.PropertyFilter.eq("userId", id))
                     .build();
-            QueryResults<Entity>  entity = getDatastore().run(entityQuery);
-            if (entity.hasNext()) {
+            QueryResults<Entity>  vo = getDatastore().run(entityQuery);
+            if (vo.hasNext()) {
                 logger.info("Пользователь найден");
-                return getUserFromEntity(entity.next());
+                return getUserFromEntity(vo.next());
 
             }*/
         logger.info("Пользователь не найден");
@@ -408,6 +407,27 @@ public class Users {
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
+            }
+        }
+    }
+
+    public void addSubscriptionsTemp(String userId) {
+        Transaction transaction = getDatastore().newTransaction();
+        try {
+                Entity userEntity = transaction.get(keyFactory.newKey(Long.valueOf(userId)));
+
+                logger.info("addSubscriptionsTemp " + userId);
+                Date date = new Date();
+                if (Objects.nonNull(userEntity)) {
+
+                    transaction.update(Entity.newBuilder(userEntity).set("subscriptionsTemp", TimestampValue.of(Timestamp.of(date))).build());
+                }
+
+            logger.info("Изменение статуса временной подписки пользователя " + date );
+            transaction.commit();
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
             }
         }
     }

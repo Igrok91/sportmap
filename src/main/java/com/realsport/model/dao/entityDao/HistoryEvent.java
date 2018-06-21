@@ -1,4 +1,4 @@
-package com.realsport.model.entityDao;
+package com.realsport.model.dao.entityDao;
 
 public class HistoryEvent {
     private String historyId;

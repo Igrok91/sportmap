@@ -1,4 +1,6 @@
-package com.realsport.model.entityDao;
+package com.realsport.model.dao.entityDao;
+
+import com.realsport.model.vo.MinUser;
 
 import java.io.Serializable;
 import java.util.ArrayList;

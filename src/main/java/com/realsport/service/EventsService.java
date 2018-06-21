@@ -1,14 +1,14 @@
-package com.realsport.model.service;
+package com.realsport.service;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.DatastoreService;
-import com.realsport.model.entityDao.Comment;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.EventUser;
-import com.realsport.model.entityDao.MinUser;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.dao.entityDao.Comment;
+import com.realsport.model.dao.entityDao.Event;
+import com.realsport.model.dao.entityDao.EventUser;
+import com.realsport.model.vo.MinUser;
+import com.realsport.model.dao.entityDao.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;

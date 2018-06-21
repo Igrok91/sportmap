@@ -1,13 +1,13 @@
-package com.realsport.model.service;
+package com.realsport.service;
 
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.MinUser;
-import com.realsport.model.entityDao.User;
-import com.realsport.vk.InitVkMain;
+import com.realsport.model.dao.entityDao.Event;
+import com.realsport.model.vo.MinUser;
+import com.realsport.model.dao.entityDao.User;
+import com.realsport.model.vk.InitVkMain;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.client.actors.ServiceActor;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static com.realsport.vk.InitVkMain.getVkApiClient;
+import static com.realsport.model.vk.InitVkMain.getVkApiClient;
 
 /**
  * Created by sbt-ryabtsev-is on 12.07.2017.

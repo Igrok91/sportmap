@@ -1,15 +1,15 @@
 package com.realsport.model.dao;
 
 import com.realsport.model.dao.kinds.*;
-import com.realsport.model.entity.CheckPlaygroundData;
-import com.realsport.model.entity.SubscribtionInfoUser;
-import com.realsport.model.entityDao.Comment;
-import com.realsport.model.entityDao.Event;
-import com.realsport.model.entityDao.EventUser;
-import com.realsport.model.entityDao.MinUser;
-import com.realsport.model.entityDao.Playground;
-import com.realsport.model.entityDao.TemplateGame;
-import com.realsport.model.entityDao.User;
+import com.realsport.model.vo.CheckPlaygroundData;
+import com.realsport.model.vo.SubscribtionInfoUser;
+import com.realsport.model.dao.entityDao.Comment;
+import com.realsport.model.dao.entityDao.Event;
+import com.realsport.model.dao.entityDao.EventUser;
+import com.realsport.model.vo.MinUser;
+import com.realsport.model.dao.entityDao.Playground;
+import com.realsport.model.dao.entityDao.TemplateGame;
+import com.realsport.model.dao.entityDao.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,5 +217,9 @@ public class DatastoreService {
 
     public void deleteNotification(String idPlayground) {
         notifications.deleteNotification(idPlayground);
+    }
+
+    public void addSubscriptionsTemp(String userId) {
+        users.addSubscriptionsTemp(userId);
     }
 }

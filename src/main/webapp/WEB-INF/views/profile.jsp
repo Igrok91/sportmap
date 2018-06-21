@@ -102,7 +102,12 @@
                             <a href="#" onclick="orderCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
                         </div>
                         <div id="premiumResume" class="text-center " style="padding-bottom: 15px">
-                            <a href="#" onclick="toPremiumResume()" class="btn btn-success">Стать игроком "Премиум"</a>
+                            <a href="#" onclick="toPremiumResume()" class="btn btn-success">Стать игроком "Премиум" бесплатно</a>
+                        </div>
+
+                        <div id="tempPremium" class="text-center hide" >
+                            <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
+                            <p id="countEnd" style="color: gray">Осталось <c:out value="${user.getCountDaytoEndSubscribeTemp()}"/> д.</p>
                         </div>
 
                         <div id="premiumDiv" class="hide">
@@ -136,6 +141,9 @@
                                 <a id="pay" href="#" onclick="order()" class="btn btn-primary hide">Приобрести подписку</a>
                                 <a id="resumePay" href="#" onclick="orderResume()" class="btn btn-primary hide">Возобновить подписку</a>
                                 <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
+                                <p>или добавьте площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
+                                и активируйте подписку "Премиум" на три месяца
+                                </p>
                                 <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
                             </div>
                         </div>
@@ -211,7 +219,7 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <c:if test="${user.getSubscriptionStatus() == 'active'}">
+                        <c:if test="${user.getSubscriptionStatus() == 'active' || user.getSubscriptionStatus() == 'temp'}">
                         <c:choose>
                             <c:when test="${user.listParticipant.size() == 0}">
                                 <a href="#" class="list-group-item borderless">
@@ -298,18 +306,46 @@
     }
 
     var subscriptionStatus = '${subscriptionStatus}';
-    if (subscriptionStatus === 'active') {
-        $('#premiumCancel').removeClass('hide');
-        $('#premium').addClass('hide');
-        $('#premiumResume').addClass('hide');
-    } else if (subscriptionStatus === 'resume') {
-        $('#premiumCancel').addClass('hide');
-        $('#premium').addClass('hide');
-        $('#premiumResume').removeClass('hide');
-    } else if (subscriptionStatus === 'not') {
-        $('#premiumCancel').addClass('hide');
-        $('#premium').removeClass('hide');
-        $('#premiumResume').addClass('hide');
+    if (device.desktop()) {
+        if (subscriptionStatus === 'active') {
+            $('#premiumCancel').removeClass('hide');
+            $('#premium').addClass('hide');
+            $('#premiumResume').addClass('hide');
+            $('#tempPremium').addClass('hide');
+        } else if (subscriptionStatus === 'resume') {
+            $('#premiumCancel').addClass('hide');
+            $('#premium').addClass('hide');
+            $('#premiumResume').removeClass('hide');
+            $('#tempPremium').addClass('hide');
+        } else if (subscriptionStatus === 'not') {
+            $('#premiumCancel').addClass('hide');
+            $('#premium').removeClass('hide');
+            $('#premiumResume').addClass('hide');
+            $('#tempPremium').addClass('hide');
+        } else if (subscriptionStatus === 'temp') {
+            $('#premiumCancel').addClass('hide');
+            $('#premium').addClass('hide');
+            $('#premiumResume').addClass('hide');
+            $('#tempPremium').removeClass('hide');
+        }
+    } else {
+        if (subscriptionStatus === 'active') {
+            $('#premiumCancel').addClass('hide');
+            $('#premium').addClass('hide');
+            $('#premiumResume').addClass('hide');
+            $('#tempPremium').removeClass('hide');
+            $('#countEnd').addClass('hide');
+        } else if (subscriptionStatus === 'temp') {
+            $('#premiumCancel').addClass('hide');
+            $('#premium').addClass('hide');
+            $('#premiumResume').addClass('hide');
+            $('#tempPremium').removeClass('hide');
+        } else {
+            $('#premiumCancel').addClass('hide');
+            $('#premium').addClass('hide');
+            $('#premiumResume').addClass('hide');
+            $('#tempPremium').addClass('hide');
+        }
     }
 
     function editInfoUser() {

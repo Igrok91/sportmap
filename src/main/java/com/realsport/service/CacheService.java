@@ -1,8 +1,8 @@
-package com.realsport.model.service;
+package com.realsport.service;
 
 import com.google.appengine.api.memcache.MemcacheService;
 
-import com.realsport.model.entity.LastEditData;
+import com.realsport.model.vo.LastEditData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;

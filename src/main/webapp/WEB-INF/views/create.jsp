@@ -295,7 +295,7 @@
     });
 
     if (device.desktop()) {
-        if (subscriptionStatus !== 'active') {
+        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
             getMedia();
         }
     }

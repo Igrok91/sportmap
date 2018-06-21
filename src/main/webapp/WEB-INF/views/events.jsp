@@ -314,7 +314,10 @@
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
                                   </script>
+
+
                                 </span>
+                                <a class="btn " onclick="shareEvent('${event.idEvent}')" ><span class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
                             </div>
 
                             <div class="modal fade" id="addIgrok_${event.idEvent}">
@@ -417,6 +420,7 @@
     var eventsId = {};
     var maxWatch = 10;
     var userId = "${userId}";
+    var isDesktop = device.desktop();
     if (listEvents) {
         listEvents.forEach(function (event, i) {
             var maxCountAnswer = event.maxCountAnswer;
@@ -658,7 +662,7 @@
     }
 
     function shareEvent(eventId) {
-        VK.callMethod("shareBox", 'http://vk.com/share.php?url=https://vk.com/app6437488_-148660655#eventId=' + eventId, '', 'Присоединяйся к игре');
+        VK.callMethod("showShareBox", 'https://vk.com/app6600445_172924708#' + eventId, null ,'im');
     }
 
     setInterval(updateData, 5000);
