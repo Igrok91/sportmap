@@ -38,7 +38,7 @@ public class VkService {
     private Log logger = LogFactory.getLog(VkService.class);
     private final Random random = new Random();
     private static final Integer ADMIN = 172924708;
-    private static final String LINK_EVENT = "https://vk.com/app6600445";
+    private static final String LINK_APPLICATION = "https://vk.com/app6600445";
     private static final String LINK_PLAYGROUND = "https://vk.com/app6600445#pid=";
     private static final Integer APP_ID = 6600445;
     private static final String ACCESS_TOKEN = "d65021c0d65021c0d65021c019d634973ddd650d65021c08d4ae151d8bec8618a7565f0";
@@ -140,7 +140,7 @@ public class VkService {
                                     Thread.sleep(1000);
                                     vkApiClient.messages().send(groupActor).message("Открыт опрос в группе " + "\""
                                             + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
-                                            + getMinText(descr) + "\n" + LINK_EVENT).userId(userId).randomId(random.nextInt()).execute();
+                                            + getMinText(descr) + "\n" + LINK_APPLICATION).userId(userId).randomId(random.nextInt()).execute();
                                     countSend++;
                                 }
                             } catch (Exception e) {
@@ -160,7 +160,7 @@ public class VkService {
                                     Thread.sleep(3000);
                                     vkApiClient.messages().send(groupActor).message("Открыт опрос в группе " + "\""
                                             + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
-                                            + getMinText(descr) + "\n" + LINK_EVENT).userId(userId).randomId(random.nextInt()).execute();
+                                            + getMinText(descr) + "\n" + LINK_APPLICATION).userId(userId).randomId(random.nextInt()).execute();
                                     countSend++;
                                 }
                             } catch (Exception e) {
@@ -177,7 +177,7 @@ public class VkService {
                     Thread.sleep(1000);
                     vkApiClient.messages().send(groupActor)
                             .message("Вы успешно открыли опрос в группе " + "\"" + namePlayground + "\": \n"
-                                    + LINK_EVENT + "#" + idEvent)
+                                    + LINK_APPLICATION + "#" + idEvent)
                             .userId(userIdCreator).randomId(random.nextInt()).execute();
 
                 }
@@ -259,7 +259,7 @@ public class VkService {
                             Thread.sleep(1000);
                             vkApiClient.messages().send(groupActor).message(event.getUserFirtsNameCreator() + " " + event.getUserLastNameCreator()
                                     + " завершил(а) опрос в группе " + "\"" + event.getPlaygroundName() + "\": \n"
-                                    + getMinText(event.getDescription()) + "\n" + LINK_EVENT + "#" + event.getIdEvent()).userId(userId).randomId(random.nextInt()).execute();
+                                    + getMinText(event.getDescription()) + "\n" + LINK_APPLICATION + "#" + event.getIdEvent()).userId(userId).randomId(random.nextInt()).execute();
                         }
                         Thread.sleep(1000);
                     }
@@ -288,7 +288,7 @@ public class VkService {
                     Thread.sleep(1000);
                     vkApiClient.messages().send(groupActor).message("Пользователь https://vk.com/id" + userId
                             + " отменил голос: \n"
-                            + LINK_EVENT).userId(userIdCreator).randomId(random.nextInt()).execute();
+                            + LINK_APPLICATION).userId(userIdCreator).randomId(random.nextInt()).execute();
                 }
             }
         } catch (ApiException e) {

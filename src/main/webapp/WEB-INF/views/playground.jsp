@@ -18,19 +18,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/events.js"></script>
-    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <script src="resources\js\device.js"></script>
+    <%--<script src="resources/js/xd_connection.js" type="text/javascript"></script>--%>
+    <script type="text/javascript">
+        if (device.desktop()) {
+            document.write('<script src="resources/js/xd_connection.js"></scr' + 'ipt>');
+        } else {
+            document.write('<script src="resources/js/mobile.js"></scr' + 'ipt>');
+        }
+    </script>
     <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
     <script src="resources\js\media.js"></script>
     <script src="resources\js\device.js"></script>
+
+    <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
+    <script src="https://vk.com/js/api/adman_init.js"></script>
+    <script src="https://js.appscentrum.com/scr/preroll.js"></script>
+
     <script>
         VK.init(function () {
             console.log('vk init')
-            /*      VK.addCallback('onAllowMessagesFromCommunity', function f(location){
-                      infoAllowMessages(true);
-                  });
-                  VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
-                      infoAllowMessages(false);
-                  });*/
 
             VK.addCallback('onSubscriptionSuccess', function (subscription_id) {
                 console.log("SubscriptionSuccess: " + subscription_id);
@@ -46,6 +53,71 @@
             // API initialization failed
             // Can reload page here
         }, '5.74');
+
+    </script>
+    <script type="text/javascript">
+        var firstStart = '${firstStart}';
+        var subscriptionStatus = '${subscriptionStatus}';
+        window.addEventListener('load', function () {
+
+            var user_id = '${userId}';
+            var isAdmin = ${isAdmin};
+            var app_id = 6600445;
+
+            if ((subscriptionStatus === 'not' || subscriptionStatus === 'resume') && device.desktop()) {
+                // if (!isAdmin) {
+                    if (firstStart === 'true') {
+                        disableNavigtion(true);
+                        $("#event").addClass('hide');
+                        admanInit({
+                            user_id: user_id,
+                            app_id: app_id,
+                            type: 'preloader',
+                            params: {preview: 1}
+                        }, onAdsReady, onNoAds);
+
+                    } else {
+                        getMedia();
+                        setTimeout(resizePlayground(), 1000);
+                    }
+                // }
+            }
+
+
+            function onAdsReady(adman) {
+                adman.onStarted(function () {
+                    console.log("Adman: Started");
+                    admanStat(app_id, user_id);
+                });
+
+                adman.onCompleted(function () {
+                    console.log("Adman: Completed");
+                    $("#event").removeClass('hide');
+                    getMedia();
+                    setTimeout(resizePlayground(), 1000);
+                    disableNavigtion(false);
+
+                });
+                adman.onSkipped(function () {
+                    console.log("Adman: Skipped");
+                });
+                adman.onClicked(function () {
+                    console.log("Adman: Clicked");
+                });
+
+                adman.start('preroll');
+
+            };
+
+
+            function onNoAds() {
+                console.log("Adman: No ads");
+                getMedia();
+                setTimeout(resizeEvent(), 1000);
+            };
+        });
+
+
 
     </script>
     <style>
@@ -209,8 +281,9 @@
 
                     <c:if test="${subscriptionStatus == 'resume' || subscriptionStatus == 'not'}">
                         <div id="premium" class="text-center" style="padding-bottom: 15px">
+                            <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
                             <a href="#" data-toggle="modal"
-                               data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум" бесплатно</a>
+                               data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум"</a>
                         </div>
                     </c:if>
                     <div class="list-group">
@@ -239,7 +312,7 @@
                     </div>
 
                     <div style="padding: 4px" class="text-center">
-                        <span class="btn">
+                        <span class="btn" id="shareWebGroup">
                             <script type="text/javascript">
                                 document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#pid=${playgroundId}"}, {
                                     type: "custom",
@@ -247,6 +320,7 @@
                                 }));
                             </script>
                         </span>
+                        <a class="btn " id="shareMobileGroup" onclick="sharePlayground()" ><span class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span> Пригласить в группу</a>
                     </div>
                     <%--               <div class="container-fluid">
                                        <div class="row text-center" >
@@ -500,7 +574,7 @@
                                         </c:if>
                                     </span>
                                     </a>
-                                    <span class="btn" id="share_${event.idEvent}">
+                                    <span class="btn" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
@@ -509,6 +583,8 @@
                                     }));
                                   </script>
                                 </span>
+
+                                    <a class="btn " id="shareMobile_${event.idEvent}" onclick="shareEvent('${event.idEvent}')" ><span class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
 
 
                                 </div>
@@ -618,7 +694,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <p>Чтобы снять ограничения, оформите подписку "Премиум"</p>
+                        <div id="divPayWeb">
+                            <p>Чтобы снять ограничения, оформите подписку "Премиум"</p>
                         <c:choose>
                             <c:when test="${subscriptionStatus == 'resume'}">
                                 <a href="#" onclick="orderResume()" id="pay" class="btn btn-primary ">Возобновить
@@ -629,6 +706,10 @@
                                     подписку</a>
                             </c:otherwise>
                         </c:choose>
+                        </div>
+                        <div id="divPayMobile">
+                            <p>Чтобы снять ограничения, оформите подписку "Премиум" в веб версии приложения <span class="glyphicon glyphicon-home"></span></p>
+                        </div>
                         <%--<a href="vk://vk.com/app6602081_-148660655" target="_blank" id="goToAllow" class="btn btn-primary" >Разрешить отправку сообщений</a>--%>
                     </div>
                 </div>
@@ -700,7 +781,7 @@
                             </c:otherwise>
                         </c:choose>
                         <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
-                        <p>или добавьте площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
+                        <p>Или добавьте новую площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
                             и активируйте подписку "Премиум" на три месяца
                         </p>
                     </div>
@@ -714,14 +795,16 @@
     var listEvents = ${listEventsJson};
     var playgroundId = '${playgroundId}';
     var subscriptionStatus = '${subscriptionStatus}';
+    var isDesktop = device.desktop();
     var eventsId = {};
     var maxWatch = 10;
 
-    if (device.desktop()) {
+    if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
-        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
-            getMedia();
-        }
+        $('#shareWebGroup').removeClass('hide');
+        $('#shareMobileGroup').addClass('hide');
+        $('#divPayWeb').removeClass('hide');
+        $('#divPayMobile').addClass('hide');
         VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
             var isMember = data.response === 1;
             if (isMember) {
@@ -740,6 +823,10 @@
         if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
             $('#premium').addClass('hide');
         }
+        $('#shareWebGroup').addClass('hide');
+        $('#shareMobileGroup').removeClass('hide');
+        $('#divPayWeb').addClass('hide');
+        $('#divPayMobile').removeClass('hide');
     }
     setTimeout('resizePlayground()', 500);
     if (listEvents) {
@@ -754,6 +841,14 @@
             }
             if (event.isEditEvent == true) {
                 location.reload();
+            }
+
+            if (isDesktop) {
+                $('#shareWeb_' + id).removeClass('hide');
+                $('#shareMobile_' + id).addClass('hide');
+            } else {
+                $('#shareWeb_' + id).addClass('hide');
+                $('#shareMobile_' + id).removeClass('hide');
             }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
@@ -1114,6 +1209,14 @@
         VK.callMethod('showSubscriptionBox', 'resume', {subscription_id: '${subscription_id}'});
     }
 
+    function sharePlayground() {
+        VK.callMethod("showShareBox", 'Вступай в группу площадки и Го на Игру! \n https://vk.com/app6600445_172924708#pid' + playgroundId, null ,'im');
+    }
+
+    function shareEvent(eventId) {
+        VK.callMethod("showShareBox", 'Присоединяйся к игре! \n https://vk.com/app6600445_172924708#' + eventId, null ,'im');
+    }
+
     function subscriptionSuccess(subscription_id) {
         $('#notPremium').modal('hide');
         $('#toPremium').modal('hide');
@@ -1123,6 +1226,22 @@
     }
     function hideButtonAlert(id) {
         $('#' + id).addClass('hide');
+    }
+
+    function disableNavigtion(flag) {
+        if (flag) {
+            $('#events').addClass('disabled');
+            $('#searchPlayground').addClass('disabled');
+            $('#create').addClass('disabled');
+            $('#groups').addClass('disabled');
+            $('#profile').addClass('disabled');
+        } else {
+            $('#events').removeClass('disabled');
+            $('#searchPlayground').removeClass('disabled');
+            $('#create').removeClass('disabled');
+            $('#groups').removeClass('disabled');
+            $('#profile').removeClass('disabled');
+        }
     }
 
 

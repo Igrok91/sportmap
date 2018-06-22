@@ -40,12 +40,6 @@
     <script>
         VK.init(function () {
             console.log('vk init');
-            VK.addCallback('onAllowMessagesFromCommunity', function f(location) {
-                infoAllowMessages(true);
-            });
-            VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location) {
-                infoAllowMessages(false);
-            });
 
             VK.addCallback('onSubscriptionSuccess', function (subscription_id) {
                 console.log("SubscriptionSuccess: " + subscription_id);
@@ -64,13 +58,6 @@
             // Can reload page here
         }, '5.74');
 
-        function infoAllowMessages(flag) {
-            $.ajax({
-                url: 'infoAllowMessages?isAllow=' + flag + '&userId=' + ${userId}
-            }).then(function (value) {
-
-            });
-        }
     </script>
     <script type="text/javascript">
         var firstStart = '${firstStart}';
@@ -78,26 +65,27 @@
         window.addEventListener('load', function () {
 
             var user_id = '${userId}';
-            var isAdmin = '${isAdmin}';
+            var isAdmin = ${isAdmin};
             var app_id = 6600445;
 
                 if ((subscriptionStatus === 'not' || subscriptionStatus === 'resume') && device.desktop()) {
-                    if (!isAdmin) {
-                        if (firstStart === 'true') {
-                            disableNavigtion(true);
-                            $("#event").addClass('hide');
-                            admanInit({
-                                user_id: user_id,
-                                app_id: app_id,
-                                type: 'preloader',
-                                params: {preview: 1}
-                            }, onAdsReady, onNoAds);
 
+                        if (firstStart === 'true') {
+                            if (!isAdmin) {
+                                disableNavigtion(true);
+                                $("#event").addClass('hide');
+                                admanInit({
+                                    user_id: user_id,
+                                    app_id: app_id,
+                                    type: 'preloader',
+                                    params: {preview: 1}
+                                }, onAdsReady, onNoAds);
+                            }
                         } else {
                             getMedia();
                             setTimeout(handleReturn(), 1000);
                         }
-                    }
+
                 } else {
                     handleReturn();
                 }

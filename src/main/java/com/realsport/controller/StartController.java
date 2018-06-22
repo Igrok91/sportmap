@@ -8,6 +8,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 
+import com.realsport.model.utils.SubscribtionInfoData;
 import com.realsport.model.vo.*;
 import com.realsport.model.vo.Error;
 import com.realsport.model.dao.entityDao.Event;
@@ -120,34 +121,14 @@ public class StartController {
                 }
                 if (Objects.nonNull(hash) && !hash.isEmpty()) {
                     logger.info("hash " + hash);
-                /*    String[] s = hash.split("=");
-                    String value;
-                    if (s.length > 1) {
-                         value = s[1];
-                    } else {
-                        logger.error("Нет значения id для event");
-                        model.addAttribute("userId", userId);
-                        return "error";
-                    }
-                    logger.info("value " + value);
-                    switch (s[0].trim()) {
-                        case EVENT_ID:
-                            logger.info("redirect:/event");
-                            return "redirect:/event?eventId=" + value.trim() + "&userId=" + userId;
-                    }*/
-                    //return "redirect:/event?eventId=" + hash.trim() + "&userId=" + userId;
                     Gson gson = new Gson();
-
                     Event event;
                     if (hash.contains("&")) {
                         String[] idev = hash.split("&");
                         if (idev[0].contains("pid")) {
                             String pid = idev[0].split("=")[1].trim();
                             addGroupToModel(model, pid, user, COUNT);
-                            model.addAttribute("returnBack", "home");
-                            model.addAttribute("userPhoto", user.getPhoto_50());
-                            model.addAttribute("endList", COUNT);
-                            model.addAttribute("userId", userId);
+                            setDataToModelOnFirstEnterPlayground(model, user);
                             return "playground";
                         } else {
                             event = eventsService.getEventById(idev[0].trim());
@@ -156,10 +137,7 @@ public class StartController {
                         if (hash.contains("pid")) {
                             String pid = hash.split("=")[1].trim();
                             addGroupToModel(model, pid, user, COUNT);
-                            model.addAttribute("returnBack", "home");
-                            model.addAttribute("userPhoto", user.getPhoto_50());
-                            model.addAttribute("endList", COUNT);
-                            model.addAttribute("userId", userId);
+                            setDataToModelOnFirstEnterPlayground(model, user);
                             return "playground";
                         } else {
                             event = eventsService.getEventById(hash.trim());
@@ -222,6 +200,17 @@ public class StartController {
             stringList.add(event.getIdEvent());
         }
         return stringList;
+    }
+
+    private void setDataToModelOnFirstEnterPlayground(Model model, User user) {
+        model.addAttribute("returnBack", "home");
+        model.addAttribute("userPhoto", user.getPhoto_50());
+        model.addAttribute("endList", COUNT);
+        model.addAttribute("userId", user.getUserId());
+        model.addAttribute("firstStart", true);
+        model.addAttribute("isAdmin", user.isAdmin());
+        model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
+        model.addAttribute("subscription_id", user.getSubscription_id());
     }
 
     private void setUserDataToModel(User user, Model model) {
@@ -364,6 +353,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             model.addAttribute("userPhoto", user.getPhoto_50());
             model.addAttribute("endList", size);
+            model.addAttribute("isAdmin", user.isAdmin());
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);
@@ -404,6 +394,7 @@ public class StartController {
         }
         if (user.getUserId().equals(String.valueOf(ADMIN))) {
             user.setAdmin(true);
+            cache.put(userId, user);
         }
         return user;
     }
@@ -485,6 +476,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             model.addAttribute("userPhoto", user.getPhoto_50());
             model.addAttribute("endList", size);
+            model.addAttribute("isAdmin", user.isAdmin());
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);
@@ -516,6 +508,7 @@ public class StartController {
             model.addAttribute("userPhoto", user.getPhoto_50());
             model.addAttribute("endList", size);
             model.addAttribute("userId", userId);
+            model.addAttribute("isAdmin", user.isAdmin());
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);

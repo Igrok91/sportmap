@@ -306,7 +306,7 @@
                                         </c:if>
                                     </span>
                                 </a>
-                                <span class="btn">
+                                <span class="btn" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
@@ -317,7 +317,7 @@
 
 
                                 </span>
-                                <a class="btn " onclick="shareEvent('${event.idEvent}')" ><span class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
+                                <a class="btn " id="shareMobile_${event.idEvent}" onclick="shareEvent('${event.idEvent}')" ><span class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
                             </div>
 
                             <div class="modal fade" id="addIgrok_${event.idEvent}">
@@ -438,6 +438,13 @@
             } else if (sp == 'Волейбол') {
                 element.className = 'panel panel-info';
                 imgPlayground.src = "resources/image/сетка.png";
+            }
+            if (isDesktop) {
+                $('#shareWeb_' + id).removeClass('hide');
+                $('#shareMobile_' + id).addClass('hide');
+            } else {
+                $('#shareWeb_' + id).addClass('hide');
+                $('#shareMobile_' + id).removeClass('hide');
             }
             eventsId[id] = id;
             var description = event.description.split('\n');
@@ -662,7 +669,7 @@
     }
 
     function shareEvent(eventId) {
-        VK.callMethod("showShareBox", 'https://vk.com/app6600445_172924708#' + eventId, null ,'im');
+        VK.callMethod("showShareBox", 'Присоединяйся к игре! \n https://vk.com/app6600445_172924708#' + eventId, null ,'im');
     }
 
     setInterval(updateData, 5000);

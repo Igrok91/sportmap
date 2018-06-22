@@ -96,13 +96,15 @@
                         </div>
 
                         <div id="premium" class="text-center" style="padding-bottom: 15px">
+                            <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
                             <a  href="#" onclick="toPremium()" class="btn btn-success">Стать игроком "Премиум"</a>
                         </div>
                         <div id="premiumCancel" class="text-center" style="padding-bottom: 15px">
                             <a href="#" onclick="orderCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
                         </div>
                         <div id="premiumResume" class="text-center " style="padding-bottom: 15px">
-                            <a href="#" onclick="toPremiumResume()" class="btn btn-success">Стать игроком "Премиум" бесплатно</a>
+                            <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
+                            <a href="#" onclick="toPremiumResume()" class="btn btn-success">Стать игроком "Премиум" </a>
                         </div>
 
                         <div id="tempPremium" class="text-center hide" >
@@ -138,10 +140,10 @@
                                              Иконка "Премиум"</li>--%>
                             </ul>
                             <div class="text-center">
-                                <a id="pay" href="#" onclick="order()" class="btn btn-primary hide">Приобрести подписку</a>
+                                <a id="paySubscriptions" href="#" onclick="order()" class="btn btn-primary hide">Приобрести подписку</a>
                                 <a id="resumePay" href="#" onclick="orderResume()" class="btn btn-primary hide">Возобновить подписку</a>
                                 <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
-                                <p>или добавьте площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
+                                <p>Или добавьте новую площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
                                 и активируйте подписку "Премиум" на три месяца
                                 </p>
                                 <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
@@ -409,7 +411,7 @@
 
     function toPremium() {
         $('#premiumDiv').removeClass('hide');
-        $('#pay').removeClass('hide');
+        $('#paySubscriptions').removeClass('hide');
         //$('#premium').addClass('hide');
         resizeProfileMain();
     }

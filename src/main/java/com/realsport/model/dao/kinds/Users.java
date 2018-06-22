@@ -393,7 +393,7 @@ public class Users {
     public void registerUser(String userId, String first_name, String last_name, String photo_50, String photo_100) {
         Transaction tx = getDatastore().newTransaction();
         try {
-            FullEntity task = FullEntity.newBuilder(keyFactory.newKey(userId))
+            FullEntity task = FullEntity.newBuilder(keyFactory.newKey(Long.valueOf(userId)))
                     .set("firstName", first_name)
                     .set("userId", userId)
                     .set("lastName", last_name)
@@ -416,7 +416,7 @@ public class Users {
         try {
                 Entity userEntity = transaction.get(keyFactory.newKey(Long.valueOf(userId)));
 
-                logger.info("addSubscriptionsTemp " + userId);
+                logger.info("addSubscriptionsTemp " + userId + " " + userEntity);
                 Date date = new Date();
                 if (Objects.nonNull(userEntity)) {
 

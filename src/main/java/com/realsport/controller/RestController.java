@@ -357,6 +357,7 @@ public class RestController {
         }
         if (user.getUserId().equals(String.valueOf(ADMIN))) {
             user.setAdmin(true);
+            cache.put(userId, user);
         }
         return user;
     }
