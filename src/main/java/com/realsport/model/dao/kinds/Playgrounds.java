@@ -1,6 +1,15 @@
 package com.realsport.model.dao.kinds;
 
-import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.EntityValue;
+import com.google.cloud.datastore.FullEntity;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.LatLng;
+import com.google.cloud.datastore.LatLngValue;
+import com.google.cloud.datastore.ListValue;
+import com.google.cloud.datastore.Query;
+import com.google.cloud.datastore.QueryResults;
+import com.google.cloud.datastore.Transaction;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.vo.MinUser;
@@ -53,7 +62,6 @@ public class Playgrounds {
 
     private List<MinUser> convertListValueToUserList(List<EntityValue> listValues) {
         List<MinUser> list = new ArrayList<>();
-        logger.info("Количество участников = " + listValues.size());
         if (listValues.size() != 0) {
             for (EntityValue value : listValues) {
                 MinUser minUser = new MinUser();
@@ -115,7 +123,7 @@ public class Playgrounds {
         Transaction transaction = getDatastore().newTransaction();
         try {
             logger.info("playgroundId = " + playgroundId);
-            Entity task = transaction.get(keyFactory.newKey(Long.valueOf(playgroundId)));
+            Entity task = getEntityByIdOnTransaction(transaction, playgroundId);
             logger.info("task " + task);
             if (Objects.nonNull(task)) {
                 List<EntityValue> listValue = null;
@@ -164,7 +172,7 @@ public class Playgrounds {
     public void deleteUserFromPlayground(String userId, String playgroundId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity task = transaction.get(keyFactory.newKey(Long.valueOf(playgroundId)));
+            Entity task = getEntityByIdOnTransaction(transaction, playgroundId);
             logger.info("task" + task);
             if (Objects.nonNull(task)) {
                 List<EntityValue> listValue = null;
@@ -226,6 +234,22 @@ public class Playgrounds {
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
+            }
+        }
+        return null;
+    }
+
+    private Entity getEntityByIdOnTransaction(Transaction transaction, String eventId) {
+        if (eventId != null) {
+            String internId = eventId.trim();
+            Entity entity = transaction.get(keyFactory.newKey(internId));
+            if (Objects.nonNull(entity)) {
+                return entity;
+            } else {
+                entity = transaction.get(keyFactory.newKey(Long.valueOf(internId)));
+                if (Objects.nonNull(entity)) {
+                    return entity;
+                }
             }
         }
         return null;

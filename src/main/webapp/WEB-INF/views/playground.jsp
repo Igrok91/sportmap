@@ -18,18 +18,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/events.js"></script>
-    <script src="resources\js\device.js"></script>
+    <script src="resources/js/device.js"></script>
     <%--<script src="resources/js/xd_connection.js" type="text/javascript"></script>--%>
     <script type="text/javascript">
         if (device.desktop()) {
             document.write('<script src="resources/js/xd_connection.js"></scr' + 'ipt>');
+            document.write('<script src="//vk.com/js/api/openapi.js?154"></scr' + 'ipt>');
         } else {
             document.write('<script src="resources/js/mobile.js"></scr' + 'ipt>');
         }
     </script>
-    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
-    <script src="resources\js\media.js"></script>
-    <script src="resources\js\device.js"></script>
+    <script src="resources/js/media.js"></script>
 
     <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
     <script src="https://vk.com/js/api/adman_init.js"></script>
@@ -62,10 +61,11 @@
 
             var user_id = '${userId}';
             var isAdmin = ${isAdmin};
+            var isDesktop = device.desktop();
             var app_id = 6600445;
-
-            if ((subscriptionStatus === 'not' || subscriptionStatus === 'resume') && device.desktop()) {
-                // if (!isAdmin) {
+            if (!isAdmin) {
+                if ((subscriptionStatus === 'not' || subscriptionStatus === 'resume') && isDesktop) {
+                    // if (!isAdmin) {
                     if (firstStart === 'true') {
                         disableNavigtion(true);
                         $("#event").addClass('hide');
@@ -80,7 +80,18 @@
                         getMedia();
                         setTimeout(resizePlayground(), 1000);
                     }
-                // }
+                    // }
+                } else {
+                    if (isDesktop) {
+                        var count = 0;
+                        while (count < 5) {
+                            setTimeout('resizePlayground()', 1000);
+                            count++;
+                        }
+                    }
+                }
+            } else {
+                setTimeout('resizePlayground()', 1000);
             }
 
 
@@ -116,7 +127,6 @@
                 setTimeout(resizeEvent(), 1000);
             };
         });
-
 
 
     </script>
@@ -258,14 +268,14 @@
                             </div>
                         </div>
                         <div id="alertSuccessDiv" style="padding-top: 10px" class="hide">
-                        <div id="alertSuccess" class=" alert alert-success fade in "
-                             role="alert">
-                            <button type="button" class="close" onclick="hideButtonAlert('alertSuccess')"
-                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <div class="text-center">
-                                Подписка успешно оформлена!
+                            <div id="alertSuccess" class=" alert alert-success fade in "
+                                 role="alert">
+                                <button type="button" class="close" onclick="hideButtonAlert('alertSuccess')"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <div class="text-center">
+                                    Подписка успешно оформлена!
+                                </div>
                             </div>
-                        </div>
                         </div>
                         <h5><span class="glyphicon glyphicon-info-sign"></span> Информация</h5>
                         <div>
@@ -280,7 +290,7 @@
 
 
                     <c:if test="${subscriptionStatus == 'resume' || subscriptionStatus == 'not'}">
-                        <div id="premium" class="text-center" style="padding-bottom: 15px">
+                        <div id="premium" class="text-center hide" style="padding-bottom: 15px">
                             <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
                             <a href="#" data-toggle="modal"
                                data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум"</a>
@@ -312,7 +322,7 @@
                     </div>
 
                     <div style="padding: 4px" class="text-center">
-                        <span class="btn" id="shareWebGroup">
+                        <span class="btn hide" id="shareWebGroup">
                             <script type="text/javascript">
                                 document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#pid=${playgroundId}"}, {
                                     type: "custom",
@@ -320,7 +330,9 @@
                                 }));
                             </script>
                         </span>
-                        <a class="btn " id="shareMobileGroup" onclick="sharePlayground()" ><span class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span> Пригласить в группу</a>
+                        <a class="btn hide" id="shareMobileGroup" onclick="sharePlayground()"><span
+                                class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>
+                            Пригласить в группу</a>
                     </div>
                     <%--               <div class="container-fluid">
                                        <div class="row text-center" >
@@ -337,7 +349,14 @@
                             <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
                                  class="center-block"></div>
                             <script type="text/javascript">
-                                VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
+                                try {
+                                    VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
+                                } catch (e) {
+                                    setTimeout(function () {
+                                        $('#subscribe').remove();
+                                        resizePlayground();
+                                    }, 1000);
+                                }
                                 VK.Observer.subscribe("widgets.groups.joined", function f() {
                                     console.log("user joined")
                                     setTimeout(function () {
@@ -574,7 +593,7 @@
                                         </c:if>
                                     </span>
                                     </a>
-                                    <span class="btn" id="shareWeb_${event.idEvent}">
+                                    <span class="btn hide" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
@@ -584,7 +603,10 @@
                                   </script>
                                 </span>
 
-                                    <a class="btn " id="shareMobile_${event.idEvent}" onclick="shareEvent('${event.idEvent}')" ><span class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
+                                    <a class="btn hide" id="shareMobile_${event.idEvent}"
+                                       onclick="shareEvent('${event.idEvent}')"><span
+                                            class="glyphicon glyphicon-bullhorn"
+                                            style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
 
 
                                 </div>
@@ -689,26 +711,28 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title text-center" id="notPremiumLabel">${firstName}, превышен лимит количества групп! </h4>
+                    <h4 class="modal-title text-center" id="notPremiumLabel">${firstName}, превышен лимит количества
+                        групп! </h4>
 
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
                         <div id="divPayWeb">
                             <p>Чтобы снять ограничения, оформите подписку "Премиум"</p>
-                        <c:choose>
-                            <c:when test="${subscriptionStatus == 'resume'}">
-                                <a href="#" onclick="orderResume()" id="pay" class="btn btn-primary ">Возобновить
-                                    подписку </a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="#" onclick="order()" id="pay" class="btn btn-primary ">Приобрести
-                                    подписку</a>
-                            </c:otherwise>
-                        </c:choose>
+                            <c:choose>
+                                <c:when test="${subscriptionStatus == 'resume'}">
+                                    <a href="#" onclick="orderResume()" id="pay" class="btn btn-primary ">Возобновить
+                                        подписку </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="#" onclick="order()" id="pay" class="btn btn-primary ">Приобрести
+                                        подписку</a>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                         <div id="divPayMobile">
-                            <p>Чтобы снять ограничения, оформите подписку "Премиум" в веб версии приложения <span class="glyphicon glyphicon-home"></span></p>
+                            <p>Чтобы снять ограничения, оформите подписку "Премиум" в веб версии приложения <span
+                                    class="glyphicon glyphicon-home"></span></p>
                         </div>
                         <%--<a href="vk://vk.com/app6602081_-148660655" target="_blank" id="goToAllow" class="btn btn-primary" >Разрешить отправку сообщений</a>--%>
                     </div>
@@ -780,8 +804,10 @@
                                     подписку</a>
                             </c:otherwise>
                         </c:choose>
-                        <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
-                        <p>Или добавьте новую площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
+                        <p style="color: gray;padding-top: 5px">14 голосов в месяц</p>
+                        <p>Или добавьте новую площадку на карту в разделе <span style="color: gray"
+                                                                                class="glyphicon glyphicon-search"></span>
+                            <span style="color: gray"> Площадки</span>
                             и активируйте подписку "Премиум" на три месяца
                         </p>
                     </div>
@@ -795,6 +821,7 @@
     var listEvents = ${listEventsJson};
     var playgroundId = '${playgroundId}';
     var subscriptionStatus = '${subscriptionStatus}';
+    var sport = '${sport}';
     var isDesktop = device.desktop();
     var eventsId = {};
     var maxWatch = 10;
@@ -805,20 +832,23 @@
         $('#shareMobileGroup').addClass('hide');
         $('#divPayWeb').removeClass('hide');
         $('#divPayMobile').addClass('hide');
+
         VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
             var isMember = data.response === 1;
             if (isMember) {
                 $('#subscribe').remove();
             } else {
                 $('#subscribe').removeClass('hide');
-                var count = 0;
-                while (count < 5) {
-                    setTimeout('resizePlayground()', 1000);
-                    count++;
-                }
+                /*  var count = 0;
+                  while (count < 5) {
+                      setTimeout('resizePlayground()', 1000);
+                      count++;
+                  }*/
             }
         });
-
+        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
+            $('#premium').removeClass('hide');
+        }
     } else {
         if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
             $('#premium').addClass('hide');
@@ -828,7 +858,7 @@
         $('#divPayWeb').addClass('hide');
         $('#divPayMobile').removeClass('hide');
     }
-    setTimeout('resizePlayground()', 500);
+    //    setTimeout('resizePlayground()', 500);
     if (listEvents) {
         var userId = "${userId}";
         listEvents.forEach(function (event, i) {
@@ -844,11 +874,15 @@
             }
 
             if (isDesktop) {
-                $('#shareWeb_' + id).removeClass('hide');
-                $('#shareMobile_' + id).addClass('hide');
+                if (activeEvent) {
+                    $('#shareWeb_' + id).removeClass('hide');
+                    $('#shareMobile_' + id).addClass('hide');
+                }
             } else {
-                $('#shareWeb_' + id).addClass('hide');
-                $('#shareMobile_' + id).removeClass('hide');
+                if (activeEvent) {
+                    $('#shareWeb_' + id).addClass('hide');
+                    $('#shareMobile_' + id).removeClass('hide');
+                }
             }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
@@ -947,19 +981,18 @@
 
     }
 
-    var sp = '${sport}';
     var allowSendMessage = ${allowSendMessage};
-    if (sp == 'Футбол') {
+    if (sport == 'Футбол') {
         $('#panelGroup').addClass('panel-success');
         $('#imageGroup').attr("src", "resources/image/стадион.png")
-    } else if (sp == 'Баскетбол') {
+    } else if (sport == 'Баскетбол') {
         $('#panelGroup').addClass('panel-warning');
         $('#imageGroup').attr("src", "resources/image/playbasket.png")
-    } else if (sp == 'Волейбол') {
+    } else if (sport == 'Волейбол') {
         $('#panelGroup').addClass('panel-info');
         $('#imageGroup').attr("src", "resources/image/сетка.png")
     }
-    var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sp + '&userId=' + ${userId};
+    var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sport + '&userId=' + ${userId};
     $('#returnBack').attr('href', returnBack);
 
 
@@ -996,7 +1029,7 @@
                     var count2 = parseInt($('#players').text());
                     count2 = count2 - 1;
                     $('#players').text(count2);
-                //    $('#list_' + userId).remove();
+                    //    $('#list_' + userId).remove();
                     break;
                 case 'notAllow':
                     $('#notPremium').modal('show');
@@ -1007,12 +1040,11 @@
         });
     }
 
-    setTimeout('resizePlayground()', 500);
 
     function resizePlayground() {
         var height = $('#mainPlayground').height();
         if (device.desktop()) {
-            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp' ) {
+            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 if (height < 650) {
                     VK.callMethod('resizeWindow', 900, 650);
                 } else {
@@ -1024,7 +1056,6 @@
                 } else {
                     VK.callMethod('resizeWindow', 900, height + 160);
                 }
-
             }
         }
     }
@@ -1118,7 +1149,7 @@
                                         $('#imageUser').addClass('hide');
                                         var userImg = document.getElementById("templateUserList2").cloneNode(true);
                                         var addIgr = user.countFake;
-                                        userImg.id = user.userId + '_imgUser_' + eventId;
+                                        userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
                                         userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
                                         var span = document.createElement('span');
                                         span.id = user.userId + '_add_' + eventId;
@@ -1210,11 +1241,18 @@
     }
 
     function sharePlayground() {
-        VK.callMethod("showShareBox", 'Вступай в группу площадки и Го на Игру! \n https://vk.com/app6600445_172924708#pid' + playgroundId, null ,'im');
+        if (sport === 'Футбол') {
+            VK.callMethod("showShareBox", 'Вступай в группу площадки и Го в Футбол! \n https://vk.com/app6600445_172924708#pid=' + playgroundId, null, 'im');
+        } else if (sport == 'Баскетбол') {
+            VK.callMethod("showShareBox", 'Вступай в группу площадки и Го в Баскетбол! \n https://vk.com/app6600445_172924708#pid=' + playgroundId, null, 'im');
+        } else {
+            VK.callMethod("showShareBox", 'Вступай в группу площадки и Го на игру! \n https://vk.com/app6600445_172924708#pid=' + playgroundId, null, 'im');
+        }
+
     }
 
     function shareEvent(eventId) {
-        VK.callMethod("showShareBox", 'Присоединяйся к игре! \n https://vk.com/app6600445_172924708#' + eventId, null ,'im');
+        VK.callMethod("showShareBox", 'Присоединяйся к игре! \n https://vk.com/app6600445_172924708#' + eventId, null, 'im');
     }
 
     function subscriptionSuccess(subscription_id) {
@@ -1224,6 +1262,7 @@
         $('#alertSuccessDiv').removeClass('hide');
         $('#alertSuccess').alert();
     }
+
     function hideButtonAlert(id) {
         $('#' + id).addClass('hide');
     }

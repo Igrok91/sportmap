@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Event implements Serializable{
+public class Event implements Serializable {
     private String idEvent;
     private String userIdCreator;
     private String userFirtsNameCreator;
@@ -30,7 +30,6 @@ public class Event implements Serializable{
     private List<HistoryEvent> historyEvent = new ArrayList<>();
 
 
-
     public String getDescription() {
         return description;
     }
@@ -38,9 +37,6 @@ public class Event implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
-
-
-
 
 
     public int getMaxCountAnswer() {

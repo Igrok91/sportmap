@@ -1,9 +1,6 @@
 package com.realsport.model.cache;
 
 import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Component;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
@@ -26,7 +23,7 @@ public class CacheUser {
                 properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.HOURS.toSeconds(1));
                 atomicReference.set(cacheFactory.createCache(properties));
             } catch (CacheException e) {
-               e.printStackTrace();
+                e.printStackTrace();
             }
         }
 

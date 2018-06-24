@@ -18,8 +18,13 @@ import com.realsport.model.dao.entityDao.TemplateGame;
 import com.realsport.model.dao.entityDao.User;
 
 
-import com.realsport.service.*;
 import com.realsport.model.utils.Playgrounds;
+import com.realsport.service.CacheService;
+import com.realsport.service.EventsService;
+import com.realsport.service.PlaygroundService;
+import com.realsport.service.SubscriptionsService;
+import com.realsport.service.UserService;
+import com.realsport.service.VkService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +39,12 @@ import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.TimeZone;
 
 import static com.realsport.model.cache.CacheObserver.getCacheObserver;
 import static com.realsport.model.cache.CachePlaygrounds.getCachePlaygrounds;
@@ -82,7 +92,7 @@ public class RestController {
                              @RequestParam(value = "photo_50") String photo_50,
                              @RequestParam(value = "photo_100") String photo_100) {
         logger.info("Регистрируем пользователя с id " + userId + ", first_name " +
-                first_name + ", last_name " + last_name + ", photo_50 " + photo_50 + ", photo_100 " + photo_100 );
+                first_name + ", last_name " + last_name + ", photo_50 " + photo_50 + ", photo_100 " + photo_100);
         userService.registerUser(userId, first_name, last_name, photo_50, photo_100);
     }
 
@@ -149,7 +159,7 @@ public class RestController {
 
     @RequestMapping(value = "/infoAllowMessages")
     public void infoAllowMessages(@RequestParam(value = "isAllow") boolean isAllow,
-                             @RequestParam(value = "userId") String userId) throws Exception {
+                                  @RequestParam(value = "userId") String userId) throws Exception {
         vkService.sendMessage(ADMIN, "Пользователь https://vk.com/id" + userId + "  разрешил присылать сообщения " + isAllow);
     }
 
@@ -254,8 +264,8 @@ public class RestController {
     @RequestMapping("/handleGroup")
     @ResponseBody
     public String handleGroup(@RequestParam(value = "playgroundId", required = false, defaultValue = "1") String playgroundId,
-                               @RequestParam(value = "sport", required = false, defaultValue = " Футбол") String sport,
-                               @RequestParam(value = "userId") String userId) {
+                              @RequestParam(value = "sport", required = false, defaultValue = " Футбол") String sport,
+                              @RequestParam(value = "userId") String userId) {
 
         User user = getUser(userId);
         String isParticipant = "false";
@@ -266,31 +276,14 @@ public class RestController {
             }
         }).first().orNull();
         System.out.println("id= " + id);
-            if (id == null) {
-                if (user.getPlaygroundIdlList().size() > 2 && (user.getSubscriptionStatus().equals(RESUME) || user.getSubscriptionStatus().equals(NOT))) {
-                    isParticipant = "notAllow";
-                } else {
-                    logger.info("User c id " + userId + " вступил в группу " + playgroundId);
-                    user.getPlaygroundIdlList().add(playgroundId);
-                    playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
-                    userService.addPlaygroundToUser(userId, playgroundId);
-                    List<Playground> playgrounds = playgroundService.getAllPlayground();
-                    Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
-                        @Override
-                        public boolean apply(Playground playground) {
-                            return playground.getIdplayground().equals(playgroundId);
-                        }
-                    }).get();
-                    p.getPlayers().add(getUserMin(user));
-                    getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
-                    isParticipant = "true";
-                    vkService.notifyNewUserInvite(user, p.getName(), p.getPlayers(), p.getIdplayground());
-                }
+        if (id == null) {
+            if (user.getPlaygroundIdlList().size() > 2 && (user.getSubscriptionStatus().equals(RESUME) || user.getSubscriptionStatus().equals(NOT))) {
+                isParticipant = "notAllow";
             } else {
-                logger.info("User c id " + userId + " вышел из группы " + playgroundId);
-                user.getPlaygroundIdlList().remove(id);
-                playgroundService.deleteUserFromPlayground(userId, playgroundId);
-                userService.deletePlaygroundFromUser(userId, playgroundId);
+                logger.info("User c id " + userId + " вступил в группу " + playgroundId);
+                user.getPlaygroundIdlList().add(playgroundId);
+                playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
+                userService.addPlaygroundToUser(userId, playgroundId);
                 List<Playground> playgrounds = playgroundService.getAllPlayground();
                 Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
                     @Override
@@ -298,15 +291,32 @@ public class RestController {
                         return playground.getIdplayground().equals(playgroundId);
                     }
                 }).get();
-                p.getPlayers().removeIf(new Predicate<MinUser>() {
-                    @Override
-                    public boolean apply(MinUser minUser) {
-                        return minUser.getUserId().equals(userId);
-                    }
-                });
+                p.getPlayers().add(getUserMin(user));
                 getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
-                isParticipant = "false";
+                isParticipant = "true";
+                vkService.notifyNewUserInvite(user, p.getName(), p.getPlayers(), p.getIdplayground());
             }
+        } else {
+            logger.info("User c id " + userId + " вышел из группы " + playgroundId);
+            user.getPlaygroundIdlList().remove(id);
+            playgroundService.deleteUserFromPlayground(userId, playgroundId);
+            userService.deletePlaygroundFromUser(userId, playgroundId);
+            List<Playground> playgrounds = playgroundService.getAllPlayground();
+            Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
+                @Override
+                public boolean apply(Playground playground) {
+                    return playground.getIdplayground().equals(playgroundId);
+                }
+            }).get();
+            p.getPlayers().removeIf(new Predicate<MinUser>() {
+                @Override
+                public boolean apply(MinUser minUser) {
+                    return minUser.getUserId().equals(userId);
+                }
+            });
+            getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
+            isParticipant = "false";
+        }
 
         putToCacheUser(user);
         return isParticipant;
@@ -343,7 +353,7 @@ public class RestController {
                     if (user.getSubscriptionsTemp() != null && isActiveSubscriptionsTemp(user.getSubscriptionsTemp())) {
                         status = TEMP;
                         int end = getCountDaytoEndSubscribe(user.getSubscriptionsTemp());
-                        logger.info("getCountDaytoEndSubscribe " + end   );
+                        logger.info("getCountDaytoEndSubscribe " + end);
                         user.setCountDaytoEndSubscribeTemp(end);
                         logger.info("status подписки пользователя " + userId + " Temp");
                     } else {
@@ -352,13 +362,14 @@ public class RestController {
                     user.setSubscriptionStatus(status);
                 }
                 cache.put(userId, user);
+                if (user.getUserId().equals(String.valueOf(ADMIN))) {
+                    user.setAdmin(true);
+                    cache.put(userId, user);
+                }
             }
 
         }
-        if (user.getUserId().equals(String.valueOf(ADMIN))) {
-            user.setAdmin(true);
-            cache.put(userId, user);
-        }
+
         return user;
     }
 
@@ -409,32 +420,33 @@ public class RestController {
         Long idNew = playgroundService.addPlaygroundToDB(userId.trim(), lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
         playgroundService.deleteNotification(idPlayground);
         boolean isActiveSubsctrictions = subscriptionsService.isPremiumUser(userId);
-        userService.addSubscriptionsTemp(userId);
+
         Cache cache = getCacheUser();
-        User user = (User) cache.get(userId);
+        User user = getUser(userId);
         if (Objects.nonNull(user)) {
-            user.setSubscriptionStatus(TEMP);
-            int end = getCountDaytoEndSubscribe(user.getSubscriptionsTemp());
-            logger.info("getCountDaytoEndSubscribe " + end);
-            user.setCountDaytoEndSubscribeTemp(end);
-            cache.put(userId, user);
-        }
-
-        if (vkService.isAllowSendMessages(Integer.valueOf(userId))) {
-            if (isActiveSubsctrictions) {
-                vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка прошла проверку и добавлена на карту \n https://vk.com/app6600445");
+            if (isActiveSubscriptionsTemp(user.getSubscriptionsTemp()) || isActiveSubsctrictions) {
+                logger.info("Польщователь с id " + userId + " уже имеет подписку");
+                if (vkService.isAllowSendMessages(Integer.valueOf(userId))) {
+                    vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка прошла проверку и добавлена на карту \n https://vk.com/app6600445");
+                } else {
+                    vkService.sendNotification(Collections.singletonList(Integer.valueOf(userId)), "Ваша площадка прошла проверку и добавлена на карту");
+                }
             } else {
-                vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка добавлена на карту и активирована подписка \"Премиум\" \n https://vk.com/app6600445");
-            }
-
-        } else {
-            if (isActiveSubsctrictions) {
-                vkService.sendNotification(Collections.singletonList(Integer.valueOf(userId)), "Ваша площадка прошла проверку и добавлена на карту");
-            } else {
-                vkService.sendNotification(Collections.singletonList(Integer.valueOf(userId)), "Ваша площадка добавлена на карту и активирована подписка \"Премиум\"");
+                Date date = new Date();
+                user.setSubscriptionStatus(TEMP);
+                user.setSubscriptionsTemp(Timestamp.of(date));
+                int end = getCountDaytoEndSubscribe(Timestamp.of(date));
+                logger.info("getCountDaytoEndSubscribe " + end);
+                user.setCountDaytoEndSubscribeTemp(end);
+                cache.put(userId, user);
+                userService.addSubscriptionsTemp(userId.trim());
+                if (vkService.isAllowSendMessages(Integer.valueOf(userId))) {
+                    vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка добавлена на карту и активирована подписка \"Премиум\" \n https://vk.com/app6600445");
+                } else {
+                    vkService.sendNotification(Collections.singletonList(Integer.valueOf(userId)), "Ваша площадка добавлена на карту и активирована подписка \"Премиум\"");
+                }
             }
         }
-
 
         List<Playground> playgrounds = playgroundService.getAllPlayground();
         Playground playground = new Playground();
@@ -453,13 +465,13 @@ public class RestController {
 
     @RequestMapping("/addPlaygroundToDBAdmin")
     public void addPlaygroundToDBAdmin(@RequestParam(value = "lat") String lat,
-                                  @RequestParam(value = "lng") String lng,
-                                  @RequestParam(value = "name") String name,
-                                  @RequestParam(value = "city") String city,
-                                  @RequestParam(value = "street") String street,
-                                  @RequestParam(value = "house") String house,
-                                  @RequestParam(value = "sport") String sport) throws Exception {
-         playgroundService.addPlaygroundToDB(null, lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
+                                       @RequestParam(value = "lng") String lng,
+                                       @RequestParam(value = "name") String name,
+                                       @RequestParam(value = "city") String city,
+                                       @RequestParam(value = "street") String street,
+                                       @RequestParam(value = "house") String house,
+                                       @RequestParam(value = "sport") String sport) throws Exception {
+        playgroundService.addPlaygroundToDB(null, lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
     }
 
     @RequestMapping("/addPlaygroundToCheck")
@@ -477,7 +489,7 @@ public class RestController {
     @ResponseBody
     public List<Event> getNewDataEvents(Model model, @RequestParam(value = "date") long date,
                                         @RequestParam(value = "userId") String userId,
-                                        @RequestParam(value = "eventsId" ) String eventsId) throws ParseException {
+                                        @RequestParam(value = "eventsId") String eventsId) throws ParseException {
 
         Date now = new Date(date);
         User user = getUser(userId);
@@ -523,7 +535,7 @@ public class RestController {
     public List<Event> getNewDataEventsPlayground(Model model, @RequestParam(value = "date") long date,
                                                   @RequestParam(value = "userId") String userId,
                                                   @RequestParam(value = "playgroundId") String playgroundId,
-                                                  @RequestParam(value = "eventsId" ) String eventsId) throws ParseException {
+                                                  @RequestParam(value = "eventsId") String eventsId) throws ParseException {
 
         Date now = new Date(date);
         boolean isEditData = false;

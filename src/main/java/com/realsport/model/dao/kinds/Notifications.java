@@ -1,6 +1,12 @@
 package com.realsport.model.dao.kinds;
 
-import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.DoubleValue;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.FullEntity;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.Query;
+import com.google.cloud.datastore.QueryResults;
+import com.google.cloud.datastore.Transaction;
 import com.realsport.model.vo.CheckPlaygroundData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,9 +65,9 @@ public class Notifications {
         for (QueryResults<Entity> it = queryResults; it.hasNext(); ) {
             Entity entity = it.next();
             CheckPlaygroundData data = new CheckPlaygroundData(entity.getDouble("lat"),
-                                                                entity.getDouble("lng"),
-                                                                    entity.getString("sport"),
-                                                                        entity.getString("userIdCreator"));
+                    entity.getDouble("lng"),
+                    entity.getString("sport"),
+                    entity.getString("userIdCreator"));
             data.setId(entity.getKey().getId());
             list.add(data);
         }

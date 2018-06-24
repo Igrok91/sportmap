@@ -24,10 +24,9 @@ public class User implements Serializable {
     // Список id  событий, в которых учавствовал
     private List<EventUser> listParticipant = new ArrayList<>();
     // Список id площадок
-    private List<String> playgroundIdlList =  new ArrayList<>();
+    private List<String> playgroundIdlList = new ArrayList<>();
     // Список шаблонов пользователя
-    private List<TemplateGame> templateGames =  new ArrayList<>();
-
+    private List<TemplateGame> templateGames = new ArrayList<>();
 
 
     public String getInfo() {
@@ -101,6 +100,7 @@ public class User implements Serializable {
     public void setTemplateGames(List<TemplateGame> templateGames) {
         this.templateGames = templateGames;
     }
+
     public void addTemplateGames(TemplateGame templateGames) {
         this.templateGames.add(templateGames);
     }

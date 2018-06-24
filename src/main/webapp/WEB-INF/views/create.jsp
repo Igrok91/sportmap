@@ -21,10 +21,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
     <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
-    <link rel="stylesheet" href="resources\switch\switch.css"/>
-    <script src="resources\switch\switch.js"></script>
-    <script src="resources\js\media.js"></script>
-    <script src="resources\js\device.js"></script>
+    <link rel="stylesheet" href="resources/switch/switch.css"/>
+    <script src="resources/switch/switch.js"></script>
+    <script src="resources/js/media.js"></script>
+    <script src="resources/js/device.js"></script>
     <script>
         VK.init(function () {
             console.log('vk init')

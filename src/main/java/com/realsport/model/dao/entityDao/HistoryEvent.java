@@ -1,6 +1,8 @@
 package com.realsport.model.dao.entityDao;
 
-public class HistoryEvent {
+import java.io.Serializable;
+
+public class HistoryEvent implements Serializable{
     private String historyId;
     private String userId;
     private String firstName;

@@ -17,25 +17,29 @@
     <script src="resources/js/events.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="resources\js\device.js"></script>
+    <script src="resources/js/device.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-    <script src="resources\js\media.js"></script>
+    <script src="resources/js/media.js"></script>
     <style>
         .borderless {
             border: 0 none;
             box-shadow: none;
         }
+
         .liOptions {
             margin-bottom: 2px;
             margin-top: 2px;
         }
+
         a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
         }
+
         textarea {
             resize: none;
         }
+
         .round {
             border-radius: 50%;
         }
@@ -293,15 +297,20 @@
 
                     </div>
 
-                    <hr style="margin-bottom: 0px">
-                    <span class="btn" style="margin: 5px" id="share_${event.idEvent}">
-                        <script type="text/javascript">
-                            document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
-                                type: "custom",
-                                text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
+                    <hr style="margin-bottom: 1px">
+                    <span class="btn hide " id="shareWeb_${event.idEvent}">
+
+                                    <script type="text/javascript">
+                                    document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
+                                        type: "custom",
+                                        text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
-                        </script>
-                    </span>
+                                  </script>
+
+
+                                </span>
+                    <a class="btn hide" id="shareMobile_${event.idEvent}" onclick="shareEvent('${event.idEvent}')"><span
+                            class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
                     <%--   <c:if test="${event.commentsList.size() != 0}">--%>
                     <div class="text-center hide" style="color: gray; padding: 15px;" id="past_${event.idEvent}">
                         <span>Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
@@ -464,26 +473,40 @@
 <script>
     var where = '${where}';
     var subscriptionStatus = '${subscriptionStatus}';
+    var isDesktop = device.desktop();
+    var maxWatch = 10;
+    var event = ${eventJson};
+    var isAdmin = ${isAdmin};
+    var activeEvent = event.active;
+    var sp = event.sport;
+    var id = event.idEvent;
     if (where === 'comment') {
         $('#textComment').focus();
     }
 
-    if (device.desktop()) {
+    if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
         if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
-            getMedia();
+            if (!isAdmin) {
+                getMedia();
+            }
+        }
+        if (activeEvent) {
+            $('#shareWeb_' + id).removeClass('hide');
+            $('#shareMobile_' + id).addClass('hide');
+        }
+    } else {
+        if (activeEvent) {
+            $('#shareWeb_' + id).addClass('hide');
+            $('#shareMobile_' + id).removeClass('hide');
         }
     }
 
 
-    var maxWatch = 10;
-    var event = ${eventJson};
-    var activeEvent = event.active;
     var userId = "${userId}";
     var maxCountAnswer = event.maxCountAnswer;
     var usersList = event.userList;
-    var sp = event.sport;
-    var id = event.idEvent;
+
 
     var element = document.getElementById(id);
     var imgPlayground = document.getElementById(id + '_imgPlayground');
@@ -795,7 +818,7 @@
                                 $('#imageUser').addClass('hide');
                                 var userImg = document.getElementById("templateUserList2").cloneNode(true);
                                 var addIgr = user.countFake;
-                                userImg.id = user.userId + '_imgUser_' + eventId;
+                                userImg.id = user.userId + '_imgUser_' + eventId + '_fake';
                                 userImg.href = "user?playerId=" + user.userId + "&userId=${userId}";
                                 var span = document.createElement('span');
                                 span.id = user.userId + '_add_' + eventId;
@@ -875,10 +898,10 @@
         $('#cancelAnswer_' + id).addClass('hide');
         $('#editEvent_' + id).addClass('hide');
         $('#endEvent_' + id).addClass('hide');
-        $('#share_' + id).addClass('hide');
         $('#commentArea').addClass('hide');
         $('#textComment').attr('disabled', 'disabled');
         $('#answerButton_' + id).attr('disabled', 'disabled');
+
 
     }
 

@@ -9,24 +9,38 @@ import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 
 import com.realsport.model.utils.SubscribtionInfoData;
-import com.realsport.model.vo.*;
+import com.realsport.model.vo.CheckPlaygroundData;
 import com.realsport.model.vo.Error;
 import com.realsport.model.dao.entityDao.Event;
 import com.realsport.model.dao.entityDao.EventUser;
+import com.realsport.model.vo.ErrorInfo;
 import com.realsport.model.vo.MinUser;
 import com.realsport.model.dao.entityDao.Playground;
 import com.realsport.model.dao.entityDao.TemplateGame;
 import com.realsport.model.dao.entityDao.User;
 
-import com.realsport.service.*;
 import com.realsport.model.utils.Utils;
+import com.realsport.model.vo.PlaygroundInfo;
+import com.realsport.model.vo.Response;
+import com.realsport.model.vo.StatusSubscribe;
+import com.realsport.model.vo.SubscribtionInfo;
+import com.realsport.model.vo.SubscribtionInfoUser;
+import com.realsport.service.CacheService;
+import com.realsport.service.EventsService;
+import com.realsport.service.PlaygroundService;
+import com.realsport.service.SubscriptionsService;
+import com.realsport.service.UserService;
+import com.realsport.service.VkService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.cache.Cache;
 
@@ -60,9 +74,7 @@ public class StartController {
     public static final Integer COUNT = 5;
 
 
-
     private static final Integer ADMIN = 172924708;
-
 
 
     @Autowired
@@ -380,7 +392,7 @@ public class StartController {
                     if (user.getSubscriptionsTemp() != null && isActiveSubscriptionsTemp(user.getSubscriptionsTemp())) {
                         status = TEMP;
                         int end = getCountDaytoEndSubscribe(user.getSubscriptionsTemp());
-                        logger.info("getCountDaytoEndSubscribe " + end   );
+                        logger.info("getCountDaytoEndSubscribe " + end);
                         user.setCountDaytoEndSubscribeTemp(end);
                         logger.info("status подписки пользователя " + userId + " Temp");
                     } else {
@@ -389,16 +401,15 @@ public class StartController {
                     user.setSubscriptionStatus(status);
                 }
                 cache.put(userId, user);
+                if (user.getUserId().equals(String.valueOf(ADMIN))) {
+                    user.setAdmin(true);
+                    cache.put(userId, user);
+                }
             }
 
         }
-        if (user.getUserId().equals(String.valueOf(ADMIN))) {
-            user.setAdmin(true);
-            cache.put(userId, user);
-        }
         return user;
     }
-
 
 
     private User getPlayers(String userId) {
@@ -413,7 +424,6 @@ public class StartController {
             addGroupDataToModel(model, playground, idGroup, size);
         }
         model.addAttribute("firstName", user.getFirstName());
-        model.addAttribute("lastName", user.getLastName());
         model.addAttribute("lastName", user.getLastName());
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
@@ -533,30 +543,30 @@ public class StartController {
 
     @RequestMapping(value = "/money", method = RequestMethod.POST)
     @ResponseBody
-    public String money(@RequestParam(value = "notification_type", required = false) String notification_type ,
-                        @RequestParam(value = "app_id") Integer app_id ,
-                        @RequestParam(value = "user_id") Integer user_id ,
-                        @RequestParam(value = "receiver_id", required = false) Integer receiver_id ,
+    public String money(@RequestParam(value = "notification_type", required = false) String notification_type,
+                        @RequestParam(value = "app_id") Integer app_id,
+                        @RequestParam(value = "user_id") Integer user_id,
+                        @RequestParam(value = "receiver_id", required = false) Integer receiver_id,
                         @RequestParam(value = "sig", required = false) String sig,
-                        @RequestParam(value = "item", required = false) String item ,
+                        @RequestParam(value = "item", required = false) String item,
                         @RequestParam(value = "order_id", required = false) Integer order_id,
                         @RequestParam(value = "cancel_reason", required = false) String cancel_reason,
                         @RequestParam(value = "item_id", required = false) String item_id,
                         @RequestParam(value = "status", required = false) String status,
                         @RequestParam(value = "item_price", required = false) Integer item_price,
                         @RequestParam(value = "pending_cancel", required = false) Integer pending_cancel,
-                        @RequestParam(value = "lang", required = false) String lang ,
-                        @RequestParam(value = "subscription_id", required = false) Integer subscription_id)  {
+                        @RequestParam(value = "lang", required = false) String lang,
+                        @RequestParam(value = "subscription_id", required = false) Integer subscription_id) {
         try {
             logger.info("Тест платежа: " + "notification_type - " + notification_type + ", item - " + item +
-            ", order_id - " + order_id + ", item_id - " + item_id + ", status - " + status + ", subscription_id - " + subscription_id);
-          logger.info("sig = " + sig);
+                    ", order_id - " + order_id + ", item_id - " + item_id + ", status - " + status + ", subscription_id - " + subscription_id);
+            logger.info("sig = " + sig);
             String md5;
             switch (notification_type) {
                 case "get_subscription_test":
-                     md5 = getHash(notification_type, app_id, user_id,
+                    md5 = getHash(notification_type, app_id, user_id,
                             receiver_id, item, order_id, cancel_reason, item_id,
-                            status, item_price,pending_cancel ,subscription_id, lang);
+                            status, item_price, pending_cancel, subscription_id, lang);
                     if (!sig.equals(md5)) {
                         ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
                         return toJson(new Error(errorInfo));
@@ -568,7 +578,7 @@ public class StartController {
                     if (Objects.nonNull(status)) {
                         md5 = getHash(notification_type, app_id, user_id,
                                 receiver_id, item, order_id, cancel_reason, item_id,
-                                status, item_price,pending_cancel ,subscription_id, lang);
+                                status, item_price, pending_cancel, subscription_id, lang);
                         if (!sig.equals(md5)) {
                             ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
                             return toJson(new Error(errorInfo));
@@ -613,9 +623,9 @@ public class StartController {
                         return toJson(new Error(errorInfo));
                     }
                 case "get_subscription":
-                     md5 = getHash(notification_type, app_id, user_id,
+                    md5 = getHash(notification_type, app_id, user_id,
                             receiver_id, item, order_id, cancel_reason, item_id,
-                            status, item_price,pending_cancel ,subscription_id, lang);
+                            status, item_price, pending_cancel, subscription_id, lang);
                     if (!sig.equals(md5)) {
                         ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
                         return toJson(new Error(errorInfo));
@@ -627,7 +637,7 @@ public class StartController {
                     if (Objects.nonNull(status)) {
                         md5 = getHash(notification_type, app_id, user_id,
                                 receiver_id, item, order_id, cancel_reason, item_id,
-                                status, item_price,pending_cancel ,subscription_id, lang);
+                                status, item_price, pending_cancel, subscription_id, lang);
                         if (!sig.equals(md5)) {
                             ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
                             return toJson(new Error(errorInfo));
@@ -686,8 +696,8 @@ public class StartController {
                            String cancel_reason, String item_id, String status, Integer item_price,
                            Integer pending_cancel, Integer subscription_id, String lang) {
         String list = Utils.getSortParam(notification_type, app_id, user_id,
-                receiver_id, item, order_id, cancel_reason, item_id, status, item_price,pending_cancel ,subscription_id, lang);
-           logger.info("Param " + list);
+                receiver_id, item, order_id, cancel_reason, item_id, status, item_price, pending_cancel, subscription_id, lang);
+        logger.info("Param " + list);
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -704,7 +714,7 @@ public class StartController {
             if (hex.length() == 1) hexString.append('0');
             hexString.append(hex);
         }
-    logger.info("sigCheck = " + hexString.toString());
+        logger.info("sigCheck = " + hexString.toString());
         return hexString.toString();
     }
 
@@ -936,7 +946,7 @@ public class StartController {
                 }
             }
 
-            cacheService.putToCache(eventId, userId,false);
+            cacheService.putToCache(eventId, userId, false);
             if (where.equals("playground")) {
                 return "redirect:/playground?playgroundId=" + id + "&userId=" + userId;
             }
@@ -967,6 +977,7 @@ public class StartController {
 
             model.addAttribute("userId", userId);
             model.addAttribute("user", user);
+            model.addAttribute("isAdmin", user.isAdmin());
             model.addAttribute("where", where);
             model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
         } catch (Exception e) {

@@ -17,7 +17,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-    <script src="resources\js\device.js"></script>
+    <script src="resources/js/device.js"></script>
     <style>
 
         /* Set black background color, white text and some padding */
@@ -66,9 +66,14 @@
                     <div class="text-center">
                         <div style="margin-bottom: 5px">
                             <div>
-                                <a href="https://vk.com/id${playerId}" target="_blank">
+                                <a id="userProfileWeb" class="hide" href="https://vk.com/id${playerId}" target="_blank">
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
-                                    <img class="round" src="${userPhoto}" alt="Футбол" width="100"
+                                    <img class="round" src="${userPhoto}" alt="Пользователь" width="100"
+                                         height="100">
+                                </a>
+                                <a id="userProfileMobile" class="hide" href="vk://vk.com/id${playerId}" target="_blank">
+                                    <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
+                                    <img class="round" src="${userPhoto}" alt="Пользователь" width="100"
                                          height="100">
                                 </a>
                             </div>
@@ -100,8 +105,9 @@
                         <c:choose>
                             <c:when test="${countGroup == 0}">
                                 <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/users.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                    <span style="padding-right: 5px"> <img src="resources/image/users.png" width="25"
+                                                                           height="25"></span>
+                                    <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                             </span>
                                </span>
@@ -111,8 +117,9 @@
                             <c:otherwise>
                                 <a href="groupsUser?userId=${userId}&where=profile&playerId=${playerId}"
                                    class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/users.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                    <span style="padding-right: 5px"> <img src="resources/image/users.png" width="25"
+                                                                           height="25"></span>
+                                    <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countGroup}"/>
                             </span>
                                 <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
@@ -122,47 +129,51 @@
                             </c:otherwise>
                         </c:choose>
                         <c:if test="${subscriptionStatus == 'active' || user.getSubscriptionStatus() == 'temp'}">
-                        <c:choose>
-                            <c:when test="${countParticipant == 0}">
-                                <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                            <c:choose>
+                                <c:when test="${countParticipant == 0}">
+                                    <a href="#" class="list-group-item borderless">
+                                        <span style="padding-right: 5px"> <img src="resources/image/participant.png"
+                                                                               width="25" height="25"></span>
+                                        <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="нет"/>
                                </span></span>
-                                    Участие в играх</a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="userParticipant?userId=${userId}&where=profile&playerId=${playerId}"
-                                   class="borderless list-group-item">
-                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                        Участие в играх</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="userParticipant?userId=${userId}&where=profile&playerId=${playerId}"
+                                       class="borderless list-group-item">
+                                        <span style="padding-right: 5px"> <img src="resources/image/participant.png"
+                                                                               width="25" height="25"></span>
+                                        <span class="badge" style="background: #ffffff"><span style="color: gray">
                                   <c:out value="${countParticipant}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                                    Участие в играх</a>
-                            </c:otherwise>
-                        </c:choose>
+                                        Участие в играх</a>
+                                </c:otherwise>
+                            </c:choose>
 
-                        <c:choose>
-                            <c:when test="${countOrganize == 0}">
-                                <a href="#" class="list-group-item borderless">
-                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                            <c:choose>
+                                <c:when test="${countOrganize == 0}">
+                                    <a href="#" class="list-group-item borderless">
+                                        <span style="padding-right: 5px"> <img src="resources/image/organisator.png"
+                                                                               width="25" height="25"></span>
+                                        <span class="badge" style="background: #ffffff"><span style="color: gray">
                                  <c:out value="нет"/>
                             </span></span>
-                                    Организация игр</a>
+                                        Организация игр</a>
 
-                            </c:when>
-                            <c:otherwise>
-                                <a href="userOrganize?userId=${userId}&where=profile&playerId=${playerId}"
-                                   class=" borderless list-group-item">
-                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff"><span style="color: gray">
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="userOrganize?userId=${userId}&where=profile&playerId=${playerId}"
+                                       class=" borderless list-group-item">
+                                        <span style="padding-right: 5px"> <img src="resources/image/organisator.png"
+                                                                               width="25" height="25"></span>
+                                        <span class="badge" style="background: #ffffff"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                                    Организация игр</a>
+                                        Организация игр</a>
 
-                            </c:otherwise>
-                        </c:choose>
+                                </c:otherwise>
+                            </c:choose>
                         </c:if>
                     </div>
 
@@ -240,12 +251,19 @@
 
     var back = '${where}';
     var returnBack;
+    var isDesktop = device.desktop();
     if (back === 'events') {
         returnBack = 'home?&userId=' + ${userId};
     } else if (back === 'event') {
         returnBack = 'event?eventId=' + ${eventId} +'&userId=' + ${userId};
     } else if (back === 'playground') {
         returnBack = 'playground?playgroundId=' + ${playgroundId} +'&userId=' + ${userId};
+    }
+
+    if (isDesktop) {
+        $('#userProfileWeb').removeClass('hide');
+    } else {
+        $('#userProfileMobile').removeClass('hide');
     }
 
     $('#returnBack').attr('href', returnBack);

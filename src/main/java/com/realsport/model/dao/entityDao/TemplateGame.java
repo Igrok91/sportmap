@@ -2,7 +2,7 @@ package com.realsport.model.dao.entityDao;
 
 import java.io.Serializable;
 
-public class TemplateGame implements Serializable{
+public class TemplateGame implements Serializable {
     private String templateId;
     private String description;
     private int countAnswer;

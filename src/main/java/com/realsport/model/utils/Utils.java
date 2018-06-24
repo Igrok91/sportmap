@@ -30,12 +30,16 @@ public class Utils {
     }
 
     public static boolean isActiveSubscriptionsTemp(Timestamp subscriptionsTemp) {
+        if (subscriptionsTemp == null) {
+            return false;
+        }
         java.sql.Timestamp timestampValue = subscriptionsTemp.toSqlTimestamp();
         Long durationSubscribe = DURATION * DURATION_SUBSCRIBE;
         Date dateUserEnd = new Date(timestampValue.getTime() + durationSubscribe);
         Date now = new Date();
         return now.before(dateUserEnd);
     }
+
     public static int getCountDaytoEndSubscribe(Timestamp subscriptionsTemp) {
         java.sql.Timestamp timestampValue = subscriptionsTemp.toSqlTimestamp();
         Long durationSubscribe = DURATION * DURATION_SUBSCRIBE;
@@ -43,14 +47,14 @@ public class Utils {
         Long now = new Date().getTime();
         double end = (dateUserEnd - now) / DURATION;
 
-        return (int) Math.floor(end);
+        return (int) Math.ceil(end);
     }
 
     public static String getSortParam(String notification_type,
-                                            Integer app_id, Integer user_id, Integer receiver_id, String item,
-                                            Integer order_id, String cancel_reason, String item_id, String status,
-                                            Integer item_price, Integer pending_cancel, Integer subscription_id,
-                                            String lang) {
+                                      Integer app_id, Integer user_id, Integer receiver_id, String item,
+                                      Integer order_id, String cancel_reason, String item_id, String status,
+                                      Integer item_price, Integer pending_cancel, Integer subscription_id,
+                                      String lang) {
         List<String> list = new ArrayList<>();
         if (notification_type != null) {
             list.add("notification_type=" + notification_type);

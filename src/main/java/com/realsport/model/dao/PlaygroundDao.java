@@ -10,21 +10,24 @@ import java.util.List;
  */
 public interface PlaygroundDao {
     /**
-     *   Method to get all playground available
-     * @return List of product
+     * Method to get all playground available
+     *
      * @param allPlaygroundList
+     * @return List of product
      */
     List<Playground> getFootballPlayground(List<Playground> allPlaygroundList);
 
     /**
-     *   Method to get all playground available
-     * @return List of product
+     * Method to get all playground available
+     *
      * @param allPlaygroundList
+     * @return List of product
      */
     List<Playground> getVoleyballPlayground(List<Playground> allPlaygroundList);
 
     /**
-     *   Method to get all playground available
+     * Method to get all playground available
+     *
      * @return List of product
      */
     List<Playground> getBasketballPlayground(List<Playground> allPlaygroundList);

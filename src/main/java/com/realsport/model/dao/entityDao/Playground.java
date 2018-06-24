@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Playground implements Serializable{
+public class Playground implements Serializable {
     private String idplayground;
     private String name;
     private String latitude;
@@ -119,7 +119,6 @@ public class Playground implements Serializable{
     public void setInfo(String info) {
         this.info = info;
     }
-
 
 
     public Byte getSchool() {

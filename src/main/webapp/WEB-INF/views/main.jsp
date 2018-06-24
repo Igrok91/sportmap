@@ -17,14 +17,15 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="resources\switch\switch.css"/>
-    <script src="resources\switch\switch.js"></script>
-    <script src="resources\js\device.js"></script>
-    <script src="resources\js\media.js"></script>
+    <link rel="stylesheet" href="resources/switch/switch.css"/>
+    <script src="resources/switch/switch.js"></script>
+    <script src="resources/js/device.js"></script>
+    <script src="resources/js/media.js"></script>
 
- <%--   <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <%--   <script src="resources/js/xd_connection.js" type="text/javascript"></script>
 
-    <script src="https://vk.com/js/api/mobile_sdk.js"  type="text/javascript"></script>--%>
+       <script src="https://vk.com/js/api/mobile_sdk.js"  type="text/javascript"></script>--%>
+    <%--<script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>--%>
 
     <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
     <script src="https://vk.com/js/api/adman_init.js"></script>
@@ -33,6 +34,7 @@
     <script type="text/javascript">
         if (device.desktop()) {
             document.write('<script src="resources/js/xd_connection.js"></scr' + 'ipt>');
+            document.write('<script src="//vk.com/js/api/openapi.js?154"></scr' + 'ipt>');
         } else {
             document.write('<script src="resources/js/mobile.js"></scr' + 'ipt>');
         }
@@ -67,28 +69,30 @@
             var user_id = '${userId}';
             var isAdmin = ${isAdmin};
             var app_id = 6600445;
-
+            if (!isAdmin) {
                 if ((subscriptionStatus === 'not' || subscriptionStatus === 'resume') && device.desktop()) {
 
-                        if (firstStart === 'true') {
-                            if (!isAdmin) {
-                                disableNavigtion(true);
-                                $("#event").addClass('hide');
-                                admanInit({
-                                    user_id: user_id,
-                                    app_id: app_id,
-                                    type: 'preloader',
-                                    params: {preview: 1}
-                                }, onAdsReady, onNoAds);
-                            }
-                        } else {
-                            getMedia();
-                            setTimeout(handleReturn(), 1000);
-                        }
+                    if (firstStart === 'true') {
+
+                        disableNavigtion(true);
+                        $("#event").addClass('hide');
+                        admanInit({
+                            user_id: user_id,
+                            app_id: app_id,
+                            type: 'preloader',
+                            params: {preview: 1}
+                        }, onAdsReady, onNoAds);
+                    } else {
+                        getMedia();
+                        setTimeout(handleReturn(), 1000);
+                    }
 
                 } else {
                     handleReturn();
                 }
+            } else {
+                handleReturn();
+            }
 
 
             function onAdsReady(adman) {
@@ -101,7 +105,7 @@
                     console.log("Adman: Completed");
                     $("#event").removeClass('hide');
                     getMedia();
-                    setTimeout(resizeEvent(), 1000);
+                    setTimeout(handleReturn(), 1000);
                     disableNavigtion(false);
 
                 });
@@ -123,7 +127,6 @@
                 setTimeout(resizeEvent(), 1000);
             };
         });
-
 
 
     </script>
@@ -149,12 +152,11 @@
         .round {
             border-radius: 50%;
         }
+
         a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
         }
-
-
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     </style>
@@ -379,7 +381,11 @@
             setTimeout('resizeProfileMain()', 500);
         } else if (returnBack === 'start') {
             if (device.desktop()) {
-                VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.73"}, function (data) {
+                VK.api("groups.isMember", {
+                    "group_id": "148660655",
+                    "user_id": "${userId}",
+                    "v": "5.73"
+                }, function (data) {
                     var isMember = data.response === 1;
                     if (isMember) {
                         $('#subscribe').remove();
@@ -399,7 +405,6 @@
             setTimeout('resizeProfileMain()', 500);
         }
     }
-
 
 
     var sessUser =  ${jsonUser};

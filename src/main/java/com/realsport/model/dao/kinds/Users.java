@@ -1,7 +1,17 @@
 package com.realsport.model.dao.kinds;
 
 import com.google.cloud.Timestamp;
-import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.BooleanValue;
+import com.google.cloud.datastore.Datastore;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.EntityValue;
+import com.google.cloud.datastore.FullEntity;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.ListValue;
+import com.google.cloud.datastore.LongValue;
+import com.google.cloud.datastore.StringValue;
+import com.google.cloud.datastore.TimestampValue;
+import com.google.cloud.datastore.Transaction;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.realsport.model.dao.entityDao.Event;
@@ -78,7 +88,7 @@ public class Users {
     public User getUser(String id) {
         logger.info("Поиск пользователя");
         Datastore datastore = getDatastore();
-        Entity entity = datastore.get(keyFactory.newKey(id));
+        Entity entity = getEntityById(datastore, id);
         if (Objects.nonNull(entity)) {
             logger.info("Пользователь найден");
             return getUserFromEntity(entity);
@@ -97,6 +107,22 @@ public class Users {
         return null;
     }
 
+    private Entity getEntityById(Datastore datastore, String id) {
+        if (id != null) {
+            String internId = id.trim();
+            Entity entity = datastore.get(keyFactory.newKey(internId));
+            if (Objects.nonNull(entity)) {
+                return entity;
+            } else {
+                entity = datastore.get(keyFactory.newKey(Long.valueOf(internId)));
+                if (Objects.nonNull(entity)) {
+                    return entity;
+                }
+            }
+        }
+        return null;
+    }
+
     private List<String> convertListValuePlaygroundIdToList(List<StringValue> listValues) {
         List<String> list = new ArrayList<>();
         logger.info("Количество участников = " + listValues.size());
@@ -111,7 +137,7 @@ public class Users {
     public void addPlaygroundToUser(String userId, String playgroundId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity task = transaction.get(keyFactory.newKey(userId));
+            Entity task = getEntityByIdOnTransaction(transaction, userId);
             logger.info("task" + task);
             if (Objects.nonNull(task)) {
                 List<StringValue> listValue = null;
@@ -147,10 +173,26 @@ public class Users {
         }
     }
 
+    private Entity getEntityByIdOnTransaction(Transaction transaction, String userId) {
+        if (userId != null) {
+            String internId = userId.trim();
+            Entity entity = transaction.get(keyFactory.newKey(internId));
+            if (Objects.nonNull(entity)) {
+                return entity;
+            } else {
+                entity = transaction.get(keyFactory.newKey(Long.valueOf(internId)));
+                if (Objects.nonNull(entity)) {
+                    return entity;
+                }
+            }
+        }
+        return null;
+    }
+
     public void deletePlaygroundFromUser(String userId, String playgroundId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity task = transaction.get(keyFactory.newKey(userId));
+            Entity task = getEntityByIdOnTransaction(transaction, userId);
             logger.info("task" + task);
             if (Objects.nonNull(task)) {
                 List<StringValue> listValue = null;
@@ -181,7 +223,8 @@ public class Users {
 
 
     public List<TemplateGame> getTemplatesUserById(String userId) {
-        Entity entity = getDatastore().get(keyFactory.newKey(userId));
+        Datastore datastore = getDatastore();
+        Entity entity = getEntityById(datastore, userId);
         try {
             if (Objects.nonNull(entity)) {
                 List<EntityValue> list = entity.getList("templates");
@@ -220,7 +263,7 @@ public class Users {
         Transaction transaction = getDatastore().newTransaction();
         String id = "10";
         try {
-            Entity user = transaction.get(keyFactory.newKey(userId));
+            Entity user = getEntityByIdOnTransaction(transaction, userId);
             logger.info("user" + user);
             if (Objects.nonNull(user)) {
                 List<EntityValue> listValue = null;
@@ -265,7 +308,7 @@ public class Users {
     public void removeTemplateUser(String userId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity user = transaction.get(keyFactory.newKey(userId));
+            Entity user = getEntityByIdOnTransaction(transaction, userId);
             logger.info("user" + user);
             if (Objects.nonNull(user)) {
                 List<EntityValue> listValue = null;
@@ -293,7 +336,7 @@ public class Users {
     public Event createEventByTemplate(String templateId, String userId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity user = transaction.get(keyFactory.newKey(userId));
+            Entity user = getEntityByIdOnTransaction(transaction, userId);
             logger.info("user " + user);
             logger.info("userId " + userId);
             if (Objects.nonNull(user)) {
@@ -336,7 +379,8 @@ public class Users {
     }
 
     public void editUserInfo(String userInfo, String userId) {
-        Entity entity = getDatastore().get(keyFactory.newKey(userId));
+        Datastore datastore = getDatastore();
+        Entity entity = getEntityById(datastore, userId);
         try {
             if (Objects.nonNull(entity)) {
                 getDatastore().update(Entity.newBuilder(entity).set("info", userInfo).build());
@@ -351,7 +395,7 @@ public class Users {
         Transaction transaction = getDatastore().newTransaction();
         try {
             for (User u : userList) {
-                Entity userEntity = transaction.get(keyFactory.newKey(u.getUserId()));
+                Entity userEntity = getEntityByIdOnTransaction(transaction, u.getUserId());
                 boolean isOrganize = u.getUserId().equals(userId);
                 logger.info("user " + userEntity);
                 if (Objects.nonNull(userEntity)) {
@@ -412,23 +456,20 @@ public class Users {
     }
 
     public void addSubscriptionsTemp(String userId) {
-        Transaction transaction = getDatastore().newTransaction();
+        Datastore transaction = getDatastore();
         try {
-                Entity userEntity = transaction.get(keyFactory.newKey(Long.valueOf(userId)));
+            Entity userEntity = getEntityById(transaction, userId);
 
-                logger.info("addSubscriptionsTemp " + userId + " " + userEntity);
-                Date date = new Date();
-                if (Objects.nonNull(userEntity)) {
+            logger.info("addSubscriptionsTemp " + userId + " " + userEntity);
+            Date date = new Date();
+            if (Objects.nonNull(userEntity)) {
 
-                    transaction.update(Entity.newBuilder(userEntity).set("subscriptionsTemp", TimestampValue.of(Timestamp.of(date))).build());
-                }
-
-            logger.info("Изменение статуса временной подписки пользователя " + date );
-            transaction.commit();
-        } finally {
-            if (transaction.isActive()) {
-                transaction.rollback();
+                transaction.update(Entity.newBuilder(userEntity).set("subscriptionsTemp", TimestampValue.of(Timestamp.of(date))).build());
             }
+
+            logger.info("Изменение статуса временной подписки пользователя " + date);
+        } catch (Exception e) {
+            logger.error(e);
         }
     }
 }

@@ -60,7 +60,12 @@
                     <div class="text-center">
                         <div style="margin-bottom: 5px">
                             <div>
-                                <a  href="https://vk.com/id${userId}" target="_blank" >
+                                <a id="userProfileWeb" class="hide" href="https://vk.com/id${userId}" target="_blank" >
+                                    <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
+                                    <img class="round" src="${user.photo_100}" alt="Пользователь" width="100"
+                                         height="100">
+                                </a>
+                                <a id="userProfileMobile" class="hide" href="vk://vk.com/id${userId}" target="_blank" >
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
                                     <img class="round" src="${user.photo_100}" alt="Пользователь" width="100"
                                          height="100">
@@ -73,7 +78,21 @@
                                 <!--    <span  class="glyphicon glyphicon-star-empty" ></span><span style="color: gray; margin-right: 15px" > 105 </span>
                                    <span style="color: gray"> 3 место</span> -->
                             </div>
+                            <div id="tempPremium" class="text-center hide" style="padding-top:5px;margin-top: 5px">
+                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
+                                <c:if test="${user.getCountDaytoEndSubscribeTemp() > 4 && (user.getCountDaytoEndSubscribeTemp() != 22 || user.getCountDaytoEndSubscribeTemp() != 33 || user.getCountDaytoEndSubscribeTemp() != 44)}">
+                                    <p id="countEnd" style="color: gray">Осталось <c:out value="${user.getCountDaytoEndSubscribeTemp()}"/> дней</p>
+                                </c:if>
+                                <c:if test="${(user.getCountDaytoEndSubscribeTemp() > 1 && user.getCountDaytoEndSubscribeTemp() < 5) || user.getCountDaytoEndSubscribeTemp() == 22 ||
+                            user.getCountDaytoEndSubscribeTemp() == 33 || user.getCountDaytoEndSubscribeTemp() == 44}">
+                                    <p id="countEnd" style="color: gray">Осталось <c:out value="${user.getCountDaytoEndSubscribeTemp()}"/> дня</p>
+                                </c:if>
+                                <c:if test="${user.getCountDaytoEndSubscribeTemp() == 1}">
+                                    <p id="countEnd" style="color: gray">Остался <c:out value="${user.getCountDaytoEndSubscribeTemp()}"/> день</p>
+                                </c:if>
+                            </div>
                         </div>
+
                     </div>
                     <div class="panel-body">
 
@@ -95,22 +114,19 @@
                             Подписка отменена!
                         </div>
 
-                        <div id="premium" class="text-center" style="padding-bottom: 15px">
+                        <div id="premium" class="text-center hide" style="padding-bottom: 15px">
                             <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
                             <a  href="#" onclick="toPremium()" class="btn btn-success">Стать игроком "Премиум"</a>
                         </div>
-                        <div id="premiumCancel" class="text-center" style="padding-bottom: 15px">
+                        <div id="premiumCancel" class="text-center hide" style="padding-bottom: 15px">
                             <a href="#" onclick="orderCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
                         </div>
-                        <div id="premiumResume" class="text-center " style="padding-bottom: 15px">
+                        <div id="premiumResume" class="text-center hide" style="padding-bottom: 15px">
                             <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
                             <a href="#" onclick="toPremiumResume()" class="btn btn-success">Стать игроком "Премиум" </a>
                         </div>
 
-                        <div id="tempPremium" class="text-center hide" >
-                            <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
-                            <p id="countEnd" style="color: gray">Осталось <c:out value="${user.getCountDaytoEndSubscribeTemp()}"/> д.</p>
-                        </div>
+
 
                         <div id="premiumDiv" class="hide">
                             <div class="text-center">
@@ -142,7 +158,7 @@
                             <div class="text-center">
                                 <a id="paySubscriptions" href="#" onclick="order()" class="btn btn-primary hide">Приобрести подписку</a>
                                 <a id="resumePay" href="#" onclick="orderResume()" class="btn btn-primary hide">Возобновить подписку</a>
-                                <p style="color: gray;padding-top: 5px">20 голосов в месяц</p>
+                                <p style="color: gray;padding-top: 5px">14 голосов в месяц</p>
                                 <p>Или добавьте новую площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
                                 и активируйте подписку "Премиум" на три месяца
                                 </p>
@@ -271,14 +287,18 @@
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                             Мобильная версия</a>--%>
-                        <a href="https://vk.com/board148660655" target="_blank" class="list-group-item borderless">
+                        <a id="linkDeveloperWeb" href="https://vk.com/board148660655" target="_blank" class="list-group-item borderless hide">
+                            <span style="padding-right: 5px"> <img src="resources/image/settings.png"  width="25" height="25"></span>
+                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                            Связаться с разработчиками</a>
+                        <a id="linkDeveloperMobile" href="vk://vk.com/board148660655" target="_blank" class="list-group-item borderless hide">
                             <span style="padding-right: 5px"> <img src="resources/image/settings.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                             Связаться с разработчиками</a>
 
                     </div>
-
                     <div style="padding: 20px">
                         <!-- <a href="#" class="btn"><span class="glyphicon glyphicon-th-list"></span> Общий рейтинг</a>   -->
                     </div>
@@ -330,6 +350,8 @@
             $('#premiumResume').addClass('hide');
             $('#tempPremium').removeClass('hide');
         }
+        $('#linkDeveloperWeb').removeClass('hide');
+        $('#userProfileWeb').removeClass('hide');
     } else {
         if (subscriptionStatus === 'active') {
             $('#premiumCancel').addClass('hide');
@@ -348,6 +370,8 @@
             $('#premiumResume').addClass('hide');
             $('#tempPremium').addClass('hide');
         }
+        $('#linkDeveloperMobile').removeClass('hide');
+        $('#userProfileMobile').removeClass('hide');
     }
 
     function editInfoUser() {

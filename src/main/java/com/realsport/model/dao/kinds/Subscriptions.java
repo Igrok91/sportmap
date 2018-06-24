@@ -1,6 +1,10 @@
 package com.realsport.model.dao.kinds;
 
-import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.FullEntity;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.LongValue;
+import com.google.cloud.datastore.Transaction;
 import com.realsport.model.vo.SubscribtionInfoUser;
 import com.realsport.model.utils.Utils;
 import org.apache.commons.logging.Log;
@@ -21,7 +25,7 @@ public class Subscriptions {
         Transaction tx = getDatastore().newTransaction();
         Entity user = null;
         try {
-            user = tx.get(keyFactory.newKey(Long.valueOf(userId)));
+            user = getEntityByIdOnTransaction(tx, String.valueOf(userId));
             if (Objects.nonNull(user)) {
                 return getSubscribtionInfoUser(user);
             }
@@ -46,7 +50,7 @@ public class Subscriptions {
         Transaction tx = getDatastore().newTransaction();
         Entity user = null;
         try {
-            user = tx.get(keyFactory.newKey(user_id));
+            user = getEntityByIdOnTransaction(tx, String.valueOf(user_id));
             if (Objects.isNull(user)) {
                 FullEntity task = FullEntity.newBuilder(keyFactory.newKey(user_id))
                         .set("subscription_id", LongValue.of(subscription_id))
@@ -78,7 +82,7 @@ public class Subscriptions {
         Transaction tx = getDatastore().newTransaction();
         Entity userEntity = null;
         try {
-            userEntity = tx.get(keyFactory.newKey(Long.valueOf(user_id)));
+            userEntity = getEntityByIdOnTransaction(tx, String.valueOf(user_id));
             if (Objects.nonNull(userEntity)) {
                 if (cancel_reason != null) {
                     tx.update(Entity.newBuilder(userEntity)
@@ -106,7 +110,7 @@ public class Subscriptions {
         Transaction tx = getDatastore().newTransaction();
         Entity userEntity = null;
         try {
-            userEntity = tx.get(keyFactory.newKey(Long.valueOf(userId)));
+            userEntity = getEntityByIdOnTransaction(tx, userId);
             if (Objects.nonNull(userEntity)) {
                 return userEntity.getString("status").equals(Utils.ACTIVE);
             } else {
@@ -121,5 +125,21 @@ public class Subscriptions {
             }
         }
         return false;
+    }
+
+    private Entity getEntityByIdOnTransaction(Transaction transaction, String eventId) {
+        if (eventId != null) {
+            String internId = eventId.trim();
+            Entity entity = transaction.get(keyFactory.newKey(internId));
+            if (Objects.nonNull(entity)) {
+                return entity;
+            } else {
+                entity = transaction.get(keyFactory.newKey(Long.valueOf(internId)));
+                if (Objects.nonNull(entity)) {
+                    return entity;
+                }
+            }
+        }
+        return null;
     }
 }

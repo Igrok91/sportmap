@@ -217,7 +217,7 @@ public class Events {
     public void addUserToEvent(String eventId, User user, boolean isFake) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            Entity event = getEntityByIdOnTransaction(transaction, eventId);
             if (Objects.nonNull(event)) {
                 List<EntityValue> list = event.getList("userList");
                 if (Objects.nonNull(list)) {
@@ -248,7 +248,7 @@ public class Events {
     public void deleteUserFromEvent(String eventId, String userId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            Entity event = getEntityByIdOnTransaction(transaction, eventId);
             if (Objects.nonNull(event)) {
                 List<EntityValue> list = event.getList("userList");
                 if (Objects.nonNull(list) && list.size() != 0) {
@@ -273,7 +273,8 @@ public class Events {
     }
 
     public Event getEventById(String eventId) {
-        Entity event = getDatastore().get(keyFactory.newKey(Long.valueOf(eventId)));
+        Datastore datastore = getDatastore();
+        Entity event = getEntityById(datastore, eventId);
         if (Objects.nonNull(event)) {
             logger.info("Получаем событие " + eventId);
             return getEventFromEntity(event);
@@ -341,7 +342,7 @@ public class Events {
     public void editEventById(String eventId, String description, int maxCountAnswer, String duration) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            Entity event = getEntityByIdOnTransaction(transaction, eventId);
             if (Objects.nonNull(event)) {
                 transaction.put(Entity.newBuilder(event).
                         set("description", StringValue.of(description)).
@@ -378,7 +379,7 @@ public class Events {
     public void endGame(String eventId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            Entity event = getEntityByIdOnTransaction(transaction, eventId);
             if (Objects.nonNull(event)) {
                 transaction.put(Entity.newBuilder(event).
                         set("active", BooleanValue.of(false)).
@@ -410,7 +411,7 @@ public class Events {
         Entity entity = null;
         String idComment = null;
         try {
-            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            Entity event = getEntityByIdOnTransaction(transaction, eventId);
             if (Objects.nonNull(event)) {
                 List<EntityValue> list = null;
                 try {
@@ -460,7 +461,7 @@ public class Events {
     public void deleteCommentFromEvent(String commentId, String eventId) {
         Transaction transaction = getDatastore().newTransaction();
         try {
-            Entity event = transaction.get(keyFactory.newKey(Long.valueOf(eventId)));
+            Entity event = getEntityByIdOnTransaction(transaction, eventId);
             if (Objects.nonNull(event)) {
                 List<EntityValue> list = null;
                 try {
@@ -563,5 +564,37 @@ public class Events {
             logger.warn("Событий еще нет");
         }
         return new ArrayList<>();
+    }
+
+    private Entity getEntityById(Datastore datastore, String eventId) {
+        if (eventId != null) {
+            String internId = eventId.trim();
+            Entity entity = datastore.get(keyFactory.newKey(internId));
+            if (Objects.nonNull(entity)) {
+                return entity;
+            } else {
+                entity = datastore.get(keyFactory.newKey(Long.valueOf(internId)));
+                if (Objects.nonNull(entity)) {
+                    return entity;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Entity getEntityByIdOnTransaction(Transaction transaction, String eventId) {
+        if (eventId != null) {
+            String internId = eventId.trim();
+            Entity entity = transaction.get(keyFactory.newKey(internId));
+            if (Objects.nonNull(entity)) {
+                return entity;
+            } else {
+                entity = transaction.get(keyFactory.newKey(Long.valueOf(internId)));
+                if (Objects.nonNull(entity)) {
+                    return entity;
+                }
+            }
+        }
+        return null;
     }
 }

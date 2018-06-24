@@ -195,7 +195,7 @@ public class DatastoreService {
         return subscriptions.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
     }
 
-    public Long setSubscriptionStatusUser(Integer user_id,  String cancel_reason, String status) {
+    public Long setSubscriptionStatusUser(Integer user_id, String cancel_reason, String status) {
         return subscriptions.setSubscriptionStatusUser(user_id, cancel_reason, status);
     }
 
@@ -208,11 +208,11 @@ public class DatastoreService {
     }
 
     public List<CheckPlaygroundData> getPlaygroundsCheck() {
-        return  notifications.getPlaygroundsCheck();
+        return notifications.getPlaygroundsCheck();
     }
 
     public Long addPlaygroundToDB(String userId, String lat, String lng, String name, String city, String street, String house, String sport) {
-       return playgrounds.addPlaygroundToDB(userId, lat, lng, name, city, street, house, sport);
+        return playgrounds.addPlaygroundToDB(userId, lat, lng, name, city, street, house, sport);
     }
 
     public void deleteNotification(String idPlayground) {
