@@ -50,247 +50,154 @@
         <div class="col-sm-2">
 
         </div>
-        <div class="col-sm-8" >
+        <div class="col-sm-8">
             <div id="subscribe" class="hide">
                 <c:if test="${returnBack == 'start'}">
-                    <div class="text-center"  style="padding-bottom: 15px" >
-                            <div  style="padding-top: 10px" id="subscribe_vk_groups" >
-                                <p style="color: gray" id="error">Будь в курсе всех новостей</p>
-                                <!-- VK Widget -->
-                                <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px" class="center-block"></div>
-                                <script type="text/javascript">
-                                    try {
-                                        VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
-                                    } catch (e) {
-                                        setTimeout(function () {
-                                            $('#subscribe').remove();
-                                        }, 1000);
-                                    }
-                                    VK.Observer.subscribe("widgets.groups.joined", function f()
-                                    {
-                                        console.log("user joined")
-                                        setTimeout(function () {
-                                            $('#subscribe').remove();
-                                        }, 1000);
-                                    });
-                                </script>
+                    <div class="text-center" style="padding-bottom: 15px">
+                        <div style="padding-top: 10px" id="subscribe_vk_groups">
+                            <p style="color: gray" id="error">Будь в курсе всех новостей</p>
+                            <!-- VK Widget -->
+                            <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
+                                 class="center-block"></div>
+                            <script type="text/javascript">
+                                VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
 
-                            </div>
+                                VK.Observer.subscribe("widgets.groups.joined", function f() {
+                                    console.log("user joined")
+                                    setTimeout(function () {
+                                        $('#subscribe').remove();
+                                    }, 1000);
+                                });
+                            </script>
+
+                        </div>
                     </div>
                 </c:if>
             </div>
 
             <div style="padding-bottom: 45px">
-            <c:choose>
-                <c:when test="${listEvents.size() == 0}">
-                    <div class="text-center">
-                        <span style="color: gray">Нет событий</span>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="list-group">
-                        <c:forEach var="event" items="${listEvents}">
+                <c:choose>
+                    <c:when test="${listEvents.size() == 0}">
+                        <div class="text-center">
+                            <span style="color: gray">Нет событий</span>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="list-group">
+                            <c:forEach var="event" items="${listEvents}">
 
 
-                            <div class="panel " id="${event.idEvent}">
-                                <div class="panel-heading" style="padding-bottom: 3px; padding-top: 6px">
+                                <div class="panel " id="${event.idEvent}">
+                                    <div class="panel-heading" style="padding-bottom: 3px; padding-top: 6px">
 
-                                    <div>
-                                        <a class="pull-left"
-                                           href="playground?playgroundId=${event.playgroundId}&sport=${event.sport}&userId=${userId}">
-                                            <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                            <img id="${event.idEvent}_imgPlayground"
-                                                 src="resources/image/стадион.png"
-                                                 alt="Баскетбол" width="40" height="40">
-                                        </a>
+                                        <div>
+                                            <a class="pull-left"
+                                               href="playground?playgroundId=${event.playgroundId}&sport=${event.sport}&userId=${userId}">
+                                                <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
+                                                <img id="${event.idEvent}_imgPlayground"
+                                                     src="resources/image/стадион.png"
+                                                     alt="Баскетбол" width="40" height="40">
+                                            </a>
 
-                                        <div class="pull-right dropdown" style=" margin-top: 4px;margin-bottom: 4px; ">
-                                            <a class="btn  dropdown-toggle" data-toggle="dropdown"
-                                               id="dropdownMenu5"> <span
-                                                    class="glyphicon glyphicon-option-vertical"></span></a>
-                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
-                                                <c:choose>
-                                                    <c:when test="${event.userIdCreator == userId}">
-                                                        <c:set var="playgroundId" value="${event.playgroundId}"/>
-                                                        <c:set var="sport" value="${event.sport}"/>
-                                                        <li class="liOptions"><a
-                                                                onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}'), ${event.userList.size()}, '${user.photo_50}'"
-                                                                id="cancelAnswer_${event.idEvent}"
-                                                                class="cursorPointer"> <span
-                                                                class="glyphicon glyphicon-minus "
-                                                                style="margin-right: 20px"></span>Отменить голос</a>
-                                                        </li>
-                                                        <li class="liOptions"><a
-                                                                onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')"
-                                                                id="doAnswer_${event.idEvent}"
-                                                                class="cursorPointer"> <span
-                                                                class="glyphicon glyphicon-plus "
-                                                                style="margin-right: 20px"></span>Проголосовать</a>
-                                                        </li>
-                                                        <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
-                                                                     class="glyphicon glyphicon-time"
-                                                                     style="margin-right: 20px"></span>История
-                                                                 изменений</a></li>--%>
-                                                        <li class="liOptions"><a
-                                                                href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span
-                                                                class="glyphicon glyphicon-home"
-                                                                style="margin-right: 20px"></span>К группе</a>
-                                                        </li>
-                                                        <li class="liOptions"><a
-                                                                href="event?eventId=${event.idEvent}&userId=${userId}"> <span
-                                                                class="glyphicon glyphicon-share-alt"
-                                                                style="margin-right: 20px"></span>К записи</a>
-                                                        </li>
+                                            <div class="pull-right dropdown"
+                                                 style=" margin-top: 4px;margin-bottom: 4px; ">
+                                                <a class="btn  dropdown-toggle" data-toggle="dropdown"
+                                                   id="dropdownMenu5"> <span
+                                                        class="glyphicon glyphicon-option-vertical"></span></a>
+                                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu5">
+                                                    <c:choose>
+                                                        <c:when test="${event.userIdCreator == userId}">
+                                                            <c:set var="playgroundId" value="${event.playgroundId}"/>
+                                                            <c:set var="sport" value="${event.sport}"/>
+                                                            <li class="liOptions"><a
+                                                                    onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}'), ${event.userList.size()}, '${user.photo_50}'"
+                                                                    id="cancelAnswer_${event.idEvent}"
+                                                                    class="cursorPointer"> <span
+                                                                    class="glyphicon glyphicon-minus "
+                                                                    style="margin-right: 20px"></span>Отменить голос</a>
+                                                            </li>
+                                                            <li class="liOptions"><a
+                                                                    onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')"
+                                                                    id="doAnswer_${event.idEvent}"
+                                                                    class="cursorPointer"> <span
+                                                                    class="glyphicon glyphicon-plus "
+                                                                    style="margin-right: 20px"></span>Проголосовать</a>
+                                                            </li>
+                                                            <%--     <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span
+                                                                         class="glyphicon glyphicon-time"
+                                                                         style="margin-right: 20px"></span>История
+                                                                     изменений</a></li>--%>
+                                                            <li class="liOptions"><a
+                                                                    href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span
+                                                                    class="glyphicon glyphicon-home"
+                                                                    style="margin-right: 20px"></span>К группе</a>
+                                                            </li>
+                                                            <li class="liOptions"><a
+                                                                    href="event?eventId=${event.idEvent}&userId=${userId}"> <span
+                                                                    class="glyphicon glyphicon-share-alt"
+                                                                    style="margin-right: 20px"></span>К записи</a>
+                                                            </li>
 
 
-                                                        <li class="liOptions"><a
-                                                                href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}">
+                                                            <li class="liOptions"><a
+                                                                    href="create?playgroundId=${playgroundId}&sport=${sport}&eventId=${event.idEvent}&userId=${userId}">
                                                     <span class="glyphicon glyphicon-pencil"
                                                           style="margin-right: 20px"></span>Редактировать
-                                                        </a></li>
-                                                        <li class="liOptions"><a
-                                                                href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span
-                                                                class="glyphicon glyphicon-off"
-                                                                style="margin-right: 20px"></span>Завершить
-                                                            опрос</a></li>
-                                                        <li class="liOptions"><a
-                                                                href="deleteGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span
-                                                                class="glyphicon glyphicon-trash"
-                                                                style="margin-right: 20px"></span>Удалить
-                                                            опрос</a></li>
+                                                            </a></li>
+                                                            <li class="liOptions"><a
+                                                                    href="endGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span
+                                                                    class="glyphicon glyphicon-off"
+                                                                    style="margin-right: 20px"></span>Завершить
+                                                                опрос</a></li>
+                                                            <li class="liOptions"><a
+                                                                    href="deleteGame?playgroundId=${playgroundId}&eventId=${event.idEvent}&userId=${userId}"><span
+                                                                    class="glyphicon glyphicon-trash"
+                                                                    style="margin-right: 20px"></span>Удалить
+                                                                опрос</a></li>
 
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <c:set var="playgroundId" value="${event.playgroundId}"/>
-                                                        <c:set var="sport" value="${event.sport}"/>
-                                                        <li class="liOptions"><a
-                                                                onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')"
-                                                                id="cancelAnswer2_${event.idEvent}"
-                                                                class="cursorPointer"> <span
-                                                                class="glyphicon glyphicon-minus"
-                                                                style="margin-right: 20px"></span>Отменить голос</a>
-                                                        </li>
-                                                        <li class="liOptions"><a
-                                                                onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')"
-                                                                id="doAnswer2_${event.idEvent}"
-                                                                class="cursorPointer"> <span
-                                                                class="glyphicon glyphicon-plus"
-                                                                style="margin-right: 20px"></span>Проголосовать</a>
-                                                        </li>
-                                                        <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
-                                                                                                                                    style="margin-right: 20px"></span>История
-                                                                изменений</a></li>--%>
-                                                        <li class="liOptions"><a
-                                                                href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span
-                                                                class="glyphicon glyphicon-home"
-                                                                style="margin-right: 20px"></span>К группе</a>
-                                                        </li>
-                                                        <li class="liOptions"><a
-                                                                href="event?eventId=${event.idEvent}&userId=${userId}"> <span
-                                                                class="glyphicon glyphicon-share-alt"
-                                                                style="margin-right: 20px"></span>К записи</a>
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
-
-                                            </ul>
-                                        </div>
-                                        <div class="media-body" style="padding-left: 10px">
-
-                                            <h4 class="media-heading"
-                                                style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.playgroundName}</h4>
-
-
-                                            <span style="color: gray">${event.date}</span>
-
-                                        </div>
-
-                                    </div>
-
-
-                                </div>
-                                <div class="panel-body" style="padding-bottom: 0px">
-                                    <div style="padding-bottom: 20px">
-                                        <a class="pull-left"
-                                           href="user?playerId=${event.userIdCreator}&userId=${userId}">
-                                            <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
-                                            <img id="${event.idEvent}_imgPlayground" class="media-object round"
-                                                 src="${event.userCreatorPhoto}"
-                                                 alt="Баскетбол" width="50" height="50">
-
-                                        </a>
-                                        <div class="media-body" style="padding-top: 6px">
-                                            <a href="user?playerId=${event.userIdCreator}&userId=${userId}"
-                                               style="margin-left: 3px;"
-                                               class="btn"> ${event.userFirtsNameCreator} ${event.userLastNameCreator}
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                    <div style="padding-bottom: 12px;">
-                                        <span style="color: black;" id="descrEvent_${event.idEvent}"></span>
-                                    </div>
-                                    <div class="alert alert-danger fade in hide" role="alert"
-                                         id="alertMax_${event.idEvent}">
-                                        <button type="button" class="close" onclick="hideButton(${event.idEvent})"
-                                                aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <strong>Warning!</strong> Превышен лимит игроков
-                                    </div>
-
-                                    <div class="list-group" style="margin-bottom: 5px">
-                                        <button class="list-group-item "
-                                                onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, '${user.photo_50}', 'answerButton_${event.idEvent}')"
-                                                id="answerButton_${event.idEvent}">
-                                            <c:choose>
-                                                <c:when test="${event.maxCountAnswer == 1000}">
-                                                    <span class="badge"
-                                                          id="badge1_${event.idEvent}">${event.userList.size()}</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span class="badge"
-                                                          id="badge2_${event.idEvent}">${event.userList.size()} / ${event.maxCountAnswer} </span>
-                                                </c:otherwise>
-                                            </c:choose>
-
-                                            <div class="pull-left hide" id="answerOk_${event.idEvent}">
-                                                <span class="glyphicon glyphicon-ok "></span>
-                                            </div>
-                                            <div class="text-center">
-                                                +
-                                            </div>
-                                        </button>
-                                    </div>
-
-                                    <div class="btn-group " style="margin-top: 7px">
-                                        <div class="container-fluid">
-                                            <div class="row" id="imgUserList_${event.idEvent}">
-                                                <c:forEach var="user" items="${event.userList}">
-                                                    <c:choose>
-                                                        <c:when test="${user.isFake() == true}">
-                                                            <a href="user?playerId=${user.userId}&userId=${userId}"
-                                                               class="btn" style="padding: 2px 0px;"
-                                                               id="${user.userId}_imgUser_${event.idEvent}_fake">
-                                                                <span id="${user.userId}_add_${event.idEvent}"
-                                                                      count="${user.countFake}">+${user.countFake}</span>
-                                                            </a>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <a href="user?playerId=${user.userId}&userId=${userId}"
-                                                               class="btn" style="padding: 2px 0px"
-                                                               id="${user.userId}_imgUser_${event.idEvent}">
-                                                                <img src="${user.photo_50}" alt="Баскетбол" width="35"
-                                                                     class="round media-object "
-                                                                     height="35"
-                                                                     id="${user.userId}_img_${event.idEvent}">
-                                                            </a>
+                                                            <c:set var="playgroundId" value="${event.playgroundId}"/>
+                                                            <c:set var="sport" value="${event.sport}"/>
+                                                            <li class="liOptions"><a
+                                                                    onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')"
+                                                                    id="cancelAnswer2_${event.idEvent}"
+                                                                    class="cursorPointer"> <span
+                                                                    class="glyphicon glyphicon-minus"
+                                                                    style="margin-right: 20px"></span>Отменить голос</a>
+                                                            </li>
+                                                            <li class="liOptions"><a
+                                                                    onclick="handleAnswerMain(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, '${user.photo_50}')"
+                                                                    id="doAnswer2_${event.idEvent}"
+                                                                    class="cursorPointer"> <span
+                                                                    class="glyphicon glyphicon-plus"
+                                                                    style="margin-right: 20px"></span>Проголосовать</a>
+                                                            </li>
+                                                            <%--    <li><a href="#" data-toggle="modal" data-target="#historyChange_${event.idEvent}"> <span class="glyphicon glyphicon-time"
+                                                                                                                                        style="margin-right: 20px"></span>История
+                                                                    изменений</a></li>--%>
+                                                            <li class="liOptions"><a
+                                                                    href="playground?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}"> <span
+                                                                    class="glyphicon glyphicon-home"
+                                                                    style="margin-right: 20px"></span>К группе</a>
+                                                            </li>
+                                                            <li class="liOptions"><a
+                                                                    href="event?eventId=${event.idEvent}&userId=${userId}"> <span
+                                                                    class="glyphicon glyphicon-share-alt"
+                                                                    style="margin-right: 20px"></span>К записи</a>
+                                                            </li>
                                                         </c:otherwise>
                                                     </c:choose>
 
-                                                </c:forEach>
-                                                <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}"
-                                                   id="watch_${event.idEvent}" class="btn hide"> <span
-                                                        class="glyphicon glyphicon-eye-open"
-                                                        style="margin-right: 5px"></span></a>
+                                                </ul>
+                                            </div>
+                                            <div class="media-body" style="padding-left: 10px">
+
+                                                <h4 class="media-heading"
+                                                    style="padding-bottom: 1px; margin-bottom: 0px; margin-top: 2px">${event.playgroundName}</h4>
+
+
+                                                <span style="color: gray">${event.date}</span>
 
                                             </div>
 
@@ -298,21 +205,111 @@
 
 
                                     </div>
+                                    <div class="panel-body" style="padding-bottom: 0px">
+                                        <div style="padding-bottom: 20px">
+                                            <a class="pull-left"
+                                               href="user?playerId=${event.userIdCreator}&userId=${userId}">
+                                                <!-- <img class="media-object" src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="40" height="40" > -->
+                                                <img id="${event.idEvent}_imgPlayground" class="media-object round"
+                                                     src="${event.userCreatorPhoto}"
+                                                     alt="Баскетбол" width="50" height="50">
 
-                                </div>
+                                            </a>
+                                            <div class="media-body" style="padding-top: 6px">
+                                                <a href="user?playerId=${event.userIdCreator}&userId=${userId}"
+                                                   style="margin-left: 3px;"
+                                                   class="btn"> ${event.userFirtsNameCreator} ${event.userLastNameCreator}
+                                                </a>
+                                            </div>
 
-                                <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn"
-                                   style=" margin-left: 5px;margin-top: 5px; margin-bottom: 5px"
-                                   id="commentEvents"><span
-                                        class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
-                                        style="color: #77A5C5;margin-right: 5px"></span>
-                                    <span id="countComment_${event.idEvent}" style="font-size: medium">
+                                        </div>
+                                        <div style="padding-bottom: 12px;">
+                                            <span style="color: black;" id="descrEvent_${event.idEvent}"></span>
+                                        </div>
+                                        <div class="alert alert-danger fade in hide" role="alert"
+                                             id="alertMax_${event.idEvent}">
+                                            <button type="button" class="close" onclick="hideButton(${event.idEvent})"
+                                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <strong>Warning!</strong> Превышен лимит игроков
+                                        </div>
+
+                                        <div class="list-group" style="margin-bottom: 5px">
+                                            <button class="list-group-item "
+                                                    onclick="handleAnswer(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, '${user.photo_50}', 'answerButton_${event.idEvent}')"
+                                                    id="answerButton_${event.idEvent}">
+                                                <c:choose>
+                                                    <c:when test="${event.maxCountAnswer == 1000}">
+                                                    <span class="badge"
+                                                          id="badge1_${event.idEvent}">${event.userList.size()}</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                    <span class="badge"
+                                                          id="badge2_${event.idEvent}">${event.userList.size()} / ${event.maxCountAnswer} </span>
+                                                    </c:otherwise>
+                                                </c:choose>
+
+                                                <div class="pull-left hide" id="answerOk_${event.idEvent}">
+                                                    <span class="glyphicon glyphicon-ok "></span>
+                                                </div>
+                                                <div class="text-center">
+                                                    +
+                                                </div>
+                                            </button>
+                                        </div>
+
+                                        <div class="btn-group " style="margin-top: 7px">
+                                            <div class="container-fluid">
+                                                <div class="row" id="imgUserList_${event.idEvent}">
+                                                    <c:forEach var="user" items="${event.userList}">
+                                                        <c:choose>
+                                                            <c:when test="${user.isFake() == true}">
+                                                                <a href="user?playerId=${user.userId}&userId=${userId}"
+                                                                   class="btn" style="padding: 2px 0px;"
+                                                                   id="${user.userId}_imgUser_${event.idEvent}_fake">
+                                                                <span id="${user.userId}_add_${event.idEvent}"
+                                                                      count="${user.countFake}">+${user.countFake}</span>
+                                                                </a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="user?playerId=${user.userId}&userId=${userId}"
+                                                                   class="btn" style="padding: 2px 0px"
+                                                                   id="${user.userId}_imgUser_${event.idEvent}">
+                                                                    <img src="${user.photo_50}" alt="Баскетбол"
+                                                                         width="35"
+                                                                         class="round media-object "
+                                                                         height="35"
+                                                                         id="${user.userId}_img_${event.idEvent}">
+                                                                </a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+
+                                                    </c:forEach>
+                                                    <a href="toPlayers?eventId=${event.idEvent}&userId=${userId}"
+                                                       id="watch_${event.idEvent}" class="btn hide"> <span
+                                                            class="glyphicon glyphicon-eye-open"
+                                                            style="margin-right: 5px"></span></a>
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <a href="event?eventId=${event.idEvent}&userId=${userId}&where=comment" class="btn"
+                                       style=" margin-left: 5px;margin-top: 5px; margin-bottom: 5px"
+                                       id="commentEvents"><span
+                                            class="glyphicon glyphicon-comment " aria-hidden="Комментировать"
+                                            style="color: #77A5C5;margin-right: 5px"></span>
+                                        <span id="countComment_${event.idEvent}" style="font-size: medium">
                                         <c:if test="${event.commentsList.size() > 0}">
                                             ${event.commentsList.size()}
                                         </c:if>
                                     </span>
-                                </a>
-                                <span class="btn hide" id="shareWeb_${event.idEvent}">
+                                    </a>
+                                    <span class="btn hide" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
@@ -323,95 +320,102 @@
 
 
                                 </span>
-                                <a class="btn hide" id="shareMobile_${event.idEvent}" onclick="shareEvent('${event.idEvent}')" ><span class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
-                            </div>
+                                    <a class="btn hide" id="shareMobile_${event.idEvent}"
+                                       onclick="shareEvent('${event.idEvent}')"><span
+                                            class="glyphicon glyphicon-bullhorn"
+                                            style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
+                                </div>
 
-                            <div class="modal fade" id="addIgrok_${event.idEvent}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                                &times;
-                                            </button>
-                                            <h4 class="modal-title">Добавить еще от меня</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <select class="form-control borderless" id="countIgrok_${event.idEvent}"
-                                                    name="sel1">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                                    <%-- <option>6</option>
-                                                     <option>7</option>
-                                                     <option>8</option>
-                                                     <option>9</option>
-                                                     <option>10</option>--%>
-                                            </select>
-                                        </div>
+                                <div class="modal fade" id="addIgrok_${event.idEvent}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title">Добавить еще от меня</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <select class="form-control borderless" id="countIgrok_${event.idEvent}"
+                                                        name="sel1">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                        <%-- <option>6</option>
+                                                         <option>7</option>
+                                                         <option>8</option>
+                                                         <option>9</option>
+                                                         <option>10</option>--%>
+                                                </select>
+                                            </div>
 
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть
-                                            </button>
-                                            <button id="addIgrok_${event.idEvent}"
-                                                    onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, 'addIgrok_${event.idEvent}')"
-                                                    class="btn btn-primary">Добавить
-                                            </button>
-                                        </div>
-                                    </div><!-- /.modal-content -->
-                                </div><!-- /.modal-dialog -->
-                            </div>
-                            <!-- /.modal -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    Закрыть
+                                                </button>
+                                                <button id="addIgrok_${event.idEvent}"
+                                                        onclick="addIgrok(${event.maxCountAnswer}, ${event.idEvent}, ${userId}, 'playerId=${userId}', ${event.userList.size()}, 'addIgrok_${event.idEvent}')"
+                                                        class="btn btn-primary">Добавить
+                                                </button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="historyChange_${event.idEvent}" tabindex="-1" role="dialog"
-                                 aria-labelledby="historyChangeLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
+                                <!-- Modal -->
+                                <div class="modal fade" id="historyChange_${event.idEvent}" tabindex="-1" role="dialog"
+                                     aria-labelledby="historyChangeLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
 
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                            <h5 class="modal-title" id="historyChangeLabel">История изменений</h5>
-                                        </div>
-                                        <div class="modal-body">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h5 class="modal-title" id="historyChangeLabel">История изменений</h5>
+                                            </div>
+                                            <div class="modal-body">
 
-                                            <div class="list-group">
-                                                <c:forEach var="history" items="${event.historyEvent}">
-                                                    <a href="user?playerId=${history.userId}&userId=${userId}"
-                                                       class="list-group-item borderless">
-                                                        <div class="media">
-                                                            <div class="pull-left">
-                                                                <img class="media-object" src="resources/image/foot.png"
-                                                                     alt="Футбол" width="40"
-                                                                     height="40"/>
+                                                <div class="list-group">
+                                                    <c:forEach var="history" items="${event.historyEvent}">
+                                                        <a href="user?playerId=${history.userId}&userId=${userId}"
+                                                           class="list-group-item borderless">
+                                                            <div class="media">
+                                                                <div class="pull-left">
+                                                                    <img class="media-object"
+                                                                         src="resources/image/foot.png"
+                                                                         alt="Футбол" width="40"
+                                                                         height="40"/>
+                                                                </div>
+
+
+                                                                <div class="media-body ">
+                                                                    <p style="margin-bottom: 0px; padding-bottom: 0px; padding-top: 2px">${history.firstName} ${history.lastName} ${history.action}</p>
+                                                                    <span style="color: gray">${history.date}</span>
+                                                                    <hr style="margin-top: 0px; margin-bottom: 0px">
+                                                                </div>
                                                             </div>
+                                                        </a>
+                                                    </c:forEach>
 
 
-                                                            <div class="media-body ">
-                                                                <p style="margin-bottom: 0px; padding-bottom: 0px; padding-top: 2px">${history.firstName} ${history.lastName} ${history.action}</p>
-                                                                <span style="color: gray">${history.date}</span>
-                                                                <hr style="margin-top: 0px; margin-bottom: 0px">
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </c:forEach>
-
-
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                        </c:forEach>
+                            </c:forEach>
 
-                    </div>
-                </c:otherwise>
-            </c:choose>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
 
             </div>
         </div>
@@ -675,7 +679,7 @@
     }
 
     function shareEvent(eventId) {
-        VK.callMethod("showShareBox", 'Присоединяйся к игре! \n https://vk.com/app6600445_172924708#' + eventId, null ,'im');
+        VK.callMethod("showShareBox", 'Присоединяйся к игре! \n https://vk.com/app6600445_172924708#' + eventId, null, 'im');
     }
 
     setInterval(updateData, 5000);

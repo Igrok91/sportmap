@@ -317,7 +317,8 @@
     var start = '${start}';
     var firstStart = '${firstStart}';
     var subscriptionStatus = '${subscriptionStatus}';
-    if (device.desktop()) {
+    var isDesktop = device.desktop();
+    if (isDesktop) {
         $('#navbarEvents').addClass('hide');
         $('#navbarProfile').addClass('hide');
         $('#navbarGroups').addClass('hide');
@@ -380,7 +381,7 @@
             $('#li5').attr('class', 'active');
             setTimeout('resizeProfileMain()', 500);
         } else if (returnBack === 'start') {
-            if (device.desktop()) {
+            if (isDesktop) {
                 VK.api("groups.isMember", {
                     "group_id": "148660655",
                     "user_id": "${userId}",
@@ -439,7 +440,7 @@
     function resizeEvent() {
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
         var height = $('#event').height();
-        if (device.desktop()) {
+        if (isDesktop) {
             if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 if (height < 650) {
                     VK.callMethod('resizeWindow', 900, 650);
@@ -460,7 +461,7 @@
 
     function resizeGroups() {
         var height = $('#group').height();
-        if (device.desktop()) {
+        if (isDesktop) {
             if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 if (height < 650) {
                     VK.callMethod('resizeWindow', 900, 650);
@@ -480,7 +481,7 @@
 
     function resizeMain() {
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
-        if (device.desktop()) {
+        if (isDesktop) {
             if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 VK.callMethod('resizeWindow', 900, 650);
             } else {
@@ -516,7 +517,7 @@
 
     function resizeProfileMain() {
         var height = $('#prof').height();
-        if (device.desktop()) {
+        if (isDesktop) {
             if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
                 if (height < 650) {
                     VK.callMethod('resizeWindow', 900, 650);
