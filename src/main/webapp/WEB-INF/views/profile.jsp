@@ -423,6 +423,13 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', 'active');
             $('#li5').attr('class', '');
+
+
+            $('#searchPlayground').removeClass('active');
+            $('#events').removeClass('active');
+            $('#groups').addClass('active');
+            $('#profile').removeClass('active');
+            $('#create').removeClass('active');
             resizeGroups();
         });
     });

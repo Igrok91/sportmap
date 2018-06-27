@@ -153,6 +153,18 @@
             border-radius: 50%;
         }
 
+        .navStyle {
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            letter-spacing: 0px;
+            word-spacing: 1.4px;
+            color: #000000;
+            font-weight: 400;
+            text-decoration: none;
+            font-style: normal;
+            font-variant: normal;
+            text-transform: none;
+        }
+
         a.disabled {
             pointer-events: none; /* делаем элемент неактивным для взаимодействия */
             cursor: default; /*  курсор в виде стрелки */
@@ -338,6 +350,12 @@
             $('#li4').attr('class', '');
             $('#li5').attr('class', '');
 
+            $('#searchPlayground').addClass('active');
+            $('#events').removeClass('active');
+            $('#groups').removeClass('active');
+            $('#profile').removeClass('active');
+            $('#create').removeClass('active');
+
             initMap();
             isMapInit = true;
             // Если нет групп и первый заход в приложение
@@ -357,6 +375,12 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', 'active');
             $('#li5').attr('class', '');
+
+            $('#searchPlayground').removeClass('active');
+            $('#events').removeClass('active');
+            $('#groups').addClass('active');
+            $('#profile').removeClass('active');
+            $('#create').removeClass('active');
             setTimeout('resizeGroups()', 300);
         } else if (returnBack === 'home') {
             document.getElementById("event").className = "";
@@ -368,6 +392,12 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', '');
             $('#li5').attr('class', '');
+
+            $('#searchPlayground').removeClass('active');
+            $('#events').addClass('active');
+            $('#groups').removeClass('active');
+            $('#profile').removeClass('active');
+            $('#create').removeClass('active');
             setTimeout('resizeEvent()', 300);
         } else if (returnBack === 'profileMain') {
             document.getElementById("event").className = "hide";
@@ -379,6 +409,12 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', '');
             $('#li5').attr('class', 'active');
+
+            $('#searchPlayground').removeClass('active');
+            $('#events').removeClass('active');
+            $('#groups').removeClass('active');
+            $('#profile').addClass('active');
+            $('#create').removeClass('active');
             setTimeout('resizeProfileMain()', 500);
         } else if (returnBack === 'start') {
             if (isDesktop) {

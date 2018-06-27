@@ -74,10 +74,10 @@
 </head>
 <body>
 <header>
-    <nav class="nav navbar-default navbar-static-top  " id="web">
-        <div class="container-fluid">
-            <div class="btn-group btn-group-justified">
-                <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
+<%--    <nav class="nav navbar-default navbar-static-top  " id="web">
+        <div class="container-fluid">--%>
+            <div class="btn-group btn-group-justified navStyle" role="group" style="height: 60px">
+    <%--            <ul class="nav navbar-nav nav-tabs nav-justified" id="nav" style="height: 60px">
                     <li id="li1"><a href="home?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" id="events" class="cursorPointer"><span
                             class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a></li>
                     <li id="li2"><a href="home?where=map&playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" id="searchPlayground" class="cursorPointer"><span class="glyphicon glyphicon-search"
@@ -89,11 +89,21 @@
                                                                             aria-hidden=""></span> Группы</a></li>
                     <li id="li5"><a href="home?where=profileMain&playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" id="profile" class="cursorPointer"><span class="glyphicon glyphicon-user"
                                                                              aria-hidden=""></span> Профиль</a></li>
-                </ul>
-
+                </ul>--%>
+        <a href="home?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" id="events" class="cursorPointer btn btn-primary" style="font-size: medium"><span
+                class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a>
+        <a href="home?where=map&playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" id="searchPlayground" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-search"
+                                                                                                                                                aria-hidden=""></span>
+            Площадки</a>
+        <a id="create" href="create?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-plus-sign"
+                                                                                                                              aria-hidden="Создать"></span></a>
+        <a href="home?where=group&playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" id="groups" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-th-list"
+                                                                                                                                        aria-hidden=""></span> Группы</a>
+        <a href="home?where=profileMain&playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" id="profile" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-user"
+                                                                                                                                               aria-hidden=""></span> Профиль</a>
             </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
+<%--        </div><!-- /.container-fluid -->
+    </nav>--%>
 </header>
 
 <footer class="container-fluid text-center navbar-fixed-bottom" style="margin-bottom: 0px; padding-bottom: 0px; ">

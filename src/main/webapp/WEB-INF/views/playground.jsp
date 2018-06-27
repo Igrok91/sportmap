@@ -160,6 +160,18 @@
         .cursorPointer {
             cursor: pointer;
         }
+
+        .navStyle {
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            letter-spacing: 0px;
+            word-spacing: 1.4px;
+            color: #000000;
+            font-weight: 400;
+            text-decoration: none;
+            font-style: normal;
+            font-variant: normal;
+            text-transform: none;
+        }
     </style>
     <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 </head>

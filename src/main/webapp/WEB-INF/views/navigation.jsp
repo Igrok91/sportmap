@@ -73,11 +73,11 @@
     </style>
 </head>
 <body>
-<header>
-    <nav class="nav navbar-default navbar-static-top  " id="web">
-        <div class="container-fluid">
-            <div class="btn-group btn-group-justified">
-                <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
+<header id="web">
+<%--    <nav class="nav navbar-default navbar-static-top  " id="web">
+        <div class="container-fluid">--%>
+            <div class="btn-group btn-group-justified navStyle" role="group" style="height: 60px">
+<%--                <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
                     <li id="li1" class="active "><a id="events" class="cursorPointer"><span
                             class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a></li>
                     <li id="li2"><a id="searchPlayground" class="cursorPointer"><span class="glyphicon glyphicon-search"
@@ -90,11 +90,24 @@
                                                                             aria-hidden=""></span> Группы</a></li>
                     <li id="li5"><a id="profile" class="cursorPointer"><span class="glyphicon glyphicon-user"
                                                                              aria-hidden=""></span> Профиль</a></li>
-                </ul>
+                </ul>--%>
+
+                <a id="events" class="cursorPointer btn btn-primary active" style="font-size: medium"><span
+                        class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a>
+                <a  id="searchPlayground" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-search"
+                                                                                                                                                                        aria-hidden=""></span>
+                    Площадки</a>
+    <a id="create" class="cursorPointer btn btn-primary" data-toggle="modal"
+       data-target="#exampleModal" style="font-size: medium"><span class="glyphicon glyphicon-plus-sign"
+                                         aria-hidden="Создать"></span></a>
+                <a  id="groups" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-th-list"
+                                                                                                                                                                aria-hidden=""></span> Группы</a>
+                <a id="profile" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-user"
+                                                                                                                                                                       aria-hidden=""></span> Профиль</a>
 
             </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
+<%--        </div><!-- /.container-fluid -->
+    </nav>--%>
 </header>
 
 <footer class="container-fluid text-center navbar-fixed-bottom" style="margin-bottom: 0px; padding-bottom: 0px; ">
@@ -152,6 +165,12 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', '');
             $('#li5').attr('class', '');
+
+            $('#searchPlayground').addClass('active');
+            $('#events').removeClass('active');
+            $('#groups').removeClass('active');
+            $('#profile').removeClass('active');
+            $('#create').removeClass('active');
             resizeMain();
 
         });
@@ -169,6 +188,12 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', '');
             $('#li5').attr('class', '');
+
+            $('#searchPlayground').removeClass('active');
+            $('#events').addClass('active');
+            $('#groups').removeClass('active');
+            $('#profile').removeClass('active');
+            $('#create').removeClass('active');
             resizeEvent();
         });
     });
@@ -185,6 +210,12 @@
             $('#li3').attr('class', '');
             $('#li4').attr('class', 'active');
             $('#li5').attr('class', '');
+
+            $('#searchPlayground').removeClass('active');
+            $('#events').removeClass('active');
+            $('#groups').addClass('active');
+            $('#profile').removeClass('active');
+            $('#create').removeClass('active');
             resizeGroups();
         });
     });
@@ -201,6 +232,12 @@
             $('#li4').attr('class', '');
             $('#li5').attr('class', 'active');
             $('#premiumDiv').addClass('hide');
+
+            $('#searchPlayground').removeClass('active');
+            $('#events').removeClass('active');
+            $('#groups').removeClass('active');
+            $('#profile').addClass('active');
+            $('#create').removeClass('active');
             resizeProfileMain();
         });
     });
