@@ -105,7 +105,11 @@
                     console.log("Adman: Completed");
                     $("#event").removeClass('hide');
                     getMedia();
-                    setTimeout(resizePlayground(), 1000);
+                    var count = 0;
+                    while (count < 5) {
+                        setTimeout('resizePlayground()', 1000);
+                        count++;
+                    }
                     disableNavigtion(false);
 
                 });
@@ -124,7 +128,7 @@
             function onNoAds() {
                 console.log("Adman: No ads");
                 getMedia();
-                setTimeout(resizeEvent(), 1000);
+                setTimeout(resizePlayground(), 1000);
             };
         });
 

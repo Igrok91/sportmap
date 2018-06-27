@@ -30,6 +30,9 @@
         </sourceRoots>
       </configuration>
     </facet>
+    <facet type="app-engine-standard" name="Google App Engine">
+      <configuration />
+    </facet>
     <facet type="google-app-engine" name="Google App Engine">
       <configuration>
         <sdk-home-path>$MAVEN_REPOSITORY$/com/google/appengine/appengine-java-sdk/1.9.54/appengine-java-sdk/appengine-java-sdk-1.9.54</sdk-home-path>
