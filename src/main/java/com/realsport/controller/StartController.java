@@ -221,8 +221,6 @@ public class StartController {
         model.addAttribute("userId", user.getUserId());
         model.addAttribute("firstStart", true);
         model.addAttribute("isAdmin", user.isAdmin());
-        model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
-        model.addAttribute("subscription_id", user.getSubscription_id());
     }
 
     private void setUserDataToModel(User user, Model model) {
@@ -253,8 +251,6 @@ public class StartController {
         model.addAttribute("allPlaygroundUser", listPlygrounds);
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("countOrganize", countOrganize);
-        model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
-        model.addAttribute("subscription_id", user.getSubscription_id());
         model.addAttribute("isAdmin", user.isAdmin());
 
         if (user.isAdmin()) {
@@ -381,25 +377,6 @@ public class StartController {
             logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
             user = userService.getUser(userId);
             if (Objects.nonNull(user)) {
-                SubscribtionInfoUser subscribtionInfoUser = subscriptionsService.getSubscriptionStatusUser(userId);
-                if (Objects.nonNull(subscribtionInfoUser)) {
-                    String status = getSubstrictionStatusUser(subscribtionInfoUser.getStatus());
-                    logger.info("status подписки пользователя " + userId + " " + status);
-                    user.setSubscriptionStatus(status);
-                    user.setSubscription_id(subscribtionInfoUser.getSubscription_id());
-                } else {
-                    String status = NOT;
-                    if (user.getSubscriptionsTemp() != null && isActiveSubscriptionsTemp(user.getSubscriptionsTemp())) {
-                        status = TEMP;
-                        int end = getCountDaytoEndSubscribe(user.getSubscriptionsTemp());
-                        logger.info("getCountDaytoEndSubscribe " + end);
-                        user.setCountDaytoEndSubscribeTemp(end);
-                        logger.info("status подписки пользователя " + userId + " Temp");
-                    } else {
-                        logger.info("status подписки пользователя " + userId + " " + status);
-                    }
-                    user.setSubscriptionStatus(status);
-                }
                 cache.put(userId, user);
                 if (user.getUserId().equals(String.valueOf(ADMIN))) {
                     user.setAdmin(true);
@@ -426,8 +403,6 @@ public class StartController {
         model.addAttribute("firstName", user.getFirstName());
         model.addAttribute("lastName", user.getLastName());
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
-        model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
-        model.addAttribute("subscription_id", user.getSubscription_id());
         model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
 
         model.addAttribute("isParticipant", isParticipant(user.getPlaygroundIdlList(), idGroup));
@@ -720,8 +695,8 @@ public class StartController {
 
     private void setStatusUserToCache(String resume, Integer user_id, Integer subscription_id) {
         User user = getUser(String.valueOf(user_id));
-        user.setSubscription_id(subscription_id);
-        user.setSubscriptionStatus(resume);
+//        user.setSubscription_id(subscription_id);
+//        user.setSubscriptionStatus(resume);
 
         Cache cache = getCacheUser();
         cache.put(String.valueOf(user_id), user);
@@ -790,7 +765,6 @@ public class StartController {
                 model.addAttribute("event", new Event());
                 model.addAttribute("templates", userTemplates);
                 model.addAttribute("template", list);
-                model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
             }
             model.addAttribute("returnBack", "home");
             model.addAttribute("userId", userId);
@@ -979,7 +953,6 @@ public class StartController {
             model.addAttribute("user", user);
             model.addAttribute("isAdmin", user.isAdmin());
             model.addAttribute("where", where);
-            model.addAttribute("subscriptionStatus", user.getSubscriptionStatus());
         } catch (Exception e) {
             logger.error(e);
             model.addAttribute("userId", userId);

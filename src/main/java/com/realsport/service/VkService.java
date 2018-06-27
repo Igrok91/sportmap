@@ -119,20 +119,7 @@ public class VkService {
                 GroupActor groupActor = InitVkMain.getGroupActor();
                 Integer userIdCreator = Integer.valueOf(userCreator.getUserId());
                 int countSend = 0;
-                List<MinUser> listUserPremium = new ArrayList<>();
-                List<MinUser> listUserNotPremium = new ArrayList<>();
-                for (MinUser user : players) {
-                    boolean isPremium = subscriptionsService.isPremiumUser(user.getUserId());
-                    if (isPremium) {
-                        listUserPremium.add(user);
-                    } else {
-                        listUserNotPremium.add(user);
-                    }
-                }
-                logger.info("user premium size: " + listUserPremium.size());
-                // Отправляем уведомления премиум
-                if (listUserPremium.size() > 0) {
-                    for (MinUser user : listUserPremium) {
+                    for (MinUser user : players) {
                         Integer userId = Integer.valueOf(user.getUserId());
                         if (!Objects.equals(userId, userIdCreator)) {
                             try {
@@ -149,29 +136,7 @@ public class VkService {
                             Thread.sleep(3000);
                         }
                     }
-                }
-                Thread.sleep(5000);
-                if (listUserNotPremium.size() > 0) {
-                    for (MinUser user : listUserNotPremium) {
-                        Integer userId = Integer.valueOf(user.getUserId());
-                        if (!Objects.equals(userId, userIdCreator)) {
-                            try {
-                                if (isAllowSendMessages(userId)) {
-                                    Thread.sleep(3000);
-                                    vkApiClient.messages().send(groupActor).message("Открыт опрос в группе " + "\""
-                                            + namePlayground + "\", " + userCreator.getFirstName() + " " + userCreator.getLastName() + ": \n"
-                                            + getMinText(descr) + "\n" + LINK_APPLICATION).userId(userId).randomId(random.nextInt()).execute();
-                                    countSend++;
-                                }
-                            } catch (Exception e) {
-                                logger.warn(e);
-                            }
-                            Thread.sleep(5000);
-                        }
-                    }
-                }
-
-               List<Integer> userIds = getUserIds(players, userCreator.getUserId());
+                Thread.sleep(3000);
 
                 if (isAllowSendMessages(userIdCreator)) {
                     Thread.sleep(1000);
@@ -182,9 +147,6 @@ public class VkService {
 
                 }
                 logger.info("Уведомление отправлено " + countSend + " участникам группы " + namePlayground);
-                sendNotification(userIds,userCreator.getFirstName() + " "
-                        + userCreator.getLastName() + ": \n"
-                        + getMinText(descr) );
             }
         } catch (ApiException e) {
             logger.error(e);
@@ -193,22 +155,6 @@ public class VkService {
         } catch (InterruptedException e) {
             logger.error(e);
         }
-    }
-
-    private List<Integer> getUserIds(List<MinUser> players, String userId) {
-        List<Integer> userIds = FluentIterable.from(players).filter(new Predicate<MinUser>() {
-            @Override
-            public boolean apply(MinUser minUser) {
-                return !minUser.getUserId().equals(userId);
-            }
-        }).transform(new Function<MinUser, Integer>() {
-            @Override
-            public Integer apply(MinUser minUser) {
-                return Integer.valueOf(minUser.getUserId().trim());
-            }
-        }).toList();
-        logger.info("MinUser players size " + players.size() + ", После фильтра " + userIds.size() );
-        return userIds;
     }
 
     @Async
@@ -336,23 +282,9 @@ public class VkService {
                     }
                 }
                 logger.info("Уведомление отправлено " + countSend + " участникам группы " + namePlayground);
-                List<Integer> userIds = getUserIds(players, user.getUserId());
-                sendNotification(userIds, "Новый игрок в группе "
-                        + "\"" + namePlayground + "\"!");
             }
         } catch (InterruptedException e) {
             logger.error(e);
-        }
-    }
-
-    @Async
-    public void sendNotification(List<Integer> listId, String message) {
-        try {
-            ServiceActor serviceActor = new ServiceActor(APP_ID, ACCESS_TOKEN);
-            getVkApiClient().secure().sendNotification(serviceActor, message).userIds(listId).execute();
-            Thread.sleep(3000);
-        } catch (Exception e) {
-            logger.warn(e);
         }
     }
 }

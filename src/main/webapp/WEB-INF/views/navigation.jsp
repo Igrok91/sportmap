@@ -76,7 +76,7 @@
 <header id="web">
 <%--    <nav class="nav navbar-default navbar-static-top  " id="web">
         <div class="container-fluid">--%>
-            <div class="btn-group btn-group-justified navStyle" role="group" style="height: 60px">
+            <div class="btn-group btn-group-justified navStyle" role="group" style="height: 50px">
 <%--                <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
                     <li id="li1" class="active "><a id="events" class="cursorPointer"><span
                             class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a></li>

@@ -49,12 +49,6 @@ public class Users {
             logger.warn(e);
         }
         try {
-            user.setSubscriptionsTemp(entity.getTimestamp("subscriptionsTemp"));
-        } catch (Exception e) {
-            logger.warn(e);
-            user.setSubscriptionsTemp(null);
-        }
-        try {
             user.setPlaygroundIdlList(convertListValuePlaygroundIdToList(entity.getList("playgroundIdList")));
         } catch (Exception e) {
             logger.warn(e);

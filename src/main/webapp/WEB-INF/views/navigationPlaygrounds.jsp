@@ -76,7 +76,7 @@
 <header>
 <%--    <nav class="nav navbar-default navbar-static-top  " id="web">
         <div class="container-fluid">--%>
-            <div class="btn-group btn-group-justified navStyle" role="group" style="height: 60px">
+            <div class="btn-group btn-group-justified navStyle" role="group" style="height: 50px">
     <%--            <ul class="nav navbar-nav nav-tabs nav-justified" id="nav" style="height: 60px">
                     <li id="li1"><a href="home?playgroundId=${playgroundId}&sport=${sport}&userId=${userId}" id="events" class="cursorPointer"><span
                             class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a></li>
@@ -121,8 +121,6 @@
                     class="glyphicon glyphicon-user  " aria-hidden=""><span class="tablet"> Профиль</span></span></a>
         </div>
     </div>
-
-
 </footer>
 
 </body>

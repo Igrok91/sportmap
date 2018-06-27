@@ -277,9 +277,6 @@ public class RestController {
         }).first().orNull();
         System.out.println("id= " + id);
         if (id == null) {
-            if (user.getPlaygroundIdlList().size() > 2 && (user.getSubscriptionStatus().equals(RESUME) || user.getSubscriptionStatus().equals(NOT))) {
-                isParticipant = "notAllow";
-            } else {
                 logger.info("User c id " + userId + " вступил в группу " + playgroundId);
                 user.getPlaygroundIdlList().add(playgroundId);
                 playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
@@ -295,7 +292,6 @@ public class RestController {
                 getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
                 isParticipant = "true";
                 vkService.notifyNewUserInvite(user, p.getName(), p.getPlayers(), p.getIdplayground());
-            }
         } else {
             logger.info("User c id " + userId + " вышел из группы " + playgroundId);
             user.getPlaygroundIdlList().remove(id);
@@ -342,25 +338,6 @@ public class RestController {
             logger.info("Достаем пользователя " + userId + " из бд и кладем в кеш");
             user = userService.getUser(userId);
             if (Objects.nonNull(user)) {
-                SubscribtionInfoUser subscribtionInfoUser = subscriptionsService.getSubscriptionStatusUser(userId);
-                if (Objects.nonNull(subscribtionInfoUser)) {
-                    String status = getSubstrictionStatusUser(subscribtionInfoUser.getStatus());
-                    logger.info("status подписки пользователя " + userId + " " + status);
-                    user.setSubscriptionStatus(status);
-                    user.setSubscription_id(subscribtionInfoUser.getSubscription_id());
-                } else {
-                    String status = NOT;
-                    if (user.getSubscriptionsTemp() != null && isActiveSubscriptionsTemp(user.getSubscriptionsTemp())) {
-                        status = TEMP;
-                        int end = getCountDaytoEndSubscribe(user.getSubscriptionsTemp());
-                        logger.info("getCountDaytoEndSubscribe " + end);
-                        user.setCountDaytoEndSubscribeTemp(end);
-                        logger.info("status подписки пользователя " + userId + " Temp");
-                    } else {
-                        logger.info("status подписки пользователя " + userId + " " + status);
-                    }
-                    user.setSubscriptionStatus(status);
-                }
                 cache.put(userId, user);
                 if (user.getUserId().equals(String.valueOf(ADMIN))) {
                     user.setAdmin(true);
@@ -419,35 +396,6 @@ public class RestController {
                                   @RequestParam(value = "sport") String sport) throws Exception {
         Long idNew = playgroundService.addPlaygroundToDB(userId.trim(), lat, lng, name.trim(), city.trim(), street.trim(), house.trim(), sport.trim());
         playgroundService.deleteNotification(idPlayground);
-        boolean isActiveSubsctrictions = subscriptionsService.isPremiumUser(userId);
-
-        Cache cache = getCacheUser();
-        User user = getUser(userId);
-        if (Objects.nonNull(user)) {
-            if (isActiveSubscriptionsTemp(user.getSubscriptionsTemp()) || isActiveSubsctrictions) {
-                logger.info("Польщователь с id " + userId + " уже имеет подписку");
-                if (vkService.isAllowSendMessages(Integer.valueOf(userId))) {
-                    vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка прошла проверку и добавлена на карту \n https://vk.com/app6600445");
-                } else {
-                    vkService.sendNotification(Collections.singletonList(Integer.valueOf(userId)), "Ваша площадка прошла проверку и добавлена на карту");
-                }
-            } else {
-                Date date = new Date();
-                user.setSubscriptionStatus(TEMP);
-                user.setSubscriptionsTemp(Timestamp.of(date));
-                int end = getCountDaytoEndSubscribe(Timestamp.of(date));
-                logger.info("getCountDaytoEndSubscribe " + end);
-                user.setCountDaytoEndSubscribeTemp(end);
-                cache.put(userId, user);
-                userService.addSubscriptionsTemp(userId.trim());
-                if (vkService.isAllowSendMessages(Integer.valueOf(userId))) {
-                    vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка добавлена на карту и активирована подписка \"Премиум\" \n https://vk.com/app6600445");
-                } else {
-                    vkService.sendNotification(Collections.singletonList(Integer.valueOf(userId)), "Ваша площадка добавлена на карту и активирована подписка \"Премиум\"");
-                }
-            }
-        }
-
         List<Playground> playgrounds = playgroundService.getAllPlayground();
         Playground playground = new Playground();
         playground.setIdplayground(String.valueOf(idNew));

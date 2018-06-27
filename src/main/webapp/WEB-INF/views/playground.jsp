@@ -35,6 +35,7 @@
     <script src="https://js.appscentrum.com/scr/preroll.js"></script>
 
     <script>
+        var isSubscribe;
         VK.init(function () {
             console.log('vk init')
 
@@ -52,86 +53,6 @@
             // API initialization failed
             // Can reload page here
         }, '5.74');
-
-    </script>
-    <script type="text/javascript">
-        var firstStart = '${firstStart}';
-        var subscriptionStatus = '${subscriptionStatus}';
-        window.addEventListener('load', function () {
-
-            var user_id = '${userId}';
-            var isAdmin = ${isAdmin};
-            var isDesktop = device.desktop();
-            var app_id = 6600445;
-            if (!isAdmin) {
-                if ((subscriptionStatus === 'not' || subscriptionStatus === 'resume') && isDesktop) {
-                    // if (!isAdmin) {
-                    if (firstStart === 'true') {
-                        disableNavigtion(true);
-                        $("#event").addClass('hide');
-                        admanInit({
-                            user_id: user_id,
-                            app_id: app_id,
-                            type: 'preloader',
-                            params: {preview: 1}
-                        }, onAdsReady, onNoAds);
-
-                    } else {
-                        getMedia();
-                        setTimeout(resizePlayground(), 1000);
-                    }
-                    // }
-                } else {
-                    if (isDesktop) {
-                        var count = 0;
-                        while (count < 5) {
-                            setTimeout('resizePlayground()', 1000);
-                            count++;
-                        }
-                    }
-                }
-            } else {
-                setTimeout('resizePlayground()', 1000);
-            }
-
-
-            function onAdsReady(adman) {
-                adman.onStarted(function () {
-                    console.log("Adman: Started");
-                    admanStat(app_id, user_id);
-                });
-
-                adman.onCompleted(function () {
-                    console.log("Adman: Completed");
-                    $("#event").removeClass('hide');
-                    getMedia();
-                    var count = 0;
-                    while (count < 5) {
-                        setTimeout('resizePlayground()', 1000);
-                        count++;
-                    }
-                    disableNavigtion(false);
-
-                });
-                adman.onSkipped(function () {
-                    console.log("Adman: Skipped");
-                });
-                adman.onClicked(function () {
-                    console.log("Adman: Clicked");
-                });
-
-                adman.start('preroll');
-
-            };
-
-
-            function onNoAds() {
-                console.log("Adman: No ads");
-                getMedia();
-                setTimeout(resizePlayground(), 1000);
-            };
-        });
-
 
     </script>
     <style>
@@ -304,14 +225,12 @@
 
                     </div>
 
-
-                    <c:if test="${subscriptionStatus == 'resume' || subscriptionStatus == 'not'}">
                         <div id="premium" class="text-center hide" style="padding-bottom: 15px">
-                            <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
+                            <p>Подпишись на официальное сообщество приложения и стань игроком "Премиум"</p>
                             <a href="#" data-toggle="modal"
                                data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум"</a>
                         </div>
-                    </c:if>
+
                     <div class="list-group">
                         <c:choose>
                             <c:when test="${players.size() == 0}">
@@ -374,10 +293,11 @@
                                     }, 1000);
                                 }
                                 VK.Observer.subscribe("widgets.groups.joined", function f() {
-                                    console.log("user joined")
-                                    setTimeout(function () {
+                                    console.log("user joined");
+                                    location.reload();
+                      /*              setTimeout(function () {
                                         $('#subscribe').remove();
-                                    }, 1000);
+                                    }, 1000);*/
                                 });
                             </script>
 
@@ -734,21 +654,8 @@
                 <div class="modal-body">
                     <div class="text-center">
                         <div id="divPayWeb">
-                            <p>Чтобы снять ограничения, оформите подписку "Премиум"</p>
-                            <c:choose>
-                                <c:when test="${subscriptionStatus == 'resume'}">
-                                    <a href="#" onclick="orderResume()" id="pay" class="btn btn-primary ">Возобновить
-                                        подписку </a>
-                                </c:when>
-                                <c:otherwise>
-                                    <a href="#" onclick="order()" id="pay" class="btn btn-primary ">Приобрести
-                                        подписку</a>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                        <div id="divPayMobile">
-                            <p>Чтобы снять ограничения, оформите подписку "Премиум" в веб версии приложения <span
-                                    class="glyphicon glyphicon-home"></span></p>
+                            <p>Чтобы снять ограничения, подпишитесь на официальное сообщество приложения!</p>
+                                    <a href="https://vk.com/sporterr"  target="_blank" class="btn btn-primary ">Подписаться</a>
                         </div>
                         <%--<a href="vk://vk.com/app6602081_-148660655" target="_blank" id="goToAllow" class="btn btn-primary" >Разрешить отправку сообщений</a>--%>
                     </div>
@@ -778,13 +685,6 @@
                     <ul class="list-group">
                         <li class="list-group-item borderless">
                                   <span style="padding-right: 10px"><img class="round "
-                                                                         src="resources\image\marketing.png" alt="Нет"
-                                                                         width="50"
-                                                                         height="50"></span>
-                            Нет рекламы в приложении
-                        </li>
-                        <li class="list-group-item borderless">
-                                  <span style="padding-right: 10px"><img class="round "
                                                                          src="resources\image\infinity2.png" alt="Нет"
                                                                          width="50"
                                                                          height="50"></span>
@@ -804,28 +704,9 @@
                                                                             height="50"></span>
                             Cтатистика по играм
                         </li>
-                        <%--         <li class="list-group-item borderless">
-                                   <span style="padding-right: 10px"><img class="round premium" src="${user.photo_50}" alt="Премиум" width="50"
-                                                                         height="50"></span>
-                                     Иконка "Премиум"</li>--%>
                     </ul>
                     <div class="text-center">
-                        <c:choose>
-                            <c:when test="${subscriptionStatus == 'resume'}">
-                                <a href="#" onclick="orderResume()" id="payMain" class="btn btn-primary ">Возобновить
-                                    подписку</a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="#" onclick="order()" id="payMain" class="btn btn-primary ">Приобрести
-                                    подписку</a>
-                            </c:otherwise>
-                        </c:choose>
-                        <p style="color: gray;padding-top: 5px">14 голосов в месяц</p>
-                        <p>Или добавьте новую площадку на карту в разделе <span style="color: gray"
-                                                                                class="glyphicon glyphicon-search"></span>
-                            <span style="color: gray"> Площадки</span>
-                            и активируйте подписку "Премиум" на три месяца
-                        </p>
+                        <a href="https://vk.com/sporterr"  target="_blank" class="btn btn-primary ">Подписаться</a>
                     </div>
                 </div>
             </div>
@@ -836,45 +717,44 @@
 <script>
     var listEvents = ${listEventsJson};
     var playgroundId = '${playgroundId}';
-    var subscriptionStatus = '${subscriptionStatus}';
     var sport = '${sport}';
     var isDesktop = device.desktop();
     var eventsId = {};
     var maxWatch = 10;
 
+
     if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
         $('#shareWebGroup').removeClass('hide');
         $('#shareMobileGroup').addClass('hide');
-        $('#divPayWeb').removeClass('hide');
-        $('#divPayMobile').addClass('hide');
+
 
         VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
             var isMember = data.response === 1;
             if (isMember) {
+                isSubscribe = true;
                 $('#subscribe').remove();
             } else {
                 $('#subscribe').removeClass('hide');
-                /*  var count = 0;
+                isSubscribe = false;
+                  var count = 0;
                   while (count < 5) {
                       setTimeout('resizePlayground()', 1000);
                       count++;
-                  }*/
+                  }
             }
         });
-        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
+        if (!isSubscribe) {
             $('#premium').removeClass('hide');
         }
     } else {
-        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
-            $('#premium').addClass('hide');
+        if (!isSubscribe) {
+            $('#premium').removeClass('hide');
         }
         $('#shareWebGroup').addClass('hide');
         $('#shareMobileGroup').removeClass('hide');
-        $('#divPayWeb').addClass('hide');
-        $('#divPayMobile').removeClass('hide');
     }
-    //    setTimeout('resizePlayground()', 500);
+       setTimeout('resizePlayground()', 1000);
     if (listEvents) {
         var userId = "${userId}";
         listEvents.forEach(function (event, i) {
@@ -1018,6 +898,9 @@
 
         $('#exitFromGroup').addClass('disabled');
         $('#enterToGroup').addClass('disabled');
+        if (countGroup > 2 && !isSubscribe) {
+            $('#notPremium').modal('show');
+        } else {
         $.ajax({
             url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport + '&userId=' + ${userId}
         }).then(function (value) {
@@ -1047,31 +930,21 @@
                     $('#players').text(count2);
                     //    $('#list_' + userId).remove();
                     break;
-                case 'notAllow':
-                    $('#notPremium').modal('show');
-
             }
-            $('#exitFromGroup').removeClass('disabled');
-            $('#enterToGroup').removeClass('disabled');
         });
+        }
+        $('#exitFromGroup').removeClass('disabled');
+        $('#enterToGroup').removeClass('disabled');
     }
 
 
     function resizePlayground() {
         var height = $('#mainPlayground').height();
         if (device.desktop()) {
-            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
-                if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 650);
-                } else {
-                    VK.callMethod('resizeWindow', 900, height + 50);
-                }
+            if (height < 650) {
+                VK.callMethod('resizeWindow', 900, 650);
             } else {
-                if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 777);
-                } else {
-                    VK.callMethod('resizeWindow', 900, height + 160);
-                }
+                VK.callMethod('resizeWindow', 900, height + 50);
             }
         }
     }

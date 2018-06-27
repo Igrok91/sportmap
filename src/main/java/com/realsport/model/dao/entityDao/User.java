@@ -12,11 +12,7 @@ public class User implements Serializable {
     private String photoLink;
     private String photo_50;
     private String photo_100;
-    private String subscriptionStatus;
-    private Integer subscription_id;
-    private Integer countDaytoEndSubscribeTemp;
     private String info = "";
-    private Timestamp subscriptionsTemp;
     private boolean isAdmin = false;
     private boolean isFake = false;
     private boolean isMember = false;
@@ -145,37 +141,6 @@ public class User implements Serializable {
         isMember = member;
     }
 
-    public String getSubscriptionStatus() {
-        return subscriptionStatus;
-    }
-
-    public void setSubscriptionStatus(String subscriptionStatus) {
-        this.subscriptionStatus = subscriptionStatus;
-    }
-
-    public Integer getSubscription_id() {
-        return subscription_id;
-    }
-
-    public void setSubscription_id(Integer subscription_id) {
-        this.subscription_id = subscription_id;
-    }
-
-    public Timestamp getSubscriptionsTemp() {
-        return subscriptionsTemp;
-    }
-
-    public void setSubscriptionsTemp(Timestamp subscriptionsTemp) {
-        this.subscriptionsTemp = subscriptionsTemp;
-    }
-
-    public Integer getCountDaytoEndSubscribeTemp() {
-        return countDaytoEndSubscribeTemp;
-    }
-
-    public void setCountDaytoEndSubscribeTemp(Integer countDaytoEndSubscribeTemp) {
-        this.countDaytoEndSubscribeTemp = countDaytoEndSubscribeTemp;
-    }
 
     @Override
     public String toString() {
