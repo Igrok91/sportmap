@@ -51,9 +51,7 @@
     <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 </head>
 <body id="eventMain">
-<header>
-    <div id="vk_ads_105219"></div>
-</header>
+
 <a href="" class="btn hide" style="padding: 2px" id="templateUserList2">
     <!-- <img  src="\Users\igrok\Downloads\icons9.png" alt="Баскетбол" width="30" height="30" > -->
     <img src="" alt="Баскетбол" width="35" class="round"
@@ -462,17 +460,9 @@
     </div>
 </main>
 <script>
-    VK.init(function () {
-        console.log('vk init');
-    }, function () {
-        alert('vk init fail \n Напишите нам об ошибке')
-        // API initialization failed
-        // Can reload page here
-    }, '5.74');
 </script>
 <script>
     var where = '${where}';
-    var subscriptionStatus = '${subscriptionStatus}';
     var isDesktop = device.desktop();
     var maxWatch = 10;
     var event = ${eventJson};
@@ -486,11 +476,6 @@
 
     if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
-        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
-            if (!isAdmin) {
-                getMedia();
-            }
-        }
         if (activeEvent) {
             $('#shareWeb_' + id).removeClass('hide');
             $('#shareMobile_' + id).addClass('hide');

@@ -55,7 +55,7 @@
                 <c:if test="${returnBack == 'start'}">
                     <div class="text-center" style="padding-bottom: 15px">
                         <div style="padding-top: 10px" id="subscribe_vk_groups">
-                            <p style="color: gray" id="error">Будь в курсе всех новостей</p>
+                            <p style="color: gray" id="error">Стань игроком "Премиум"</p>
                             <!-- VK Widget -->
                             <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
                                  class="center-block"></div>
@@ -63,7 +63,8 @@
                                 VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
 
                                 VK.Observer.subscribe("widgets.groups.joined", function f() {
-                                    console.log("user joined")
+                                    console.log("user joined");
+                                    location.reload();
                                     setTimeout(function () {
                                         $('#subscribe').remove();
                                     }, 1000);

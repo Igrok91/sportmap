@@ -37,7 +37,7 @@
         <div class="navbar-brand ">
             Мои профиль
         </div>
-<%--        <div class="pull-right dropdown" style="padding-top: 10px">
+       <div class="pull-right dropdown" style="padding-top: 10px">
             <c:if test="${allowSendMessage == false}">
                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1"> <span
                         class="glyphicon glyphicon-bell"></span></a>
@@ -46,7 +46,7 @@
                 </ul>
             </c:if>
 
-        </div>--%>
+        </div>
     </div>
 </nav>
 <main id="bodyProfile">
@@ -95,38 +95,10 @@
 
                     </div>
                     <div class="panel-body">
-
-                        <div id="alertSuccess" class="alert alert-success fade in hide" style="padding-top: 10px" role="alert">
-                            <button type="button" class="close" onclick="hideButtonAlert('alertSuccess')"
-                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <div class="text-center">
-                                Подписка успешно оформлена, перезапустите приложение!
-                            </div>
-                        </div>
-                        <div id="alertDanger" class="alert alert-danger fade in hide" role="alert" style="padding-top: 10px">
-                            <button type="button" class="close" onclick="hideButtonAlert('alertDanger')"
-                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <strong>Произошла ошибка!</strong>
-                        </div>
-                        <div id="alertWarning" class="alert alert-warning fade in hide" role="alert" style="padding-top: 10px">
-                            <button type="button" class="close" onclick="hideButtonAlert('alertWarning')"
-                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            Подписка отменена!
-                        </div>
-
                         <div id="premium" class="text-center hide" style="padding-bottom: 15px">
-                            <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
+                            <p>Подпишись на официальное сообщество приложения и стань игроком "Премиум"</p>
                             <a  href="#" onclick="toPremium()" class="btn btn-success">Стать игроком "Премиум"</a>
                         </div>
-                        <div id="premiumCancel" class="text-center hide" style="padding-bottom: 15px">
-                            <a href="#" onclick="orderCancel()" class="btn btn-primary">Отменить подписку "Премиум"</a>
-                        </div>
-                        <div id="premiumResume" class="text-center hide" style="padding-bottom: 15px">
-                            <p>Добавь новую площадку на карту и стань игроком "Премиум" бесплатно</p>
-                            <a href="#" onclick="toPremiumResume()" class="btn btn-success">Стать игроком "Премиум" </a>
-                        </div>
-
-
 
                         <div id="premiumDiv" class="hide">
                             <div class="text-center">
@@ -134,10 +106,6 @@
                                 <p style="color: gray">Опции для проффесионального игрока:</p>
                             </div>
                             <ul class="list-group">
-                                <li class="list-group-item borderless">
-                                  <span style="padding-right: 10px"><img class="round " src="resources\image\marketing.png" alt="Нет" width="50"
-                                                                         height="50"></span>
-                                    Нет рекламы в приложении</li>
                                 <li class="list-group-item borderless">
                                   <span style="padding-right: 10px"><img class="round " src="resources\image\infinity2.png" alt="Нет" width="50"
                                                                          height="50"></span>
@@ -150,18 +118,9 @@
                                      <span style="padding-right: 10px"><img class="round " src="resources\image\stat.png" alt="Нет" width="50"
                                                                             height="50"></span>
                                     Cтатистика по играм</li>
-                                <%--         <li class="list-group-item borderless">
-                                           <span style="padding-right: 10px"><img class="round premium" src="${user.photo_50}" alt="Премиум" width="50"
-                                                                                 height="50"></span>
-                                             Иконка "Премиум"</li>--%>
                             </ul>
                             <div class="text-center">
-                                <a id="paySubscriptions" href="#" onclick="order()" class="btn btn-primary hide">Приобрести подписку</a>
-                                <a id="resumePay" href="#" onclick="orderResume()" class="btn btn-primary hide">Возобновить подписку</a>
-                                <p style="color: gray;padding-top: 5px">14 голосов в месяц</p>
-                                <p>Или добавьте новую площадку на карту в разделе <span style="color: gray" class="glyphicon glyphicon-search"></span> <span style="color: gray"> Площадки</span>
-                                и активируйте подписку "Премиум" на три месяца
-                                </p>
+                                <a id="paySubscriptions" href="https://vk.com/sporterr" target="_blank" class="btn btn-primary hide">Подписаться</a>
                                 <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
                             </div>
                         </div>
@@ -173,10 +132,10 @@
                                     <li><a class="cursorPointer" onclick="editInfoUser()">
                                         <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
                                     </a></li>
-                        <%--            <c:if test="${allowSendMessage == false}">
+                                <c:if test="${allowSendMessage == false}">
                                         <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification2"> <span class="glyphicon glyphicon-bell"
                                                                                                                         style="margin-right: 20px"></span>Включить </a></li>
-                                    </c:if>--%>
+                                    </c:if>
                                 </ul>
                             </div>
                             <div>
@@ -237,10 +196,10 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <c:if test="${user.getSubscriptionStatus() == 'active' || user.getSubscriptionStatus() == 'temp'}">
+
                         <c:choose>
                             <c:when test="${user.listParticipant.size() == 0}">
-                                <a href="#" class="list-group-item borderless">
+                                <a href="#" class="list-group-item borderless hide" id="participantUser">
                                     <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <c:out value="нет"/>
@@ -248,7 +207,7 @@
                                     Участие в играх</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
+                                <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item borderless hide"  id="participantUser">
                                     <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                   <c:out value="${user.listParticipant.size()}"/>
@@ -258,7 +217,7 @@
                         </c:choose>
                         <c:choose>
                             <c:when test="${countOrganize == 0}">
-                                <a href="#" class="list-group-item borderless">
+                                <a href="#" class="list-group-item borderless hide"  id="organizeUser">
                                     <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                  <c:out value="нет"/>
@@ -267,7 +226,7 @@
 
                             </c:when>
                             <c:otherwise>
-                                <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item borderless">
+                                <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item borderless hide" id="organizeUser">
                                     <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <c:out value="${countOrganize}"/>
@@ -276,12 +235,6 @@
 
                             </c:otherwise>
                         </c:choose>
-                        </c:if>
-                        <a href="#" onclick="showInviteBox()" class="list-group-item borderless">
-                            <span style="padding-right: 5px"> <img src="resources/image/invite.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
-                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                            Пригласить друзей</a>
                        <%-- <a href="#" onclick="showInstallPushBox()" class="list-group-item borderless">
                             <span style="padding-right: 5px"> <img src="resources/image/mobile.png"  width="25" height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
@@ -327,49 +280,21 @@
         });
     }
 
-    var subscriptionStatus = '${subscriptionStatus}';
+    if (!isSubscribe) {
+        $('#premiumCancel').removeClass('hide');
+        $('#premium').addClass('hide');
+        $('#premiumResume').addClass('hide');
+        $('#tempPremium').addClass('hide');
+    } else {
+        $('#organizeUser').removeClass('hide');
+        $('#participantUser').removeClass('hide');
+    }
+
     if (device.desktop()) {
-        if (subscriptionStatus === 'active') {
-            $('#premiumCancel').removeClass('hide');
-            $('#premium').addClass('hide');
-            $('#premiumResume').addClass('hide');
-            $('#tempPremium').addClass('hide');
-        } else if (subscriptionStatus === 'resume') {
-            $('#premiumCancel').addClass('hide');
-            $('#premium').addClass('hide');
-            $('#premiumResume').removeClass('hide');
-            $('#tempPremium').addClass('hide');
-        } else if (subscriptionStatus === 'not') {
-            $('#premiumCancel').addClass('hide');
-            $('#premium').removeClass('hide');
-            $('#premiumResume').addClass('hide');
-            $('#tempPremium').addClass('hide');
-        } else if (subscriptionStatus === 'temp') {
-            $('#premiumCancel').addClass('hide');
-            $('#premium').addClass('hide');
-            $('#premiumResume').addClass('hide');
-            $('#tempPremium').removeClass('hide');
-        }
+
         $('#linkDeveloperWeb').removeClass('hide');
         $('#userProfileWeb').removeClass('hide');
     } else {
-        if (subscriptionStatus === 'active') {
-            $('#premiumCancel').addClass('hide');
-            $('#premium').addClass('hide');
-            $('#premiumResume').addClass('hide');
-            $('#tempPremium').removeClass('hide');
-            $('#countEnd').addClass('hide');
-        } else if (subscriptionStatus === 'temp') {
-            $('#premiumCancel').addClass('hide');
-            $('#premium').addClass('hide');
-            $('#premiumResume').addClass('hide');
-            $('#tempPremium').removeClass('hide');
-        } else {
-            $('#premiumCancel').addClass('hide');
-            $('#premium').addClass('hide');
-            $('#premiumResume').addClass('hide');
-            $('#tempPremium').addClass('hide');
-        }
         $('#linkDeveloperMobile').removeClass('hide');
         $('#userProfileMobile').removeClass('hide');
     }
@@ -446,28 +371,11 @@
         //$('#premium').addClass('hide');
         resizeProfileMain();
     }
-    function toPremiumResume() {
-        $('#premiumDiv').removeClass('hide');
-        $('#resumePay').removeClass('hide');
-        resizeProfileMain();
-    }
 
     function hidePremium() {
         $('#premiumDiv').addClass('hide');
       //  $('#premium').removeClass('hide');
         resizeProfileMain();
-    }
-
-    function order() {
-        VK.callMethod('showSubscriptionBox', 'create', {item: 'premium'});
-    }
-
-    function orderCancel() {
-        VK.callMethod('showSubscriptionBox', 'cancel', {subscription_id: '${subscription_id}'});
-    }
-
-    function orderResume() {
-        VK.callMethod('showSubscriptionBox', 'resume', {subscription_id: '${subscription_id}'});
     }
 
 

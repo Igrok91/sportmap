@@ -25,17 +25,6 @@
     <script src="resources/switch/switch.js"></script>
     <script src="resources/js/media.js"></script>
     <script src="resources/js/device.js"></script>
-    <script>
-        VK.init(function () {
-            console.log('vk init')
-
-        }, function () {
-            alert('vk init fail \n Напишите нам об ошибке')
-            // API initialization failed
-            // Can reload page here
-        }, '5.74');
-
-    </script>
     <style>
 
         /* Set black background color, white text and some padding */
@@ -57,9 +46,6 @@
     </style>
 </head>
 <body>
-<header>
-    <div id="vk_ads_105219"></div>
-</header>
 <nav class="nav navbar-static-top navbar-default" style="background: #eeeeee">
     <div class="container-fluid ">
         <div class="pull-left">
@@ -280,7 +266,6 @@
 
 <script>
     var el3 = document.querySelector('.checkbox-switch3');
-    var subscriptionStatus = '${subscriptionStatus}';
     var mySwitch3 = new Switch(el3, {
         showText: true,
         onText: '',
@@ -294,11 +279,6 @@
         }
     });
 
-    if (device.desktop()) {
-        if (subscriptionStatus === 'not' || subscriptionStatus === 'resume') {
-            getMedia();
-        }
-    }
 
     var event = ${eventJson};
     if (event.idEvent) {

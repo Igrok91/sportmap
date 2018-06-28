@@ -39,13 +39,6 @@
         VK.init(function () {
             console.log('vk init')
 
-            VK.addCallback('onSubscriptionSuccess', function (subscription_id) {
-                console.log("SubscriptionSuccess: " + subscription_id);
-                subscriptionSuccess(subscription_id);
-            });
-            VK.addCallback('onSubscriptionFail', function () {
-                console.log("onSubscriptionFail");
-            });
 
 
         }, function () {
@@ -97,9 +90,6 @@
     <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 </head>
 <body>
-<header>
-    <div id="vk_ads_105219"></div>
-</header>
 <jsp:include page="navigationPlaygrounds.jsp"/>
 <nav id="navPlaygrounds" class="nav  navbar-static-top navbar-default">
     <div class="container-fluid ">
@@ -173,7 +163,8 @@
                                 <p><span class="glyphicon glyphicon-flash" style="padding-right: 3px"></span> Сейчас
                                     идет набор в группу, здесь ты сможешь позвать
                                     на игру, либо узнать о ближайшей игре. Все игры публикуются на стене группы <span
-                                            class="glyphicon glyphicon-arrow-down"></span>
+                                            class="glyphicon glyphicon-arrow-down"></span> Чтобы не пропустить игры, мы будем присылать тебе уведомления в личные сообщения
+                                    <span class="glyphicon glyphicon-bell"></span>
                                 </p>
                             </div>
                         </c:if>
@@ -279,7 +270,6 @@
                 <div id="subscribe" class="hide">
                     <div class="text-center" style="padding-bottom: 10px">
                         <div id="subscribe_vk_groups">
-                            <p style="color: gray" id="error">Будь в курсе всех новостей</p>
                             <!-- VK Widget -->
                             <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
                                  class="center-block"></div>
@@ -721,6 +711,7 @@
     var isDesktop = device.desktop();
     var eventsId = {};
     var maxWatch = 10;
+    var allowSendMessage = ${allowSendMessage};
 
 
     if (isDesktop) {
@@ -877,7 +868,7 @@
 
     }
 
-    var allowSendMessage = ${allowSendMessage};
+
     if (sport == 'Футбол') {
         $('#panelGroup').addClass('panel-success');
         $('#imageGroup').attr("src", "resources/image/стадион.png")
@@ -917,6 +908,9 @@
                     count2 = count2 + 1;
                     $('#players').text(count2);
                     infoHandleGroup(true, allowSendMessage);
+                    if (!allowSendMessage) {
+                        VK.callMethod("showAllowMessagesFromCommunityBox");
+                    }
                     break;
                 case 'false':
                     $('#exitFromGroup').addClass('hide');
@@ -1121,13 +1115,7 @@
         });
     }
 
-    function order() {
-        VK.callMethod('showSubscriptionBox', 'create', {item: 'premium'});
-    }
 
-    function orderResume() {
-        VK.callMethod('showSubscriptionBox', 'resume', {subscription_id: '${subscription_id}'});
-    }
 
     function sharePlayground() {
         if (sport === 'Футбол') {

@@ -40,19 +40,28 @@
         }
     </script>
     <script>
+        var isSubscribe;
         VK.init(function () {
             console.log('vk init');
+            VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
+                var isMember = data.response === 1;
+                if (isMember) {
+                    isSubscribe = true;
+                    $('#subscribe').remove();
+                } else {
+                    $('#subscribe').removeClass('hide');
+                    isSubscribe = false;
+                    var count = 0;
+                    while (count < 5) {
+                        setTimeout('resizeEvent()', 1000);
+                        count++;
+                    }
+                }
+            });
 
-            VK.addCallback('onSubscriptionSuccess', function (subscription_id) {
-                console.log("SubscriptionSuccess: " + subscription_id);
-                subscriptionSuccess(subscription_id);
-            });
-            VK.addCallback('onSubscriptionFail', function () {
-                console.log("onSubscriptionFail");
-            });
-            VK.addCallback('onSubscriptionCancel', function () {
-                console.log("onSubscriptionCancel");
-                subscriptionCancel();
+            VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
+                $('#notification1').removeClass('hide');
+                $('#notification2').removeClass('hide');
             });
         }, function () {
             alert('vk init fail \n Напишите нам об ошибке')
@@ -61,77 +70,6 @@
         }, '5.74');
 
     </script>
-    <script type="text/javascript">
-        var firstStart = '${firstStart}';
-        var subscriptionStatus = '${subscriptionStatus}';
-        window.addEventListener('load', function () {
-
-            var user_id = '${userId}';
-            var isAdmin = ${isAdmin};
-            var app_id = 6600445;
-            if (!isAdmin) {
-                if ((subscriptionStatus === 'not' || subscriptionStatus === 'resume') && device.desktop()) {
-
-                    if (firstStart === 'true') {
-
-                        disableNavigtion(true);
-                        $("#event").addClass('hide');
-                        admanInit({
-                            user_id: user_id,
-                            app_id: app_id,
-                            type: 'preloader',
-                            params: {preview: 1}
-                        }, onAdsReady, onNoAds);
-                    } else {
-                        getMedia();
-                        setTimeout(handleReturn(), 1000);
-                    }
-
-                } else {
-                    handleReturn();
-                }
-            } else {
-                handleReturn();
-            }
-
-
-            function onAdsReady(adman) {
-                adman.onStarted(function () {
-                    console.log("Adman: Started");
-                    admanStat(app_id, user_id);
-                });
-
-                adman.onCompleted(function () {
-                    console.log("Adman: Completed");
-                    $("#event").removeClass('hide');
-                    getMedia();
-                    setTimeout(handleReturn(), 1000);
-                    disableNavigtion(false);
-
-                });
-                adman.onSkipped(function () {
-                    console.log("Adman: Skipped");
-                });
-                adman.onClicked(function () {
-                    console.log("Adman: Clicked");
-                });
-
-                adman.start('preroll');
-
-            };
-
-
-            function onNoAds() {
-                console.log("Adman: No ads");
-                getMedia();
-                setTimeout(resizeEvent(), 1000);
-            };
-        });
-
-
-    </script>
-
-
     <style>
         .borderless {
             border: 0 none;
@@ -174,9 +112,6 @@
     </style>
 </head>
 <body id="body">
-<header>
-    <div id="vk_ads_105219"></div>
-</header>
 <jsp:include page="navigation.jsp"/>
 
 <div>
@@ -328,7 +263,6 @@
     var returnBack = '${returnBack}';
     var start = '${start}';
     var firstStart = '${firstStart}';
-    var subscriptionStatus = '${subscriptionStatus}';
     var isDesktop = device.desktop();
     if (isDesktop) {
         $('#navbarEvents').addClass('hide');
@@ -338,109 +272,92 @@
         $('#event').css('padding-top', '20px');
     }
 
-    function handleReturn() {
-        if (returnBack === 'map' || start === 'true') {
-            document.getElementById("event").className = "hide";
-            document.getElementById("prof").className = "hide";
-            document.getElementById("group").className = "hide";
-            document.getElementById("search").className = "";
-            $('#li2').attr('class', 'active');
-            $('#li1').attr('class', '');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', '');
-            $('#li5').attr('class', '');
+    if (returnBack === 'map' || start === 'true') {
+        document.getElementById("event").className = "hide";
+        document.getElementById("prof").className = "hide";
+        document.getElementById("group").className = "hide";
+        document.getElementById("search").className = "";
+        $('#li2').attr('class', 'active');
+        $('#li1').attr('class', '');
+        $('#li3').attr('class', '');
+        $('#li4').attr('class', '');
+        $('#li5').attr('class', '');
 
-            $('#searchPlayground').addClass('active');
-            $('#events').removeClass('active');
-            $('#groups').removeClass('active');
-            $('#profile').removeClass('active');
-            $('#create').removeClass('active');
+        $('#searchPlayground').addClass('active');
+        $('#events').removeClass('active');
+        $('#groups').removeClass('active');
+        $('#profile').removeClass('active');
+        $('#create').removeClass('active');
 
-            initMap();
-            isMapInit = true;
-            // Если нет групп и первый заход в приложение
-            if (firstStart === 'true') {
-                $('#startInfo').modal('show');
-            }
-            setMobileMap();
-            setTimeout('resizeMain()', 1000);
-
-        } else if (returnBack === 'group') {
-            document.getElementById("event").className = "hide";
-            document.getElementById("prof").className = "hide";
-            document.getElementById("group").className = "";
-            document.getElementById("search").className = "hide";
-            $('#li2').attr('class', '');
-            $('#li1').attr('class', '');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', 'active');
-            $('#li5').attr('class', '');
-
-            $('#searchPlayground').removeClass('active');
-            $('#events').removeClass('active');
-            $('#groups').addClass('active');
-            $('#profile').removeClass('active');
-            $('#create').removeClass('active');
-            setTimeout('resizeGroups()', 300);
-        } else if (returnBack === 'home') {
-            document.getElementById("event").className = "";
-            document.getElementById("prof").className = "hide";
-            document.getElementById("group").className = "hide";
-            document.getElementById("search").className = "hide";
-            $('#li2').attr('class', '');
-            $('#li1').attr('class', 'active');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', '');
-            $('#li5').attr('class', '');
-
-            $('#searchPlayground').removeClass('active');
-            $('#events').addClass('active');
-            $('#groups').removeClass('active');
-            $('#profile').removeClass('active');
-            $('#create').removeClass('active');
-            setTimeout('resizeEvent()', 300);
-        } else if (returnBack === 'profileMain') {
-            document.getElementById("event").className = "hide";
-            document.getElementById("prof").className = "";
-            document.getElementById("group").className = "hide";
-            document.getElementById("search").className = "hide";
-            $('#li2').attr('class', '');
-            $('#li1').attr('class', '');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', '');
-            $('#li5').attr('class', 'active');
-
-            $('#searchPlayground').removeClass('active');
-            $('#events').removeClass('active');
-            $('#groups').removeClass('active');
-            $('#profile').addClass('active');
-            $('#create').removeClass('active');
-            setTimeout('resizeProfileMain()', 500);
-        } else if (returnBack === 'start') {
-            if (isDesktop) {
-                VK.api("groups.isMember", {
-                    "group_id": "148660655",
-                    "user_id": "${userId}",
-                    "v": "5.73"
-                }, function (data) {
-                    var isMember = data.response === 1;
-                    if (isMember) {
-                        $('#subscribe').remove();
-                    } else {
-                        $('#subscribe').removeClass('hide');
-                        var count = 0;
-                        while (count < 5) {
-                            setTimeout('resizeEvent()', 1000);
-                            count++;
-                        }
-                    }
-                });
-            }
-            setTimeout('resizeEvent()', 500);
-        } else {
-            setTimeout('resizeEvent()', 500);
-            setTimeout('resizeProfileMain()', 500);
+        initMap();
+        isMapInit = true;
+        // Если нет групп и первый заход в приложение
+        if (firstStart === 'true') {
+            $('#startInfo').modal('show');
         }
+        setMobileMap();
+        setTimeout('resizeMain()', 1000);
+
+    } else if (returnBack === 'group') {
+        document.getElementById("event").className = "hide";
+        document.getElementById("prof").className = "hide";
+        document.getElementById("group").className = "";
+        document.getElementById("search").className = "hide";
+        $('#li2').attr('class', '');
+        $('#li1').attr('class', '');
+        $('#li3').attr('class', '');
+        $('#li4').attr('class', 'active');
+        $('#li5').attr('class', '');
+
+        $('#searchPlayground').removeClass('active');
+        $('#events').removeClass('active');
+        $('#groups').addClass('active');
+        $('#profile').removeClass('active');
+        $('#create').removeClass('active');
+        setTimeout('resizeGroups()', 300);
+    } else if (returnBack === 'home') {
+        document.getElementById("event").className = "";
+        document.getElementById("prof").className = "hide";
+        document.getElementById("group").className = "hide";
+        document.getElementById("search").className = "hide";
+        $('#li2').attr('class', '');
+        $('#li1').attr('class', 'active');
+        $('#li3').attr('class', '');
+        $('#li4').attr('class', '');
+        $('#li5').attr('class', '');
+
+        $('#searchPlayground').removeClass('active');
+        $('#events').addClass('active');
+        $('#groups').removeClass('active');
+        $('#profile').removeClass('active');
+        $('#create').removeClass('active');
+        setTimeout('resizeEvent()', 300);
+    } else if (returnBack === 'profileMain') {
+        document.getElementById("event").className = "hide";
+        document.getElementById("prof").className = "";
+        document.getElementById("group").className = "hide";
+        document.getElementById("search").className = "hide";
+        $('#li2').attr('class', '');
+        $('#li1').attr('class', '');
+        $('#li3').attr('class', '');
+        $('#li4').attr('class', '');
+        $('#li5').attr('class', 'active');
+
+        $('#searchPlayground').removeClass('active');
+        $('#events').removeClass('active');
+        $('#groups').removeClass('active');
+        $('#profile').addClass('active');
+        $('#create').removeClass('active');
+        setTimeout('resizeProfileMain()', 500);
+    } else if (returnBack === 'start') {
+        if (isDesktop && !isSubscribe) {
+            $('#subscribe').removeClass('hide');
+        } else {
+            $('#subscribe').remove();
+        }
+        setTimeout('resizeEvent()', 500);
+    } else {
+        setTimeout('resizeEvent()', 500);
     }
 
 
@@ -477,19 +394,10 @@
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
         var height = $('#event').height();
         if (isDesktop) {
-            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
-                if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 650);
-                } else {
-                    VK.callMethod('resizeWindow', 900, height + 50);
-                }
+            if (height < 650) {
+                VK.callMethod('resizeWindow', 900, 650);
             } else {
-                if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 650);
-                } else {
-                    VK.callMethod('resizeWindow', 900, height + 160);
-                }
-
+                VK.callMethod('resizeWindow', 900, height + 50);
             }
         }
         //VK.callMethod('scrollWindow', 0);
@@ -498,19 +406,10 @@
     function resizeGroups() {
         var height = $('#group').height();
         if (isDesktop) {
-            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
-                if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 650);
-                } else {
-                    VK.callMethod('resizeWindow', 900, height + 10);
-                }
+            if (height < 650) {
+                VK.callMethod('resizeWindow', 900, 650);
             } else {
-                if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 777);
-                } else {
-                    VK.callMethod('resizeWindow', 900, height + 140);
-                }
-
+                VK.callMethod('resizeWindow', 900, height + 10);
             }
         }
     }
@@ -518,11 +417,7 @@
     function resizeMain() {
         //VK.callMethod('resizeWindow', 1000, $('#body').height() + 80);
         if (isDesktop) {
-            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
-                VK.callMethod('resizeWindow', 900, 650);
-            } else {
-                VK.callMethod('resizeWindow', 900, 777);
-            }
+            VK.callMethod('resizeWindow', 900, 650);
         }
         //VK.callMethod('scrollWindow', 0);
     }
@@ -531,58 +426,15 @@
         $('#startInfo').modal('hide');
     }
 
-    function subscriptionSuccess(subscription_id) {
-        $('#premiumDiv').addClass('hide');
-        $('#premium').addClass('hide');
-        $('#premiumCancel').addClass('hide');
-        $('#premiumResume').addClass('hide');
-        $('#alertSuccess').removeClass('hide');
-        $('#alertSuccess').alert();
-        resizeProfileMain();
-    }
-
-    function subscriptionCancel() {
-        $('#premiumDiv').addClass('hide');
-        $('#premium').addClass('hide');
-        $('#premiumCancel').addClass('hide');
-        $('#premiumResume').removeClass('hide');
-        $('#alertWarning').removeClass('hide');
-        $('#alertWarning').alert();
-        resizeProfileMain();
-    }
 
     function resizeProfileMain() {
         var height = $('#prof').height();
         if (isDesktop) {
-            if (subscriptionStatus === 'active' || subscriptionStatus === 'temp') {
-                if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 650);
-                } else {
-                    VK.callMethod('resizeWindow', 900, height + 50);
-                }
+            if (height < 650) {
+                VK.callMethod('resizeWindow', 900, 650);
             } else {
-                if (height < 650) {
-                    VK.callMethod('resizeWindow', 900, 777);
-                } else {
-                    VK.callMethod('resizeWindow', 900, height + 160);
-                }
+                VK.callMethod('resizeWindow', 900, height + 50);
             }
-        }
-    }
-
-    function disableNavigtion(flag) {
-        if (flag) {
-            $('#events').addClass('disabled');
-            $('#searchPlayground').addClass('disabled');
-            $('#create').addClass('disabled');
-            $('#groups').addClass('disabled');
-            $('#profile').addClass('disabled');
-        } else {
-            $('#events').removeClass('disabled');
-            $('#searchPlayground').removeClass('disabled');
-            $('#create').removeClass('disabled');
-            $('#groups').removeClass('disabled');
-            $('#profile').removeClass('disabled');
         }
     }
 

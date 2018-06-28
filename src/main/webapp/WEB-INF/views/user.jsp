@@ -128,10 +128,9 @@
 
                             </c:otherwise>
                         </c:choose>
-                        <c:if test="${subscriptionStatus == 'active' || user.getSubscriptionStatus() == 'temp'}">
                             <c:choose>
                                 <c:when test="${countParticipant == 0}">
-                                    <a href="#" class="list-group-item borderless">
+                                    <a href="#" class="list-group-item borderless hide"  id="participantUser">
                                         <span style="padding-right: 5px"> <img src="resources/image/participant.png"
                                                                                width="25" height="25"></span>
                                         <span class="badge" style="background: #ffffff"><span style="color: gray">
@@ -141,7 +140,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <a href="userParticipant?userId=${userId}&where=profile&playerId=${playerId}"
-                                       class="borderless list-group-item">
+                                       class="borderless list-group-item hide"  id="participantUser">
                                         <span style="padding-right: 5px"> <img src="resources/image/participant.png"
                                                                                width="25" height="25"></span>
                                         <span class="badge" style="background: #ffffff"><span style="color: gray">
@@ -153,7 +152,7 @@
 
                             <c:choose>
                                 <c:when test="${countOrganize == 0}">
-                                    <a href="#" class="list-group-item borderless">
+                                    <a href="#" class="list-group-item borderless hide" id="organizeUser">
                                         <span style="padding-right: 5px"> <img src="resources/image/organisator.png"
                                                                                width="25" height="25"></span>
                                         <span class="badge" style="background: #ffffff"><span style="color: gray">
@@ -164,7 +163,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <a href="userOrganize?userId=${userId}&where=profile&playerId=${playerId}"
-                                       class=" borderless list-group-item">
+                                       class=" borderless list-group-item hide" id="organizeUser">
                                         <span style="padding-right: 5px"> <img src="resources/image/organisator.png"
                                                                                width="25" height="25"></span>
                                         <span class="badge" style="background: #ffffff"><span style="color: gray">
@@ -174,13 +173,7 @@
 
                                 </c:otherwise>
                             </c:choose>
-                        </c:if>
                     </div>
-
-                    <div style="padding: 20px">
-                        <!-- <a href="#" class="btn"><span class="glyphicon glyphicon-th-list"></span> Общий рейтинг</a>   -->
-                    </div>
-
 
                 </div>
 
@@ -248,6 +241,25 @@
 </main>
 
 <script>
+    var isSubscribe;
+    VK.init(function () {
+        console.log('vk init');
+        VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
+            var isMember = data.response === 1;
+            if (isMember) {
+                isSubscribe = true;
+                $('#organizeUser').removeClass('hide');
+                $('#participantUser').removeClass('hide');
+            } else {
+                isSubscribe = false;
+            }
+        });
+
+    }, function () {
+        alert('vk init fail \n Напишите нам об ошибке')
+        // API initialization failed
+        // Can reload page here
+    }, '5.74');
 
     var back = '${where}';
     var returnBack;
