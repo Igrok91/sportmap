@@ -19,10 +19,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/events.js"></script>
     <script src="resources/js/device.js"></script>
-    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
+    <%--    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+        <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>--%>
     <script src="resources/js/media.js"></script>
-
+    <script type="text/javascript">
+        if (device.desktop()) {
+            document.write('<script src="resources/js/xd_connection.js"></scr' + 'ipt>');
+            document.write('<script src="//vk.com/js/api/openapi.js?154"></scr' + 'ipt>');
+        } else {
+            document.write('<script src="resources/js/mobile.js"></scr' + 'ipt>');
+        }
+    </script>
     <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
     <script src="https://vk.com/js/api/adman_init.js"></script>
     <script src="https://js.appscentrum.com/scr/preroll.js"></script>
@@ -32,7 +39,7 @@
         VK.init(function () {
             console.log('vk init')
 
-            VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+            VK.addCallback('onAllowMessagesFromCommunity', function f(location) {
                 $('#allowMessage').modal('hide');
             });
 
@@ -210,11 +217,11 @@
 
                     </div>
 
-                        <div id="premium" class="text-center hide" style="padding-bottom: 15px">
-                            <p>Подпишись на официальное сообщество приложения и стань игроком "Премиум"</p>
-                            <a href="#" data-toggle="modal"
-                               data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум"</a>
-                        </div>
+                    <div id="premium" class="text-center hide" style="padding-bottom: 15px">
+                        <p>Подпишись на официальное сообщество приложения и стань игроком "Премиум"</p>
+                        <a href="#" data-toggle="modal"
+                           data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум"</a>
+                    </div>
 
                     <div class="list-group">
                         <c:choose>
@@ -244,7 +251,7 @@
                     <div style="padding: 4px" class="text-center">
                         <span class="btn hide" id="shareWebGroup">
                             <script type="text/javascript">
-                                document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#pid=${playgroundId}"}, {
+                                document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#pid=${playgroundId}"}, {
                                     type: "custom",
                                     text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Пригласить в группу</span>"
                                 }));
@@ -280,7 +287,7 @@
                                     console.log("user joined");
                                     $('#alertSuccessDiv').removeClass('hide');
                                     $('#alertSuccess').alert();
-                               setTimeout(function () {
+                                    setTimeout(function () {
                                         $('#subscribe').remove();
                                     }, 1000);
                                 });
@@ -517,7 +524,7 @@
                                     <span class="btn " id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
-                                    document.write(VK.Share.button({url: "Присоединяйся к игре! \n https://vk.com/app6437488_172924708#${event.idEvent}"}, {
+                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#${event.idEvent}"}, {
                                         type: "custom",
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
@@ -640,7 +647,7 @@
                     <div class="text-center">
                         <div id="divPayWeb">
                             <p>Чтобы снять ограничения, подпишитесь на официальное сообщество приложения!</p>
-                                    <a href="https://vk.com/sporterr"  target="_blank" class="btn btn-primary ">Подписаться</a>
+                            <a href="https://vk.com/sporterr" target="_blank" class="btn btn-primary ">Подписаться</a>
                         </div>
                         <%--<a href="vk://vk.com/app6602081_-148660655" target="_blank" id="goToAllow" class="btn btn-primary" >Разрешить отправку сообщений</a>--%>
                     </div>
@@ -691,7 +698,7 @@
                         </li>
                     </ul>
                     <div class="text-center">
-                        <a href="https://vk.com/sporterr"  target="_blank" class="btn btn-primary ">Подписаться</a>
+                        <a href="https://vk.com/sporterr" target="_blank" class="btn btn-primary ">Подписаться</a>
                     </div>
                 </div>
             </div>
@@ -708,36 +715,33 @@
     var maxWatch = 10;
     var allowSendMessage = ${allowSendMessage};
 
+    VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
+        var isMember = data.response === 1;
+        if (isMember) {
+            isSubscribe = true;
+            $('#subscribe').remove();
 
+        } else {
+            if (isDesktop) {
+                $('#subscribe').removeClass('hide');
+                var count = 0;
+                while (count < 5) {
+                    setTimeout('resizePlayground()', 1000);
+                    count++;
+                }
+            }
+            isSubscribe = false;
+            $('#premium').removeClass('hide');
+        }
+    });
     if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
         $('#shareWebGroup').removeClass('hide');
         $('#shareMobileGroup').addClass('hide');
-
-
-        VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
-            var isMember = data.response === 1;
-            if (isMember) {
-                isSubscribe = true;
-                $('#subscribe').remove();
-
-            } else {
-                $('#subscribe').removeClass('hide');
-                isSubscribe = false;
-                $('#premium').removeClass('hide');
-                  var count = 0;
-                  while (count < 5) {
-                      setTimeout('resizePlayground()', 1000);
-                      count++;
-                  }
-            }
-        });
     } else {
-        if (!isSubscribe) {
-            $('#premium').removeClass('hide');
-        }
         $('#shareWebGroup').addClass('hide');
         $('#shareMobileGroup').removeClass('hide');
+        $('#web').css('height', '0px');
     }
     setTimeout('resizePlayground()', 1000);
 
@@ -874,7 +878,7 @@
         $('#exitFromGroup').addClass('disabled');
         $('#enterToGroup').addClass('disabled');
         $.ajax({
-            url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport + '&userId=' + ${userId} + '&isSubscribe=' + isSubscribe
+            url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport + '&userId=' + ${userId} +'&isSubscribe=' + isSubscribe
         }).then(function (value) {
             var userId = '${userId}';
             switch (value) {
@@ -1096,7 +1100,6 @@
 
         });
     }
-
 
 
     function sharePlayground() {

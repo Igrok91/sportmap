@@ -32,7 +32,7 @@
     </style>
 </head>
 <body >
-<nav id="navbarProfile" class="nav  navbar-static-top navbar-default ">
+<nav id="navbarProfile" class="nav  navbar-static-top navbar-default hide ">
     <div class="container-fluid ">
         <div class="navbar-brand ">
             Мои профиль

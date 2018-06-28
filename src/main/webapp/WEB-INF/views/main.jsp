@@ -261,13 +261,12 @@
     var firstStart = '${firstStart}';
     var isDesktop = device.desktop();
     if (isDesktop) {
-        $('#navbarEvents').addClass('hide');
-        $('#navbarProfile').addClass('hide');
-        $('#navbarGroups').addClass('hide');
-
         $('#event').css('padding-top', '20px');
     } else {
         $('#web').css('height', '0px');
+        $('#navbarEvents').removeClass('hide');
+        $('#navbarProfile').removeClass('hide');
+        $('#navbarGroups').removeClass('hide');
     }
 
     if (returnBack === 'map' || start === 'true') {
@@ -347,13 +346,6 @@
         $('#profile').addClass('active');
         $('#create').removeClass('active');
         setTimeout('resizeProfileMain()', 500);
-    } else if (returnBack === 'start') {
-        if (isDesktop && !isSubscribe) {
-            $('#subscribe').removeClass('hide');
-        } else {
-            $('#subscribe').remove();
-        }
-        setTimeout('resizeEvent()', 500);
     } else {
         setTimeout('resizeEvent()', 500);
     }

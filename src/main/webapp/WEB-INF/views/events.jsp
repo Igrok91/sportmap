@@ -38,7 +38,7 @@
 </a>
 
 
-<nav id="navbarEvents" class="navbar navbar-static-top navbar-default">
+<nav id="navbarEvents" class="navbar navbar-static-top navbar-default hide">
     <div class="container-fluid ">
         <div class="pull-left">
             <a class="navbar-brand" href="#">События</a>
@@ -51,31 +51,6 @@
 
         </div>
         <div class="col-sm-8">
-            <div id="subscribe" class="hide">
-                <c:if test="${returnBack == 'start'}">
-                    <div class="text-center" style="padding-bottom: 15px">
-                        <div style="padding-top: 10px" id="subscribe_vk_groups">
-                            <p style="color: gray" id="error">Стань игроком "Премиум" и будь в курсе всех новостей</p>
-                            <!-- VK Widget -->
-                            <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
-                                 class="center-block"></div>
-                            <script type="text/javascript">
-                                VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
-
-                                VK.Observer.subscribe("widgets.groups.joined", function f() {
-                                    console.log("user joined");
-                                    location.reload();
-                                    setTimeout(function () {
-                                        $('#subscribe').remove();
-                                    }, 1000);
-                                });
-                            </script>
-
-                        </div>
-                    </div>
-                </c:if>
-            </div>
-
             <div style="padding-bottom: 45px">
                 <c:choose>
                     <c:when test="${listEvents.size() == 0}">
@@ -313,7 +288,7 @@
                                     <span class="btn " id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
-                                    document.write(VK.Share.button({url: "Присоединяйся к игре! \n https://vk.com/app6437488_172924708#${event.idEvent}"}, {
+                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#${event.idEvent}"}, {
                                         type: "custom",
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
