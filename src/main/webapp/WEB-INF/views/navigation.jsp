@@ -76,7 +76,7 @@
 <header id="web">
 <%--    <nav class="nav navbar-default navbar-static-top  " id="web">
         <div class="container-fluid">--%>
-            <div class="btn-group btn-group-justified navStyle" role="group" style="height: 60px">
+            <div class="btn-group btn-group-justified " role="group" style="height: 60px">
 <%--                <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
                     <li id="li1" class="active "><a id="events" class="cursorPointer"><span
                             class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a></li>
@@ -92,17 +92,17 @@
                                                                              aria-hidden=""></span> Профиль</a></li>
                 </ul>--%>
 
-                <a id="events" class="cursorPointer btn btn-primary active" style="font-size: medium"><span
+                <a id="events" class="cursorPointer btn btn-primary active" ><span
                         class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a>
-                <a  id="searchPlayground" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-search"
+                <a  id="searchPlayground" class="cursorPointer btn btn-primary" ><span class="glyphicon glyphicon-search"
                                                                                                                                                                         aria-hidden=""></span>
                     Площадки</a>
     <a id="create" class="cursorPointer btn btn-primary" data-toggle="modal"
        data-target="#exampleModal" style="font-size: medium"><span class="glyphicon glyphicon-plus-sign"
                                          aria-hidden="Создать"></span></a>
-                <a  id="groups" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-th-list"
+                <a  id="groups" class="cursorPointer btn btn-primary"><span class="glyphicon glyphicon-th-list"
                                                                                                                                                                 aria-hidden=""></span> Группы</a>
-                <a id="profile" class="cursorPointer btn btn-primary" style="font-size: medium"><span class="glyphicon glyphicon-user"
+                <a id="profile" class="cursorPointer btn btn-primary"><span class="glyphicon glyphicon-user"
                                                                                                                                                                        aria-hidden=""></span> Профиль</a>
 
             </div><!-- /.navbar-collapse -->
