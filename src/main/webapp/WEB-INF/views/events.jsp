@@ -55,7 +55,7 @@
                 <c:if test="${returnBack == 'start'}">
                     <div class="text-center" style="padding-bottom: 15px">
                         <div style="padding-top: 10px" id="subscribe_vk_groups">
-                            <p style="color: gray" id="error">Стань игроком "Премиум"</p>
+                            <p style="color: gray" id="error">Стань игроком "Премиум" и будь в курсе всех новостей</p>
                             <!-- VK Widget -->
                             <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
                                  class="center-block"></div>
@@ -310,10 +310,10 @@
                                         </c:if>
                                     </span>
                                     </a>
-                                    <span class="btn hide" id="shareWeb_${event.idEvent}">
+                                    <span class="btn " id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
-                                    document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
+                                    document.write(VK.Share.button({url: "Присоединяйся к игре! \n https://vk.com/app6437488_172924708#${event.idEvent}"}, {
                                         type: "custom",
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
@@ -321,10 +321,6 @@
 
 
                                 </span>
-                                    <a class="btn hide" id="shareMobile_${event.idEvent}"
-                                       onclick="shareEvent('${event.idEvent}')"><span
-                                            class="glyphicon glyphicon-bullhorn"
-                                            style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
                                 </div>
 
                                 <div class="modal fade" id="addIgrok_${event.idEvent}">
@@ -518,13 +514,7 @@
                 }
 
             });
-            if (isDesktop) {
-                $('#shareWeb_' + id).removeClass('hide');
-                $('#shareMobile_' + id).addClass('hide');
-            } else {
-                $('#shareWeb_' + id).addClass('hide');
-                $('#shareMobile_' + id).removeClass('hide');
-            }
+
             if (isActive) {
                 $('#answerButton_' + id).removeClass('active');
                 $('#answerButton_' + id).css('background', '#EAEAEC');

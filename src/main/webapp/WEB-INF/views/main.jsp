@@ -22,23 +22,14 @@
     <script src="resources/js/device.js"></script>
     <script src="resources/js/media.js"></script>
 
-    <%--   <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-
-       <script src="https://vk.com/js/api/mobile_sdk.js"  type="text/javascript"></script>--%>
-    <%--<script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>--%>
+     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+     <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
 
     <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
     <script src="https://vk.com/js/api/adman_init.js"></script>
     <script src="https://js.appscentrum.com/scr/preroll.js"></script>
 
-    <script type="text/javascript">
-        if (device.desktop()) {
-            document.write('<script src="resources/js/xd_connection.js"></scr' + 'ipt>');
-            document.write('<script src="//vk.com/js/api/openapi.js?154"></scr' + 'ipt>');
-        } else {
-            document.write('<script src="resources/js/mobile.js"></scr' + 'ipt>');
-        }
-    </script>
+
     <script>
         var isSubscribe;
         VK.init(function () {
@@ -48,8 +39,13 @@
                 if (isMember) {
                     isSubscribe = true;
                     $('#subscribe').remove();
+                    $('#organizeUser').removeClass('hide');
+                    $('#participantUser').removeClass('hide');
+                    $('#tempPremium').removeClass('hide');
+
                 } else {
                     $('#subscribe').removeClass('hide');
+                    $('#premium').removeClass('hide');
                     isSubscribe = false;
                     var count = 0;
                     while (count < 5) {
@@ -270,6 +266,8 @@
         $('#navbarGroups').addClass('hide');
 
         $('#event').css('padding-top', '20px');
+    } else {
+        $('#navbarEvents').css('height', '0px');
     }
 
     if (returnBack === 'map' || start === 'true') {

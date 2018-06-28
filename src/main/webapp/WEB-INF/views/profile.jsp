@@ -80,16 +80,6 @@
                             </div>
                             <div id="tempPremium" class="text-center hide" style="padding-top:5px;margin-top: 5px">
                                 <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
-                                <c:if test="${user.getCountDaytoEndSubscribeTemp() > 4 && (user.getCountDaytoEndSubscribeTemp() != 22 || user.getCountDaytoEndSubscribeTemp() != 33 || user.getCountDaytoEndSubscribeTemp() != 44)}">
-                                    <p id="countEnd" style="color: gray">Осталось <c:out value="${user.getCountDaytoEndSubscribeTemp()}"/> дней</p>
-                                </c:if>
-                                <c:if test="${(user.getCountDaytoEndSubscribeTemp() > 1 && user.getCountDaytoEndSubscribeTemp() < 5) || user.getCountDaytoEndSubscribeTemp() == 22 ||
-                            user.getCountDaytoEndSubscribeTemp() == 33 || user.getCountDaytoEndSubscribeTemp() == 44}">
-                                    <p id="countEnd" style="color: gray">Осталось <c:out value="${user.getCountDaytoEndSubscribeTemp()}"/> дня</p>
-                                </c:if>
-                                <c:if test="${user.getCountDaytoEndSubscribeTemp() == 1}">
-                                    <p id="countEnd" style="color: gray">Остался <c:out value="${user.getCountDaytoEndSubscribeTemp()}"/> день</p>
-                                </c:if>
                             </div>
                         </div>
 
@@ -121,6 +111,7 @@
                             </ul>
                             <div class="text-center">
                                 <a id="paySubscriptions" href="https://vk.com/sporterr" target="_blank" class="btn btn-primary hide">Подписаться</a>
+                                <br>
                                 <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
                             </div>
                         </div>
@@ -280,15 +271,13 @@
         });
     }
 
-    if (!isSubscribe) {
-        $('#premiumCancel').removeClass('hide');
-        $('#premium').addClass('hide');
-        $('#premiumResume').addClass('hide');
-        $('#tempPremium').addClass('hide');
+  /*  if (!isSubscribe) {
+        $('#premium').removeClass('hide');
     } else {
         $('#organizeUser').removeClass('hide');
         $('#participantUser').removeClass('hide');
-    }
+        $('#tempPremium').removeClass('hide');
+    }*/
 
     if (device.desktop()) {
 

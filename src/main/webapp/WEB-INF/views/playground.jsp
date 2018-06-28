@@ -19,15 +19,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/events.js"></script>
     <script src="resources/js/device.js"></script>
-    <%--<script src="resources/js/xd_connection.js" type="text/javascript"></script>--%>
-    <script type="text/javascript">
-        if (device.desktop()) {
-            document.write('<script src="resources/js/xd_connection.js"></scr' + 'ipt>');
-            document.write('<script src="//vk.com/js/api/openapi.js?154"></scr' + 'ipt>');
-        } else {
-            document.write('<script src="resources/js/mobile.js"></scr' + 'ipt>');
-        }
-    </script>
+    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
     <script src="resources/js/media.js"></script>
 
     <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
@@ -39,7 +32,9 @@
         VK.init(function () {
             console.log('vk init')
 
-
+            VK.addCallback('onAllowMessagesFromCommunity', function f(location){
+                $('#allowMessage').modal('hide');
+            });
 
         }, function () {
             alert('vk init fail \n Напишите нам об ошибке')
@@ -163,8 +158,7 @@
                                 <p><span class="glyphicon glyphicon-flash" style="padding-right: 3px"></span> Сейчас
                                     идет набор в группу, здесь ты сможешь позвать
                                     на игру, либо узнать о ближайшей игре. Все игры публикуются на стене группы <span
-                                            class="glyphicon glyphicon-arrow-down"></span> Чтобы не пропустить игры, мы будем присылать тебе уведомления в личные сообщения
-                                    <span class="glyphicon glyphicon-bell"></span>
+                                            class="glyphicon glyphicon-arrow-down"></span>
                                 </p>
                             </div>
                         </c:if>
@@ -201,7 +195,7 @@
                                 <button type="button" class="close" onclick="hideButtonAlert('alertSuccess')"
                                         aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <div class="text-center">
-                                    Подписка успешно оформлена!
+                                    Подписка успешно оформлена! Перезапустите приложение
                                 </div>
                             </div>
                         </div>
@@ -284,10 +278,11 @@
                                 }
                                 VK.Observer.subscribe("widgets.groups.joined", function f() {
                                     console.log("user joined");
-                                    location.reload();
-                      /*              setTimeout(function () {
+                                    $('#alertSuccessDiv').removeClass('hide');
+                                    $('#alertSuccess').alert();
+                               setTimeout(function () {
                                         $('#subscribe').remove();
-                                    }, 1000);*/
+                                    }, 1000);
                                 });
                             </script>
 
@@ -519,10 +514,10 @@
                                         </c:if>
                                     </span>
                                     </a>
-                                    <span class="btn hide" id="shareWeb_${event.idEvent}">
+                                    <span class="btn " id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
-                                    document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
+                                    document.write(VK.Share.button({url: "Присоединяйся к игре! \n https://vk.com/app6437488_172924708#${event.idEvent}"}, {
                                         type: "custom",
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
@@ -620,7 +615,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <a href="https://vk.com/app6602081_-148660655" target="_blank" id="goToAllow"
+                        <a href="#" onclick="allowSendMessageVK()" id="goToAllow"
                            class="btn btn-primary">Разрешить отправку сообщений</a>
                         <%--<a href="vk://vk.com/app6602081_-148660655" target="_blank" id="goToAllow" class="btn btn-primary" >Разрешить отправку сообщений</a>--%>
                     </div>
@@ -725,9 +720,11 @@
             if (isMember) {
                 isSubscribe = true;
                 $('#subscribe').remove();
+
             } else {
                 $('#subscribe').removeClass('hide');
                 isSubscribe = false;
+                $('#premium').removeClass('hide');
                   var count = 0;
                   while (count < 5) {
                       setTimeout('resizePlayground()', 1000);
@@ -735,9 +732,6 @@
                   }
             }
         });
-        if (!isSubscribe) {
-            $('#premium').removeClass('hide');
-        }
     } else {
         if (!isSubscribe) {
             $('#premium').removeClass('hide');
@@ -745,7 +739,8 @@
         $('#shareWebGroup').addClass('hide');
         $('#shareMobileGroup').removeClass('hide');
     }
-       setTimeout('resizePlayground()', 1000);
+    setTimeout('resizePlayground()', 1000);
+
     if (listEvents) {
         var userId = "${userId}";
         listEvents.forEach(function (event, i) {
@@ -760,17 +755,6 @@
                 location.reload();
             }
 
-            if (isDesktop) {
-                if (activeEvent) {
-                    $('#shareWeb_' + id).removeClass('hide');
-                    $('#shareMobile_' + id).addClass('hide');
-                }
-            } else {
-                if (activeEvent) {
-                    $('#shareWeb_' + id).addClass('hide');
-                    $('#shareMobile_' + id).removeClass('hide');
-                }
-            }
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');
             if (description && description.length > 0) {
@@ -889,11 +873,8 @@
 
         $('#exitFromGroup').addClass('disabled');
         $('#enterToGroup').addClass('disabled');
-        if (countGroup > 2 && !isSubscribe) {
-            $('#notPremium').modal('show');
-        } else {
         $.ajax({
-            url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport + '&userId=' + ${userId}
+            url: 'handleGroup?playgroundId=' + playgroundId + '&sport=' + sport + '&userId=' + ${userId} + '&isSubscribe=' + isSubscribe
         }).then(function (value) {
             var userId = '${userId}';
             switch (value) {
@@ -908,9 +889,6 @@
                     count2 = count2 + 1;
                     $('#players').text(count2);
                     infoHandleGroup(true, allowSendMessage);
-                    if (!allowSendMessage) {
-                        VK.callMethod("showAllowMessagesFromCommunityBox");
-                    }
                     break;
                 case 'false':
                     $('#exitFromGroup').addClass('hide');
@@ -924,9 +902,12 @@
                     $('#players').text(count2);
                     //    $('#list_' + userId).remove();
                     break;
+                case 'notAllow':
+                    $('#notPremium').modal('show');
+                    break;
             }
         });
-        }
+
         $('#exitFromGroup').removeClass('disabled');
         $('#enterToGroup').removeClass('disabled');
     }
@@ -1087,6 +1068,7 @@
 
         $('#answerButton_' + id).attr('disabled', 'disabled');
         $('#commentEvents_' + id).addClass('disabled');
+        $('#shareWeb_' + id).addClass('hide');
     }
 
 
@@ -1142,6 +1124,10 @@
 
     function hideButtonAlert(id) {
         $('#' + id).addClass('hide');
+    }
+
+    function allowSendMessageVK() {
+        VK.callMethod("showAllowMessagesFromCommunityBox");
     }
 
     function disableNavigtion(flag) {

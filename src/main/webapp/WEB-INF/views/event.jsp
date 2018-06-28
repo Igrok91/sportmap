@@ -296,10 +296,10 @@
                     </div>
 
                     <hr style="margin-bottom: 1px">
-                    <span class="btn hide " id="shareWeb_${event.idEvent}">
+                    <span class="btn" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
-                                    document.write(VK.Share.button({url: "https://vk.com/app6600445_172924708#${event.idEvent}"}, {
+                                    document.write(VK.Share.button({url: "Присоединяйся к игре! \n https://vk.com/app6437488_172924708#${event.idEvent}"}, {
                                         type: "custom",
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
@@ -307,8 +307,7 @@
 
 
                                 </span>
-                    <a class="btn hide" id="shareMobile_${event.idEvent}" onclick="shareEvent('${event.idEvent}')"><span
-                            class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
+
                     <%--   <c:if test="${event.commentsList.size() != 0}">--%>
                     <div class="text-center hide" style="color: gray; padding: 15px;" id="past_${event.idEvent}">
                         <span>Завершено <span class="glyphicon glyphicon-eye-close"></span></span>
@@ -476,15 +475,6 @@
 
     if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
-        if (activeEvent) {
-            $('#shareWeb_' + id).removeClass('hide');
-            $('#shareMobile_' + id).addClass('hide');
-        }
-    } else {
-        if (activeEvent) {
-            $('#shareWeb_' + id).addClass('hide');
-            $('#shareMobile_' + id).removeClass('hide');
-        }
     }
 
 
@@ -886,6 +876,7 @@
         $('#commentArea').addClass('hide');
         $('#textComment').attr('disabled', 'disabled');
         $('#answerButton_' + id).attr('disabled', 'disabled');
+        $('#shareWeb_' + id).addClass('hide');
 
 
     }

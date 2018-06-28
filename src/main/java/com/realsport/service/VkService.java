@@ -38,9 +38,9 @@ public class VkService {
     private Log logger = LogFactory.getLog(VkService.class);
     private final Random random = new Random();
     private static final Integer ADMIN = 172924708;
-    private static final String LINK_APPLICATION = "https://vk.com/app6600445";
-    private static final String LINK_PLAYGROUND = "https://vk.com/app6600445#pid=";
-    private static final Integer APP_ID = 6600445;
+    private static final String LINK_APPLICATION = "https://vk.com/app6437488";
+    private static final String LINK_PLAYGROUND = "https://vk.com/app6437488#pid=";
+    private static final Integer APP_ID = 6437488;
     private static final String ACCESS_TOKEN = "d65021c0d65021c0d65021c019d634973ddd650d65021c08d4ae151d8bec8618a7565f0";
 
     @Autowired
