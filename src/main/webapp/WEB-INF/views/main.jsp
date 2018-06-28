@@ -267,7 +267,7 @@
 
         $('#event').css('padding-top', '20px');
     } else {
-        $('#navbarEvents').css('height', '0px');
+        $('#web').css('height', '0px');
     }
 
     if (returnBack === 'map' || start === 'true') {
