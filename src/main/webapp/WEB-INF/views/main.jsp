@@ -30,7 +30,7 @@
             console.log('vk init');
 
             VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
-                $('#notification1').removeClass('hide');
+                $('#dropdownMenu1').removeClass('hide');
                 $('#notification2').removeClass('hide');
             });
         }, function () {
@@ -315,20 +315,13 @@ VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v":
     var isMember = data.response === 1;
     if (isMember) {
         isSubscribe = true;
-        $('#subscribe').remove();
         $('#organizeUser').removeClass('hide');
         $('#participantUser').removeClass('hide');
         $('#tempPremium').removeClass('hide');
 
     } else {
-        $('#subscribe').removeClass('hide');
         $('#premium').removeClass('hide');
         isSubscribe = false;
-        var count = 0;
-        while (count < 5) {
-            setTimeout('resizeEvent()', 1000);
-            count++;
-        }
     }
 });
 

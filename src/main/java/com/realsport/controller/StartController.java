@@ -161,7 +161,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             return "error";
         }
-        vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + userId);
+       // vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + userId);
         return "main";
     }
 
@@ -376,6 +376,8 @@ public class StartController {
         model.addAttribute("lastName", user.getLastName());
         model.addAttribute("allowSendMessage", vkService.isAllowSendMessages(Integer.parseInt(user.getUserId())));
         model.addAttribute("countGroup", user.getPlaygroundIdlList().size());
+        model.addAttribute("lat", Double.valueOf(playground.getLatitude()));
+        model.addAttribute("lng", Double.valueOf(playground.getLongitude()));
 
         model.addAttribute("isParticipant", isParticipant(user.getPlaygroundIdlList(), idGroup));
     }

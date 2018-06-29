@@ -21,6 +21,9 @@
     <script src="resources/js/device.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
     <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXkXTJQMPNPInJcJt2yT6pNgzksYfpw1c&libraries=places">
+    </script>
 
 
     <script>
@@ -64,6 +67,11 @@
 
         .cursorPointer {
             cursor: pointer;
+        }
+
+        #map {
+            height: 300px;
+            width: 100%;
         }
 
     </style>
@@ -195,10 +203,15 @@
 
                     </div>
 
+
                     <div id="premium" class="text-center hide" style="padding-bottom: 15px">
                         <p>Подпишись на официальное сообщество приложения и стань игроком "Профи"</p>
                         <a href="#" data-toggle="modal"
                            data-target="#toPremium" class="btn btn-success">Стать игроком "Профи"</a>
+                    </div>
+
+                    <div id="map" style="padding-top: 5px; padding-bottom: 5px;">
+
                     </div>
 
                     <div class="list-group">
@@ -660,16 +673,19 @@
                                             console.log("user joined");
                                             $('#alertSuccessDiv').removeClass('hide');
                                             $('#alertSuccess').alert();
-                                            setTimeout(function () {
-                                                $('#subscribe').remove();
-                                            }, 1000);
+                                            $('#toPremium').modal('hide');
+                                            $('#subscribe').remove();
+                                            if (device.desktop()) {
+                                                setTimeout(resizePlayground, 500);
+                                            }
+
                                         });
                                     </script>
 
                                 </div>
                             </div>
                         </div>
-                        <a href="https://vk.com/sporterr" target="_blank" class="btn btn-primary ">Подписаться</a>
+                        <a href="vk://vk.com/sporterr" target="_blank" class="btn btn-primary hide" id="mobileSubscribe">Подписаться</a>
                     </div>
                 </div>
             </div>
@@ -685,13 +701,53 @@
     var eventsId = {};
     var maxWatch = 10;
     var allowSendMessage = ${allowSendMessage};
+    var imageFootball = 'resources/images/ball.png';
+    var imageBasketball = 'resources/images/basketballSm.png';
+    var imageVoleyball = 'resources/images/voleyballSm.png';
+
+    var lat = ${lat};
+    var lng = ${lng};
+
+    var isParticipant = ${isParticipant};
+
+    var map;
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: lat, lng: lng},
+            zoom: 16
+        });
+        var marker;
+        if (sport === 'Футбол') {
+            marker = new google.maps.Marker({
+                position: map.getCenter(),
+                icon: imageFootball
+            });
+        } else if (sport === 'Волейбол') {
+            marker = new google.maps.Marker({
+                position: map.getCenter(),
+                icon: imageVoleyball
+            });
+        } else if (sport === 'Баскетбол') {
+            marker = new google.maps.Marker({
+                position: map.getCenter(),
+                icon: imageBasketball
+            });
+        }
+
+        marker.setMap(map);
+        console.log('initMap');
+    }
 
     if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
         $('#shareWebGroup').removeClass('hide');
+        initMap();
     } else {
         $('#web').addClass('hide');
+        $('#map').addClass('hide');
     }
+
     VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
         var isMember = data.response === 1;
         if (isMember) {
@@ -701,13 +757,29 @@
         } else {
             if (isDesktop) {
                 $('#subscribe').removeClass('hide');
+            } else {
+                $('#mobileSubscribe').removeClass('hide')
             }
             isSubscribe = false;
             $('#premium').removeClass('hide');
         }
     });
 
-    setTimeout('resizePlayground()', 1000);
+
+
+    if (sport == 'Футбол') {
+        $('#panelGroup').addClass('panel-success');
+        $('#imageGroup').attr("src", "resources/image/стадион.png")
+    } else if (sport == 'Баскетбол') {
+        $('#panelGroup').addClass('panel-warning');
+        $('#imageGroup').attr("src", "resources/image/playbasket.png")
+    } else if (sport == 'Волейбол') {
+        $('#panelGroup').addClass('panel-info');
+        $('#imageGroup').attr("src", "resources/image/сетка.png")
+    }
+
+    var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sport + '&userId=' + ${userId};
+    $('#returnBack').attr('href', returnBack);
 
     if (listEvents) {
         var userId = "${userId}";
@@ -825,19 +897,7 @@
     }
 
 
-    if (sport == 'Футбол') {
-        $('#panelGroup').addClass('panel-success');
-        $('#imageGroup').attr("src", "resources/image/стадион.png")
-    } else if (sport == 'Баскетбол') {
-        $('#panelGroup').addClass('panel-warning');
-        $('#imageGroup').attr("src", "resources/image/playbasket.png")
-    } else if (sport == 'Волейбол') {
-        $('#panelGroup').addClass('panel-info');
-        $('#imageGroup').attr("src", "resources/image/сетка.png")
-    }
-    var returnBack = 'home?where=' + '${returnBack}' + '&playgroundId=' + '${playgroundId}' + '&sport=' + sport + '&userId=' + ${userId};
-    $('#returnBack').attr('href', returnBack);
-
+    setTimeout('resizePlayground()', 1000);
 
     function handleGroup() {
         var sport = '${sport}';
@@ -896,7 +956,7 @@
         }
     }
 
-    var isParticipant = ${isParticipant};
+
     if (isParticipant === false) {
         $('#goGame').addClass("disabled");
         $('#createMobile').addClass("disabled");
@@ -1046,13 +1106,6 @@
 
     setInterval(updateData, 5000);
 
-    function infoAllowMessages(flag) {
-        $.ajax({
-            url: 'infoAllowMessages?isAllow=' + flag + '&userId=' + ${userId}
-        }).then(function (value) {
-
-        });
-    }
 
     function infoHandleGroup(flag, allowSendMessage) {
 
@@ -1077,8 +1130,6 @@
     function allowSendMessageVK() {
         VK.callMethod("showAllowMessagesFromCommunityBox");
     }
-
-
 
 
 </script>

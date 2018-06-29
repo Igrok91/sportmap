@@ -435,14 +435,9 @@
 
 
     function initPlaygroundMarkers(map) {
-        var labels = 'Футбол';
         var imageFootball = 'resources/images/ball.png';
         var imageBasketball = 'resources/images/basketballSm.png';
         var imageVoleyball = 'resources/images/voleyballSm.png';
-
-        var imageFootball2 = 'resources/image/football2.png';
-        var imageBasketball2 = 'resources/images/basketballSm2.png';
-        var imageVoleyball2 = 'resources/images/voleyballSm2.png';
 
         var allInfowindow = [];
 
