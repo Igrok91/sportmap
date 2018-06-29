@@ -264,6 +264,7 @@
         $('#event').css('padding-top', '20px');
     } else {
         $('#web').css('height', '0px');
+        $('#web').addClass('hide');
         $('#navbarEvents').removeClass('hide');
         $('#navbarProfile').removeClass('hide');
         $('#navbarGroups').removeClass('hide');

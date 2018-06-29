@@ -19,17 +19,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/events.js"></script>
     <script src="resources/js/device.js"></script>
-    <%--    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-        <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>--%>
+      <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+        <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
     <script src="resources/js/media.js"></script>
-    <script type="text/javascript">
-        if (device.desktop()) {
-            document.write('<script src="resources/js/xd_connection.js"></scr' + 'ipt>');
-            document.write('<script src="//vk.com/js/api/openapi.js?154"></scr' + 'ipt>');
-        } else {
-            document.write('<script src="resources/js/mobile.js"></scr' + 'ipt>');
-        }
-    </script>
+
     <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
     <script src="https://vk.com/js/api/adman_init.js"></script>
     <script src="https://js.appscentrum.com/scr/preroll.js"></script>
@@ -249,7 +242,7 @@
                     </div>
 
                     <div style="padding: 4px" class="text-center">
-                        <span class="btn hide" id="shareWebGroup">
+                        <span class="btn" id="shareWebGroup">
                             <script type="text/javascript">
                                 document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#pid=${playgroundId}"}, {
                                     type: "custom",
@@ -257,9 +250,6 @@
                                 }));
                             </script>
                         </span>
-                        <a class="btn hide" id="shareMobileGroup" onclick="sharePlayground()"><span
-                                class="glyphicon glyphicon-bullhorn" style="color: #77A5C5;margin-right: 5px"></span>
-                            Пригласить в группу</a>
                     </div>
                     <%--               <div class="container-fluid">
                                        <div class="row text-center" >
@@ -736,12 +726,9 @@
     });
     if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
-        $('#shareWebGroup').removeClass('hide');
-        $('#shareMobileGroup').addClass('hide');
     } else {
-        $('#shareWebGroup').addClass('hide');
-        $('#shareMobileGroup').removeClass('hide');
         $('#web').css('height', '0px');
+        $('#web').addClass('hide');
     }
     setTimeout('resizePlayground()', 1000);
 
