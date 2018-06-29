@@ -1,16 +1,12 @@
 package com.realsport.service;
 
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.realsport.model.dao.entityDao.Event;
+import com.realsport.dao.vo.Event;
 import com.realsport.model.vo.MinUser;
-import com.realsport.model.dao.entityDao.User;
-import com.realsport.model.vk.InitVkMain;
+import com.realsport.dao.vo.User;
+import com.realsport.vk.InitVkMain;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
-import com.vk.api.sdk.client.actors.ServiceActor;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
@@ -19,16 +15,14 @@ import com.vk.api.sdk.objects.base.BoolInt;
 import com.vk.api.sdk.objects.users.UserXtrCounters;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static com.realsport.model.vk.InitVkMain.getVkApiClient;
+import static com.realsport.vk.InitVkMain.getVkApiClient;
 
 /**
  * Created by sbt-ryabtsev-is on 12.07.2017.
@@ -38,13 +32,11 @@ public class VkService {
     private Log logger = LogFactory.getLog(VkService.class);
     private final Random random = new Random();
     private static final Integer ADMIN = 172924708;
-    private static final String LINK_APPLICATION = "https://vk.com/app6437488";
-    private static final String LINK_PLAYGROUND = "https://vk.com/app6437488#pid=";
+    private static final String LINK_APPLICATION = "https://vk.com/app6437488_172924708";
+    private static final String LINK_PLAYGROUND = "https://vk.com/app6437488_172924708#pid=";
     private static final Integer APP_ID = 6437488;
     private static final String ACCESS_TOKEN = "d65021c0d65021c0d65021c019d634973ddd650d65021c08d4ae151d8bec8618a7565f0";
 
-    @Autowired
-    private SubscriptionsService subscriptionsService;
 
     @Async
     public void sendMessage(Integer userId, String message) throws Exception {

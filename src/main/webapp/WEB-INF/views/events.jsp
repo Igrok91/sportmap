@@ -285,7 +285,7 @@
                                         </c:if>
                                     </span>
                                     </a>
-                                    <span class="btn " id="shareWeb_${event.idEvent}">
+                                    <span class="btn hide" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#${event.idEvent}"}, {
@@ -422,6 +422,9 @@
                 imgPlayground.src = "resources/image/сетка.png";
             }
 
+            if (isDesktop) {
+                $('#shareWeb_' + id).removeClass('hide');
+            }
             eventsId[id] = id;
             var description = event.description.split('\n');
             $('#descrEvent_' + id).html('');

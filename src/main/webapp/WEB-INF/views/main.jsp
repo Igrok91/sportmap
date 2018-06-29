@@ -20,40 +20,14 @@
     <link rel="stylesheet" href="resources/switch/switch.css"/>
     <script src="resources/switch/switch.js"></script>
     <script src="resources/js/device.js"></script>
-    <script src="resources/js/media.js"></script>
 
      <script src="resources/js/xd_connection.js" type="text/javascript"></script>
      <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
-
-    <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
-    <script src="https://vk.com/js/api/adman_init.js"></script>
-    <script src="https://js.appscentrum.com/scr/preroll.js"></script>
-
 
     <script>
         var isSubscribe;
         VK.init(function () {
             console.log('vk init');
-            VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
-                var isMember = data.response === 1;
-                if (isMember) {
-                    isSubscribe = true;
-                    $('#subscribe').remove();
-                    $('#organizeUser').removeClass('hide');
-                    $('#participantUser').removeClass('hide');
-                    $('#tempPremium').removeClass('hide');
-
-                } else {
-                    $('#subscribe').removeClass('hide');
-                    $('#premium').removeClass('hide');
-                    isSubscribe = false;
-                    var count = 0;
-                    while (count < 5) {
-                        setTimeout('resizeEvent()', 1000);
-                        count++;
-                    }
-                }
-            });
 
             VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
                 $('#notification1').removeClass('hide');
@@ -243,7 +217,7 @@
 
 <script>
 
-    var el = document.querySelector('.checkbox-switch');
+/*    var el = document.querySelector('.checkbox-switch');
     var el2 = document.querySelector('.checkbox-switch2');
     var mySwitch = new Switch(el, {
         showText: true,
@@ -255,15 +229,17 @@
         showText: true,
         onText: '',
         offText: ''
-    });
+    });*/
     var returnBack = '${returnBack}';
     var start = '${start}';
     var firstStart = '${firstStart}';
     var isDesktop = device.desktop();
+    var sessUser =  ${jsonUser};
+    var allPlayUser = sessUser.allPlaygroundUser;
+
     if (isDesktop) {
         $('#event').css('padding-top', '20px');
     } else {
-        $('#web').css('height', '0px');
         $('#web').addClass('hide');
         $('#navbarEvents').removeClass('hide');
         $('#navbarProfile').removeClass('hide');
@@ -275,11 +251,7 @@
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "hide";
         document.getElementById("search").className = "";
-        $('#li2').attr('class', 'active');
-        $('#li1').attr('class', '');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', '');
-        $('#li5').attr('class', '');
+
 
         $('#searchPlayground').addClass('active');
         $('#events').removeClass('active');
@@ -301,11 +273,7 @@
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "";
         document.getElementById("search").className = "hide";
-        $('#li2').attr('class', '');
-        $('#li1').attr('class', '');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', 'active');
-        $('#li5').attr('class', '');
+
 
         $('#searchPlayground').removeClass('active');
         $('#events').removeClass('active');
@@ -318,11 +286,7 @@
         document.getElementById("prof").className = "hide";
         document.getElementById("group").className = "hide";
         document.getElementById("search").className = "hide";
-        $('#li2').attr('class', '');
-        $('#li1').attr('class', 'active');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', '');
-        $('#li5').attr('class', '');
+
 
         $('#searchPlayground').removeClass('active');
         $('#events').addClass('active');
@@ -335,11 +299,7 @@
         document.getElementById("prof").className = "";
         document.getElementById("group").className = "hide";
         document.getElementById("search").className = "hide";
-        $('#li2').attr('class', '');
-        $('#li1').attr('class', '');
-        $('#li3').attr('class', '');
-        $('#li4').attr('class', '');
-        $('#li5').attr('class', 'active');
+
 
         $('#searchPlayground').removeClass('active');
         $('#events').removeClass('active');
@@ -351,9 +311,29 @@
         setTimeout('resizeEvent()', 500);
     }
 
+VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
+    var isMember = data.response === 1;
+    if (isMember) {
+        isSubscribe = true;
+        $('#subscribe').remove();
+        $('#organizeUser').removeClass('hide');
+        $('#participantUser').removeClass('hide');
+        $('#tempPremium').removeClass('hide');
 
-    var sessUser =  ${jsonUser};
-    var allPlayUser = sessUser.allPlaygroundUser;
+    } else {
+        $('#subscribe').removeClass('hide');
+        $('#premium').removeClass('hide');
+        isSubscribe = false;
+        var count = 0;
+        while (count < 5) {
+            setTimeout('resizeEvent()', 1000);
+            count++;
+        }
+    }
+});
+
+
+
 
     if (allPlayUser.length != 0) {
         $('#create').attr('data-target', '#exampleModal');
@@ -362,6 +342,7 @@
         $('#create').attr('data-target', '#falseModal');
         $('#createMobile').attr('data-target', '#falseModal');
     }
+
     $(function () {
         $('#toSearchPlayground').click(function (event) {
             if (!isMapInit) {
@@ -373,11 +354,11 @@
             document.getElementById("group").className = "hide";
             document.getElementById("search").className = "";
 
-            $('#li2').attr('class', 'active');
-            $('#li1').attr('class', '');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', '');
-            $('#li5').attr('class', '');
+            $('#searchPlayground').addClass('active');
+            $('#events').removeClass('active');
+            $('#groups').removeClass('active');
+            $('#profile').removeClass('active');
+            $('#create').removeClass('active');
         });
     });
 

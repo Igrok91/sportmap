@@ -1,4 +1,4 @@
-package com.realsport.model.utils;
+package com.realsport.utils;
 
 
 import com.google.cloud.Timestamp;

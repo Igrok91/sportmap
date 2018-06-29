@@ -1,9 +1,7 @@
 package com.realsport.service;
 
-import com.realsport.model.dao.DatastoreService;
-
-import com.realsport.model.dao.entityDao.TemplateGame;
-import com.realsport.model.dao.entityDao.User;
+import com.realsport.dao.vo.TemplateGame;
+import com.realsport.dao.vo.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -295,8 +295,8 @@
 
                     </div>
 
-                    <hr style="margin-bottom: 1px">
-                    <span class="btn" id="shareWeb_${event.idEvent}">
+                    <hr style="margin-bottom: 1px" id="hrShare" class="hide">
+                    <span class="btn hide" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#${event.idEvent}"}, {
@@ -304,9 +304,7 @@
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
                                   </script>
-
-
-                                </span>
+                    </span>
 
                     <%--   <c:if test="${event.commentsList.size() != 0}">--%>
                     <div class="text-center hide" style="color: gray; padding: 15px;" id="past_${event.idEvent}">
@@ -475,6 +473,8 @@
 
     if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
+        $('#shareWeb_' + id).removeClass('hide');
+        $('#hrShare').removeClass('hide');
     }
 
 

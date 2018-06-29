@@ -1,4 +1,4 @@
-package com.realsport.model.cache;
+package com.realsport.dao.cache;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;

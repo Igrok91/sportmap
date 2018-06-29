@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-import static com.realsport.model.cache.CacheObserver.getCacheObserver;
+import static com.realsport.dao.cache.CacheObserver.getCacheObserver;
 
 @Service
 public class CacheService {

@@ -1,15 +1,17 @@
-package com.realsport.model.dao;
+package com.realsport.service;
 
-import com.realsport.model.dao.kinds.*;
+import com.realsport.dao.kinds.Events;
+import com.realsport.dao.kinds.Notifications;
+import com.realsport.dao.kinds.Playgrounds;
+import com.realsport.dao.kinds.Users;
 import com.realsport.model.vo.CheckPlaygroundData;
-import com.realsport.model.vo.SubscribtionInfoUser;
-import com.realsport.model.dao.entityDao.Comment;
-import com.realsport.model.dao.entityDao.Event;
-import com.realsport.model.dao.entityDao.EventUser;
+import com.realsport.dao.vo.Comment;
+import com.realsport.dao.vo.Event;
+import com.realsport.dao.vo.EventUser;
 import com.realsport.model.vo.MinUser;
-import com.realsport.model.dao.entityDao.Playground;
-import com.realsport.model.dao.entityDao.TemplateGame;
-import com.realsport.model.dao.entityDao.User;
+import com.realsport.dao.vo.Playground;
+import com.realsport.dao.vo.TemplateGame;
+import com.realsport.dao.vo.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +33,6 @@ public class DatastoreService {
 
     @Autowired
     private Playgrounds playgrounds;
-
-    @Autowired
-    private Subscriptions subscriptions;
 
     @Autowired
     private Notifications notifications;
@@ -187,21 +186,6 @@ public class DatastoreService {
         users.registerUser(userId, first_name, last_name, photo_50, photo_100);
     }
 
-    public SubscribtionInfoUser getSubscriptionStatusUser(String userId) {
-        return subscriptions.getSubscriptionStatusUser(userId);
-    }
-
-    public Long addSubscriptionToUser(Integer user_id, Integer subscription_id, String item_id, Integer item_price) {
-        return subscriptions.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
-    }
-
-    public Long setSubscriptionStatusUser(Integer user_id, String cancel_reason, String status) {
-        return subscriptions.setSubscriptionStatusUser(user_id, cancel_reason, status);
-    }
-
-    public boolean isPremiumUser(String userId) {
-        return subscriptions.isPremiumUser(userId);
-    }
 
     public void addPlaygroundToCheck(Double lat, Double lng, String sport, String userId) {
         notifications.addPlaygroundToCheck(lat, lng, sport, userId);

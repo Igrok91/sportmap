@@ -1,4 +1,4 @@
-package com.realsport.model.utils;
+package com.realsport.utils;
 
 
 import com.google.cloud.datastore.Datastore;
@@ -6,12 +6,12 @@ import com.google.cloud.datastore.FullEntity;
 import com.google.cloud.datastore.KeyFactory;
 import com.google.cloud.datastore.LatLng;
 import com.google.cloud.datastore.LatLngValue;
-import com.realsport.model.repository.impl.spb.data.BasketData;
-import com.realsport.model.repository.impl.spb.data.FootData;
-import com.realsport.model.repository.impl.spb.data.VoleyData;
+import com.realsport.model.testData.BasketData;
+import com.realsport.model.testData.FootData;
+import com.realsport.model.testData.VoleyData;
 
-import static com.realsport.model.dao.Persistence.getDatastore;
-import static com.realsport.model.dao.Persistence.getKeyFactory;
+import static com.realsport.dao.Persistence.getDatastore;
+import static com.realsport.dao.Persistence.getKeyFactory;
 
 public class Playgrounds {
     private static final KeyFactory keyFactory = getKeyFactory(Playgrounds.class);

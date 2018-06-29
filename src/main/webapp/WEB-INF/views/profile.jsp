@@ -79,20 +79,20 @@
                                    <span style="color: gray"> 3 место</span> -->
                             </div>
                             <div id="tempPremium" class="text-center hide" style="padding-top:5px;margin-top: 5px">
-                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
+                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Профи" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
                             </div>
                         </div>
 
                     </div>
                     <div class="panel-body">
                         <div id="premium" class="text-center hide" style="padding-bottom: 15px">
-                            <p>Подпишись на официальное сообщество приложения и стань игроком "Премиум"</p>
-                            <a  href="#" onclick="toPremium()" class="btn btn-success">Стать игроком "Премиум"</a>
+                            <p>Подпишись на официальное сообщество приложения и стань игроком "Профи"</p>
+                            <a  href="#" onclick="toPremium()" class="btn btn-success">Стать игроком "Профи"</a>
                         </div>
 
                         <div id="premiumDiv" class="hide">
                             <div class="text-center">
-                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
+                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Профи" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
                                 <p style="color: gray">Опции для проффесионального игрока:</p>
                             </div>
                             <ul class="list-group">
@@ -349,8 +349,8 @@
     });
 
     function getPermissionSendMessages() {
-        $('#notification1').addClass('hide');
         $('#notification2').addClass('hide');
+        $('#dropdownMenu1').addClass('hide');
         VK.callMethod("showAllowMessagesFromCommunityBox");
     }
 

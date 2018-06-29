@@ -26,7 +26,8 @@
             }
 
             #web {
-                visibility: collapse;;
+                visibility: collapse;
+                height: 0px;
             }
 
         }
@@ -40,6 +41,7 @@
 
             #web {
                 visibility: collapse;
+                height: 0px;
             }
 
             .tablet {
@@ -73,41 +75,20 @@
     </style>
 </head>
 <body>
+<%--#f2f6f4--%>
 <header >
-<%--    <nav class="nav navbar-default navbar-static-top  " id="web">
-        <div class="container-fluid">--%>
-            <div class="btn-group btn-group-justified " role="group" style="height: 60px" id="web">
-<%--                <ul class="nav navbar-nav nav-tabs nav-justified" id="nav">
-                    <li id="li1" class="active "><a id="events" class="cursorPointer"><span
-                            class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a></li>
-                    <li id="li2"><a id="searchPlayground" class="cursorPointer"><span class="glyphicon glyphicon-search"
-                                                                                      aria-hidden=""></span>
-                        Площадки</a></li>
-                    <li id="li3"><a id="create" class="cursorPointer" data-toggle="modal"
-                                    data-target="#exampleModal"><span class="glyphicon glyphicon-plus-sign"
-                                                                      aria-hidden="Создать"></span></a></li>
-                    <li id="li4"><a id="groups" class="cursorPointer"><span class="glyphicon glyphicon-th-list"
-                                                                            aria-hidden=""></span> Группы</a></li>
-                    <li id="li5"><a id="profile" class="cursorPointer"><span class="glyphicon glyphicon-user"
-                                                                             aria-hidden=""></span> Профиль</a></li>
-                </ul>--%>
-
-                <a id="events" class="cursorPointer btn btn-primary active" ><span
+            <div class="btn-group btn-group-justified " role="group" style="height: 60px;box-shadow: 0 0 1px;" id="web">
+                <a id="events" class="cursorPointer btn active" style="background: whitesmoke"><span
                         class="glyphicon glyphicon-calendar" aria-hidden=""></span> События</a>
-                <a  id="searchPlayground" class="cursorPointer btn btn-primary" ><span class="glyphicon glyphicon-search"
-                                                                                                                                                                        aria-hidden=""></span>
+                <a id="searchPlayground" class="cursorPointer btn" style="background: whitesmoke"><span class="glyphicon glyphicon-search" aria-hidden=""></span>
                     Площадки</a>
-    <a id="create" class="cursorPointer btn btn-primary" data-toggle="modal"
-       data-target="#exampleModal" style="font-size: medium"><span class="glyphicon glyphicon-plus-sign"
+                 <a id="create" class="cursorPointer btn " data-toggle="modal"
+                   data-target="#exampleModal" style="font-size: medium;background: whitesmoke"><span class="glyphicon glyphicon-plus-sign"
                                          aria-hidden="Создать"></span></a>
-                <a  id="groups" class="cursorPointer btn btn-primary" ><span class="glyphicon glyphicon-th-list"
-                                                                                                                                                                aria-hidden=""></span> Группы</a>
-                <a id="profile" class="cursorPointer btn btn-primary" ><span class="glyphicon glyphicon-user"
-                                                                                                                                                                       aria-hidden=""></span> Профиль</a>
+                <a  id="groups" class="cursorPointer btn " style="background: whitesmoke" ><span class="glyphicon glyphicon-th-list" aria-hidden=""></span> Группы</a>
+                <a id="profile" class="cursorPointer btn " style="background: whitesmoke"><span class="glyphicon glyphicon-user" aria-hidden=""></span> Профиль</a>
 
-            </div><!-- /.navbar-collapse -->
-<%--        </div><!-- /.container-fluid -->
-    </nav>--%>
+            </div>
 </header>
 
 <footer class="container-fluid text-center navbar-fixed-bottom" style="margin-bottom: 0px; padding-bottom: 0px; ">
@@ -160,11 +141,6 @@
             document.getElementById("group").className = "hide";
             document.getElementById("search").className = "";
 
-            $('#li2').attr('class', 'active');
-            $('#li1').attr('class', '');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', '');
-            $('#li5').attr('class', '');
 
             $('#searchPlayground').addClass('active');
             $('#events').removeClass('active');
@@ -183,11 +159,6 @@
             document.getElementById("group").className = "hide";
             document.getElementById("search").className = "hide";
 
-            $('#li2').attr('class', '');
-            $('#li1').attr('class', 'active');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', '');
-            $('#li5').attr('class', '');
 
             $('#searchPlayground').removeClass('active');
             $('#events').addClass('active');
@@ -205,12 +176,6 @@
             document.getElementById("group").className = "";
             document.getElementById("search").className = "hide";
 
-            $('#li2').attr('class', '');
-            $('#li1').attr('class', '');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', 'active');
-            $('#li5').attr('class', '');
-
             $('#searchPlayground').removeClass('active');
             $('#events').removeClass('active');
             $('#groups').addClass('active');
@@ -226,11 +191,7 @@
             document.getElementById("prof").className = "";
             document.getElementById("group").className = "hide";
             document.getElementById("search").className = "hide";
-            $('#li2').attr('class', '');
-            $('#li1').attr('class', '');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', '');
-            $('#li5').attr('class', 'active');
+
             $('#premiumDiv').addClass('hide');
 
             $('#searchPlayground').removeClass('active');

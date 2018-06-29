@@ -19,13 +19,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="resources/js/events.js"></script>
     <script src="resources/js/device.js"></script>
-      <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-        <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
-    <script src="resources/js/media.js"></script>
+    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
 
-    <script src="https://ad.mail.ru/static/admanhtml/rbadman-html5.min.js"></script>
-    <script src="https://vk.com/js/api/adman_init.js"></script>
-    <script src="https://js.appscentrum.com/scr/preroll.js"></script>
 
     <script>
         var isSubscribe;
@@ -70,17 +66,6 @@
             cursor: pointer;
         }
 
-        .navStyle {
-            font-family: "Trebuchet MS", Helvetica, sans-serif;
-            letter-spacing: 0px;
-            word-spacing: 1.4px;
-            color: #000000;
-            font-weight: 400;
-            text-decoration: none;
-            font-style: normal;
-            font-variant: normal;
-            text-transform: none;
-        }
     </style>
     <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 </head>
@@ -211,9 +196,9 @@
                     </div>
 
                     <div id="premium" class="text-center hide" style="padding-bottom: 15px">
-                        <p>Подпишись на официальное сообщество приложения и стань игроком "Премиум"</p>
+                        <p>Подпишись на официальное сообщество приложения и стань игроком "Профи"</p>
                         <a href="#" data-toggle="modal"
-                           data-target="#toPremium" class="btn btn-success">Стать игроком "Премиум"</a>
+                           data-target="#toPremium" class="btn btn-success">Стать игроком "Профи"</a>
                     </div>
 
                     <div class="list-group">
@@ -241,8 +226,8 @@
 
                     </div>
 
-                    <div style="padding: 4px" class="text-center">
-                        <span class="btn" id="shareWebGroup">
+                    <div style="padding: 4px" class="text-center hide" id="shareWebGroup">
+                        <span class="btn">
                             <script type="text/javascript">
                                 document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#pid=${playgroundId}"}, {
                                     type: "custom",
@@ -258,34 +243,7 @@
                                        </div>
                                    </div>--%>
                 </div>
-                <div id="subscribe" class="hide">
-                    <div class="text-center" style="padding-bottom: 10px">
-                        <div id="subscribe_vk_groups">
-                            <!-- VK Widget -->
-                            <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
-                                 class="center-block"></div>
-                            <script type="text/javascript">
-                                try {
-                                    VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
-                                } catch (e) {
-                                    setTimeout(function () {
-                                        $('#subscribe').remove();
-                                        resizePlayground();
-                                    }, 1000);
-                                }
-                                VK.Observer.subscribe("widgets.groups.joined", function f() {
-                                    console.log("user joined");
-                                    $('#alertSuccessDiv').removeClass('hide');
-                                    $('#alertSuccess').alert();
-                                    setTimeout(function () {
-                                        $('#subscribe').remove();
-                                    }, 1000);
-                                });
-                            </script>
 
-                        </div>
-                    </div>
-                </div>
                 <div style="padding-bottom: 45px">
                     <c:choose>
                         <c:when test="${listSize == 0}">
@@ -511,7 +469,7 @@
                                         </c:if>
                                     </span>
                                     </a>
-                                    <span class="btn " id="shareWeb_${event.idEvent}">
+                                    <span class="btn hide" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
                                     document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#${event.idEvent}"}, {
@@ -520,11 +478,6 @@
                                     }));
                                   </script>
                                 </span>
-
-                                    <a class="btn hide" id="shareMobile_${event.idEvent}"
-                                       onclick="shareEvent('${event.idEvent}')"><span
-                                            class="glyphicon glyphicon-bullhorn"
-                                            style="color: #77A5C5;margin-right: 5px"></span>Поделиться</a>
 
 
                                 </div>
@@ -656,7 +609,7 @@
                     </button>
                     <h4 class="modal-title text-center" id="toPremiumLabel"><span class="glyphicon glyphicon-star-empty"
                                                                                   style="padding-right: 10px"></span>
-                        Игрок "Премиум" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span>
+                        Игрок "Профи" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span>
                     </h4>
                 </div>
                 <div class="modal-body">
@@ -688,6 +641,34 @@
                         </li>
                     </ul>
                     <div class="text-center">
+                        <div id="subscribe" class="hide">
+                            <div class="text-center" style="padding-bottom: 10px">
+                                <div id="subscribe_vk_groups">
+                                    <!-- VK Widget -->
+                                    <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
+                                         class="center-block"></div>
+                                    <script type="text/javascript">
+                                        try {
+                                            VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
+                                        } catch (e) {
+                                            setTimeout(function () {
+                                                $('#subscribe').remove();
+                                                resizePlayground();
+                                            }, 1000);
+                                        }
+                                        VK.Observer.subscribe("widgets.groups.joined", function f() {
+                                            console.log("user joined");
+                                            $('#alertSuccessDiv').removeClass('hide');
+                                            $('#alertSuccess').alert();
+                                            setTimeout(function () {
+                                                $('#subscribe').remove();
+                                            }, 1000);
+                                        });
+                                    </script>
+
+                                </div>
+                            </div>
+                        </div>
                         <a href="https://vk.com/sporterr" target="_blank" class="btn btn-primary ">Подписаться</a>
                     </div>
                 </div>
@@ -705,6 +686,12 @@
     var maxWatch = 10;
     var allowSendMessage = ${allowSendMessage};
 
+    if (isDesktop) {
+        $('#navPlaygrounds').addClass('hide');
+        $('#shareWebGroup').removeClass('hide');
+    } else {
+        $('#web').addClass('hide');
+    }
     VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
         var isMember = data.response === 1;
         if (isMember) {
@@ -714,22 +701,12 @@
         } else {
             if (isDesktop) {
                 $('#subscribe').removeClass('hide');
-                var count = 0;
-                while (count < 5) {
-                    setTimeout('resizePlayground()', 1000);
-                    count++;
-                }
             }
             isSubscribe = false;
             $('#premium').removeClass('hide');
         }
     });
-    if (isDesktop) {
-        $('#navPlaygrounds').addClass('hide');
-    } else {
-        $('#web').css('height', '0px');
-        $('#web').addClass('hide');
-    }
+
     setTimeout('resizePlayground()', 1000);
 
     if (listEvents) {
@@ -744,6 +721,10 @@
             }
             if (event.isEditEvent == true) {
                 location.reload();
+            }
+
+            if (isDesktop) {
+                $('#shareWeb_' + id).removeClass('hide');
             }
 
             var description = event.description.split('\n');
@@ -1089,29 +1070,6 @@
     }
 
 
-    function sharePlayground() {
-        if (sport === 'Футбол') {
-            VK.callMethod("showShareBox", 'Вступай в группу площадки и Го в Футбол! \n https://vk.com/app6600445_172924708#pid=' + playgroundId, null, 'im');
-        } else if (sport == 'Баскетбол') {
-            VK.callMethod("showShareBox", 'Вступай в группу площадки и Го в Баскетбол! \n https://vk.com/app6600445_172924708#pid=' + playgroundId, null, 'im');
-        } else {
-            VK.callMethod("showShareBox", 'Вступай в группу площадки и Го на игру! \n https://vk.com/app6600445_172924708#pid=' + playgroundId, null, 'im');
-        }
-
-    }
-
-    function shareEvent(eventId) {
-        VK.callMethod("showShareBox", 'Присоединяйся к игре! \n https://vk.com/app6600445_172924708#' + eventId, null, 'im');
-    }
-
-    function subscriptionSuccess(subscription_id) {
-        $('#notPremium').modal('hide');
-        $('#toPremium').modal('hide');
-        $('#premium').addClass('hide');
-        $('#alertSuccessDiv').removeClass('hide');
-        $('#alertSuccess').alert();
-    }
-
     function hideButtonAlert(id) {
         $('#' + id).addClass('hide');
     }
@@ -1120,21 +1078,7 @@
         VK.callMethod("showAllowMessagesFromCommunityBox");
     }
 
-    function disableNavigtion(flag) {
-        if (flag) {
-            $('#events').addClass('disabled');
-            $('#searchPlayground').addClass('disabled');
-            $('#create').addClass('disabled');
-            $('#groups').addClass('disabled');
-            $('#profile').addClass('disabled');
-        } else {
-            $('#events').removeClass('disabled');
-            $('#searchPlayground').removeClass('disabled');
-            $('#create').removeClass('disabled');
-            $('#groups').removeClass('disabled');
-            $('#profile').removeClass('disabled');
-        }
-    }
+
 
 
 </script>

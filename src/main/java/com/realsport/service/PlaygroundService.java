@@ -2,12 +2,11 @@ package com.realsport.service;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.realsport.model.dao.DatastoreService;
-import com.realsport.model.dao.PlaygroundDao;
+import com.realsport.dao.PlaygroundDao;
 import com.realsport.model.vo.CheckPlaygroundData;
 import com.realsport.model.vo.MinUser;
-import com.realsport.model.dao.entityDao.Playground;
-import com.realsport.model.utils.KindSport;
+import com.realsport.dao.vo.Playground;
+import com.realsport.utils.KindSport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
-import static com.realsport.model.cache.CachePlaygrounds.getCachePlaygrounds;
+import static com.realsport.dao.cache.CachePlaygrounds.getCachePlaygrounds;
 
 /**
  * Created by Igor Ryabtsev on 28.12.2016.

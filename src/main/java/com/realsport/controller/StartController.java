@@ -8,27 +8,18 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 
-import com.realsport.model.utils.SubscribtionInfoData;
 import com.realsport.model.vo.CheckPlaygroundData;
-import com.realsport.model.vo.Error;
-import com.realsport.model.dao.entityDao.Event;
-import com.realsport.model.dao.entityDao.EventUser;
-import com.realsport.model.vo.ErrorInfo;
+import com.realsport.dao.vo.Event;
+import com.realsport.dao.vo.EventUser;
 import com.realsport.model.vo.MinUser;
-import com.realsport.model.dao.entityDao.Playground;
-import com.realsport.model.dao.entityDao.TemplateGame;
-import com.realsport.model.dao.entityDao.User;
+import com.realsport.dao.vo.Playground;
+import com.realsport.dao.vo.TemplateGame;
+import com.realsport.dao.vo.User;
 
-import com.realsport.model.utils.Utils;
 import com.realsport.model.vo.PlaygroundInfo;
-import com.realsport.model.vo.Response;
-import com.realsport.model.vo.StatusSubscribe;
-import com.realsport.model.vo.SubscribtionInfo;
-import com.realsport.model.vo.SubscribtionInfoUser;
 import com.realsport.service.CacheService;
 import com.realsport.service.EventsService;
 import com.realsport.service.PlaygroundService;
-import com.realsport.service.SubscriptionsService;
 import com.realsport.service.UserService;
 import com.realsport.service.VkService;
 import org.apache.commons.logging.Log;
@@ -40,20 +31,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.cache.Cache;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static com.realsport.model.cache.CacheUser.getCacheUser;
-import static com.realsport.model.utils.Utils.*;
+import static com.realsport.dao.cache.CacheUser.getCacheUser;
 
 /**
  * Created by Igor on 31.03.2017.
@@ -63,19 +50,11 @@ public class StartController {
 
     Log logger = LogFactory.getLog(StartController.class);
 
-
     public static final String EVENTS = "events";
     public static final String EVENT = "event";
     public static final String PLAYGROUND = "playground";
-    public static final String TITLE_SUBSCRIBE = "Игрок \"Премиум\"";
-    public static final String CHARGEABLE = "chargeable";
-    public static final String ACTIVE = "active";
-    public static final String CANCELLED = "cancelled";
     public static final Integer COUNT = 5;
-
-
     private static final Integer ADMIN = 172924708;
-
 
     @Autowired
     private PlaygroundService playgroundService;
@@ -92,10 +71,6 @@ public class StartController {
     @Autowired
     private CacheService cacheService;
 
-    @Autowired
-    private SubscriptionsService subscriptionsService;
-
-
     @RequestMapping(value = "/error2")
     public String error() {
         return "error2";
@@ -106,7 +81,6 @@ public class StartController {
                           @RequestParam(value = "access_token", required = false) String access_token,
                           @RequestParam(value = "hash", required = false) String hash) throws Exception {
         User user = null;
-        boolean isFirst = false;
         logger.info("Зашел пользователь с id " + userId + ", access_token: " + access_token);
         if (userId != null) {
             try {
@@ -293,9 +267,7 @@ public class StartController {
             List<Playground> voleyballPlaygroundList = playgroundService.getVoleyballPlayground(allPlaygroundList);
             List<Playground> footballPlaygroundList = playgroundService.getFootballPlayground(allPlaygroundList);
             List<Playground> basketballPlaygroundList = playgroundService.getBasketballPlayground(allPlaygroundList);
-        /*    if (voleyballPlaygroundList == null || footballPlaygroundList == null || basketballPlaygroundList == null) {
-                throw new DataBaseException(DataBaseException.ERORR_MESSAGE);
-            }*/
+
             PlaygroundInfo info = new PlaygroundInfo();
             // Получение координат площадок и конвертация в JSON
             if (voleyballPlaygroundList != null) {
@@ -502,228 +474,6 @@ public class StartController {
         return "playground";
     }
 
-/*    @RequestMapping(value = "/money", method = RequestMethod.POST)
-    public String money(@RequestParam(value = "notification_type ") String notification_type , @RequestParam(value = "app_id ") Integer app_id ,
-                        @RequestParam(value = "user_id ") Integer user_id ,
-                        @RequestParam(value = "receiver_id ") Integer receiver_id ,
-                        @RequestParam(value = "sig  ") String sig )  {
-        try {
-           logger.info("Тест платежа " + notification_type);
-        } catch (Exception e) {
-            logger.error(e);
-            return "error";
-        }
-        return "playground";
-    }*/
-
-    @RequestMapping(value = "/money", method = RequestMethod.POST)
-    @ResponseBody
-    public String money(@RequestParam(value = "notification_type", required = false) String notification_type,
-                        @RequestParam(value = "app_id") Integer app_id,
-                        @RequestParam(value = "user_id") Integer user_id,
-                        @RequestParam(value = "receiver_id", required = false) Integer receiver_id,
-                        @RequestParam(value = "sig", required = false) String sig,
-                        @RequestParam(value = "item", required = false) String item,
-                        @RequestParam(value = "order_id", required = false) Integer order_id,
-                        @RequestParam(value = "cancel_reason", required = false) String cancel_reason,
-                        @RequestParam(value = "item_id", required = false) String item_id,
-                        @RequestParam(value = "status", required = false) String status,
-                        @RequestParam(value = "item_price", required = false) Integer item_price,
-                        @RequestParam(value = "pending_cancel", required = false) Integer pending_cancel,
-                        @RequestParam(value = "lang", required = false) String lang,
-                        @RequestParam(value = "subscription_id", required = false) Integer subscription_id) {
-        try {
-            logger.info("Тест платежа: " + "notification_type - " + notification_type + ", item - " + item +
-                    ", order_id - " + order_id + ", item_id - " + item_id + ", status - " + status + ", subscription_id - " + subscription_id);
-            logger.info("sig = " + sig);
-            String md5;
-            switch (notification_type) {
-                case "get_subscription_test":
-                    md5 = getHash(notification_type, app_id, user_id,
-                            receiver_id, item, order_id, cancel_reason, item_id,
-                            status, item_price, pending_cancel, subscription_id, lang);
-                    if (!sig.equals(md5)) {
-                        ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
-                        return toJson(new Error(errorInfo));
-                    }
-                    SubscribtionInfo subscribtion = new SubscribtionInfo(SubscribtionInfoData.PREMIUM_NAME, SubscribtionInfoData.PHOTO_URL,
-                            SubscribtionInfoData.PREMIUM_ID, SubscribtionInfoData.PRICE, SubscribtionInfoData.PERIOD);
-                    return toJson(new Response(subscribtion));
-                case "subscription_status_change_test":
-                    if (Objects.nonNull(status)) {
-                        md5 = getHash(notification_type, app_id, user_id,
-                                receiver_id, item, order_id, cancel_reason, item_id,
-                                status, item_price, pending_cancel, subscription_id, lang);
-                        if (!sig.equals(md5)) {
-                            ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
-                            return toJson(new Error(errorInfo));
-                        }
-                        if (status.equals(CHARGEABLE)) {
-                            logger.info(CHARGEABLE + " подписка готова к оплате, userId " + user_id);
-                            Long app_order_id = subscriptionsService.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
-                            if (Objects.isNull(app_order_id)) {
-                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при создании заказа на подписку", true);
-                                return toJson(new Error(errorInfo));
-                            }
-
-                            setStatusUserToCache(ACTIVE, user_id, subscription_id);
-
-                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
-                            return toJson(new Response(statusSubscribe));
-                        } else if (status.equals(ACTIVE)) {
-                            logger.info(ACTIVE + " подписка активна, userId " + user_id);
-                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, null, ACTIVE);
-                            if (Objects.isNull(app_order_id)) {
-                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при изменении статуса подписки на активную", true);
-                                return toJson(new Error(errorInfo));
-                            }
-                            setStatusUserToCache(ACTIVE, user_id, subscription_id);
-
-                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
-                            return toJson(new Response(statusSubscribe));
-                        } else if (status.equals(CANCELLED)) {
-                            logger.info(CANCELLED + " подписка отменена, userId " + user_id + ", причина: " + cancel_reason);
-                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, cancel_reason, CANCELLED);
-                            if (Objects.isNull(app_order_id)) {
-                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при отмене подписики", true);
-                                return toJson(new Error(errorInfo));
-                            }
-                            setStatusUserToCache(RESUME, user_id, subscription_id);
-
-                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
-                            return toJson(new Response(statusSubscribe));
-                        }
-                    } else {
-                        ErrorInfo errorInfo = new ErrorInfo(11, "Параметр status null", true);
-                        return toJson(new Error(errorInfo));
-                    }
-                case "get_subscription":
-                    md5 = getHash(notification_type, app_id, user_id,
-                            receiver_id, item, order_id, cancel_reason, item_id,
-                            status, item_price, pending_cancel, subscription_id, lang);
-                    if (!sig.equals(md5)) {
-                        ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
-                        return toJson(new Error(errorInfo));
-                    }
-                    SubscribtionInfo subscribtionInfo = new SubscribtionInfo(SubscribtionInfoData.PREMIUM_NAME, SubscribtionInfoData.PHOTO_URL,
-                            SubscribtionInfoData.PREMIUM_ID, SubscribtionInfoData.PRICE, SubscribtionInfoData.PERIOD);
-                    return toJson(new Response(subscribtionInfo));
-                case "subscription_status_change":
-                    if (Objects.nonNull(status)) {
-                        md5 = getHash(notification_type, app_id, user_id,
-                                receiver_id, item, order_id, cancel_reason, item_id,
-                                status, item_price, pending_cancel, subscription_id, lang);
-                        if (!sig.equals(md5)) {
-                            ErrorInfo errorInfo = new ErrorInfo(10, "Несовпадение вычисленной и переданной подписи", true);
-                            return toJson(new Error(errorInfo));
-                        }
-                        if (status.equals(CHARGEABLE)) {
-                            logger.info(CHARGEABLE + " подписка готова к оплате, userId " + user_id);
-                            Long app_order_id = subscriptionsService.addSubscriptionToUser(user_id, subscription_id, item_id, item_price);
-                            if (Objects.isNull(app_order_id)) {
-                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при создании заказа на подписку", true);
-                                return toJson(new Error(errorInfo));
-                            }
-
-                            setStatusUserToCache(ACTIVE, user_id, subscription_id);
-
-                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
-                            return toJson(new Response(statusSubscribe));
-                        } else if (status.equals(ACTIVE)) {
-                            logger.info(ACTIVE + " подписка активна, userId " + user_id);
-                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, cancel_reason, ACTIVE);
-                            if (Objects.isNull(app_order_id)) {
-                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при изменении статуса подписки на активную", true);
-                                return toJson(new Error(errorInfo));
-                            }
-                            setStatusUserToCache(ACTIVE, user_id, subscription_id);
-
-                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
-                            return toJson(new Response(statusSubscribe));
-                        } else if (status.equals(CANCELLED)) {
-                            logger.info(CANCELLED + " подписка отменена, userId " + user_id + ", причина: " + cancel_reason);
-                            Long app_order_id = subscriptionsService.setSubscriptionStatusUser(user_id, cancel_reason, CANCELLED);
-                            if (Objects.isNull(app_order_id)) {
-                                ErrorInfo errorInfo = new ErrorInfo(2, "Ошибка при отмене подписики", true);
-                                return toJson(new Error(errorInfo));
-                            }
-                            setStatusUserToCache(RESUME, user_id, subscription_id);
-
-                            StatusSubscribe statusSubscribe = new StatusSubscribe(subscription_id, app_order_id);
-                            return toJson(new Response(statusSubscribe));
-                        }
-                    } else {
-                        ErrorInfo errorInfo = new ErrorInfo(11, "Параметр status null", true);
-                        return toJson(new Error(errorInfo));
-                    }
-            }
-
-        } catch (Exception e) {
-            logger.error(e);
-            ErrorInfo errorInfo = new ErrorInfo(1, "Общая ошибка", false);
-            return toJson(new Error(errorInfo));
-        }
-        return "";
-    }
-
-    private String getHash(String notification_type, Integer app_id, Integer user_id,
-                           Integer receiver_id, String item, Integer order_id,
-                           String cancel_reason, String item_id, String status, Integer item_price,
-                           Integer pending_cancel, Integer subscription_id, String lang) {
-        String list = Utils.getSortParam(notification_type, app_id, user_id,
-                receiver_id, item, order_id, cancel_reason, item_id, status, item_price, pending_cancel, subscription_id, lang);
-        logger.info("Param " + list);
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            logger.error(e);
-            return "error";
-        }
-        md.update(list.getBytes());
-        byte byteData[] = md.digest();
-        //конвертируем байт в шестнадцатеричный формат вторым способом
-        StringBuffer hexString = new StringBuffer();
-        for (byte aByteData : byteData) {
-            String hex = Integer.toHexString(0xff & aByteData);
-            if (hex.length() == 1) hexString.append('0');
-            hexString.append(hex);
-        }
-        logger.info("sigCheck = " + hexString.toString());
-        return hexString.toString();
-    }
-
-    private void setStatusUserToCache(String resume, Integer user_id, Integer subscription_id) {
-        User user = getUser(String.valueOf(user_id));
-//        user.setSubscription_id(subscription_id);
-//        user.setSubscriptionStatus(resume);
-
-        Cache cache = getCacheUser();
-        cache.put(String.valueOf(user_id), user);
-    }
-/*
-    @RequestMapping("/toPremium")
-    public String toPremium(Model model, @RequestParam(value = "from") String from,
-                                   @RequestParam(value = "userId") String userId,
-                            @RequestParam(value = "playgroundId", required = false) String id) {
-        try {
-            User user = getUser(userId);
-            if (user == null) {
-                model.addAttribute("userId", userId);
-                return "error";
-            }
-
-            model.addAttribute("returnBack", from);
-            model.addAttribute("userPhoto", user.getPhoto_50());
-            model.addAttribute("endList", size);
-            model.addAttribute("userId", userId);
-        } catch (Exception e) {
-            logger.error(e);
-            model.addAttribute("userId", userId);
-            return "error";
-        }
-        return "premium";
-    }*/
 
     @RequestMapping("/create")
     public String toCreate(Model model, @RequestParam(value = "playgroundId") String id, @RequestParam(value = "sport") String sport,
@@ -977,12 +727,6 @@ public class StartController {
                         return eventUser.isOrganize();
                     }
                 }).size();
-                SubscribtionInfoUser subscribtionInfoUser = subscriptionsService.getSubscriptionStatusUser(userId);
-                if (Objects.nonNull(subscribtionInfoUser)) {
-                    model.addAttribute("subscriptionStatus", subscribtionInfoUser.getStatus());
-                } else {
-                    model.addAttribute("subscriptionStatus", NOT);
-                }
                 model.addAttribute("userlastName", user.getLastName());
                 model.addAttribute("userfirstName", user.getFirstName());
                 model.addAttribute("userPhoto", user.getPhoto_100());

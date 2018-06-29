@@ -8,21 +8,19 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gson.Gson;
 import com.realsport.model.vo.LastEditData;
-import com.realsport.model.vo.SubscribtionInfoUser;
 import com.realsport.model.vo.Template;
-import com.realsport.model.dao.entityDao.Comment;
-import com.realsport.model.dao.entityDao.Event;
+import com.realsport.dao.vo.Comment;
+import com.realsport.dao.vo.Event;
 import com.realsport.model.vo.MinUser;
-import com.realsport.model.dao.entityDao.Playground;
-import com.realsport.model.dao.entityDao.TemplateGame;
-import com.realsport.model.dao.entityDao.User;
+import com.realsport.dao.vo.Playground;
+import com.realsport.dao.vo.TemplateGame;
+import com.realsport.dao.vo.User;
 
 
-import com.realsport.model.utils.Playgrounds;
+import com.realsport.utils.Playgrounds;
 import com.realsport.service.CacheService;
 import com.realsport.service.EventsService;
 import com.realsport.service.PlaygroundService;
-import com.realsport.service.SubscriptionsService;
 import com.realsport.service.UserService;
 import com.realsport.service.VkService;
 import org.apache.commons.logging.Log;
@@ -39,17 +37,15 @@ import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import static com.realsport.model.cache.CacheObserver.getCacheObserver;
-import static com.realsport.model.cache.CachePlaygrounds.getCachePlaygrounds;
-import static com.realsport.model.cache.CacheUser.getCacheUser;
-import static com.realsport.model.utils.Utils.*;
+import static com.realsport.dao.cache.CacheObserver.getCacheObserver;
+import static com.realsport.dao.cache.CachePlaygrounds.getCachePlaygrounds;
+import static com.realsport.dao.cache.CacheUser.getCacheUser;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -82,8 +78,6 @@ public class RestController {
     @Autowired
     private VkService vkService;
 
-    @Autowired
-    private SubscriptionsService subscriptionsService;
 
     @RequestMapping(value = "registerUser", method = RequestMethod.POST)
     public void registerUser(@RequestParam(value = "userId") String userId,

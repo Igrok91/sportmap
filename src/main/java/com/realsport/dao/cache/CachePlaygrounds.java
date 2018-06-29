@@ -1,4 +1,4 @@
-package com.realsport.model.cache;
+package com.realsport.dao.cache;
 
 import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 
@@ -11,19 +11,19 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CacheUser {
+public class CachePlaygrounds {
 
     private static AtomicReference<Cache> atomicReference = new AtomicReference<>();
 
-    public static Cache getCacheUser() {
+    public static Cache getCachePlaygrounds() {
         if (atomicReference.get() == null) {
             try {
                 CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
                 Map<Object, Object> properties = new HashMap<>();
-                properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.HOURS.toSeconds(1));
+                properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.HOURS.toSeconds(2));
                 atomicReference.set(cacheFactory.createCache(properties));
             } catch (CacheException e) {
-                e.printStackTrace();
+               e.printStackTrace();
             }
         }
 

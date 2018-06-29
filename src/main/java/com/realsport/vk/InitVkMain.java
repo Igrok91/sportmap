@@ -1,4 +1,4 @@
-package com.realsport.model.vk;
+package com.realsport.vk;
 
 import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;

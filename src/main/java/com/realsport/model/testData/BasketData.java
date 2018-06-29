@@ -1,4 +1,4 @@
-package com.realsport.model.repository.impl.spb.data;
+package com.realsport.model.testData;
 
 /**
  * Created by IgorR on 08.07.2017.

@@ -13,7 +13,7 @@ import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.StructuredQuery;
 import com.google.cloud.datastore.Transaction;
-import com.realsport.model.dao.kinds.Users;
+import com.realsport.dao.kinds.Users;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -29,8 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static com.realsport.model.dao.Persistence.getDatastore;
-import static com.realsport.model.dao.Persistence.getKeyFactory;
+import static com.realsport.dao.Persistence.getDatastore;
+import static com.realsport.dao.Persistence.getKeyFactory;
 
 @WebServlet("/updateEvent")
 public class EventsServlet extends HttpServlet {
