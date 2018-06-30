@@ -21,15 +21,15 @@
     <script src="resources/switch/switch.js"></script>
     <script src="resources/js/device.js"></script>
 
-     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-     <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
+    <script src="resources/js/xd_connection.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
 
     <script>
         var isSubscribe;
         VK.init(function () {
             console.log('vk init');
 
-            VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location){
+            VK.addCallback('onAllowMessagesFromCommunityCancel', function f(location) {
                 $('#dropdownMenu1').removeClass('hide');
                 $('#notification2').removeClass('hide');
             });
@@ -217,19 +217,6 @@
 
 <script>
 
-/*    var el = document.querySelector('.checkbox-switch');
-    var el2 = document.querySelector('.checkbox-switch2');
-    var mySwitch = new Switch(el, {
-        showText: true,
-        onText: '',
-        offText: ''
-    });
-
-    var mySwitch2 = new Switch(el2, {
-        showText: true,
-        onText: '',
-        offText: ''
-    });*/
     var returnBack = '${returnBack}';
     var start = '${start}';
     var firstStart = '${firstStart}';
@@ -247,18 +234,7 @@
     }
 
     if (returnBack === 'map' || start === 'true') {
-        document.getElementById("event").className = "hide";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "hide";
-        document.getElementById("search").className = "";
-
-
-        $('#searchPlayground').addClass('active');
-        $('#events').removeClass('active');
-        $('#groups').removeClass('active');
-        $('#profile').removeClass('active');
-        $('#create').removeClass('active');
-
+        handleSearchPlayground();
         initMap();
         isMapInit = true;
         // Если нет групп и первый заход в приложение
@@ -267,65 +243,33 @@
         }
         setMobileMap();
         setTimeout('resizeMain()', 1000);
-
     } else if (returnBack === 'group') {
-        document.getElementById("event").className = "hide";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "";
-        document.getElementById("search").className = "hide";
-
-
-        $('#searchPlayground').removeClass('active');
-        $('#events').removeClass('active');
-        $('#groups').addClass('active');
-        $('#profile').removeClass('active');
-        $('#create').removeClass('active');
+        handleGroups();
         setTimeout('resizeGroups()', 300);
     } else if (returnBack === 'home') {
-        document.getElementById("event").className = "";
-        document.getElementById("prof").className = "hide";
-        document.getElementById("group").className = "hide";
-        document.getElementById("search").className = "hide";
-
-
-        $('#searchPlayground').removeClass('active');
-        $('#events').addClass('active');
-        $('#groups').removeClass('active');
-        $('#profile').removeClass('active');
-        $('#create').removeClass('active');
+        handleEvents();
         setTimeout('resizeEvent()', 300);
     } else if (returnBack === 'profileMain') {
-        document.getElementById("event").className = "hide";
-        document.getElementById("prof").className = "";
-        document.getElementById("group").className = "hide";
-        document.getElementById("search").className = "hide";
-
-
-        $('#searchPlayground').removeClass('active');
-        $('#events').removeClass('active');
-        $('#groups').removeClass('active');
-        $('#profile').addClass('active');
-        $('#create').removeClass('active');
+        handleProfile();
         setTimeout('resizeProfileMain()', 500);
     } else {
+        handleEvents();
         setTimeout('resizeEvent()', 500);
     }
 
-VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
-    var isMember = data.response === 1;
-    if (isMember) {
-        isSubscribe = true;
-        $('#organizeUser').removeClass('hide');
-        $('#participantUser').removeClass('hide');
-        $('#tempPremium').removeClass('hide');
+    VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
+        var isMember = data.response === 1;
+        if (isMember) {
+            isSubscribe = true;
+            $('#organizeUser').removeClass('hide');
+            $('#participantUser').removeClass('hide');
+            $('#tempPremium').removeClass('hide');
 
-    } else {
-        $('#premium').removeClass('hide');
-        isSubscribe = false;
-    }
-});
-
-
+        } else {
+            $('#premium').removeClass('hide');
+            isSubscribe = false;
+        }
+    });
 
 
     if (allPlayUser.length != 0) {
@@ -342,16 +286,7 @@ VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v":
                 initMap();
                 isMapInit = true;
             }
-            document.getElementById("event").className = "hide";
-            document.getElementById("prof").className = "hide";
-            document.getElementById("group").className = "hide";
-            document.getElementById("search").className = "";
-
-            $('#searchPlayground').addClass('active');
-            $('#events').removeClass('active');
-            $('#groups').removeClass('active');
-            $('#profile').removeClass('active');
-            $('#create').removeClass('active');
+            handleSearchPlayground();
         });
     });
 

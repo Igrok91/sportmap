@@ -156,6 +156,7 @@
                             </div>
                         </c:if>
 
+
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="text-center">
@@ -192,27 +193,17 @@
                                 </div>
                             </div>
                         </div>
-                        <h5><span class="glyphicon glyphicon-info-sign"></span> Информация</h5>
-                        <div>
-                            <div style="padding-bottom: 2px">
-                                <span style="color: gray;">Aдрес: ${street}, ${house} </span>
-
-                            </div>
-                        </div>
 
 
                     </div>
-
-
-                    <div id="premium" class="text-center hide" style="padding-bottom: 15px">
+                    <hr style="padding: 0px;margin: 0px" id="hrSubscribe" class="hide">
+                    <div id="premium" class="text-center hide"
+                         style="padding-bottom: 15px;padding-top: 8px;margin-top: 8px">
                         <p>Подпишись на официальное сообщество приложения и стань игроком "Профи"</p>
                         <a href="#" data-toggle="modal"
                            data-target="#toPremium" class="btn btn-success">Стать игроком "Профи"</a>
                     </div>
 
-                    <div id="map" style="padding-top: 5px; padding-bottom: 5px;">
-
-                    </div>
 
                     <div class="list-group">
                         <c:choose>
@@ -221,7 +212,7 @@
                                      <span class="badge" style="background: #ffffff"><span style="color: gray"
                                                                                            id="players"><c:out
                                              value="${players.size()}"/></span> </span>
-                                    Участники
+                                    <span class="glyphicon glyphicon-user" style="padding-right: 5px"></span> Участники
                                 </a>
                             </c:when>
                             <c:otherwise>
@@ -231,24 +222,32 @@
                                                                                            id="players"><c:out
                                              value="${players.size()}"/></span> <span
                                              class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
-                                    Участники
+                                    <span class="glyphicon glyphicon-user" style="padding-right: 5px"></span> Участники
                                 </a>
                             </c:otherwise>
                         </c:choose>
-
-
-                    </div>
-
-                    <div style="padding: 4px" class="text-center hide" id="shareWebGroup">
-                        <span class="btn">
+                        <span class="list-group-item text-center hide" id="shareWebGroup">
                             <script type="text/javascript">
-                                document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#pid=${playgroundId}"}, {
-                                    type: "custom",
-                                    text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Пригласить в группу</span>"
-                                }));
+                            document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#pid=${playgroundId}"}, {
+                                type: "custom",
+                                text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"margin-right: 5px\"></span> Пригласить в группу</span>"
+                            }));
                             </script>
                         </span>
                     </div>
+
+                    <div style="margin-left: 8px;padding-left: 8px;margin-bottom: 8px;padding-bottom: 8px;margin-top: 5px;padding-top: 5px">
+                        <h5><span class="glyphicon glyphicon-info-sign" style="margin-right: 5px"></span> Информация
+                        </h5>
+                        <div style="padding-bottom: 2px">
+                            <span style="color: gray;">Aдрес: ${street}, ${house} </span>
+
+                        </div>
+                    </div>
+                    <div id="map" class="hide" style="padding-top: 7px;margin-top: 7px">
+
+                    </div>
+
                     <%--               <div class="container-fluid">
                                        <div class="row text-center" >
                                            <a href="#" class="btn" style=" margin-left: 5px;margin-top: 4px; margin-bottom: 4px"><span class="glyphicon  glyphicon-share-alt"  aria-hidden="Комментировать" style="margin-right: 5px"></span> Пригласить в группу</a>
@@ -485,7 +484,7 @@
                                     <span class="btn hide" id="shareWeb_${event.idEvent}">
 
                                     <script type="text/javascript">
-                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_172924708#${event.idEvent}"}, {
+                                    document.write(VK.Share.button({url: "https://vk.com/app6437488_-148660655#${event.idEvent}"}, {
                                         type: "custom",
                                         text: "<span><span class=\"glyphicon glyphicon-bullhorn \" style=\"color: #77A5C5;margin-right: 5px\"></span> Поделиться</span>"
                                     }));
@@ -685,7 +684,8 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="vk://vk.com/sporterr" target="_blank" class="btn btn-primary hide" id="mobileSubscribe">Подписаться</a>
+                        <a href="vk://vk.com/sporterr" target="_blank" class="btn btn-primary hide"
+                           id="mobileSubscribe">Подписаться</a>
                     </div>
                 </div>
             </div>
@@ -742,10 +742,10 @@
     if (isDesktop) {
         $('#navPlaygrounds').addClass('hide');
         $('#shareWebGroup').removeClass('hide');
+        $('#map').removeClass('hide');
         initMap();
     } else {
         $('#web').addClass('hide');
-        $('#map').addClass('hide');
     }
 
     VK.api("groups.isMember", {"group_id": "148660655", "user_id": "${userId}", "v": "5.74"}, function (data) {
@@ -762,9 +762,9 @@
             }
             isSubscribe = false;
             $('#premium').removeClass('hide');
+            $('#hrSubscribe').removeClass('hide');
         }
     });
-
 
 
     if (sport == 'Футбол') {

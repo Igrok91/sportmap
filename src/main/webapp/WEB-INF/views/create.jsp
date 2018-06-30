@@ -23,7 +23,6 @@
     <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
     <link rel="stylesheet" href="resources/switch/switch.css"/>
     <script src="resources/switch/switch.js"></script>
-    <script src="resources/js/media.js"></script>
     <script src="resources/js/device.js"></script>
     <style>
 
@@ -72,7 +71,6 @@
 
             </div>
             <div class="col-sm-8">
-
                 <div class="panel panel-default" id="headingCreate" style="margin-top: 15px">
                     <div class="panel-heading ">
                         <div>
@@ -118,9 +116,9 @@
                             <div id="panelCreate">
                                 <div>
                                     <div>
-                                        <label for="desc"><span><img src="resources/image/new.png" width="20"
-                                                                     height="20"
-                                                                     style="margin-right: 5px; margin-bottom: 3px"></span>Описание</label>
+                                        <label for="desc"><span><span class="glyphicon glyphicon-edit"
+                                                                      style="margin-right: 5px; margin-bottom: 3px"></span></span>
+                                            Описание</label>
                                     </div>
                                     <textarea type="text" class="form-control borderless " name="descr"
                                               placeholder="Го на игру в 18 ?" rows="1" id="desc" required></textarea>
@@ -159,9 +157,10 @@
                                                        </div>--%>
                                     <div style="padding-bottom: 10px">
                                         <div>
-                                            <label for="sel2"><span><img src="resources/image/count.png" width="20"
-                                                                         height="20" style="margin-right: 5px"></span>Количество
-                                                голосов</label>
+                                            <label for="sel2"><span><span class="glyphicon glyphicon-user"
+                                                                          style="margin-right: 5px"></span></span>
+                                                Количество
+                                                участников</label>
                                         </div>
                                         <select class="form-control borderless" id="sel2" name="sel2">
                                             <option>Без ограничений</option>
@@ -210,8 +209,8 @@
                                            value="${event.idEvent}"/>
                                     <input type="hidden" name="userId"
                                            value="${userId}"/>
-                                        <input type="hidden" name="city"
-                                               value="${city}"/>
+                                    <input type="hidden" name="city"
+                                           value="${city}"/>
 
                                     <div style="padding-bottom: 10px">
                                         <div>
@@ -343,6 +342,10 @@
         $('#divCreateGame').addClass('hide');
     } else {
         $('#templatesPanelEmpty').removeClass('hide');
+        $('#templatesGames').addClass('btn-primary');
+        $('#templatesGames').removeClass('btn-default');
+        $('#newGame').addClass('btn-default');
+        $('#newGame').removeClass(' btn-primary');
     }
 
     function saveToTemplates() {
@@ -417,6 +420,7 @@
 
     setInterval(handleText, 300);
     setTimeout(resizeCreate(), 1000);
+
     function resizeCreate() {
         var height = $('#mainCreate').height();
         if (device.desktop()) {

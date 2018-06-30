@@ -51,17 +51,14 @@ import static com.realsport.dao.cache.CacheUser.getCacheUser;
 public class RestController {
 
     private Log logger = LogFactory.getLog(RestController.class);
-    public static final String FOOTBALL = "Футбол";
-    public static final String BASKETBALL = "Баскетбол";
-    public static final String VOLEYBALL = "Волейбол";
     public static final String ERROR = "error";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     public static final String MAX_COUNT_ANSWER = "max_count_answer";
     public static final String PLAYGROUNDS_DATA = "playgroundsData";
     private static final Integer ADMIN = 172924708;
-    private static final String LINK_EVENT = "https://vk.com/app6600445#";
-    private static final String LINK_PLAYGROUND = "https://vk.com/app6600445#pid=";
+    private static final String LINK_EVENT = "https://vk.com/app6437488#";
+    private static final String LINK_PLAYGROUND = "https://vk.com/app6437488#pid=";
 
     @Autowired
     private UserService userService;
@@ -166,9 +163,7 @@ public class RestController {
         } else {
             vkService.sendMessage(ADMIN, "Пользователь https://vk.com/id" + userId + "  вышел из группы " + LINK_PLAYGROUND + playgroundId);
         }
-
     }
-
 
     @RequestMapping("/handleAnswerMain")
     @ResponseBody
@@ -203,8 +198,6 @@ public class RestController {
                 logger.info("Пользователь " + user + " поставил минус");
                 return FALSE;
             }
-
-
         }
         return ERROR;
     }
@@ -238,8 +231,6 @@ public class RestController {
 
             }
         }
-
-
         return ERROR;
     }
 
@@ -272,25 +263,25 @@ public class RestController {
         }).first().orNull();
         System.out.println("id= " + id);
         if (id == null) {
-                if (user.getPlaygroundIdlList().size() > 2 && !isSubscribe) {
-                    return "notAllow";
-                } else {
-                    logger.info("User c id " + userId + " вступил в группу " + playgroundId);
-                    user.getPlaygroundIdlList().add(playgroundId);
-                    playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
-                    userService.addPlaygroundToUser(userId, playgroundId);
-                    List<Playground> playgrounds = playgroundService.getAllPlayground();
-                    Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
-                        @Override
-                        public boolean apply(Playground playground) {
-                            return playground.getIdplayground().equals(playgroundId);
-                        }
-                    }).get();
-                    p.getPlayers().add(getUserMin(user));
-                    getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
-                    isParticipant = "true";
-                    vkService.notifyNewUserInvite(user, p.getName(), p.getPlayers(), p.getIdplayground());
-                }
+            if (user.getPlaygroundIdlList().size() > 2 && !isSubscribe) {
+                return "notAllow";
+            } else {
+                logger.info("User c id " + userId + " вступил в группу " + playgroundId);
+                user.getPlaygroundIdlList().add(playgroundId);
+                playgroundService.addUserToPlayground(getUserMin(user), playgroundId);
+                userService.addPlaygroundToUser(userId, playgroundId);
+                List<Playground> playgrounds = playgroundService.getAllPlayground();
+                Playground p = FluentIterable.from(playgrounds).firstMatch(new Predicate<Playground>() {
+                    @Override
+                    public boolean apply(Playground playground) {
+                        return playground.getIdplayground().equals(playgroundId);
+                    }
+                }).get();
+                p.getPlayers().add(getUserMin(user));
+                getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
+                isParticipant = "true";
+                vkService.notifyNewUserInvite(user, p.getName(), p.getPlayers(), p.getIdplayground());
+            }
         } else {
             logger.info("User c id " + userId + " вышел из группы " + playgroundId);
             user.getPlaygroundIdlList().remove(id);

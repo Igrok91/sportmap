@@ -22,27 +22,30 @@
             box-shadow: none;
 
         }
+
         textarea {
             resize: none;
         }
+
         .premium {
             border: 2px dotted rgba(0, 10, 141, 0.76);
 
         }
     </style>
 </head>
-<body >
+<body>
 <nav id="navbarProfile" class="nav  navbar-static-top navbar-default hide ">
     <div class="container-fluid ">
         <div class="navbar-brand ">
             Мои профиль
         </div>
-       <div class="pull-right dropdown" style="padding-top: 10px">
+        <div class="pull-right dropdown" style="padding-top: 10px">
             <c:if test="${allowSendMessage == false}">
                 <a class="btn  dropdown-toggle" data-toggle="dropdown" id="dropdownMenu1"> <span
                         class="glyphicon glyphicon-bell"></span></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification1">Включить уведомления</a></li>
+                    <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification1">Включить
+                        уведомления</a></li>
                 </ul>
             </c:if>
 
@@ -60,12 +63,12 @@
                     <div class="text-center">
                         <div style="margin-bottom: 5px">
                             <div>
-                                <a id="userProfileWeb" class="hide" href="https://vk.com/id${userId}" target="_blank" >
+                                <a id="userProfileWeb" class="hide" href="https://vk.com/id${userId}" target="_blank">
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
                                     <img class="round" src="${user.photo_100}" alt="Пользователь" width="100"
                                          height="100">
                                 </a>
-                                <a id="userProfileMobile" class="hide" href="vk://vk.com/id${userId}" target="_blank" >
+                                <a id="userProfileMobile" class="hide" href="vk://vk.com/id${userId}" target="_blank">
                                     <!-- <img class="media-object" src="\Users\igrok\Downloads\icons8-ÑÑÑÐ±Ð¾Ð»ÑÐ½ÑÐ¹-Ð¼ÑÑ-50.png" alt="Футбол" width="40" height="40"> -->
                                     <img class="round" src="${user.photo_100}" alt="Пользователь" width="100"
                                          height="100">
@@ -73,13 +76,15 @@
                             </div>
 
 
-                            <div  style="padding-top: 10px">
+                            <div style="padding-top: 10px">
                                 <h4>${user.firstName} ${user.lastName}</h4>
                                 <!--    <span  class="glyphicon glyphicon-star-empty" ></span><span style="color: gray; margin-right: 15px" > 105 </span>
                                    <span style="color: gray"> 3 место</span> -->
                             </div>
                             <div id="tempPremium" class="text-center hide" style="padding-top:5px;margin-top: 5px">
-                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Профи" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
+                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span>
+                                    Игрок "Профи" <span class="glyphicon glyphicon-star-empty"
+                                                        style="padding-left: 10px"></span></h3>
                             </div>
                         </div>
 
@@ -87,30 +92,42 @@
                     <div class="panel-body">
                         <div id="premium" class="text-center hide" style="padding-bottom: 15px">
                             <p>Подпишись на официальное сообщество приложения и стань игроком "Профи"</p>
-                            <a  href="#" onclick="toPremium()" class="btn btn-success">Стать игроком "Профи"</a>
+                            <a href="#" onclick="toPremium()" class="btn btn-success">Стать игроком "Профи"</a>
                         </div>
 
                         <div id="premiumDiv" class="hide">
                             <div class="text-center">
-                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span> Игрок "Профи" <span class="glyphicon glyphicon-star-empty" style="padding-left: 10px"></span></h3>
+                                <h3><span class="glyphicon glyphicon-star-empty" style="padding-right: 10px"></span>
+                                    Игрок "Профи" <span class="glyphicon glyphicon-star-empty"
+                                                        style="padding-left: 10px"></span></h3>
                                 <p style="color: gray">Опции для проффесионального игрока:</p>
                             </div>
                             <ul class="list-group">
                                 <li class="list-group-item borderless">
-                                  <span style="padding-right: 10px"><img class="round " src="resources\image\infinity2.png" alt="Нет" width="50"
+                                  <span style="padding-right: 10px"><img class="round "
+                                                                         src="resources\image\infinity2.png" alt="Нет"
+                                                                         width="50"
                                                                          height="50"></span>
-                                    Вступление в группы без ограничений (сейчас 3 макс.)</li>
+                                    Вступление в группы без ограничений (сейчас 3 макс.)
+                                </li>
                                 <li class="list-group-item borderless">
-                                     <span style="padding-right: 10px"><img class="round " src="resources\image\first.png" alt="Нет" width="50"
+                                     <span style="padding-right: 10px"><img class="round "
+                                                                            src="resources\image\first.png" alt="Нет"
+                                                                            width="50"
                                                                             height="50"></span>
-                                    Первым получение уведомлений</li>
+                                    Первым получение уведомлений
+                                </li>
                                 <li class="list-group-item borderless">
-                                     <span style="padding-right: 10px"><img class="round " src="resources\image\stat.png" alt="Нет" width="50"
+                                     <span style="padding-right: 10px"><img class="round "
+                                                                            src="resources\image\stat.png" alt="Нет"
+                                                                            width="50"
                                                                             height="50"></span>
-                                    Cтатистика по играм</li>
+                                    Cтатистика по играм
+                                </li>
                             </ul>
                             <div class="text-center">
-                                <a id="paySubscriptions" href="https://vk.com/sporterr" target="_blank" class="btn btn-primary hide">Подписаться</a>
+                                <a id="paySubscriptions" href="https://vk.com/sporterr" target="_blank"
+                                   class="btn btn-primary hide">Подписаться</a>
                                 <br>
                                 <a href="#" onclick="hidePremium()" class="btn">Скрыть</a>
                             </div>
@@ -123,9 +140,11 @@
                                     <li><a class="cursorPointer" onclick="editInfoUser()">
                                         <span class="glyphicon glyphicon-pencil" style="margin-right: 20px"></span>Редактировать
                                     </a></li>
-                                <c:if test="${allowSendMessage == false}">
-                                        <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()" id="notification2"> <span class="glyphicon glyphicon-bell"
-                                                                                                                        style="margin-right: 20px"></span>Включить </a></li>
+                                    <c:if test="${allowSendMessage == false}">
+                                        <li><a href="#" class="cursorPointer" onclick="getPermissionSendMessages()"
+                                               id="notification2"> <span class="glyphicon glyphicon-bell"
+                                                                         style="margin-right: 20px"></span>Включить </a>
+                                        </li>
                                     </c:if>
                                 </ul>
                             </div>
@@ -159,15 +178,16 @@
                         </div>
 
 
-
                     </div>
 
                     <div class="list-group" style="margin-bottom: 15px">
                         <c:choose>
                             <c:when test="${user.playgroundIdlList.size() == 0}">
-                                <a href="#"  class="list-group-item borderless ">
-                                    <span style="padding-right: 5px"> <img src="resources/image/users.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                <a href="#" class="list-group-item borderless ">
+                                    <span style="padding-right: 5px"> <img src="resources/image/users.png" width="25"
+                                                                           height="25"></span>
+                                    <span class="badge" style="background: #ffffff;margin-top: 3px"><span
+                                            style="color: gray">
                                 <c:out value="нет"/>
                             </span>
                                </span>
@@ -176,8 +196,10 @@
                             </c:when>
                             <c:otherwise>
                                 <a href="#" id="toGroupsUser" class="list-group-item borderless ">
-                                    <span style="padding-right: 5px"> <img src="resources/image/users.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                    <span style="padding-right: 5px"> <img src="resources/image/users.png" width="25"
+                                                                           height="25"></span>
+                                    <span class="badge" style="background: #ffffff;margin-top: 3px"><span
+                                            style="color: gray">
                                 <c:out value="${user.playgroundIdlList.size()}"/>
                             </span>
                                 <span class="glyphicon glyphicon-menu-right" style="color: gray"></span></span>
@@ -191,16 +213,21 @@
                         <c:choose>
                             <c:when test="${user.listParticipant.size() == 0}">
                                 <a href="#" class="list-group-item borderless hide" id="participantUser">
-                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"
+                                                                           width="25" height="25"></span>
+                                    <span class="badge" style="background: #ffffff;margin-top: 3px"><span
+                                            style="color: gray">
                                 <c:out value="нет"/>
                                </span></span>
                                     Участие в играх</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="userParticipant?userId=${userId}&playerId=${userId}" class="list-group-item borderless hide"  id="participantUser">
-                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                <a href="userParticipant?userId=${userId}&playerId=${userId}"
+                                   class="list-group-item borderless hide" id="participantUser">
+                                    <span style="padding-right: 5px"> <img src="resources/image/participant.png"
+                                                                           width="25" height="25"></span>
+                                    <span class="badge" style="background: #ffffff;margin-top: 3px"><span
+                                            style="color: gray">
                                   <c:out value="${user.listParticipant.size()}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                                     Участие в играх</a>
@@ -208,36 +235,45 @@
                         </c:choose>
                         <c:choose>
                             <c:when test="${countOrganize == 0}">
-                                <a href="#" class="list-group-item borderless hide"  id="organizeUser">
-                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                <a href="#" class="list-group-item borderless hide" id="organizeUser">
+                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"
+                                                                           width="25" height="25"></span>
+                                    <span class="badge" style="background: #ffffff;margin-top: 3px"><span
+                                            style="color: gray">
                                  <c:out value="нет"/>
                             </span></span>
                                     Организация игр</a>
 
                             </c:when>
                             <c:otherwise>
-                                <a href="userOrganize?userId=${userId}&playerId=${userId}" class="list-group-item borderless hide" id="organizeUser">
-                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                <a href="userOrganize?userId=${userId}&playerId=${userId}"
+                                   class="list-group-item borderless hide" id="organizeUser">
+                                    <span style="padding-right: 5px"> <img src="resources/image/organisator.png"
+                                                                           width="25" height="25"></span>
+                                    <span class="badge" style="background: #ffffff;margin-top: 3px"><span
+                                            style="color: gray">
                                 <c:out value="${countOrganize}"/>
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                                     Организация игр</a>
 
                             </c:otherwise>
                         </c:choose>
-                       <%-- <a href="#" onclick="showInstallPushBox()" class="list-group-item borderless">
-                            <span style="padding-right: 5px"> <img src="resources/image/mobile.png"  width="25" height="25"></span>
-                            <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
-                                <span class="glyphicon glyphicon-menu-right"></span></span></span>
-                            Мобильная версия</a>--%>
-                        <a id="linkDeveloperWeb" href="https://vk.com/board148660655" target="_blank" class="list-group-item borderless hide">
-                            <span style="padding-right: 5px"> <img src="resources/image/settings.png"  width="25" height="25"></span>
+                        <%-- <a href="#" onclick="showInstallPushBox()" class="list-group-item borderless">
+                             <span style="padding-right: 5px"> <img src="resources/image/mobile.png"  width="25" height="25"></span>
+                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
+                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
+                             Мобильная версия</a>--%>
+                        <a id="linkDeveloperWeb" href="https://vk.com/board148660655" target="_blank"
+                           class="list-group-item borderless hide">
+                            <span style="padding-right: 5px"> <img src="resources/image/settings.png" width="25"
+                                                                   height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                             Связаться с разработчиками</a>
-                        <a id="linkDeveloperMobile" href="vk://vk.com/board148660655" target="_blank" class="list-group-item borderless hide">
-                            <span style="padding-right: 5px"> <img src="resources/image/settings.png"  width="25" height="25"></span>
+                        <a id="linkDeveloperMobile" href="vk://vk.com/board148660655" target="_blank"
+                           class="list-group-item borderless hide">
+                            <span style="padding-right: 5px"> <img src="resources/image/settings.png" width="25"
+                                                                   height="25"></span>
                             <span class="badge" style="background: #ffffff;margin-top: 3px"><span style="color: gray">
                                 <span class="glyphicon glyphicon-menu-right"></span></span></span>
                             Связаться с разработчиками</a>
@@ -271,13 +307,13 @@
         });
     }
 
-  /*  if (!isSubscribe) {
-        $('#premium').removeClass('hide');
-    } else {
-        $('#organizeUser').removeClass('hide');
-        $('#participantUser').removeClass('hide');
-        $('#tempPremium').removeClass('hide');
-    }*/
+    /*  if (!isSubscribe) {
+          $('#premium').removeClass('hide');
+      } else {
+          $('#organizeUser').removeClass('hide');
+          $('#participantUser').removeClass('hide');
+          $('#tempPremium').removeClass('hide');
+      }*/
 
     if (device.desktop()) {
 
@@ -327,23 +363,7 @@
 
     $(function () {
         $('#toGroupsUser').click(function (event) {
-            document.getElementById("event").className = "hide";
-            document.getElementById("prof").className = "hide";
-            document.getElementById("group").className = "";
-            document.getElementById("search").className = "hide";
-
-            $('#li2').attr('class', '');
-            $('#li1').attr('class', '');
-            $('#li3').attr('class', '');
-            $('#li4').attr('class', 'active');
-            $('#li5').attr('class', '');
-
-
-            $('#searchPlayground').removeClass('active');
-            $('#events').removeClass('active');
-            $('#groups').addClass('active');
-            $('#profile').removeClass('active');
-            $('#create').removeClass('active');
+            handleGroups();
             resizeGroups();
         });
     });
@@ -363,7 +383,7 @@
 
     function hidePremium() {
         $('#premiumDiv').addClass('hide');
-      //  $('#premium').removeClass('hide');
+        //  $('#premium').removeClass('hide');
         resizeProfileMain();
     }
 
@@ -375,7 +395,7 @@
     function showInviteBox() {
         VK.callMethod("showInviteBox");
     }
-    
+
     function showInstallPushBox() {
         VK.callMethod("showInstallPushBox");
     }
