@@ -57,7 +57,7 @@ public class RestController {
     public static final String MAX_COUNT_ANSWER = "max_count_answer";
     public static final String PLAYGROUNDS_DATA = "playgroundsData";
     private static final Integer ADMIN = 172924708;
-    private static final String LINK_EVENT = "https://vk.com/app6437488#";
+    private static final String LINK_APPLICATION = "https://vk.com/app6437488";
     private static final String LINK_PLAYGROUND = "https://vk.com/app6437488#pid=";
 
     @Autowired
@@ -398,7 +398,9 @@ public class RestController {
         playground.setCity(city);
         playgrounds.add(playground);
         getCachePlaygrounds().put(PLAYGROUNDS_DATA, playgrounds);
-
+        if (vkService.isAllowSendMessages(Integer.valueOf(userId))) {
+            vkService.sendMessage(Integer.valueOf(userId), "Ваша площадка добавлена на карту! \n  " + LINK_APPLICATION);
+        }
     }
 
     @RequestMapping("/addPlaygroundToDBAdmin")

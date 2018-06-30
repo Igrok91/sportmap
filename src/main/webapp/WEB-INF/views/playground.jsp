@@ -20,11 +20,10 @@
     <script src="resources/js/events.js"></script>
     <script src="resources/js/device.js"></script>
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
     <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXkXTJQMPNPInJcJt2yT6pNgzksYfpw1c&libraries=places">
     </script>
-
+    <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
 
     <script>
         var isSubscribe;
@@ -75,7 +74,7 @@
         }
 
     </style>
-    <script type="text/javascript" src="resources/js/share.js" charset="windows-1251"></script>
+
 </head>
 <body>
 <jsp:include page="navigationPlaygrounds.jsp"/>
@@ -577,7 +576,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <a href="#" onclick="allowSendMessageVK()" id="goToAllow"
+                        <a  onclick="allowSendMessageVK()" id="goToAllow"
                            class="btn btn-primary">Разрешить отправку сообщений</a>
                         <%--<a href="vk://vk.com/app6602081_-148660655" target="_blank" id="goToAllow" class="btn btn-primary" >Разрешить отправку сообщений</a>--%>
                     </div>
@@ -653,39 +652,10 @@
                         </li>
                     </ul>
                     <div class="text-center">
-                        <div id="subscribe" class="hide">
-                            <div class="text-center" style="padding-bottom: 10px">
-                                <div id="subscribe_vk_groups">
-                                    <!-- VK Widget -->
-                                    <div id="vk_groups" style="padding-top: 5px;  margin-bottom: 10px"
-                                         class="center-block"></div>
-                                    <script type="text/javascript">
-                                        try {
-                                            VK.Widgets.Group("vk_groups", {mode: 3}, 148660655);
-                                        } catch (e) {
-                                            setTimeout(function () {
-                                                $('#subscribe').remove();
-                                                resizePlayground();
-                                            }, 1000);
-                                        }
-                                        VK.Observer.subscribe("widgets.groups.joined", function f() {
-                                            console.log("user joined");
-                                            $('#alertSuccessDiv').removeClass('hide');
-                                            $('#alertSuccess').alert();
-                                            $('#toPremium').modal('hide');
-                                            $('#subscribe').remove();
-                                            if (device.desktop()) {
-                                                setTimeout(resizePlayground, 500);
-                                            }
-
-                                        });
-                                    </script>
-
-                                </div>
-                            </div>
-                        </div>
                         <a href="vk://vk.com/sporterr" target="_blank" class="btn btn-primary hide"
                            id="mobileSubscribe">Подписаться</a>
+                        <a href="https://vk.com/sporterr" target="_blank" class="btn btn-primary hide"
+                           id="webSubscribe">Подписаться</a>
                     </div>
                 </div>
             </div>
@@ -756,10 +726,11 @@
 
         } else {
             if (isDesktop) {
-                $('#subscribe').removeClass('hide');
+                $('#webSubscribe').removeClass('hide');
             } else {
-                $('#mobileSubscribe').removeClass('hide')
+                $('#mobileSubscribe').removeClass('hide');
             }
+
             isSubscribe = false;
             $('#premium').removeClass('hide');
             $('#hrSubscribe').removeClass('hide');

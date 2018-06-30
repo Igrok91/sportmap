@@ -22,7 +22,7 @@
     <script src="resources/js/device.js"></script>
 
     <script src="resources/js/xd_connection.js" type="text/javascript"></script>
-    <script type="text/javascript" src="//vk.com/js/api/openapi.js?154"></script>
+
 
     <script>
         var isSubscribe;

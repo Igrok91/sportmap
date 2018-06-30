@@ -115,6 +115,7 @@ public class StartController {
                             String pid = idev[0].split("=")[1].trim();
                             addGroupToModel(model, pid, user, COUNT);
                             setDataToModelOnFirstEnterPlayground(model, user);
+                            vkService.sendMessage(ADMIN, "В группу зашел пользователь https://vk.com/id" + userId);
                             return "playground";
                         } else {
                             event = eventsService.getEventById(idev[0].trim());
@@ -124,6 +125,7 @@ public class StartController {
                             String pid = hash.split("=")[1].trim();
                             addGroupToModel(model, pid, user, COUNT);
                             setDataToModelOnFirstEnterPlayground(model, user);
+                            vkService.sendMessage(ADMIN, "В группу зашел пользователь https://vk.com/id" + userId);
                             return "playground";
                         } else {
                             event = eventsService.getEventById(hash.trim());
@@ -161,7 +163,7 @@ public class StartController {
             model.addAttribute("userId", userId);
             return "error";
         }
-       // vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + userId);
+        vkService.sendMessage(ADMIN, "В приложение зашел пользователь https://vk.com/id" + userId);
         return "main";
     }
 

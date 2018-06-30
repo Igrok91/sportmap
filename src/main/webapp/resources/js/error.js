@@ -39,5 +39,5 @@
         infoWindow.setContent("Нажмите на маркер для перехода к группе");
     }
   function updateInfoWindow(infoWindow){
-      infoWindow.setContent("Если нет вашей площадки, добавьте ее, нажмав на плюс в верхней панели");
+      infoWindow.setContent("Если нет вашей площадки, добавьте ее, нажав на плюс в верхней панели");
   }
