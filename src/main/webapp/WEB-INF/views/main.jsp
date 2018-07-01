@@ -199,7 +199,7 @@
                     <p><span class="glyphicon glyphicon-info-sign" style="padding-right: 3px"></span> Чтобы быть в курсе
                         игр и сборов на площадках, вступай в группы площадок!
                         Для перехода к группе, кликните на карте по маркеру <span
-                                class="glyphicon glyphicon-map-marker"></span></p>
+                                class="glyphicon glyphicon-map-marker"></span> Если нет вашей площадки, вы можете ее добавить, нажав на <span class="glyphicon glyphicon-plus"></span> в верхней панели</p>
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
